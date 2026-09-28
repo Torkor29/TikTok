@@ -9,6 +9,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | # | Joueur | Durée | Fichiers |
 |---|---|---|---|
 | 1 | Lionel Messi — « trop petit » → le plus grand | 2:03 | [`output/messi/`](output/messi) |
+| 2 | Cristiano Ronaldo — opéré du cœur à 15 ans → 6 Coupes du monde (accroche devinette, pause « quel joueur ? » au milieu, montage nerveux) | 1:49 | [`output/ronaldo/`](output/ronaldo) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -17,6 +18,7 @@ Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couve
 ```
 engine/engine.py      moteur papier (Paper, Label…) + déchirures, effets, bruitages, rendu parallèle
 engine/foot.py        kit foot : joueur qui grandit / change de maillot, ballon, cages, trophées, toise…
+engine/story.py       outils de montage : mots clés calés sur la voix, plusieurs plans par scène, zooms, glitch
 episodes/<joueur>/    script de l'épisode + voix off (voix/scene_N.mp3)
 assets/sfx/           bruitages ElevenLabs réutilisables (déchirure, foule, sifflet, caisse, flashs…)
 output/<joueur>/      livrables
@@ -32,4 +34,5 @@ bash scripts/setup.sh
 python3 episodes/messi/messi.py output/messi --stills     # planches de contrôle
 python3 episodes/messi/messi.py output/messi --cover      # couverture
 python3 episodes/messi/messi.py output/messi              # rendu complet (~7 min sur 4 cœurs)
+python3 episodes/ronaldo/ronaldo.py output/ronaldo        # épisode 2
 ```

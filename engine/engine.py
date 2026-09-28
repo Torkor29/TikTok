@@ -13,7 +13,7 @@ Repris du skill tiktok-edu-motion, avec en plus :
   - rendu multi-processus.
 Voir SKILL.md et episodes/messi/messi.py.
 """
-import math, os, random, subprocess, wave, hashlib, multiprocessing
+import math, os, random, re, subprocess, wave, hashlib, multiprocessing
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageChops
 
@@ -656,7 +656,8 @@ def tear_transition(cv, prev, u, kind="tear_v", seed=0):
 
 # ---------------------------------------------------------------- bruitages externes (mp3/wav)
 SFX_GAIN = dict(rip=.9, crowd=.55, whistle=.45, cash=.7, flash=.55, stamp=.95, whoosh=.45, kick=.85, boom=.9,
-                gavel=.8, plane=.5, groan=.5, heart=1.0, riser=.45, sparkle=.45, crowd_long=.5)
+                gavel=.8, plane=.5, groan=.5, heart=1.0, riser=.45, sparkle=.45, crowd_long=.5,
+                scratch=.8, glitch=.6, notif=.7, laser=.6, laugh=.6, monitor=.55)
 
 def load_sfx_dir(path):
     """Charge un dossier de bruitages : silence de tête coupé, crête normalisée (le 'top' tombe à l'instant voulu)."""
@@ -708,7 +709,8 @@ def _render_range(scenes, starts, title, f0, f1, out_path, preview_dir=None, pre
         sc.draw_fn(cv, f, t, sc.T)
         if sc.trans and i > 0 and t < sc.trans_dur:
             if i-1 not in last: last.clear(); last[i-1] = _last_frame(scenes, i-1, starts, title)
-            tear_transition(cv, last[i-1], t/sc.trans_dur, sc.trans, seed=i)
+            TRANSITIONS[sc.trans](cv, last[i-1], t, sc.trans_dur, i)
+        if getattr(sc, "post", None): sc.post(cv, f, t, sc.T)
         finish(cv, title)
         if preview_every and f % preview_every == 0: cv.save(f"{preview_dir}/prev_{f:05d}.jpg", quality=80)
         ff.stdin.write(cv.tobytes())
@@ -748,7 +750,10 @@ def render_episode(scenes, out_dir, slug, title="~/savoir $ ./episode", voice_sc
             tt, name = ev[0], ev[1]; g = ev[2] if len(ev) > 2 else 1.0
             tt = tt(sc.T) if callable(tt) else tt
             if name not in bank: print("  ! bruitage inconnu :", name); continue
-            k = max(0, int((t0+tt)*SR)); x = bank[name][:len(mix_sfx)-k]; mix_sfx[k:k+len(x)] += x*g
+            k = max(0, int((t0+tt)*SR)); x = bank[name][:len(mix_sfx)-k]
+            if len(ev) > 3:   # durée max (avec fondu de sortie)
+                n = min(len(x), int(ev[3]*SR)); x = x[:n].copy(); f = min(n, int(.08*SR)); x[n-f:] *= np.linspace(1, 0, f)
+            mix_sfx[k:k+len(x)] += x*g
         t0 += sc.T
     # niveaux : voix ramenée à un niveau fixe, bus bruitages calé `sfx_db` dB sous la voix
     def rms(x): return float(np.sqrt((x.astype(np.float64)**2).mean())) + 1e-9
@@ -800,3 +805,183 @@ def scene_timing(scenes, voice_files):
 
 def render_still(scene_draw, path, t=1.0, T=5.0, frame=0, title="~/savoir $ ./episode"):
     cv = background(frame, title); scene_draw(cv, frame, t, T); finish(cv, title); cv.save(path); return path
+
+# ---------------------------------------------------------------- alignement mot par mot (sans modèle de reconnaissance)
+_VOW = "aeiouyàâäéèêëîïôöùûüœæ"
+def _syll(w):
+    """Estimation du nombre de syllabes d'un mot français (groupes de voyelles, e muet final ignoré)."""
+    w = w.lower().strip(".,;:!?…'’\"«»()-")
+    n = len(re.findall(f"[{_VOW}]+", w))
+    if len(w) > 2 and w.endswith(("e", "es")) and not w.endswith(("ée", "ées")) and n > 1: n -= 1
+    return max(1, n)
+
+def align_words(audio_path, text, min_pause=0.11):
+    """Minutage approximatif de chaque mot (±0,15 s) à partir du texte et de l'audio :
+    les pauses de la voix sont appariées aux ponctuations (programmation dynamique), puis les mots
+    sont répartis entre deux ancres selon leur nombre de syllabes, sur le temps de parole seulement.
+    Renvoie [(mot, début, fin)] en secondes dans le fichier."""
+    a = load_audio(audio_path); hop = int(SR*0.01)
+    env = np.array([np.sqrt((a[i:i+hop]**2).mean()) for i in range(0, len(a), hop)])
+    thr = max(1e-4, np.percentile(env, 95)*0.07)
+    sp = env > thr
+    sp = np.convolve(sp.astype(float), np.ones(5)/5, mode="same") > 0.2          # lissage
+    idx = np.where(sp)[0]
+    if len(idx) == 0: return []
+    t0, t1 = idx[0]*0.01, (idx[-1]+1)*0.01
+    pauses = []; i = idx[0]
+    while i < idx[-1]:
+        if not sp[i]:
+            j = i
+            while j < len(sp) and not sp[j]: j += 1
+            if (j-i)*0.01 >= min_pause: pauses.append((i*0.01, j*0.01))
+            i = j
+        else: i += 1
+    words = []
+    for tok in text.replace("…", "… ").split():
+        if words and re.fullmatch(r"[.,;:!?…»«\"]+", tok): words[-1] += tok
+        else: words.append(tok)
+    wts = [_syll(w) + 0.25 for w in words]
+    cum = np.concatenate([[0], np.cumsum(wts)]); tot = cum[-1]
+    speech_total = (t1-t0) - sum(b-a_ for a_, b in pauses)
+    # temps de parole cumulé au début de chaque pause
+    sp_before = []; acc = 0; prev = t0
+    for (pa, pb) in pauses: acc += pa-prev; sp_before.append(acc); prev = pb
+    brk = [k+1 for k, w in enumerate(words[:-1]) if re.search(r"[.,;:!?…]$", w)]
+    strong = {k+1 for k, w in enumerate(words[:-1]) if re.search(r"[.;:!?…]$", w)}
+    # DP : apparier pauses (dans l'ordre) et coupures du texte (dans l'ordre)
+    P, B = len(pauses), len(brk)
+    INF = 1e9; D = np.full((P+1, B+1), INF); D[0, :] = 0; D[:, 0] = [0]*(P+1)
+    bt = {}
+    D[0, 0] = 0
+    for p in range(P+1):
+        for b in range(B+1):
+            if p == 0 and b == 0: continue
+            best = INF; arg = None
+            if p > 0 and b > 0:
+                c = abs(cum[brk[b-1]]/tot - sp_before[p-1]/max(1e-6, speech_total))*10
+                if D[p-1, b-1] + c < best: best, arg = D[p-1, b-1] + c, "m"
+            if p > 0:   # pause sans ponctuation (respiration)
+                dur = pauses[p-1][1]-pauses[p-1][0]
+                c = 0.6 + 2.0*max(0, dur-0.25)
+                if D[p-1, b] + c < best: best, arg = D[p-1, b] + c, "p"
+            if b > 0:   # ponctuation sans pause
+                c = 0.5 if brk[b-1] not in strong else 1.2
+                if D[p, b-1] + c < best: best, arg = D[p, b-1] + c, "b"
+            D[p, b] = best; bt[(p, b)] = arg
+    anchors = []; p, b = P, B
+    while p > 0 or b > 0:
+        m = bt.get((p, b))
+        if m == "m": anchors.append((brk[b-1], pauses[p-1])); p -= 1; b -= 1
+        elif m == "p": p -= 1
+        else: b -= 1
+    anchors.reverse()
+    # sections entre ancres : (mot_début, mot_fin, t_début, t_fin, pauses internes)
+    cuts = [(0, t0)] + [(wi, pb) for wi, (pa, pb) in anchors]
+    ends = [pa for wi, (pa, pb) in anchors] + [t1]
+    out = []
+    for k, (w0, ts) in enumerate(cuts):
+        w1 = cuts[k+1][0] if k+1 < len(cuts) else len(words); te = ends[k]
+        inner = [(pa, pb) for (pa, pb) in pauses if ts < pa and pb < te]
+        seg_speech = (te-ts) - sum(pb-pa for pa, pb in inner)
+        def at_speech(x):   # temps de parole -> temps réel (en sautant les pauses internes)
+            tcur = ts
+            for pa, pb in inner:
+                if tcur + x <= pa: return tcur + x
+                x -= pa - tcur; tcur = pb
+            return tcur + x
+        wsum = sum(wts[w0:w1]) or 1; acc = 0
+        for wi in range(w0, w1):
+            s = at_speech(seg_speech*acc/wsum); acc += wts[wi]; e = at_speech(seg_speech*acc/wsum)
+            out.append((words[wi], round(s, 3), round(e, 3)))
+    return out
+
+class Words:
+    """Accès pratique aux mots d'une scène : W("Ferguson") -> temps de début (dans le fichier voix)."""
+    def __init__(self, aligned): self.a = aligned
+    def __call__(self, word, n=1, end=False):
+        norm = lambda x: re.sub(r"[.,;:!?…'’\"«»]", "", x.lower())
+        k = 0; key = norm(word)
+        for w, s, e in self.a:
+            if norm(w).startswith(key):
+                k += 1
+                if k == n: return e if end else s
+        raise KeyError(word)
+
+# ---------------------------------------------------------------- fonds colorés, glitch, transitions rapides
+_panels = {}
+def stage_fill(cv, frame, color, key=None):
+    """Remplit la scène avec un papier coloré texturé (pour varier les ambiances d'une scène à l'autre)."""
+    key = key or str(color)
+    if key not in _panels:
+        sx0, sy0, sx1, sy1 = STAGE; w, h = sx1-sx0, sy1-sy0; ims = []
+        for i in range(3):
+            g = _lowfreq(w, h, 300+i+hash(key) % 97, 40); rng = np.random.default_rng(700+i)
+            fib = rng.random((h, w)).astype(np.float32)
+            st = np.zeros((h, w, 3), np.float32); st[:] = color
+            st *= (0.93+0.10*g)[..., None]; st -= ((fib > .985)*14)[..., None]
+            yy, xx = np.mgrid[0:h, 0:w]; vx = (xx/w-.5); vy = (yy/h-.5)
+            st *= (1-.25*(vx*vx+vy*vy)*2)[..., None]
+            ims.append(Image.fromarray(np.clip(st, 0, 255).astype(np.uint8)))
+        m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+        _panels[key] = (ims, m)
+    ims, m = _panels[key]
+    cv.paste(ims[boil(frame)], STAGE[:2], m)
+
+def rgb_split(cv, amount=8, frame=0, slices=0):
+    """Glitch : décalage des canaux rouge / bleu (+ tranches horizontales décalées)."""
+    if amount < 1 and slices == 0: return
+    st = cv.crop(STAGE); r, g, b = st.split(); a = int(amount)
+    r = ImageChops.offset(r, -a, 0); b = ImageChops.offset(b, a, 0)
+    st = Image.merge("RGB", (r, g, b))
+    if slices:
+        rnd = random.Random(frame//2)
+        for _ in range(slices):
+            y = rnd.randint(0, st.height-60); hgt = rnd.randint(12, 60); dx = rnd.randint(-40, 40)
+            band = st.crop((0, y, st.width, y+hgt)); st.paste(ImageChops.offset(band, dx, 0), (0, y))
+    cv.paste(st, STAGE[:2])
+
+def whip_transition(cv, prev, u, direction=-1):
+    """Filé rapide : l'ancienne image part sur le côté avec un flou de mouvement, la nouvelle arrive."""
+    sx0, sy0, sx1, sy1 = STAGE; w, h = sx1-sx0, sy1-sy0
+    e = ease_io(u)
+    new = cv.crop(STAGE); old = prev.crop(STAGE)
+    def blur(im, k):
+        if k < 2: return im
+        return im.resize((max(1, w//k), h), Image.BILINEAR).resize((w, h), Image.BILINEAR)
+    k = int(2 + 22*math.sin(u*math.pi))
+    comp = Image.new("RGB", (w, h))
+    comp.paste(blur(old, k), (int(direction*e*w), 0))
+    comp.paste(blur(new, k), (int(direction*e*w - direction*w), 0))
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    cv.paste(comp, (sx0, sy0), m)
+
+def punch_transition(cv, prev, u):
+    """Coupe « punch » : flash blanc + zoom qui retombe sur la nouvelle scène."""
+    zoom_punch(cv, 1 + 0.14*(1-ease_out_cubic(u)))
+    flash(cv, 0.9*(1-u)**2)
+
+_pol_cache = {}
+def polaroid_transition(cv, prev, u, target=(250, 470), scale=.36, rot=-8):
+    """Arrêt sur image : l'image précédente devient une photo (bord blanc, noir et blanc) qui s'épingle en haut à gauche."""
+    key = id(prev)
+    if key not in _pol_cache:
+        st = prev.crop(STAGE).convert("L").convert("RGB")
+        w, h = st.size; b = 28
+        card = Image.new("RGBA", (w+2*b, h+2*b+60), (250, 248, 240, 255)); card.paste(st, (b, b))
+        card.info["anchor"] = (card.width/2, card.height/2)
+        _pol_cache.clear(); _pol_cache[key] = card
+    card = _pol_cache[key]; e = ease_out_back(clamp(u), 1.2)
+    sx0, sy0, sx1, sy1 = STAGE
+    x = lerp((sx0+sx1)/2, target[0], e); y = lerp((sy0+sy1)/2, target[1], e)
+    s = lerp(1.0*(sx1-sx0)/card.width, scale, e)
+    blit(cv, card, x+10, y+14, s, rot*e, .25)   # ombre grossière
+    blit(cv, card, x, y, s, rot*e, 1)
+
+TRANSITIONS = {
+    "tear_v": lambda cv, prev, t, d, i: tear_transition(cv, prev, t/d, "tear_v", seed=i),
+    "tear_h": lambda cv, prev, t, d, i: tear_transition(cv, prev, t/d, "tear_h", seed=i),
+    "tear_d": lambda cv, prev, t, d, i: tear_transition(cv, prev, t/d, "tear_d", seed=i),
+    "whip":   lambda cv, prev, t, d, i: whip_transition(cv, prev, t/d, -1 if i % 2 else 1),
+    "punch":  lambda cv, prev, t, d, i: punch_transition(cv, prev, t/d),
+    "polaroid": lambda cv, prev, t, d, i: polaroid_transition(cv, prev, t/0.55),
+}

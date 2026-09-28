@@ -9,7 +9,8 @@ Adaptation du skill `tiktok-edu-motion` (vidéos éducatives) aux **histoires de
 Même identité visuelle (papier déchiré, gouache, boil stop-motion, fenêtre de terminal `~/légendes $ ./<joueur>`), **sans la mascotte Pixel** (le joueur est le seul personnage récurrent),
 avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py`).
 
-Épisode de référence : `episodes/messi/messi.py` (9 scènes, 2 min 03).
+Épisodes de référence : `episodes/ronaldo/ronaldo.py` (**le modèle à suivre** : 12 scènes, 1 min 49, montage nerveux)
+et `episodes/messi/messi.py` (9 scènes, 2 min 03, plus posé).
 
 ## Livrables (toujours, sans s'arrêter au storyboard)
 Dans `output/<joueur>/` :
@@ -36,11 +37,33 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 5. **Textes à l'écran** = commentaires courts (date, chiffre, nom), jamais la transcription. Titre en haut (y≈330), étiquettes entre y 450 et 1500. Zone sûre TikTok : rien d'important sous y≈1550 ni à droite de x≈930.
 6. **Carte des transitions** avant de coder : alterner continuités (l'objet de fin devient l'objet suivant) et déchirures (`Scene(trans="tear_v" | "tear_h" | "tear_d")`, 5-6 par épisode au plus). Une scène suivie d'une déchirure garde sa composition jusqu'au bout (pas d'animation de sortie).
 
+## Rétention (ce qui marche, appliqué dans l'épisode Ronaldo)
+- **Accroche en devinette** : dès la 1re image, un titre (« QUI EST-CE ? ») + la silhouette noire du joueur + 3 indices qui claquent
+  (le plus surprenant d'abord), puis « Tu l'as reconnu ? ». La révélation ouvre la scène 2 (flash + zoom, célébration du joueur).
+- **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
+  `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
+  cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
+- **Fin** : question oui/non liée à l'actualité du joueur (« il va atteindre les 1000 buts ? ») + bouton « + ABONNE-TOI » qui s'enfonce.
+- **Rythme** : un changement visuel toutes les 1,5-3 s. Plusieurs plans par scène (`shots()`), un fond de couleur par plan
+  (`stage_fill`), un mot clé à l'écran sur chaque info (`kw()`), zoom caméra continu (`drift()`), glitch sur les moments durs.
+  Marges voix courtes : `pad_in=0.15`, `pad_out=0.3`.
+
+## Montage calé sur la voix (`engine/story.py`)
+- `align_words(voix.mp3, texte)` donne le minutage de chaque mot (pauses de la voix appariées à la ponctuation + syllabes, ±0,15 s),
+  sans modèle de reconnaissance (Hugging Face est bloqué dans le conteneur). `align_episode()` l'enregistre dans `alignement.json`.
+- Dans une scène : `w(i, "mot", n)` = instant où le n-ième mot commençant par « mot » est prononcé (attention aux préfixes :
+  « marque » trouve d'abord « marquer », « Ronald » trouve « Ronaldo » → préciser `n`).
+- `shots(cv, fr, t, [(t0, plan_a), (t1, plan_b), …])` : plusieurs plans dans une scène, filé avec flou de mouvement entre eux.
+- Transitions de scène : `tear_v` / `tear_h` / `tear_d` (déchirure), `whip` (filé), `punch` (flash + zoom), `polaroid` (arrêt sur image).
+
 ## Kit football (`engine/foot.py`)
 - `Player(key)` : joueur articulé. `draw(cv, fr, x, y_pieds, s, age=0..1, kit=..., beard=, arms=(g, d), legs=(g, d), mood=, tears=, look=)`.
   `age` 0 = 10 ans / 1,27 m, 1 = adulte / 1,70 m à la même échelle : **animer `age` pour le faire grandir** contre la toise (`toise_sprite(483)`, `PX_M = 483` à s=1.3).
   `arms` : ouverture vers l'extérieur en degrés (0 = le long du corps, 165 = bras au ciel). `mood` : normal, happy, cheer, sad, surprised, determined.
-- `KITS` : newells, barca, psg, arg, miami, street, suit, coach ; en ajouter un = une entrée (`plain` / `stripes` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
+- `Player(key, hair=, skin=, hair_style="short"|"quiff")` : teint et coiffure par joueur.
+- `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira ;
+  en ajouter un = une entrée (`plain` / `stripes` / `hoops` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
+- `silhouette()` (devinette), `UCL` (coupe aux grandes oreilles).
 - Changer de maillot : `spin_player` / `render_layer` + `blit_sxy` (tour sur lui-même), ou déchirer l'ancien maillot (`jersey_front` + `tear_split`).
 - Objets : `draw_ball`, `draw_goal(net_u=)`, `CUP`, `WC_TROPHY`, `WC_SIL`, `BALLON_OR`, `jersey_back(kit, "NOM", n)`, `price_tag`, `scoreboard_sprite`, `pencil_check` / `pencil_cross`, `Granny`.
 
@@ -56,7 +79,9 @@ plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow
   Récupérer `media[].url` via `creative_get_flow_run_status`, télécharger avec `curl` dans `episodes/<joueur>/voix/scene_N.mp3` (le domaine `storage.googleapis.com` doit être autorisé).
 - Caler les animations sur les mots : `ffmpeg -af silencedetect=noise=-35dB:d=0.18` donne les pauses de chaque fichier ; dans la scène, `tv(temps_dans_le_fichier)` = temps local.
 - Bruitages : `assets/sfx/*.mp3` (générés une fois avec `eleven_text_to_sound_v2`, ~17 crédits pièce) : rip, crowd (+ `crowd_long` auto), whistle, cash, flash, stamp, whoosh, kick, boom, gavel, plane, groan, heart, riser, sparkle.
+  + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque).
   S'y ajoutent les synthétiques : pop, pop2, swish, thud, clink, paper, scribble, whoosh_up, ding, poof, tick.
+  `Scene(sfx=[(temps, "nom", gain, durée_max)])` : la durée max coupe un bruitage trop long (fondu de sortie).
   `Scene(sfx=[(temps, "nom", gain)])` ; les bruitages sont baissés automatiquement sous la voix (ducking).
 - Mixage : `render_episode(..., sfx_db=7, lufs=-14)` : la voix est ramenée à un niveau fixe, le bus bruitages est calé 7 dB dessous,
   puis loudnorm EBU R128 en deux passes à -14 LUFS (niveau TikTok). Sans ça, les bruitages ElevenLabs (normalisés à fond) écrasent la voix.

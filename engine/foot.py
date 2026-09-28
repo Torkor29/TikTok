@@ -21,6 +21,12 @@ KITS = {
     "street":  dict(kind="plain", c1=(252, 250, 244), sleeve=(252, 250, 244), shorts=(40, 84, 150), socks=(252, 250, 244), trim=(40, 84, 150)),
     "suit":    dict(kind="suit", c1=(52, 54, 62), sleeve=(52, 54, 62), shorts=(52, 54, 62), socks=(52, 54, 62), trim=(250, 248, 240), pants=True),
     "coach":   dict(kind="plain", c1=(38, 150, 138), sleeve=(38, 150, 138), shorts=(46, 44, 42), socks=(46, 44, 42), trim=(250, 248, 240), pants=True),
+    "sporting": dict(kind="hoops", c1=(0, 128, 72), c2=(250, 250, 246), n=7, sleeve=(250, 250, 246), shorts=(34, 32, 32), socks=(0, 128, 72), trim=(0, 128, 72)),
+    "manutd":  dict(kind="plain", c1=(214, 24, 34), sleeve=(214, 24, 34), shorts=(250, 250, 246), socks=(34, 32, 32), trim=(250, 250, 246)),
+    "real":    dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(212, 170, 60)),
+    "portugal": dict(kind="plain", c1=(196, 18, 48), sleeve=(196, 18, 48), shorts=(0, 110, 62), socks=(196, 18, 48), trim=(0, 110, 62)),
+    "alnassr": dict(kind="plain", c1=(252, 212, 20), sleeve=(252, 212, 20), shorts=(20, 50, 150), socks=(252, 212, 20), trim=(20, 50, 150)),
+    "madeira": dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(40, 84, 150), socks=(250, 250, 246), trim=(196, 18, 48)),
 }
 
 def kit_pattern(kit, x0, x1):
@@ -31,6 +37,10 @@ def kit_pattern(kit, x0, x1):
             n = kit["n"]; w = (x1-x0)/n
             for i in range(n):
                 d.rectangle([ox+x0+i*w, 0, ox+x0+(i+1)*w, 4000], fill=kit["c1"] if i % 2 == 0 else kit["c2"])
+        elif k == "hoops":
+            n = kit["n"]; hgt = 200/n
+            for i in range(n):
+                d.rectangle([0, oy-10+i*hgt, 4000, oy-10+(i+1)*hgt], fill=kit["c1"] if i % 2 == 0 else kit["c2"])
         elif k == "halves":
             d.rectangle([0, 0, ox, 4000], fill=kit["c1"]); d.rectangle([ox, 0, 4000, 4000], fill=kit["c2"])
         elif k == "band":
@@ -48,12 +58,18 @@ HIP_Y, WAIST_Y, NECK_Y, SHOULDER_DX, HIP_DX = -262, -330, -512, 84, 38
 class Player:
     _cache = {}
 
-    def __init__(self, key="messi", hair=HAIR, beard_col=(92, 60, 40)):
+    def __init__(self, key="messi", hair=HAIR, beard_col=(92, 60, 40), skin=None, hair_style="short"):
         self.key, self.hair_col, self.beard_col = key, hair, beard_col
-        self.head = Paper(ellipse_pts(104, 124, 36), SKIN, key+"head", rough=1.4)
-        self.neck = Paper(rect_pts(34, 40), SKIN, key+"neck", rough=1, shadow=False)
-        self.hair_adult = Paper(poly_pts([(-56, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (57, -22),
-                                          (46, -36), (26, -46), (4, -44), (-22, -48), (-44, -34)]), hair, key+"hairA", rough=2.2, hatch=True)
+        self.skin = skin = skin or SKIN
+        self.head = Paper(ellipse_pts(104, 124, 36), skin, key+"head", rough=1.4)
+        self.neck = Paper(rect_pts(34, 40), skin, key+"neck", rough=1, shadow=False)
+        if hair_style == "quiff":   # cheveux courts sur les côtés, houppette relevée devant
+            hpts = [(-55, -14), (-56, -46), (-40, -66), (-18, -80), (6, -104), (30, -98), (46, -80), (56, -50), (56, -14),
+                    (46, -34), (30, -44), (8, -46), (-16, -46), (-40, -38)]
+        else:
+            hpts = [(-56, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (57, -22),
+                    (46, -36), (26, -46), (4, -44), (-22, -48), (-44, -34)]
+        self.hair_adult = Paper(poly_pts(hpts), hair, key+"hairA", rough=2.0, hatch=True)
         self.hair_kid = Paper(poly_pts([(-60, -2), (-58, -50), (-36, -74), (-2, -80), (32, -74), (54, -54), (60, -4),
                                         (48, -22), (34, -28), (14, -22), (-6, -30), (-26, -22), (-46, -26)]), hair, key+"hairK", rough=2.2, hatch=True)
         self.beard = Paper(poly_pts([(-52, -8), (-40, -2), (-22, 18), (0, 16), (22, 18), (40, -2), (52, -8), (50, 22), (34, 48),
@@ -72,7 +88,8 @@ class Player:
         sleeve_col, pants = kit["sleeve"], kit.get("pants")
         def arm_pat(d, ox, oy):
             d.rectangle([0, 0, 4000, oy+(190 if pants else 62)], fill=sleeve_col)
-        arm = Paper([(-18, -12), (18, -12), (17, 196), (-17, 196)], SKIN, k+"arm", rough=1.4, pattern=arm_pat)
+        skin = self.skin
+        arm = Paper([(-18, -12), (18, -12), (17, 196), (-17, 196)], skin, k+"arm", rough=1.4, pattern=arm_pat)
         def _hand(d, a):
             ax, ay = a; d.ellipse([ax-17, ay+182, ax+17, ay+216], fill=SKIN)
         arm.add(_hand)
@@ -85,7 +102,7 @@ class Player:
                 d.rectangle([0, oy+236, 4000, 4000], fill=(34, 32, 32))
             pts = [(-20, -6), (20, -6), (20, 238), (20+side*28, 244), (22+side*34, 262), (-22, 262), (-20, 238)] if side > 0 else \
                   [(-20, -6), (20, -6), (20, 238), (22, 262), (-22+side*34, 262), (-20+side*28, 244), (-20, 238)]
-            legs.append(Paper(pts, SKIN, k+f"leg{side}", rough=1.4, pattern=leg_pat))
+            legs.append(Paper(pts, skin, k+f"leg{side}", rough=1.4, pattern=leg_pat))
         P = dict(torso=torso, arm=arm, shorts=shorts, legs=legs, kit=kit)
         Player._cache[ck] = P
         return P
@@ -317,3 +334,17 @@ def pencil_check(d, x, y, s=1.0, col=(46, 150, 80)):
 def pencil_cross(d, x, y, s=1.0, col=PAL["red"]):
     pencil_line(d, [(x-20*s, y-20*s), (x+20*s, y+20*s)], 1, col, int(9*s), 4, 1.5)
     pencil_line(d, [(x+20*s, y-20*s), (x-20*s, y+20*s)], 1, col, int(9*s), 5, 1.5)
+
+
+def silhouette(layer_img, color=(34, 32, 36)):
+    """Transforme un calque (joueur…) en silhouette unie, pour les devinettes."""
+    sil = Image.new("RGBA", layer_img.size, (*color, 0)); sil.putalpha(layer_img.getchannel("A"))
+    sil.info["anchor"] = layer_img.info.get("anchor"); return sil
+
+def _ucl_decor(d, a):
+    ax, ay = a
+    for sg in (-1, 1):   # les grandes oreilles
+        d.arc([ax+sg*70-70, ay-120, ax+sg*70+70, ay+40], 90 if sg < 0 else 270, 270 if sg < 0 else 90, fill=(170, 176, 186), width=18)
+    d.ellipse([ax-62, ay-128, ax+62, ay-100], fill=(236, 240, 246))
+UCL = Paper(poly_pts([(-66, -118), (66, -118), (58, -20), (26, 40), (18, 110), (54, 128), (54, 152), (-54, 152), (-54, 128), (-18, 110), (-26, 40), (-58, -20)]),
+            (206, 212, 222), "ucl", rough=1.5, hatch=True, pad=70).add(_ucl_decor)
