@@ -20,6 +20,7 @@ engine/foot.py        kit foot : joueur qui grandit / change de maillot, ballon,
 episodes/<joueur>/    script de l'épisode + voix off (voix/scene_N.mp3)
 assets/sfx/           bruitages ElevenLabs réutilisables (déchirure, foule, sifflet, caisse, flashs…)
 output/<joueur>/      livrables
+branding/             compte TikTok « Foot Découpé » : nom, bio, description, photo de profil (pp.py)
 scripts/setup.sh      dépendances (Pillow, numpy, ffmpeg, polices)
 scripts/build_skill.sh  fabrique dist/tiktok-foot-legendes.skill
 ```
