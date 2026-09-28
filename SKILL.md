@@ -6,7 +6,7 @@ description: Crée des vidéos TikTok « Légendes du foot » (1080x1920, ~1 min
 # TikTok « Légendes du foot » — motion design papier
 
 Adaptation du skill `tiktok-edu-motion` (vidéos éducatives) aux **histoires de footballeurs**.
-Même identité visuelle (papier déchiré, gouache, boil stop-motion, mascotte Pixel, fenêtre de terminal `~/légendes $ ./<joueur>`),
+Même identité visuelle (papier déchiré, gouache, boil stop-motion, fenêtre de terminal `~/légendes $ ./<joueur>`), **sans la mascotte Pixel** (le joueur est le seul personnage récurrent),
 avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py`).
 
 Épisode de référence : `episodes/messi/messi.py` (9 scènes, 2 min 03).
@@ -47,7 +47,7 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 ## Effets (`engine/engine.py`)
 `tear_transition` (automatique via `Scene(trans=…)`), `tear_split(image)` (déchirer n'importe quel objet : contrat, maillot),
 `shake`, `zoom_punch`, `flash`, `tint` (nuit), `rays`, `speed_lines`, `confetti`, `camera_flashes`, `drops` (larmes), `counter` (compteurs qui défilent),
-plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow`, `particles`, `regroup`, `Mascot`).
+plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow`, `particles`, `regroup`). `Mascot` existe encore dans le moteur mais n'est pas utilisée dans cette série.
 `paper_sprite(pattern=…)` peint un motif (rayures) sous la texture papier.
 
 ## Voix off et bruitages (ElevenLabs connecté)
@@ -69,7 +69,8 @@ python3 episodes/<joueur>/<joueur>.py output/<joueur> --stills 3,4     # seuleme
 python3 episodes/<joueur>/<joueur>.py output/<joueur> --cover
 nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 &   # ~8-10 min pour 2 min sur 4 cœurs (x264 slow, crf 25 ≈ 35 Mo)
 ```
-**Toujours regarder les planches** avant le rendu complet : chevauchements (mascotte en bas à gauche, titre sur 2 lignes), objets hors de la zone sûre, étiquettes illisibles.
+**Toujours regarder les planches** avant le rendu complet : chevauchements (titre sur 2 lignes), objets hors de la zone sûre, étiquettes illisibles.
+**Toujours vérifier que la voix est dans le .mp4 final** (corrélation avec `voix/scene_1.mp3`, ou écoute) et n'envoyer que la version avec voix : la version `_sans_voix` prête à confusion.
 
 ## Pièges connus
 - Les polices n'ont ni « → » ni « ★ ✓ ✗ » : dessiner flèches, étoiles, coches (`arrow`, `draw_star`, `pencil_check`).

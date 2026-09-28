@@ -15,7 +15,7 @@ Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couve
 ## Structure
 
 ```
-engine/engine.py      moteur papier (Paper, Label, Mascot…) + déchirures, effets, bruitages, rendu parallèle
+engine/engine.py      moteur papier (Paper, Label…) + déchirures, effets, bruitages, rendu parallèle
 engine/foot.py        kit foot : joueur qui grandit / change de maillot, ballon, cages, trophées, toise…
 episodes/<joueur>/    script de l'épisode + voix off (voix/scene_N.mp3)
 assets/sfx/           bruitages ElevenLabs réutilisables (déchirure, foule, sifflet, caisse, flashs…)

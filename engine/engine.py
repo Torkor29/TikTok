@@ -785,8 +785,10 @@ def render_episode(scenes, out_dir, slug, title="~/savoir $ ./episode", voice_sc
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", f"{tmp}/chunks.txt", "-c", "copy", silent], check=True)
     # 4) mux
     for nm, aud in ((f"{slug}.mp4", "audio_full"), (f"{slug}_sans_voix.mp4", "audio_sfx_only")):
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", silent, "-i", f"{tmp}/{aud}.wav", "-c:v", "copy",
-                        "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", f"{out_dir}/{nm}"], check=True)
+        # son stéréo 48 kHz : le format le plus compatible (TikTok, iPhone, Android, lecteurs intégrés)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", silent, "-i", f"{tmp}/{aud}.wav", "-map", "0:v:0", "-map", "1:a:0",
+                        "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ac", "2", "-ar", "48000", "-shortest",
+                        "-movflags", "+faststart", f"{out_dir}/{nm}"], check=True)
     return [f"{out_dir}/{slug}.mp4", f"{out_dir}/{slug}_sans_voix.mp4"]
 
 def scene_timing(scenes, voice_files):

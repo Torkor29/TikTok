@@ -18,7 +18,6 @@ VOICE = [os.path.join(HERE, "voix", f"scene_{i}.mp3") for i in range(1, 10)]
 SFX_DIR = os.path.join(ROOT, "assets", "sfx")
 PAD = 0.25                                   # silence avant la voix dans chaque scène
 def tv(v): return PAD + v                    # temps local d'un mot, à partir de son temps dans le fichier voix
-M = Mascot(); MX, MY = 165, 1470             # mascotte : position de repos (coin bas gauche)
 PL = Player("messi"); GR = Granny()
 COACH = Player("coach", hair=(58, 48, 42)); REX = Player("rexach", hair=(176, 174, 170))
 
@@ -68,8 +67,6 @@ def punch(cv, t, t0, z=1.07, dur=.35, center=None):
     if t0 <= t < t0+dur: zoom_punch(cv, 1+(z-1)*(1-(t-t0)/dur), center)
 def flashes(cv, t, t0, dur=.18, a=.75):
     if t0 <= t < t0+dur: flash(cv, a*(1-(t-t0)/dur))
-def mascot(cv, fr, t, mood="normal", hop=0.0, look=(1, -1), x=MX, y=MY):
-    M.draw(cv, fr, x, y, look=look, mood=mood, hop=hop, t=t)
 
 # ------------------------------------------------------------------ objets propres à l'épisode
 def _bill_decor(d, a):
@@ -394,7 +391,6 @@ def s1(cv, fr, t, T):
             x, y, r = S1_POS[i]; show_stamp(cv, fr, lab, t, S1_T[i], x, y, r)
     hl(cv, fr, H1, t, tw+.3, tv(7.2), y=330)
     N1a.draw(cv, fr, CX, 300, win(t, tv(7.31)), -2); N1b.draw(cv, fr, CX, 440, win(t, tv(7.9), None, .5), 2)
-    mascot(cv, fr, t, "surprised" if S1_T[0] < t < tw else ("happy" if t > tw else "normal"), hop=abs(math.sin(t*9))*40 if tw < t < tw+1 else 0)
     for t0 in S1_T: impact(cv, t, t0, 18)
     flashes(cv, t, tw, .25, .8)
 
@@ -450,7 +446,6 @@ def s2(cv, fr, t, T):
     show(cv, fr, T2c, t, tv(5.8), tv(7.3), 560, 700, 1)
     show(cv, fr, T2d, t, tv(7.3), tv(8.9), 560, 700, -1)
     show(cv, fr, T2e, t, tv(11.1), None, CX, 960, -1.5)
-    mascot(cv, fr, t, "happy" if t > t_sky else "normal")
     flashes(cv, t, t_sky, .2, .5)
 
 # ------------------------------------------------------------------ SCÈNE 3 — le diagnostic
@@ -497,7 +492,6 @@ def s3(cv, fr, t, T):
         d.text((690+88*pa, 1000), L, font=font("title", int(60*pa)), fill=PAL["ink"], anchor="mm")
         d.text((690+88*pa, 1058), "par mois", font=font("hand", int(40*pa)), fill=PAL["ink"], anchor="mm")
         show_stamp(cv, fr, S3, t, tv(9.6), 700, 1170, -8)
-    mascot(cv, fr, t, "surprised" if t > tv(2.74) else "normal", look=(1, 0))
     impact(cv, t, tv(9.6), 16)
 
 # ------------------------------------------------------------------ SCÈNE 4 — la serviette
@@ -582,7 +576,6 @@ def s4(cv, fr, t, T):
             TAG4.draw(cv, fr, 470, 1330, pa2, -3)
             d.text((470+100*pa2, 1330), f"{counter(0, 965000, prog(t, tv(13.2), 1.1))} $", font=font("title", int(52*pa2)), fill=PAL["ink"], anchor="mm")
         show(cv, fr, T4e, t, tv(13.6), None, 590, 1460, 1)
-    mascot(cv, fr, t, "surprised" if tv(8.53) < t < tv(9.8) or t > hit else "normal")
     punch(cv, t, tv(8.53), 1.08); impact(cv, t, tv(12.9), 14)
 
 # ------------------------------------------------------------------ SCÈNE 5 — il grandit, débuts, premier but
@@ -642,7 +635,6 @@ def s5(cv, fr, t, T):
     if t > t_run:
         speed_lines(cv, fr, (CX, 1000), prog(t, t_run, .3), seed=5)
         draw_ball(cv, fr, px+90, FLOOR-40, .6, t*900)
-    mascot(cv, fr, t, "happy" if t > tg1 else "normal", hop=abs(math.sin(t*9))*35 if tg1 < t < tg1+.8 else 0)
     punch(cv, t, t_shot+.35, 1.06); flashes(cv, t, t_shot+.35, .15, .5); punch(cv, t, t_run, 1.05, .5)
 
 # ------------------------------------------------------------------ SCÈNE 6 — la machine à records
@@ -686,7 +678,6 @@ def s6(cv, fr, t, T):
     hl(cv, fr, H6a, t, .1, t12)
     hl(cv, fr, H6b, t, t12+.05, tbo)
     hl(cv, fr, H6c, t, tbo+.05)
-    mascot(cv, fr, t, "happy" if t > tno else "surprised", hop=abs(math.sin(t*8))*35 if t > tno else 0)
     impact(cv, t, tv(5.6), 14); impact(cv, t, tno, 14)
 
 # ------------------------------------------------------------------ SCÈNE 7 — l'argent, le départ
@@ -748,7 +739,6 @@ def s7(cv, fr, t, T):
         else:
             PL.draw(cv, fr, CX, 1480, 1.0, age=1, kit="psg", beard=True, mood="normal", t=t)
         show(cv, fr, T7e, t, tv(14.1), None, CX, 700, -2)
-    mascot(cv, fr, t, "surprised" if t_num < t < t_sec else ("normal" if t < t_rip else "normal"))
     impact(cv, t, t_rec, 14); impact(cv, t, t_rip, 10)
 
 # ------------------------------------------------------------------ SCÈNE 8 — la Coupe du monde
@@ -816,8 +806,6 @@ def s8(cv, fr, t, T):
         WC_TROPHY.draw(cv, fr, CX, 1500 + 300*(1-u) - 815 + 60*(1-lift), .62, 3*math.sin(t*3))
         show_stamp(cv, fr, S8, t, t_enfin, CX, 380, -6)
         camera_flashes(cv, fr, "cf8", t-t_enfin-.2, 2.0, 12)
-    mascot(cv, fr, t, "happy" if t > t_enfin else ("surprised" if t_kick < t < t_quit else "normal"),
-           hop=abs(math.sin(t*8))*40 if t > t_enfin else 0)
     impact(cv, t, t_enfin, 20); flashes(cv, t, t_enfin, .25, .8)
 
 # ------------------------------------------------------------------ SCÈNE 9 — Miami, 2026, le plus grand
@@ -887,8 +875,6 @@ def s9(cv, fr, t, T):
         confetti(cv, fr, "c9", t-t_big-1.2, 60, 5)
     T9e.draw(cv, fr, CX, 540, win(t, t_sub+.2), -2)
     T9f.draw(cv, fr, CX, 660, win(t, t_sub+.9), 1.5)
-    mascot(cv, fr, t, "happy" if t > t_big else "normal", hop=abs(math.sin(t*7))*40 if t > t_sub else 0,
-           look=(1, -1))
     flashes(cv, t, t_big+1.2, .2, .6); impact(cv, t, t_big+1.2, 14)
 
 # ------------------------------------------------------------------ scènes + bruitages
@@ -954,7 +940,6 @@ def cover(path):
     PL.draw(cv, 0, 750, floor, 1.1, age=1, kit="arg", beard=True, mood="cheer", arms=(172, 172), t=1)
     WC_TROPHY.draw(cv, 0, 750, floor - 1.1*(512-14) - 205 - 82, .5, 3)
     Label("L'HISTOIRE FOLLE DE MESSI", "c4", font("title", 66), PAL["cream"], PAL["teal"], padx=30, pady=12).draw(cv, 0, CX, 1680, 1, 1)
-    M.draw(cv, 0, 960, 1480, look=(-1, -1), mood="surprised", scale=.6, t=1.0)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 # ------------------------------------------------------------------ planches de contrôle
