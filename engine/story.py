@@ -137,3 +137,48 @@ def heart_pts(s=1.0, n=60):
 def draw_star(cv, x, y, r, a=1.0, rot=0.0, col=(255, 236, 150)):
     if a <= .01: return
     ImageDraw.Draw(cv).polygon(star_shape(x, y, r*a, 5, .45, rot-math.pi/2), fill=col)
+
+# ------------------------------------------------------------------ effets « archive »
+def grayscale(cv, a=1.0):
+    """Passe la scène en noir et blanc (a = dosage) : moments tristes, souvenirs."""
+    if a <= .01: return
+    st = cv.crop(STAGE); g = st.convert("L").convert("RGB")
+    if a < .99: g = Image.blend(st, g, a)
+    m = Image.new("L", g.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, g.width-1, g.height-1], 20, fill=255)
+    cv.paste(g, STAGE[:2], m)
+
+def vhs(cv, fr, t, a=1.0, label="REW", stamp=None):
+    """Rembobinage de cassette VHS : lignes de balayage, bande de tracking qui remonte, canaux décalés,
+    tranches qui glissent, incrustation ◀◀ REW (triangles dessinés : la police n'a pas le glyphe)."""
+    if a <= .01: return
+    rgb_split(cv, 10*a, fr, slices=int(5*a))
+    sx0, sy0, sx1, sy1 = STAGE; w, h = sx1-sx0, sy1-sy0
+    st = np.asarray(cv.crop(STAGE), dtype=np.float32)
+    st[::4] *= 1 - .35*a                                        # lignes de balayage
+    st = st*(1-.25*a) + np.array([40, 60, 110], np.float32)*.25*a   # dominante bleue
+    rng = np.random.default_rng(fr)
+    by = int((1 - (t*1.7) % 1.0)*(h+160)) - 80                  # bande de tracking qui remonte
+    y0, y1 = max(0, by), min(h, by+70)
+    if y1 > y0:
+        st[y0:y1] = st[y0:y1]*.4 + rng.random((y1-y0, w, 1)).astype(np.float32)*230*.6
+    st += (rng.random((h, w, 1)).astype(np.float32) - .5)*38*a   # neige
+    im = Image.fromarray(np.clip(st, 0, 255).astype(np.uint8))
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    cv.paste(im, (sx0, sy0), m)
+    d = ImageDraw.Draw(cv); x, y = 90, 200; col = (250, 250, 246)
+    if int(t*3) % 2 == 0 or label != "REW":
+        for k in range(2): d.polygon([(x+k*44, y), (x+k*44+44, y-28), (x+k*44+44, y+28)], fill=col)
+        d.text((x+110, y), label, font=font("mono", 64), fill=col, anchor="lm")
+    if stamp: d.text((sx1-60, sy1-420), stamp, font=font("mono", 58), fill=col, anchor="rm")
+
+def fr_flag(cv, x, y, w=300, h=200, a=1.0, t=0.0, rot=0.0):
+    """Drapeau français qui ondule."""
+    if a <= .01: return
+    L = layer(int(w+40), int(h+60), (w/2+20, h/2+30)); d = ImageDraw.Draw(L)
+    cols = [(24, 44, 120), (250, 250, 246), (206, 32, 44)]
+    n = 30
+    for k in range(n):
+        x0 = 20 + k*w/n; x1 = 20 + (k+1)*w/n + 1
+        off = 12*math.sin(k/n*math.pi*2 - t*5)*(k/n)
+        d.rectangle([x0, 30+off, x1, 30+h+off], fill=cols[min(2, int(3*k/n))])
+    blit(cv, L, x, y, a, rot, 1)

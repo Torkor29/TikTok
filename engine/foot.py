@@ -27,6 +27,15 @@ KITS = {
     "portugal": dict(kind="plain", c1=(196, 18, 48), sleeve=(196, 18, 48), shorts=(0, 110, 62), socks=(196, 18, 48), trim=(0, 110, 62)),
     "alnassr": dict(kind="plain", c1=(252, 212, 20), sleeve=(252, 212, 20), shorts=(20, 50, 150), socks=(252, 212, 20), trim=(20, 50, 150)),
     "madeira": dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(40, 84, 150), socks=(250, 250, 246), trim=(196, 18, 48)),
+    "france":  dict(kind="plain", c1=(24, 44, 120), sleeve=(24, 44, 120), shorts=(250, 250, 246), socks=(206, 32, 44), trim=(250, 250, 246)),
+    "france_w": dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(206, 32, 44)),
+    "italy":   dict(kind="plain", c1=(40, 100, 190), sleeve=(40, 100, 190), shorts=(250, 250, 246), socks=(40, 100, 190), trim=(250, 250, 246)),
+    "brazil":  dict(kind="plain", c1=(252, 214, 30), sleeve=(252, 214, 30), shorts=(24, 70, 160), socks=(250, 250, 246), trim=(0, 140, 70)),
+    "saudi":   dict(kind="plain", c1=(0, 120, 70), sleeve=(0, 120, 70), shorts=(250, 250, 246), socks=(0, 120, 70), trim=(250, 250, 246)),
+    "juventus": dict(kind="stripes", c1=(30, 28, 28), c2=(250, 250, 246), n=5, sleeve=(30, 28, 28), shorts=(250, 250, 246), socks=(30, 28, 28), trim=(250, 250, 246)),
+    "cannes":  dict(kind="plain", c1=(200, 30, 40), sleeve=(200, 30, 40), shorts=(250, 250, 246), socks=(200, 30, 40), trim=(250, 250, 246)),
+    "gk":      dict(kind="plain", c1=(120, 124, 130), sleeve=(120, 124, 130), shorts=(40, 40, 44), socks=(120, 124, 130), trim=(40, 40, 44)),
+    "ref":     dict(kind="plain", c1=(34, 32, 32), sleeve=(34, 32, 32), shorts=(34, 32, 32), socks=(34, 32, 32), trim=(250, 250, 246)),
 }
 
 def kit_pattern(kit, x0, x1):
@@ -55,6 +64,15 @@ def kit_pattern(kit, x0, x1):
 # L'âge (0 = 10 ans / 1,27 m, 1 = adulte / 1,70 m) change les proportions : corps plus court, tête plus grosse.
 HIP_Y, WAIST_Y, NECK_Y, SHOULDER_DX, HIP_DX = -262, -330, -512, 84, 38
 
+class HairGroup:
+    """Plusieurs mèches de papier dessinées ensemble (même ancre que la tête) : couronne d'un crâne chauve."""
+    def __init__(self, papers, shine=None): self.papers, self.shine = papers, shine
+    def draw(self, cv, fr, x, y, scale=1.0, rot=0.0, alpha=1.0, amp=1.5):
+        if self.shine and alpha > .5:   # reflet sur le crâne
+            d = ImageDraw.Draw(cv); s = scale
+            d.ellipse([x-30*s, y-54*s, x-8*s, y-42*s], fill=self.shine)
+        for p in self.papers: p.draw(cv, fr, x, y, scale, rot, alpha, amp)
+
 class Player:
     _cache = {}
 
@@ -69,7 +87,13 @@ class Player:
         else:
             hpts = [(-56, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (57, -22),
                     (46, -36), (26, -46), (4, -44), (-22, -48), (-44, -34)]
-        self.hair_adult = Paper(poly_pts(hpts), hair, key+"hairA", rough=2.0, hatch=True)
+        if hair_style == "bald":    # crâne rasé : deux touffes courtes au-dessus des oreilles
+            side = [(-57, -2), (-57, -26), (-52, -42), (-45, -40), (-47, -22), (-47, -2)]
+            self.hair_adult = HairGroup([Paper(poly_pts(side), hair, key+"hairL", rough=1.2, shadow=False),
+                                         Paper(poly_pts([(-x, y) for x, y in side]), hair, key+"hairR", rough=1.2, shadow=False)],
+                                        shine=tuple(min(255, c+28) for c in skin))
+        else:
+            self.hair_adult = Paper(poly_pts(hpts), hair, key+"hairA", rough=2.0, hatch=True)
         self.hair_kid = Paper(poly_pts([(-60, -2), (-58, -50), (-36, -74), (-2, -80), (32, -74), (54, -54), (60, -4),
                                         (48, -22), (34, -28), (14, -22), (-6, -30), (-26, -22), (-46, -26)]), hair, key+"hairK", rough=2.2, hatch=True)
         self.beard = Paper(poly_pts([(-52, -8), (-40, -2), (-22, 18), (0, 16), (22, 18), (40, -2), (52, -8), (50, 22), (34, 48),
@@ -170,6 +194,7 @@ class Player:
         """Dessine le joueur dans un calque (pour le faire pivoter / retourner d'un bloc)."""
         L = layer(int(760*s), int(900*s), (380*s, 820*s))
         tmp = Image.new("RGBA", L.size, (0, 0, 0, 0))
+        kw.setdefault("t", 1.0)   # t=0 tomberait sur un clignement (yeux fermés)
         self.draw(tmp, fr, 380*s, 820*s, s, **kw)
         tmp.info["anchor"] = (380*s, 820*s)
         return tmp
@@ -302,7 +327,7 @@ def jersey_back(kitname, name, number, key=None):
     kit = KITS[kitname]
     pts = [(-200, -210), (-120, -236), (-50, -228), (0, -218), (50, -228), (120, -236), (200, -210), (290, -100), (220, -34), (170, -80), (170, 236), (-170, 236), (-170, -80), (-220, -34), (-290, -100)]
     J = Paper(pts, kit["c1"], key or f"jb_{kitname}_{number}", rough=2, hatch=True, pattern=kit_pattern(kit, -200, 200))
-    col = (252, 248, 236) if kitname not in ("arg", "miami") else (30, 28, 28)
+    col = (30, 28, 28) if (kitname in ("arg", "miami") or sum(kit["c1"]) > 690) else (252, 248, 236)   # texte foncé sur maillot clair
     def dec(d, a):
         ax, ay = a
         d.text((ax, ay-150), name, font=font("title", 64), fill=col, anchor="mm", stroke_width=3, stroke_fill=(30, 28, 28) if col[0] > 200 else (250, 248, 240))

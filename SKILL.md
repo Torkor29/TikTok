@@ -9,7 +9,7 @@ Adaptation du skill `tiktok-edu-motion` (vidéos éducatives) aux **histoires de
 Même identité visuelle (papier déchiré, gouache, boil stop-motion, fenêtre de terminal `~/légendes $ ./<joueur>`), **sans la mascotte Pixel** (le joueur est le seul personnage récurrent),
 avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py`).
 
-Épisodes de référence : `episodes/ronaldo/ronaldo.py` (**le modèle à suivre** : 12 scènes, 1 min 49, montage nerveux)
+Épisodes de référence : `episodes/ronaldo/ronaldo.py` et `episodes/zidane/zidane.py` (**les modèles à suivre** : 12 scènes, ~1 min 45, montage nerveux),
 et `episodes/messi/messi.py` (9 scènes, 2 min 03, plus posé).
 
 ## Livrables (toujours, sans s'arrêter au storyboard)
@@ -40,6 +40,10 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 ## Rétention (ce qui marche, appliqué dans l'épisode Ronaldo)
 - **Accroche en devinette** : dès la 1re image, un titre (« QUI EST-CE ? ») + la silhouette noire du joueur + 3 indices qui claquent
   (le plus surprenant d'abord), puis « Tu l'as reconnu ? ». La révélation ouvre la scène 2 (flash + zoom, célébration du joueur).
+- **Ou accroche « cold open »** (épisode Zidane) : ouvrir sur le moment le plus fort de la carrière (le coup de tête de 2006),
+  arrêt sur image en noir et blanc (`grayscale`, seul le carton reste en couleur) + « COMMENT ?! », puis **rembobinage VHS**
+  (`vhs()` : balayage, bande de tracking, ◀◀ REW, compteur d'années qui recule, la scène rejouée à l'envers) jusqu'à la naissance.
+  La scène « fatale » revient plus tard dans l'ordre chronologique, avec le contexte.
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -60,8 +64,10 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 - `Player(key)` : joueur articulé. `draw(cv, fr, x, y_pieds, s, age=0..1, kit=..., beard=, arms=(g, d), legs=(g, d), mood=, tears=, look=)`.
   `age` 0 = 10 ans / 1,27 m, 1 = adulte / 1,70 m à la même échelle : **animer `age` pour le faire grandir** contre la toise (`toise_sprite(483)`, `PX_M = 483` à s=1.3).
   `arms` : ouverture vers l'extérieur en degrés (0 = le long du corps, 165 = bras au ciel). `mood` : normal, happy, cheer, sad, surprised, determined.
-- `Player(key, hair=, skin=, hair_style="short"|"quiff")` : teint et coiffure par joueur.
-- `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira ;
+- `Player(key, hair=, skin=, hair_style="short"|"quiff"|"bald")` : teint et coiffure par joueur (`bald` : crâne rasé ; l'enfant garde ses cheveux,
+  et `kid_hair=True` force les cheveux sur un ado plus âgé). `beard=True` + `beard_col=` pour la barbe.
+- `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira,
+  france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre) ;
   en ajouter un = une entrée (`plain` / `stripes` / `hoops` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
 - `silhouette()` (devinette), `UCL` (coupe aux grandes oreilles).
 - Changer de maillot : `spin_player` / `render_layer` + `blit_sxy` (tour sur lui-même), ou déchirer l'ancien maillot (`jersey_front` + `tear_split`).
@@ -72,6 +78,7 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 `shake`, `zoom_punch`, `flash`, `tint` (nuit), `rays`, `speed_lines`, `confetti`, `camera_flashes`, `drops` (larmes), `counter` (compteurs qui défilent),
 plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow`, `particles`, `regroup`). `Mascot` existe encore dans le moteur mais n'est pas utilisée dans cette série.
 `paper_sprite(pattern=…)` peint un motif (rayures) sous la texture papier.
+Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (rembobinage de cassette), `fr_flag()` (drapeau qui ondule).
 
 ## Voix off et bruitages (ElevenLabs connecté)
 - Voix par défaut de la série : **Léo – Energetic & Engaging** (`jsScnYkNNda9Q1NES5nn`), `eleven_multilingual_v2`, dynamique et rythmée. Garder la même d'un épisode à l'autre.
@@ -79,7 +86,8 @@ plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow
   Récupérer `media[].url` via `creative_get_flow_run_status`, télécharger avec `curl` dans `episodes/<joueur>/voix/scene_N.mp3` (le domaine `storage.googleapis.com` doit être autorisé).
 - Caler les animations sur les mots : `ffmpeg -af silencedetect=noise=-35dB:d=0.18` donne les pauses de chaque fichier ; dans la scène, `tv(temps_dans_le_fichier)` = temps local.
 - Bruitages : `assets/sfx/*.mp3` (générés une fois avec `eleven_text_to_sound_v2`, ~17 crédits pièce) : rip, crowd (+ `crowd_long` auto), whistle, cash, flash, stamp, whoosh, kick, boom, gavel, plane, groan, heart, riser, sparkle.
-  + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque).
+  + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque),
+  rewind (cassette VHS qui rembobine), bar (ballon sur la barre), horn (klaxon), gasp (foule choquée).
   S'y ajoutent les synthétiques : pop, pop2, swish, thud, clink, paper, scribble, whoosh_up, ding, poof, tick.
   `Scene(sfx=[(temps, "nom", gain, durée_max)])` : la durée max coupe un bruitage trop long (fondu de sortie).
   `Scene(sfx=[(temps, "nom", gain)])` ; les bruitages sont baissés automatiquement sous la voix (ducking).
@@ -99,6 +107,8 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 
 ## Pièges connus
 - Les polices n'ont ni « → » ni « ★ ✓ ✗ » : dessiner flèches, étoiles, coches (`arrow`, `draw_star`, `pencil_check`).
+- `Words` : `w(i, "Il", n)` compte aussi les « il » minuscules et `w(i, "coup")` trouve aussi « Coupe » : vérifier l'ordre des mots dans le texte.
+- `pkill -f "<motif>"` peut tuer le shell qui le lance (sa ligne de commande contient le motif) : préférer `pgrep` puis `kill <pid>`.
 - Ne jamais créer un `Label` / `Paper` dans une fonction de scène (recréé à chaque image = lent) : utiliser `LBL(...)` (cache) pour les compteurs.
 - Un décor dessiné hors du polygone d'un `Paper` est coupé : augmenter `pad=`.
 - Vérifier le **contexte temporel** : Messi a quitté Paris en 2023, pas « un an plus tard ». Relire le script voix off contre les dates avant de générer l'audio (chaque prise coûte des crédits).
