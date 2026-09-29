@@ -182,3 +182,90 @@ def fr_flag(cv, x, y, w=300, h=200, a=1.0, t=0.0, rot=0.0):
         off = 12*math.sin(k/n*math.pi*2 - t*5)*(k/n)
         d.rectangle([x0, 30+off, x1, 30+h+off], fill=cols[min(2, int(3*k/n))])
     blit(cv, L, x, y, a, rot, 1)
+
+def sepia(cv, a=1.0):
+    """Ton sépia (vieille photo) sur la scène."""
+    if a <= .01: return
+    st = cv.crop(STAGE); g = np.asarray(st.convert("L"), dtype=np.float32)[..., None]
+    sp = np.clip(g*np.array([1.07, .88, .66], np.float32) + np.array([18, 10, 0], np.float32), 0, 255).astype(np.uint8)
+    im = Image.fromarray(sp)
+    if a < .99: im = Image.blend(st, im, a)
+    m = Image.new("L", im.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, im.width-1, im.height-1], 20, fill=255)
+    cv.paste(im, STAGE[:2], m)
+
+def old_film(cv, fr, t, a=1.0):
+    """Vieux film : sépia + rayures verticales + poussières + scintillement."""
+    if a <= .01: return
+    sepia(cv, a)
+    d = ImageDraw.Draw(cv); rnd = random.Random(fr // 2); sx0, sy0, sx1, sy1 = STAGE
+    for _ in range(3):
+        x = rnd.uniform(sx0+40, sx1-40); d.line([(x, sy0), (x + rnd.uniform(-6, 6), sy1)], fill=(236, 226, 200), width=rnd.choice([1, 2, 3]))
+    for _ in range(14):
+        x, y, r = rnd.uniform(sx0, sx1), rnd.uniform(sy0, sy1), rnd.uniform(1.5, 5)
+        d.ellipse([x-r, y-r, x+r, y+r], fill=(40, 30, 20) if rnd.random() < .6 else (240, 232, 210))
+    if rnd.random() < .3: flash(cv, .08*a, (255, 240, 200))
+
+def elevator_drop(cv, t, t0, dur=.7, shaft=(34, 32, 40)):
+    """Chute d'ascenseur : l'image part vers le haut (la caméra tombe), la cage défile avec des étages."""
+    u = prog(t, t0, dur)
+    if u <= 0: return 0.0
+    sx0, sy0, sx1, sy1 = STAGE; h = sy1 - sy0; w = sx1 - sx0
+    e = ease_in_cubic(u); off = int(e*h)
+    st = cv.crop(STAGE)
+    k = int(2 + 18*math.sin(u*math.pi))
+    if k > 2: st = st.resize((w, max(1, h//k)), Image.BILINEAR).resize((w, h), Image.BILINEAR)   # flou vertical
+    comp = Image.new("RGB", (w, h), shaft); comp.paste(st, (0, -off))
+    d = ImageDraw.Draw(comp)
+    for j in range(8):   # étages qui défilent
+        y = (j*260 - t*2600) % (h + 260) - 130
+        if y > h - off - 30: continue
+        d.rectangle([0, y, w, y + 16], fill=(70, 66, 80)); d.line([(0, y + 30), (w, y + 30)], fill=(56, 52, 64), width=4)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    cv.paste(comp, (sx0, sy0), m)
+    return u
+
+def floor_panel(cv, fr, x, y, label, t, down=True, s=1.0, a=1.0):
+    """Afficheur d'étage d'ascenseur (chiffres rouges + flèche qui clignote)."""
+    if a <= .01: return
+    L = layer(int(320*s), int(210*s), (160*s, 105*s)); d = ImageDraw.Draw(L)
+    d.rounded_rectangle([6*s, 6*s, 314*s, 204*s], int(22*s), fill=(20, 20, 24), outline=(150, 150, 160), width=max(2, int(6*s)))
+    d.text((200*s, 108*s), label, font=font("mono", int(110*s)), fill=(255, 60, 50), anchor="mm")
+    if int(t*6) % 2 == 0:
+        ax, ay = 72*s, 105*s; sg = 1 if down else -1
+        d.polygon([(ax-34*s, ay-22*s*sg), (ax+34*s, ay-22*s*sg), (ax, ay+30*s*sg)], fill=(255, 60, 50))
+    blit(cv, L, x, y, a)
+
+def siren_lights(cv, t, a=.35):
+    """Gyrophares : la scène clignote rouge / bleu."""
+    if a <= .01: return
+    sx0, sy0, sx1, sy1 = STAGE; w, h = sx1 - sx0, sy1 - sy0
+    ph = int(t*5) % 2
+    L = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(L)
+    col = (230, 30, 40, int(255*a)) if ph == 0 else (30, 80, 240, int(255*a))
+    if ph == 0: d.rectangle([0, 0, w//2, h], fill=col)
+    else: d.rectangle([w//2, 0, w, h], fill=col)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    L.putalpha(ImageChops.multiply(L.getchannel("A"), m))
+    cv.paste(L, (sx0, sy0), L)
+
+def flares(cv, fr, key, t, area, n=10, a=1.0):
+    """Fumigènes dans la tribune : points rouges incandescents + fumée grise translucide qui monte."""
+    if a <= .01: return
+    x0, y0, x1, y1 = area; rnd = random.Random(key)
+    L = Image.new("RGBA", cv.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(L)
+    pts = [(rnd.uniform(x0, x1), rnd.uniform(y0, y1), rnd.uniform(0, 3)) for _ in range(n)]
+    for i, (x, y, ph) in enumerate(pts):
+        for k in range(5):   # fumée
+            tt = (t*.5 + ph + k/5) % 1.0
+            r = (14 + 46*tt)*a; sy = y - 240*tt; sx = x + 26*math.sin(tt*4 + i)
+            dl.ellipse([sx-r, sy-r, sx+r, sy+r], fill=(215, 205, 205, int(110*(1 - tt))))
+        r = 70*a; dl.ellipse([x-r, y-r, x+r, y+r], fill=(255, 60, 40, 60))   # halo rouge
+    cv.paste(L, (0, 0), L); d = ImageDraw.Draw(cv)
+    for i, (x, y, ph) in enumerate(pts):
+        r = (11 + 4*math.sin(t*30 + i))*a
+        d.ellipse([x-r*1.8, y-r*1.8, x+r*1.8, y+r*1.8], fill=(255, 90, 50)); d.ellipse([x-r, y-r, x+r, y+r], fill=(255, 240, 200))
+
+def beam(cv, apex, pts, a=.35, col=(255, 244, 200)):
+    """Faisceau lumineux semi-transparent (projecteur, lampe torche)."""
+    L = Image.new("RGBA", cv.size, (0, 0, 0, 0)); ImageDraw.Draw(L).polygon([apex] + pts, fill=(*col, int(255*a)))
+    cv.paste(L, (0, 0), L)

@@ -11,6 +11,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 1 | Lionel Messi — « trop petit » → le plus grand | 2:03 | [`output/messi/`](output/messi) |
 | 2 | Cristiano Ronaldo — opéré du cœur à 15 ans → 6 Coupes du monde (accroche devinette, pause « quel joueur ? » au milieu, montage nerveux) | 1:49 | [`output/ronaldo/`](output/ronaldo) |
 | 3 | Zinédine Zidane — carton rouge à son dernier match → sélectionneur des Bleus (ouverture sur le coup de tête, rembobinage VHS, panenka au ralenti) | 1:46 | [`output/zidane/`](output/zidane) |
+| 4 | L'Olympique de Marseille — champion d'Europe… puis en D2 (histoire d'un club : chute d'ascenseur D1 → D2, vieux film 1899, affaire VA-OM, team OM ou team PSG ?) | 1:43 | [`output/om/`](output/om) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -37,4 +38,5 @@ python3 episodes/messi/messi.py output/messi --cover      # couverture
 python3 episodes/messi/messi.py output/messi              # rendu complet (~7 min sur 4 cœurs)
 python3 episodes/ronaldo/ronaldo.py output/ronaldo        # épisode 2
 python3 episodes/zidane/zidane.py output/zidane           # épisode 3
+python3 episodes/om/om.py output/om                       # épisode 4 (un club)
 ```

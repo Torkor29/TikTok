@@ -10,6 +10,7 @@ Même identité visuelle (papier déchiré, gouache, boil stop-motion, fenêtre 
 avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py`).
 
 Épisodes de référence : `episodes/ronaldo/ronaldo.py` et `episodes/zidane/zidane.py` (**les modèles à suivre** : 12 scènes, ~1 min 45, montage nerveux),
+`episodes/om/om.py` pour **l'histoire d'un club** (pas de joueur fil rouge : un joueur « générique » au maillot du club + les légendes du club),
 et `episodes/messi/messi.py` (9 scènes, 2 min 03, plus posé).
 
 ## Livrables (toujours, sans s'arrêter au storyboard)
@@ -44,6 +45,9 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   arrêt sur image en noir et blanc (`grayscale`, seul le carton reste en couleur) + « COMMENT ?! », puis **rembobinage VHS**
   (`vhs()` : balayage, bande de tracking, ◀◀ REW, compteur d'années qui recule, la scène rejouée à l'envers) jusqu'à la naissance.
   La scène « fatale » revient plus tard dans l'ordre chronologique, avec le contexte.
+- **Ou accroche « titre choc »** (épisode OM) : le titre en deux temps (« CHAMPION D'EUROPE… » dès la 1re image, puis « …PUIS EN D2 ?! »),
+  un objet qui claque à l'image 0 (coupe géante, rayons, flashs), puis le retournement visuel (noir et blanc, `elevator_drop()` + `floor_panel()`),
+  et un rappel du même effet plus tard dans l'histoire (l'ascenseur revient au moment de la relégation).
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -64,10 +68,10 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 - `Player(key)` : joueur articulé. `draw(cv, fr, x, y_pieds, s, age=0..1, kit=..., beard=, arms=(g, d), legs=(g, d), mood=, tears=, look=)`.
   `age` 0 = 10 ans / 1,27 m, 1 = adulte / 1,70 m à la même échelle : **animer `age` pour le faire grandir** contre la toise (`toise_sprite(483)`, `PX_M = 483` à s=1.3).
   `arms` : ouverture vers l'extérieur en degrés (0 = le long du corps, 165 = bras au ciel). `mood` : normal, happy, cheer, sad, surprised, determined.
-- `Player(key, hair=, skin=, hair_style="short"|"quiff"|"bald")` : teint et coiffure par joueur (`bald` : crâne rasé ; l'enfant garde ses cheveux,
+- `Player(key, hair=, skin=, hair_style="short"|"quiff"|"bald"|"mullet")` : teint et coiffure par joueur (`bald` : crâne rasé ; l'enfant garde ses cheveux,
   et `kid_hair=True` force les cheveux sur un ado plus âgé). `beard=True` + `beard_col=` pour la barbe.
 - `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira,
-  france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre) ;
+  france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre), om, milan, redstar, valenciennes ;
   en ajouter un = une entrée (`plain` / `stripes` / `hoops` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
 - `silhouette()` (devinette), `UCL` (coupe aux grandes oreilles).
 - Changer de maillot : `spin_player` / `render_layer` + `blit_sxy` (tour sur lui-même), ou déchirer l'ancien maillot (`jersey_front` + `tear_split`).
@@ -78,7 +82,9 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 `shake`, `zoom_punch`, `flash`, `tint` (nuit), `rays`, `speed_lines`, `confetti`, `camera_flashes`, `drops` (larmes), `counter` (compteurs qui défilent),
 plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow`, `particles`, `regroup`). `Mascot` existe encore dans le moteur mais n'est pas utilisée dans cette série.
 `paper_sprite(pattern=…)` peint un motif (rayures) sous la texture papier.
-Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (rembobinage de cassette), `fr_flag()` (drapeau qui ondule).
+Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (rembobinage de cassette), `fr_flag()` (drapeau qui ondule),
+`sepia()` / `old_film()` (vieux film : sépia, rayures, poussières), `elevator_drop()` + `floor_panel()` (chute d'étage, afficheur D1 → D2),
+`siren_lights()` (gyrophares), `flares()` (fumigènes en tribune), `beam()` (faisceau de lampe / projecteur).
 
 ## Voix off et bruitages (ElevenLabs connecté)
 - Voix par défaut de la série : **Léo – Energetic & Engaging** (`jsScnYkNNda9Q1NES5nn`), `eleven_multilingual_v2`, dynamique et rythmée. Garder la même d'un épisode à l'autre.
@@ -87,7 +93,9 @@ Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (
 - Caler les animations sur les mots : `ffmpeg -af silencedetect=noise=-35dB:d=0.18` donne les pauses de chaque fichier ; dans la scène, `tv(temps_dans_le_fichier)` = temps local.
 - Bruitages : `assets/sfx/*.mp3` (générés une fois avec `eleven_text_to_sound_v2`, ~17 crédits pièce) : rip, crowd (+ `crowd_long` auto), whistle, cash, flash, stamp, whoosh, kick, boom, gavel, plane, groan, heart, riser, sparkle.
   + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque),
-  rewind (cassette VHS qui rembobine), bar (ballon sur la barre), horn (klaxon), gasp (foule choquée).
+  rewind (cassette VHS qui rembobine), bar (ballon sur la barre), horn (klaxon), gasp (foule choquée),
+  coin (pièce), siren (sirène de police), dig (pelle), jail (porte de prison), bell (sonnette de vélo), elevator (ascenseur qui tombe).
+  Les bruitages longs (« 4 secondes de chants ») reviennent parfois à 0,5 s : vérifier la durée avec ffprobe et jeter ceux qui sont inutilisables.
   S'y ajoutent les synthétiques : pop, pop2, swish, thud, clink, paper, scribble, whoosh_up, ding, poof, tick.
   `Scene(sfx=[(temps, "nom", gain, durée_max)])` : la durée max coupe un bruitage trop long (fondu de sortie).
   `Scene(sfx=[(temps, "nom", gain)])` ; les bruitages sont baissés automatiquement sous la voix (ducking).
@@ -106,6 +114,8 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 **Toujours vérifier que la voix est dans le .mp4 final** (corrélation avec `voix/scene_1.mp3`, ou écoute) et n'envoyer que la version avec voix : la version `_sans_voix` prête à confusion.
 
 ## Pièges connus
+- **Vérifier que les faits n'ont pas changé** : « le seul club français champion d'Europe » n'est plus vrai depuis le PSG en 2025 (« le premier ») ;
+  Papin n'est plus le seul Ballon d'Or joué en Ligue 1 (Dembélé, 2025).
 - Les polices n'ont ni « → » ni « ★ ✓ ✗ » : dessiner flèches, étoiles, coches (`arrow`, `draw_star`, `pencil_check`).
 - `Words` : `w(i, "Il", n)` compte aussi les « il » minuscules et `w(i, "coup")` trouve aussi « Coupe » : vérifier l'ordre des mots dans le texte.
 - `pkill -f "<motif>"` peut tuer le shell qui le lance (sa ligne de commande contient le motif) : préférer `pgrep` puis `kill <pid>`.

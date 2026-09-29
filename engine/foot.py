@@ -36,6 +36,10 @@ KITS = {
     "cannes":  dict(kind="plain", c1=(200, 30, 40), sleeve=(200, 30, 40), shorts=(250, 250, 246), socks=(200, 30, 40), trim=(250, 250, 246)),
     "gk":      dict(kind="plain", c1=(120, 124, 130), sleeve=(120, 124, 130), shorts=(40, 40, 44), socks=(120, 124, 130), trim=(40, 40, 44)),
     "ref":     dict(kind="plain", c1=(34, 32, 32), sleeve=(34, 32, 32), shorts=(34, 32, 32), socks=(34, 32, 32), trim=(250, 250, 246)),
+    "om":      dict(kind="plain", c1=(250, 250, 246), sleeve=(47, 174, 224), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(47, 174, 224)),
+    "milan":   dict(kind="stripes", c1=(200, 24, 36), c2=(30, 28, 28), n=5, sleeve=(200, 24, 36), shorts=(250, 250, 246), socks=(30, 28, 28), trim=(30, 28, 28)),
+    "redstar": dict(kind="stripes", c1=(206, 30, 44), c2=(250, 250, 246), n=5, sleeve=(206, 30, 44), shorts=(250, 250, 246), socks=(206, 30, 44), trim=(250, 250, 246)),
+    "valenciennes": dict(kind="plain", c1=(206, 30, 44), sleeve=(206, 30, 44), shorts=(250, 250, 246), socks=(206, 30, 44), trim=(250, 250, 246)),
 }
 
 def kit_pattern(kit, x0, x1):
@@ -81,7 +85,10 @@ class Player:
         self.skin = skin = skin or SKIN
         self.head = Paper(ellipse_pts(104, 124, 36), skin, key+"head", rough=1.4)
         self.neck = Paper(rect_pts(34, 40), skin, key+"neck", rough=1, shadow=False)
-        if hair_style == "quiff":   # cheveux courts sur les côtés, houppette relevée devant
+        if hair_style == "mullet":  # coupe mulet : court devant, long sur la nuque (Waddle, années 90)
+            hpts = [(-60, 46), (-58, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (58, -18), (60, 46),
+                    (48, 50), (48, -30), (26, -44), (4, -42), (-22, -46), (-48, -30), (-48, 50)]
+        elif hair_style == "quiff":   # cheveux courts sur les côtés, houppette relevée devant
             hpts = [(-55, -14), (-56, -46), (-40, -66), (-18, -80), (6, -104), (30, -98), (46, -80), (56, -50), (56, -14),
                     (46, -34), (30, -44), (8, -46), (-16, -46), (-40, -38)]
         else:
