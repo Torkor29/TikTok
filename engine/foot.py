@@ -40,6 +40,9 @@ KITS = {
     "milan":   dict(kind="stripes", c1=(200, 24, 36), c2=(30, 28, 28), n=5, sleeve=(200, 24, 36), shorts=(250, 250, 246), socks=(30, 28, 28), trim=(30, 28, 28)),
     "redstar": dict(kind="stripes", c1=(206, 30, 44), c2=(250, 250, 246), n=5, sleeve=(206, 30, 44), shorts=(250, 250, 246), socks=(206, 30, 44), trim=(250, 250, 246)),
     "valenciennes": dict(kind="plain", c1=(206, 30, 44), sleeve=(206, 30, 44), shorts=(250, 250, 246), socks=(206, 30, 44), trim=(250, 250, 246)),
+    "santos":  dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(30, 28, 28)),
+    "alhilal": dict(kind="plain", c1=(20, 76, 172), sleeve=(20, 76, 172), shorts=(250, 250, 246), socks=(20, 76, 172), trim=(250, 250, 246)),
+    "norway":  dict(kind="plain", c1=(200, 16, 46), sleeve=(200, 16, 46), shorts=(250, 250, 246), socks=(24, 44, 120), trim=(24, 44, 120)),
 }
 
 def kit_pattern(kit, x0, x1):
@@ -85,7 +88,10 @@ class Player:
         self.skin = skin = skin or SKIN
         self.head = Paper(ellipse_pts(104, 124, 36), skin, key+"head", rough=1.4)
         self.neck = Paper(rect_pts(34, 40), skin, key+"neck", rough=1, shadow=False)
-        if hair_style == "mullet":  # coupe mulet : court devant, long sur la nuque (Waddle, années 90)
+        if hair_style == "mohawk":  # crête (Neymar à Santos) : côtés courts, bande dressée au milieu
+            hpts = [(-54, -10), (-52, -40), (-30, -56), (-14, -62), (-12, -96), (0, -108), (12, -96), (14, -62), (30, -56),
+                    (52, -40), (54, -10), (44, -26), (20, -40), (0, -44), (-20, -40), (-44, -26)]
+        elif hair_style == "mullet":  # coupe mulet : court devant, long sur la nuque (Waddle, années 90)
             hpts = [(-60, 46), (-58, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (58, -18), (60, 46),
                     (48, 50), (48, -30), (26, -44), (4, -42), (-22, -46), (-48, -30), (-48, 50)]
         elif hair_style == "quiff":   # cheveux courts sur les côtés, houppette relevée devant

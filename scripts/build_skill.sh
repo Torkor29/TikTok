@@ -3,13 +3,14 @@
 set -e
 cd "$(dirname "$0")/.."
 T=$(mktemp -d); S=$T/tiktok-foot-legendes
-mkdir -p $S/scripts $S/examples/messi $S/examples/ronaldo $S/examples/zidane $S/examples/om $S/assets
+mkdir -p $S/scripts $S/examples/messi $S/examples/ronaldo $S/examples/zidane $S/examples/om $S/examples/neymar $S/assets
 cp SKILL.md $S/
 cp engine/engine.py engine/foot.py engine/story.py scripts/setup.sh $S/scripts/
 cp episodes/messi/messi.py output/messi/messi_legende_script.md $S/examples/messi/
 cp episodes/ronaldo/ronaldo.py episodes/ronaldo/alignement.json output/ronaldo/ronaldo_legende_script.md $S/examples/ronaldo/
 cp episodes/zidane/zidane.py episodes/zidane/alignement.json output/zidane/zidane_legende_script.md $S/examples/zidane/
 cp episodes/om/om.py episodes/om/alignement.json output/om/om_legende_script.md $S/examples/om/
+cp episodes/neymar/neymar.py episodes/neymar/alignement.json output/neymar/neymar_legende_script.md $S/examples/neymar/
 cp -r assets/sfx $S/assets/
 mkdir -p dist; rm -f dist/tiktok-foot-legendes.skill
 (cd $T && zip -qr tiktok-foot-legendes.skill tiktok-foot-legendes) && mv $T/tiktok-foot-legendes.skill dist/

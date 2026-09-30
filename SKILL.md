@@ -48,6 +48,9 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 - **Ou accroche « titre choc »** (épisode OM) : le titre en deux temps (« CHAMPION D'EUROPE… » dès la 1re image, puis « …PUIS EN D2 ?! »),
   un objet qui claque à l'image 0 (coupe géante, rayons, flashs), puis le retournement visuel (noir et blanc, `elevator_drop()` + `floor_panel()`),
   et un rappel du même effet plus tard dans l'histoire (l'ascenseur revient au moment de la relégation).
+- **Ou devinette par les âges** (épisode Neymar) : « À 4 MOIS… / À 25 ANS… / À 34 ANS… » sur la silhouette, un indice visuel par âge
+  (voiture accidentée, compteur 222 000 000 €, larmes). Boucler l'histoire sur un lieu (le stade de son 1er but = celui de son dernier match)
+  avec un flashback en `old_film()`.
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -68,10 +71,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 - `Player(key)` : joueur articulé. `draw(cv, fr, x, y_pieds, s, age=0..1, kit=..., beard=, arms=(g, d), legs=(g, d), mood=, tears=, look=)`.
   `age` 0 = 10 ans / 1,27 m, 1 = adulte / 1,70 m à la même échelle : **animer `age` pour le faire grandir** contre la toise (`toise_sprite(483)`, `PX_M = 483` à s=1.3).
   `arms` : ouverture vers l'extérieur en degrés (0 = le long du corps, 165 = bras au ciel). `mood` : normal, happy, cheer, sad, surprised, determined.
-- `Player(key, hair=, skin=, hair_style="short"|"quiff"|"bald"|"mullet")` : teint et coiffure par joueur (`bald` : crâne rasé ; l'enfant garde ses cheveux,
+- `Player(key, hair=, skin=, hair_style="short"|"quiff"|"bald"|"mullet"|"mohawk")` : teint et coiffure par joueur (`bald` : crâne rasé ; l'enfant garde ses cheveux,
   et `kid_hair=True` force les cheveux sur un ado plus âgé). `beard=True` + `beard_col=` pour la barbe.
 - `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira,
-  france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre), om, milan, redstar, valenciennes ;
+  france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre), om, milan, redstar, valenciennes,
+  santos, alhilal, norway ;
   en ajouter un = une entrée (`plain` / `stripes` / `hoops` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
 - `silhouette()` (devinette), `UCL` (coupe aux grandes oreilles).
 - Changer de maillot : `spin_player` / `render_layer` + `blit_sxy` (tour sur lui-même), ou déchirer l'ancien maillot (`jersey_front` + `tear_split`).
@@ -94,7 +98,8 @@ Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (
 - Bruitages : `assets/sfx/*.mp3` (générés une fois avec `eleven_text_to_sound_v2`, ~17 crédits pièce) : rip, crowd (+ `crowd_long` auto), whistle, cash, flash, stamp, whoosh, kick, boom, gavel, plane, groan, heart, riser, sparkle.
   + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque),
   rewind (cassette VHS qui rembobine), bar (ballon sur la barre), horn (klaxon), gasp (foule choquée),
-  coin (pièce), siren (sirène de police), dig (pelle), jail (porte de prison), bell (sonnette de vélo), elevator (ascenseur qui tombe).
+  coin (pièce), siren (sirène de police), dig (pelle), jail (porte de prison), bell (sonnette de vélo), elevator (ascenseur qui tombe),
+  crash (accident de voiture), samba (batucada, 1 s).
   Les bruitages longs (« 4 secondes de chants ») reviennent parfois à 0,5 s : vérifier la durée avec ffprobe et jeter ceux qui sont inutilisables.
   S'y ajoutent les synthétiques : pop, pop2, swish, thud, clink, paper, scribble, whoosh_up, ding, poof, tick.
   `Scene(sfx=[(temps, "nom", gain, durée_max)])` : la durée max coupe un bruitage trop long (fondu de sortie).
@@ -117,6 +122,9 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 - **Vérifier que les faits n'ont pas changé** : « le seul club français champion d'Europe » n'est plus vrai depuis le PSG en 2025 (« le premier ») ;
   Papin n'est plus le seul Ballon d'Or joué en Ligue 1 (Dembélé, 2025).
 - Les polices n'ont ni « → » ni « ★ ✓ ✗ » : dessiner flèches, étoiles, coches (`arrow`, `draw_star`, `pencil_check`).
+- Faire rouler / tourner un joueur : `render_layer` a son ancre aux pieds ; pour tourner autour du centre du corps, décaler le point
+  d'ancrage (`x + h/2*sin(a)`, `y + h/2*cos(a)`) à chaque image (roulade de Neymar, épisode 5).
+- `Words` : `w(i, "but")` trouve aussi « buts », et « Et » trouve un « et » plus tôt dans la phrase (« Messi et Suárez ») : compter les occurrences.
 - `Words` : `w(i, "Il", n)` compte aussi les « il » minuscules et `w(i, "coup")` trouve aussi « Coupe » : vérifier l'ordre des mots dans le texte.
 - `pkill -f "<motif>"` peut tuer le shell qui le lance (sa ligne de commande contient le motif) : préférer `pgrep` puis `kill <pid>`.
 - Ne jamais créer un `Label` / `Paper` dans une fonction de scène (recréé à chaque image = lent) : utiliser `LBL(...)` (cache) pour les compteurs.
