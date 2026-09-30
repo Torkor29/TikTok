@@ -32,6 +32,9 @@ scripts/build_skill.sh  fabrique dist/tiktok-foot-legendes.skill
 
 ## Refaire / modifier un épisode
 
+Depuis l'épisode 6, les vidéos sont en plein écran, sans la barre de fenêtre façon Mac en haut. Les épisodes 1 à 5 ont été publiés avec cette barre ;
+pour les re-rendre à l'identique : `LEGENDES_CADRE=1 python3 episodes/<joueur>/<joueur>.py output/<joueur>`.
+
 ```bash
 bash scripts/setup.sh
 python3 episodes/messi/messi.py output/messi --stills     # planches de contrôle

@@ -144,7 +144,7 @@ def grayscale(cv, a=1.0):
     if a <= .01: return
     st = cv.crop(STAGE); g = st.convert("L").convert("RGB")
     if a < .99: g = Image.blend(st, g, a)
-    m = Image.new("L", g.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, g.width-1, g.height-1], 20, fill=255)
+    m = Image.new("L", g.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, g.width-1, g.height-1], RADIUS, fill=255)
     cv.paste(g, STAGE[:2], m)
 
 def vhs(cv, fr, t, a=1.0, label="REW", stamp=None):
@@ -163,7 +163,7 @@ def vhs(cv, fr, t, a=1.0, label="REW", stamp=None):
         st[y0:y1] = st[y0:y1]*.4 + rng.random((y1-y0, w, 1)).astype(np.float32)*230*.6
     st += (rng.random((h, w, 1)).astype(np.float32) - .5)*38*a   # neige
     im = Image.fromarray(np.clip(st, 0, 255).astype(np.uint8))
-    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], RADIUS, fill=255)
     cv.paste(im, (sx0, sy0), m)
     d = ImageDraw.Draw(cv); x, y = 90, 200; col = (250, 250, 246)
     if int(t*3) % 2 == 0 or label != "REW":
@@ -190,7 +190,7 @@ def sepia(cv, a=1.0):
     sp = np.clip(g*np.array([1.07, .88, .66], np.float32) + np.array([18, 10, 0], np.float32), 0, 255).astype(np.uint8)
     im = Image.fromarray(sp)
     if a < .99: im = Image.blend(st, im, a)
-    m = Image.new("L", im.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, im.width-1, im.height-1], 20, fill=255)
+    m = Image.new("L", im.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, im.width-1, im.height-1], RADIUS, fill=255)
     cv.paste(im, STAGE[:2], m)
 
 def old_film(cv, fr, t, a=1.0):
@@ -220,7 +220,7 @@ def elevator_drop(cv, t, t0, dur=.7, shaft=(34, 32, 40)):
         y = (j*260 - t*2600) % (h + 260) - 130
         if y > h - off - 30: continue
         d.rectangle([0, y, w, y + 16], fill=(70, 66, 80)); d.line([(0, y + 30), (w, y + 30)], fill=(56, 52, 64), width=4)
-    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], RADIUS, fill=255)
     cv.paste(comp, (sx0, sy0), m)
     return u
 
@@ -244,7 +244,7 @@ def siren_lights(cv, t, a=.35):
     col = (230, 30, 40, int(255*a)) if ph == 0 else (30, 80, 240, int(255*a))
     if ph == 0: d.rectangle([0, 0, w//2, h], fill=col)
     else: d.rectangle([w//2, 0, w, h], fill=col)
-    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], RADIUS, fill=255)
     L.putalpha(ImageChops.multiply(L.getchannel("A"), m))
     cv.paste(L, (sx0, sy0), L)
 

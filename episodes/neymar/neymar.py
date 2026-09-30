@@ -136,6 +136,11 @@ def score2(cv, fr, x, y, la, lb, a, b, sub="", s=1.0):
     if sub: d.text((450, 330), sub, font=font("mono", 38), fill=(170, 166, 160), anchor="mm")
     blit(cv, L, x, y, s)
 
+def stripes(d, col, n=12):
+    """Rayures verticales sur toute la scène (une bande sur deux), quel que soit le cadre."""
+    sx0, sy0, sx1, sy1 = STAGE; wd = (sx1 - sx0)/n
+    for k in range(0, n, 2): d.rectangle([sx0 + k*wd, sy0, sx0 + (k+1)*wd, sy1], fill=col)
+
 def walk(t, speed=9, amp=22):
     ph = math.sin(t*speed); return (amp*ph, -amp*ph), abs(math.sin(t*speed))*8
 
@@ -296,7 +301,7 @@ def s2b(cv, fr, t):
 
 def s2c(cv, fr, t):
     stage_fill(cv, fr, (26, 30, 48), "nys2c"); d = ImageDraw.Draw(cv)
-    d.rectangle([30, 1300, 1050, 1890], fill=(60, 60, 66))
+    d.rectangle([STAGE[0], 1300, STAGE[2], STAGE[3]], fill=(60, 60, 66))
     for k in range(6): d.rectangle([60 + k*190, 1480, 160 + k*190, 1496], fill=(220, 214, 190))
     draw_car(cv, fr, 560, 1250, 1.3, 16, t)
     particles(cv, fr, "nysmoke", (820, 1180), (t*.8) % 1, 10, 200, [(120, 120, 130), (90, 90, 100)], 26, -120)
@@ -319,7 +324,7 @@ def s2(cv, fr, t, T):
 # ------------------------------------------------------------------ SCÈNE 3 — futsal, essai au Real, Santos le garde
 def s3a(cv, fr, t):
     stage_fill(cv, fr, (226, 170, 110), "nys3a"); d = ImageDraw.Draw(cv)
-    for k in range(10): d.line([(30, 200 + k*170), (1050, 200 + k*170)], fill=(206, 150, 94), width=4)
+    for k in range(10): d.line([(STAGE[0], 200 + k*170), (STAGE[2], 200 + k*170)], fill=(206, 150, 94), width=4)
     d.rectangle([90, 700, 990, 1760], outline=(250, 250, 246), width=8); d.ellipse([CX-140, 1090, CX+140, 1370], outline=(250, 250, 246), width=8)
     x = lerp(160, 880, ease_io(prog(t, .1, 2.0))); step = 22*math.sin(t*20)
     for i, (P, kx) in enumerate(zip(KIDS, (400, 660))):
@@ -342,7 +347,7 @@ def s3b(cv, fr, t):
 
 def s3c(cv, fr, t):
     stage_fill(cv, fr, (30, 30, 34), "nys3c"); d = ImageDraw.Draw(cv)
-    for k in range(6): d.rectangle([30 + k*180, 130, 120 + k*180, 1890], fill=(250, 250, 246))
+    stripes(d, (250, 250, 246))
     ts = w(3, "Santos")
     spin(cv, fr, NEY, CX, 1640, 1.0, t, ts - .1, "real", "santos", age=.45, mood="happy")
     bill_rain(cv, fr, t, w(3, "grand"), 1.2, 12, "nybills3")
@@ -397,7 +402,7 @@ def s4(cv, fr, t, T):
 def s5a(cv, fr, t):
     sx0, sy0, sx1, sy1 = STAGE
     stage_fill(cv, fr, (0, 77, 152), "nys5a"); d = ImageDraw.Draw(cv)
-    for k in range(0, 6, 2): d.rectangle([30 + k*170, sy0, 30 + (k+1)*170, sy1], fill=(165, 0, 68))
+    stripes(d, (165, 0, 68), 6)
     tb = w(5, "Barcelone")
     spin(cv, fr, NEY, CX, 1640, .9, t, tb - .1, "santos", "barca", mood="happy")
     tm, ts = w(5, "Messi"), w(5, "Suárez")
@@ -617,7 +622,7 @@ def s11b(cv, fr, t):
 
 def s11c(cv, fr, t):
     stage_fill(cv, fr, (30, 30, 34), "nys11c"); d = ImageDraw.Draw(cv)
-    for k in range(6): d.rectangle([30 + k*180, 130, 120 + k*180, 1890], fill=(250, 250, 246))
+    stripes(d, (250, 250, 246))
     spin(cv, fr, NEY, CX, 1640, 1.0, t, w(11, "rentre") - .1, "alhilal", "santos", mood="happy", arms=(150, 150))
     kw(cv, fr, K11d, t, w(11, "Santos") - .1, None, CX, 440, -3)
     show(cv, fr, T11b, t, w(11, "Santos"), None, CX, 600, 2)

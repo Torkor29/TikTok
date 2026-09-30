@@ -28,8 +28,12 @@ PAL = dict(
     ink=(28, 26, 24), red=(205, 62, 48), sand=(214, 176, 128), clay=(196, 120, 82),
     gold=(238, 190, 60), white=(255, 252, 245), sky=(214, 230, 222),
 )
-# Zone de scène (à l'intérieur de la fenêtre terminal). Zone sûre TikTok : éviter y>1560 et x>930 pour le texte important.
-STAGE = (30, 122, W - 30, H - 30)
+# Cadre « fenêtre de terminal » (barre façon Mac : 3 pastilles + titre ~/légendes $ ./joueur) : désactivé par défaut,
+# la scène occupe tout l'écran. LEGENDES_CADRE=1 redonne l'ancien look (épisodes 1 à 5, rendus avec la barre).
+CADRE = os.environ.get("LEGENDES_CADRE", "0") == "1"
+# Zone de scène. Zone sûre TikTok : éviter y>1560 et x>930 pour le texte important (et y<150 : onglets de l'appli).
+STAGE = (30, 122, W - 30, H - 30) if CADRE else (0, 0, W, H)
+RADIUS = 20 if CADRE else 0     # coins arrondis de la scène (seulement avec le cadre)
 CX = W // 2
 
 # ---------------------------------------------------------------- polices
@@ -289,10 +293,11 @@ def frame_overlay(title):
     global _frame_overlay
     if _frame_overlay is None:
         base = background(0, title).convert("RGBA")
-        m = Image.new("L", (W, H), 255); ImageDraw.Draw(m).rounded_rectangle(STAGE, 20, fill=0)
+        m = Image.new("L", (W, H), 255); ImageDraw.Draw(m).rounded_rectangle(STAGE, RADIUS, fill=0)
         base.putalpha(m); _frame_overlay = base
     return _frame_overlay
 def finish(cv, title):
+    if not CADRE: return cv      # plein cadre : rien à recoller par-dessus
     ov = frame_overlay(title); cv.paste(ov, (0, 0), ov); return cv
 def background(frame, title="~/savoir $ ./episode"):
     global _bg
@@ -300,13 +305,14 @@ def background(frame, title="~/savoir $ ./episode"):
         _bg = []
         for i in range(3):
             im = Image.new("RGB", (W, H), (27, 25, 24))
-            d = ImageDraw.Draw(im)
-            x0, y0, x1, y1 = 18, 22, W-18, H-18
-            d.rounded_rectangle([x0, y0, x1, y1], 30, fill=(38, 36, 34))
-            d.rounded_rectangle([x0, y0, x1, 112], 30, fill=(50, 47, 44)); d.rectangle([x0, 80, x1, 112], fill=(50, 47, 44))
-            for k, c in enumerate((PAL["coral"], PAL["mustard"], PAL["teal"])):
-                d.ellipse([58+k*46-13, 67-13, 58+k*46+13, 67+13], fill=c)
-            f = font("mono", 30); d.text((220, 50), title, font=f, fill=(170, 164, 154))
+            if CADRE:   # fenêtre de terminal : barre du haut avec 3 pastilles + titre
+                d = ImageDraw.Draw(im)
+                x0, y0, x1, y1 = 18, 22, W-18, H-18
+                d.rounded_rectangle([x0, y0, x1, y1], 30, fill=(38, 36, 34))
+                d.rounded_rectangle([x0, y0, x1, 112], 30, fill=(50, 47, 44)); d.rectangle([x0, 80, x1, 112], fill=(50, 47, 44))
+                for k, c in enumerate((PAL["coral"], PAL["mustard"], PAL["teal"])):
+                    d.ellipse([58+k*46-13, 67-13, 58+k*46+13, 67+13], fill=c)
+                f = font("mono", 30); d.text((220, 50), title, font=f, fill=(170, 164, 154))
             sx0, sy0, sx1, sy1 = STAGE
             g = _lowfreq(sx1-sx0, sy1-sy0, 50+i, 40)
             rng = np.random.default_rng(90+i)
@@ -318,7 +324,7 @@ def background(frame, title="~/savoir $ ./episode"):
             vx = (xx/(sx1-sx0)-.5); vy = (yy/(sy1-sy0)-.5)
             st *= (1-.22*(vx*vx+vy*vy)*2)[..., None]
             stage = Image.fromarray(np.clip(st, 0, 255).astype(np.uint8))
-            m = Image.new("L", stage.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, stage.width-1, stage.height-1], 20, fill=255)
+            m = Image.new("L", stage.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, stage.width-1, stage.height-1], RADIUS, fill=255)
             im.paste(stage, (sx0, sy0), m)
             _bg.append(im)
     return _bg[boil(frame)].copy()
@@ -505,7 +511,7 @@ def rays(cv, center, t, a=1.0, n=14, r=1500, color=(250, 226, 150), width=0.11, 
         an = t*speed + k*2*math.pi/n
         d.polygon([(cx, cy), (cx+r*math.cos(an-width), cy+r*math.sin(an-width)), (cx+r*math.cos(an+width), cy+r*math.sin(an+width))],
                   fill=(*color, int(150*a)))
-    m = Image.new("L", cv.size, 0); ImageDraw.Draw(m).rounded_rectangle(STAGE, 20, fill=255)
+    m = Image.new("L", cv.size, 0); ImageDraw.Draw(m).rounded_rectangle(STAGE, RADIUS, fill=255)
     ov.putalpha(ImageChops.multiply(ov.getchannel("A"), m))
     cv.paste(ov, (0, 0), ov)
 
@@ -625,7 +631,7 @@ def tear_transition(cv, prev, u, kind="tear_v", seed=0):
     key = (id(prev), kind, seed)
     if key not in _tear_cache:
         stage = prev.crop(STAGE).convert("RGBA")
-        m = Image.new("L", stage.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, stage.width-1, stage.height-1], 20, fill=255)
+        m = Image.new("L", stage.size, 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, stage.width-1, stage.height-1], RADIUS, fill=255)
         stage.putalpha(m)
         A, B, line = tear_split(stage, k, seed)
         shadows = []
@@ -923,7 +929,7 @@ def stage_fill(cv, frame, color, key=None):
             yy, xx = np.mgrid[0:h, 0:w]; vx = (xx/w-.5); vy = (yy/h-.5)
             st *= (1-.25*(vx*vx+vy*vy)*2)[..., None]
             ims.append(Image.fromarray(np.clip(st, 0, 255).astype(np.uint8)))
-        m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+        m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], RADIUS, fill=255)
         _panels[key] = (ims, m)
     ims, m = _panels[key]
     cv.paste(ims[boil(frame)], STAGE[:2], m)
@@ -953,7 +959,7 @@ def whip_transition(cv, prev, u, direction=-1):
     comp = Image.new("RGB", (w, h))
     comp.paste(blur(old, k), (int(direction*e*w), 0))
     comp.paste(blur(new, k), (int(direction*e*w - direction*w), 0))
-    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], 20, fill=255)
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, w-1, h-1], RADIUS, fill=255)
     cv.paste(comp, (sx0, sy0), m)
 
 def punch_transition(cv, prev, u):

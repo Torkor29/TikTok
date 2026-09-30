@@ -6,7 +6,8 @@ description: Crée des vidéos TikTok « Légendes du foot » (1080x1920, ~1 min
 # TikTok « Légendes du foot » — motion design papier
 
 Adaptation du skill `tiktok-edu-motion` (vidéos éducatives) aux **histoires de footballeurs**.
-Même identité visuelle (papier déchiré, gouache, boil stop-motion, fenêtre de terminal `~/légendes $ ./<joueur>`), **sans la mascotte Pixel** (le joueur est le seul personnage récurrent),
+Même identité visuelle (papier déchiré, gouache, boil stop-motion), **en plein écran, sans la barre de fenêtre façon Mac en haut**
+(ni pastilles ni titre `~/légendes $ ./<joueur>` : l'utilisateur n'en veut plus), **sans la mascotte Pixel** (le joueur est le seul personnage récurrent),
 avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py`).
 
 Épisodes de référence : `episodes/ronaldo/ronaldo.py` et `episodes/zidane/zidane.py` (**les modèles à suivre** : 12 scènes, ~1 min 45, montage nerveux),
@@ -35,7 +36,7 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
    → sommet (records, trophées) → argent / transfert / polémique → quête du trophée manquant → aujourd'hui + appel à s'abonner (et « prochaine légende ? » en commentaire).
 4. **Voix off** ~380-420 mots (≈ 2 min avec une voix dynamique). Phrases courtes, tutoiement, suspense (« Son premier but ? … »).
    Nombres et dates **en toutes lettres**, pas de symboles (%, €) dans le texte parlé.
-5. **Textes à l'écran** = commentaires courts (date, chiffre, nom), jamais la transcription. Titre en haut (y≈330), étiquettes entre y 450 et 1500. Zone sûre TikTok : rien d'important sous y≈1550 ni à droite de x≈930.
+5. **Textes à l'écran** = commentaires courts (date, chiffre, nom), jamais la transcription. Titre en haut (y≈330), étiquettes entre y 450 et 1500. Zone sûre TikTok : rien d'important sous y≈1550 ni à droite de x≈930, ni au-dessus de y≈150 (onglets de l'appli).
 6. **Carte des transitions** avant de coder : alterner continuités (l'objet de fin devient l'objet suivant) et déchirures (`Scene(trans="tear_v" | "tear_h" | "tear_d")`, 5-6 par épisode au plus). Une scène suivie d'une déchirure garde sa composition jusqu'au bout (pas d'animation de sortie).
 
 ## Rétention (ce qui marche, appliqué dans l'épisode Ronaldo)
@@ -119,6 +120,11 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 **Toujours vérifier que la voix est dans le .mp4 final** (corrélation avec `voix/scene_1.mp3`, ou écoute) et n'envoyer que la version avec voix : la version `_sans_voix` prête à confusion.
 
 ## Pièges connus
+- **Pas de barre Mac / fenêtre de terminal** : la scène occupe tout l'écran (`STAGE = (0, 0, 1080, 1920)`, `finish()` ne recolle plus de cadre).
+  Ne pas la remettre. `LEGENDES_CADRE=1` ne sert qu'à re-rendre à l'identique les épisodes 1 à 5 (Messi, Ronaldo, Zidane, OM, Neymar), publiés avec la barre.
+  La variable `TITLE` des épisodes n'est plus affichée.
+- Aplats pleine largeur (sol, route, rayures) : utiliser `STAGE` (`sx0, sy0, sx1, sy1 = STAGE`, ou `stripes()` dans `neymar.py`),
+  jamais les anciens bords du cadre codés en dur (30, 122, 1050, 1890), sinon des bandes apparaissent au bord de l'écran.
 - **Vérifier que les faits n'ont pas changé** : « le seul club français champion d'Europe » n'est plus vrai depuis le PSG en 2025 (« le premier ») ;
   Papin n'est plus le seul Ballon d'Or joué en Ligue 1 (Dembélé, 2025).
 - Les polices n'ont ni « → » ni « ★ ✓ ✗ » : dessiner flèches, étoiles, coches (`arrow`, `draw_star`, `pencil_check`).
