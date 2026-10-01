@@ -52,6 +52,12 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 - **Ou devinette par les âges** (épisode Neymar) : « À 4 MOIS… / À 25 ANS… / À 34 ANS… » sur la silhouette, un indice visuel par âge
   (voiture accidentée, compteur 222 000 000 €, larmes). Boucler l'histoire sur un lieu (le stade de son 1er but = celui de son dernier match)
   avec un flashback en `old_film()`.
+- **Ou « de la cave au sommet »** (épisode Le Mans, un club) : « FAILLITE EN 2013… » dès la 1re image, l'ascenseur tombe en D6
+  (`elevator_drop()` + `floor_panel()`), puis « 13 ANS PLUS TARD… » il remonte étage par étage (`shaft(cv, fr, t, speed)` : étages qui
+  défilent vers le bas + `floor_panel(..., down=False)` qui affiche D5, D4, D3, L2…) jusqu'à « L1 », et finir l'accroche sur une surprise
+  (« parmi ses actionnaires… Novak Djokovic »). L'afficheur sert de fil rouge à chaque montée / descente de l'histoire.
+- **Épisode demandé par un abonné** : le dire dans la description, en commentaire épinglé et à la fin (« c'est un abonné qui l'a demandée…
+  alors demande-nous la tienne ») ; la pause du milieu demande alors « ton club de cœur ? » pour alimenter les prochains épisodes.
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -76,7 +82,7 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   et `kid_hair=True` force les cheveux sur un ado plus âgé). `beard=True` + `beard_col=` pour la barbe.
 - `KITS` : newells, barca, psg, arg, miami, street, suit, coach, sporting, manutd, real, portugal, alnassr, madeira,
   france, france_w (blanc), italy, brazil, saudi, juventus, cannes, gk (gardien), ref (arbitre), om, milan, redstar, valenciennes,
-  santos, alhilal, norway ;
+  santos, alhilal, norway, lemans (rouge, liseré jaune), guingamp (rouge et noir), chelsea, tennis (polo blanc), pilote (combinaison de course) ;
   en ajouter un = une entrée (`plain` / `stripes` / `hoops` / `halves` / `band`). Jamais d'écusson ni de logo de club ou de marque.
 - `silhouette()` (devinette), `UCL` (coupe aux grandes oreilles).
 - Changer de maillot : `spin_player` / `render_layer` + `blit_sxy` (tour sur lui-même), ou déchirer l'ancien maillot (`jersey_front` + `tear_split`).
@@ -90,6 +96,9 @@ plus ceux du moteur d'origine (`Paper`, `Label`, `pop_in`, `pencil_line`, `arrow
 Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (rembobinage de cassette), `fr_flag()` (drapeau qui ondule),
 `sepia()` / `old_film()` (vieux film : sépia, rayures, poussières), `elevator_drop()` + `floor_panel()` (chute d'étage, afficheur D1 → D2),
 `siren_lights()` (gyrophares), `flares()` (fumigènes en tribune), `beam()` (faisceau de lampe / projecteur).
+Dans `episodes/lemans/lemans.py` (à copier au besoin) : `race_car()` / `car_pass()` (proto d'endurance qui traverse l'écran avec traînées),
+`track()` (bitume + vibreurs), `checkered()` (drapeau à damier), `tricolor()` (drapeau à 3 bandes), `racket()` / `tball()` (tennis),
+`ARENA` (stade moderne vu de l'extérieur), `calendar()` (page qui s'arrache), `virus()`, `bricks()` (mur qui se monte), `carton()`, `shaft()` (cage d'ascenseur).
 
 ## Voix off et bruitages (ElevenLabs connecté)
 - Voix par défaut de la série : **Léo – Energetic & Engaging** (`jsScnYkNNda9Q1NES5nn`), `eleven_multilingual_v2`, dynamique et rythmée. Garder la même d'un épisode à l'autre.
@@ -100,7 +109,8 @@ Dans `story.py` : `grayscale(cv, a)` (noir et blanc dosable), `vhs(cv, fr, t)` (
   + scratch (vinyle), glitch, notif (commentaire), laser, laugh (rires moqueurs), monitor (moniteur cardiaque),
   rewind (cassette VHS qui rembobine), bar (ballon sur la barre), horn (klaxon), gasp (foule choquée),
   coin (pièce), siren (sirène de police), dig (pelle), jail (porte de prison), bell (sonnette de vélo), elevator (ascenseur qui tombe),
-  crash (accident de voiture), samba (batucada, 1 s).
+  crash (accident de voiture), samba (batucada, 1 s), race (voiture de course qui passe, effet Doppler : caler le pic au passage au centre),
+  tennis (frappe de balle).
   Les bruitages longs (« 4 secondes de chants ») reviennent parfois à 0,5 s : vérifier la durée avec ffprobe et jeter ceux qui sont inutilisables.
   S'y ajoutent les synthétiques : pop, pop2, swish, thud, clink, paper, scribble, whoosh_up, ding, poof, tick.
   `Scene(sfx=[(temps, "nom", gain, durée_max)])` : la durée max coupe un bruitage trop long (fondu de sortie).
@@ -135,4 +145,12 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 - `pkill -f "<motif>"` peut tuer le shell qui le lance (sa ligne de commande contient le motif) : préférer `pgrep` puis `kill <pid>`.
 - Ne jamais créer un `Label` / `Paper` dans une fonction de scène (recréé à chaque image = lent) : utiliser `LBL(...)` (cache) pour les compteurs.
 - Un décor dessiné hors du polygone d'un `Paper` est coupé : augmenter `pad=`.
+- `Words`, autres préfixes piégeux : « quatre-vingt » trouve d'abord « quatre-vingt-dix », « Deux » trouve aussi « deuxième »,
+  « demande » trouve « demandée », « Le » trouve tous les « le ». En cas de doute, afficher la liste des mots de `alignement.json` et compter.
+- L'aligneur se trompe quand la voix prononce un passage plus bas (noms propres enchaînés : « Gervinho, Sessègnon, Grafite ») :
+  tracer l'enveloppe d'énergie (RMS par tranche de 10 ms) et corriger les débuts de mots à la main dans `alignement.json`.
+  Pour vérifier le texte réellement dit : `creative_transcribe_audio` avec `connect_from=[node_id du nœud TTS]` (pas de minutage, texte seul).
+- `LBL(txt, key, …)` met en cache par (clé, texte) : si la couleur change pour un même texte (ligne de classement surlignée), mettre l'état dans la clé.
+- Placer un objet dans la main d'un joueur (raquette, valise, casque, gants) : `hand_pos(x, y, s, côté, angle_du_bras)` dans `lemans.py`.
+- Quand les sources se contredisent (nom du 2e club de la fusion de 1985), rester vague à l'écran et le noter dans les précautions du script.
 - Vérifier le **contexte temporel** : Messi a quitté Paris en 2023, pas « un an plus tard ». Relire le script voix off contre les dates avant de générer l'audio (chaque prise coûte des crédits).

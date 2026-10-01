@@ -43,6 +43,11 @@ KITS = {
     "santos":  dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(30, 28, 28)),
     "alhilal": dict(kind="plain", c1=(20, 76, 172), sleeve=(20, 76, 172), shorts=(250, 250, 246), socks=(20, 76, 172), trim=(250, 250, 246)),
     "norway":  dict(kind="plain", c1=(200, 16, 46), sleeve=(200, 16, 46), shorts=(250, 250, 246), socks=(24, 44, 120), trim=(24, 44, 120)),
+    "lemans":  dict(kind="plain", c1=(206, 30, 40), sleeve=(206, 30, 40), shorts=(206, 30, 40), socks=(206, 30, 40), trim=(250, 204, 40)),
+    "guingamp": dict(kind="halves", c1=(200, 20, 40), c2=(30, 28, 28), sleeve=(200, 20, 40), shorts=(30, 28, 28), socks=(200, 20, 40), trim=(30, 28, 28)),
+    "chelsea": dict(kind="plain", c1=(20, 60, 160), sleeve=(20, 60, 160), shorts=(20, 60, 160), socks=(250, 250, 246), trim=(250, 250, 246)),
+    "tennis":  dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(40, 44, 60), socks=(250, 250, 246), trim=(40, 44, 60)),
+    "pilote":  dict(kind="plain", c1=(200, 24, 34), sleeve=(200, 24, 34), shorts=(200, 24, 34), socks=(30, 28, 28), trim=(250, 250, 246), pants=True),
 }
 
 def kit_pattern(kit, x0, x1):
