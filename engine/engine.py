@@ -665,7 +665,7 @@ SFX_GAIN = dict(rip=.9, crowd=.55, whistle=.45, cash=.7, flash=.55, stamp=.95, w
                 gavel=.8, plane=.5, groan=.5, heart=1.0, riser=.45, sparkle=.45, crowd_long=.5,
                 scratch=.8, glitch=.6, notif=.7, laser=.6, laugh=.6, monitor=.55,
                 rewind=.6, bar=.8, horn=.5, gasp=.6, coin=.7, siren=.45, dig=.7, jail=.9, bell=.6, elevator=.8, crash=.8, samba=.6,
-                race=.6, tennis=.7)
+                race=.6, tennis=.7, cluck=.7, phone=.6)
 
 def load_sfx_dir(path):
     """Charge un dossier de bruitages : silence de tête coupé, crête normalisée (le 'top' tombe à l'instant voulu)."""

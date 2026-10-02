@@ -48,6 +48,7 @@ KITS = {
     "chelsea": dict(kind="plain", c1=(20, 60, 160), sleeve=(20, 60, 160), shorts=(20, 60, 160), socks=(250, 250, 246), trim=(250, 250, 246)),
     "tennis":  dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(40, 44, 60), socks=(250, 250, 246), trim=(40, 44, 60)),
     "pilote":  dict(kind="plain", c1=(200, 24, 34), sleeve=(200, 24, 34), shorts=(200, 24, 34), socks=(30, 28, 28), trim=(250, 250, 246), pants=True),
+    "dijon":   dict(kind="plain", c1=(214, 26, 42), sleeve=(214, 26, 42), shorts=(214, 26, 42), socks=(214, 26, 42), trim=(250, 250, 246)),
 }
 
 def kit_pattern(kit, x0, x1):

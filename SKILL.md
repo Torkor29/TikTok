@@ -58,6 +58,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   (« parmi ses actionnaires… Novak Djokovic »). L'afficheur sert de fil rouge à chaque montée / descente de l'histoire.
 - **Épisode demandé par un abonné** : le dire dans la description, en commentaire épinglé et à la fin (« c'est un abonné qui l'a demandée…
   alors demande-nous la tienne ») ; la pause du milieu demande alors « ton club de cœur ? » pour alimenter les prochains épisodes.
+- **Format court** (épisode Dijon, quand les vues décrochent vers 20 s) : ~1 min 15, 9 scènes de 6 à 10 s, phrases de 12 mots max,
+  un nouveau plan toutes les ~1,5 s (`shots(..., d=.24)`, `pad_in=.12`, `pad_out=.25`), zoom `drift(cv, t, T, .05)`.
+  Le nom du club / de la ville doit se lire **dès la 1re image et sur la couverture** (« DIJON » géant + un objet symbole : pot de moutarde).
+  Promettre la durée dans l'accroche (« l'histoire du DFCO en une minute ») et afficher une barre chrono en haut (`chrono_bar()` dans `dijon.py`,
+  à y≈176 sous les onglets TikTok), qui se remplit sur toute la vidéo. Annoncer les 3 retournements dès les 9 premières secondes.
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -153,4 +158,8 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
 - `LBL(txt, key, …)` met en cache par (clé, texte) : si la couleur change pour un même texte (ligne de classement surlignée), mettre l'état dans la clé.
 - Placer un objet dans la main d'un joueur (raquette, valise, casque, gants) : `hand_pos(x, y, s, côté, angle_du_bras)` dans `lemans.py`.
 - Quand les sources se contredisent (nom du 2e club de la fusion de 1985), rester vague à l'écran et le noter dans les précautions du script.
+- **Crédits ElevenLabs** : le quota mensuel peut être épuisé (erreur « exceeds your quota » dans `creative_get_flow_run_status`).
+  Une voix de ~170 caractères coûte ~170 crédits (`eleven_multilingual_v2`) : vérifier avec `estimate_only=True` avant de lancer un épisode.
+  En attendant les voix : minutage provisoire (voix muettes à ~6 syllabes/s + pauses de ponctuation, alignement estimé) dans un dossier
+  pointé par `LEGENDES_PROVISOIRE=<dossier avec voix/ et alignement.json>` pour écrire les scènes, sortir planches et couverture ; le rendu final est bloqué.
 - Vérifier le **contexte temporel** : Messi a quitté Paris en 2023, pas « un an plus tard ». Relire le script voix off contre les dates avant de générer l'audio (chaque prise coûte des crédits).

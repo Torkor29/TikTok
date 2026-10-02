@@ -14,6 +14,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 4 | L'Olympique de Marseille — champion d'Europe… puis en D2 (histoire d'un club : chute d'ascenseur D1 → D2, vieux film 1899, affaire VA-OM, team OM ou team PSG ?) | 1:43 | [`output/om/`](output/om) |
 | 5 | Neymar — 222 millions… génie ou gâchis ? (devinette par les âges, remontada minute par minute, 14 min au sol, fin au Mondial 2026 dans le stade de son 1er but) | 1:56 | [`output/neymar/`](output/neymar) |
 | 6 | Le Mans FC — faillite en 2013… Ligue 1 en 2026 ?! (demandé par un abonné ; plein écran sans barre : ascenseur D6 → L1, Drogba ×300, usine à pépites, Djokovic actionnaire, montée validée malgré les fumigènes) | 2:02 | [`output/lemans/`](output/lemans) |
+| 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image ; **voix en attente de crédits ElevenLabs**) | — | [`output/dijon/`](output/dijon) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -46,4 +47,5 @@ python3 episodes/zidane/zidane.py output/zidane           # épisode 3
 python3 episodes/om/om.py output/om                       # épisode 4 (un club)
 python3 episodes/neymar/neymar.py output/neymar           # épisode 5
 python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club, plein écran)
+python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
 ```
