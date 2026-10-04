@@ -12,9 +12,9 @@ Tout le skill est dans ce dépôt. Avant de toucher à un épisode, lire :
 Le code est dans `engine/` (moteur papier, kit foot, outils de montage), un épisode par dossier `episodes/<sujet>/`, les livrables dans `output/<sujet>/`.
 Branche de travail : `claude/footballer-stories-tiktok-h7k2q9`.
 
-## Finir un épisode « en attente de voix » (Dijon, PSG…)
+## Finir un épisode « en attente de voix »
 
-Ces épisodes ont tout sauf la voix : scènes (`episodes/<club>/<club>.py`), textes des voix (`episodes/<club>/textes_voix.json`),
+Exemples : Dijon et PSG (préparés sans voix, finis le 04/10/2026). Ces épisodes ont tout sauf la voix : scènes (`episodes/<club>/<club>.py`), textes des voix (`episodes/<club>/textes_voix.json`),
 couverture et script (`output/<club>/`). Les scènes ont été calées sur un minutage provisoire (`scripts/minutage_provisoire.py`).
 
 1. **Voix** : un flow ElevenLabs par épisode, puis `creative_generate_speech` une fois par scène.

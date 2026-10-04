@@ -14,8 +14,8 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 4 | L'Olympique de Marseille — champion d'Europe… puis en D2 (histoire d'un club : chute d'ascenseur D1 → D2, vieux film 1899, affaire VA-OM, team OM ou team PSG ?) | 1:43 | [`output/om/`](output/om) |
 | 5 | Neymar — 222 millions… génie ou gâchis ? (devinette par les âges, remontada minute par minute, 14 min au sol, fin au Mondial 2026 dans le stade de son 1er but) | 1:56 | [`output/neymar/`](output/neymar) |
 | 6 | Le Mans FC — faillite en 2013… Ligue 1 en 2026 ?! (demandé par un abonné ; plein écran sans barre : ascenseur D6 → L1, Drogba ×300, usine à pépites, Djokovic actionnaire, montée validée malgré les fumigènes) | 2:02 | [`output/lemans/`](output/lemans) |
-| 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image ; **voix en attente de crédits ElevenLabs**) | — | [`output/dijon/`](output/dijon) |
-| 8 | PSG — envoyé en 3e division… double champion d'Europe ?! (format court, CTA like + abonne-toi ; **voix en attente de crédits ElevenLabs**) | — | [`output/psg/`](output/psg) |
+| 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image, poulet Gaston Gérard, Dijon 2-1 PSG, chute en National, retour en L2) | 1:11 | [`output/dijon/`](output/dijon) |
+| 8 | PSG — envoyé en 3e division… double champion d'Europe ?! (format court avec barre chrono, « PSG » + tour Eiffel dès la 1re image, 20 000 « oui », divorce de 1972, N'Gotty, le Qatar, 5-0 contre l'Inter ; CTA like + abonne-toi) | 1:15 | [`output/psg/`](output/psg) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -34,13 +34,12 @@ scripts/build_skill.sh  fabrique dist/tiktok-foot-legendes.skill
 scripts/minutage_provisoire.py  voix muettes + alignement estimé (avant de générer les voix)
 ```
 
-## Épisodes en attente de voix (Dijon, PSG)
+## Épisode en attente de voix
 
-Scènes, couvertures et scripts prêts ; il manque les voix ElevenLabs (crédits épuisés le 02/10). Pour finir : ouvrir une session
-**sur la branche `claude/footballer-stories-tiktok-h7k2q9`** avec le connecteur ElevenLabs actif et dire « Finis PSG et Dijon ».
-La marche à suivre est dans le skill du projet, [`.claude/skills/tiktok-foot-legendes/SKILL.md`](.claude/skills/tiktok-foot-legendes/SKILL.md),
-qui se charge tout seul dans les sessions ouvertes sur ce dépôt. Aperçu muet au minutage provisoire :
-`LEGENDES_PROVISOIRE=<dossier> python3 episodes/<club>/<club>.py <sortie> --apercu`.
+Quand les crédits ElevenLabs manquent, on peut tout préparer (scènes, couverture, script) sur un minutage provisoire, puis finir plus tard.
+C'est ce qui a été fait pour Dijon et le PSG, finis le 04/10/2026. La marche à suivre est dans le skill du projet,
+[`.claude/skills/tiktok-foot-legendes/SKILL.md`](.claude/skills/tiktok-foot-legendes/SKILL.md), qui se charge tout seul dans les sessions ouvertes sur ce dépôt.
+Aperçu muet au minutage provisoire : `LEGENDES_PROVISOIRE=<dossier> python3 episodes/<club>/<club>.py <sortie> --apercu`.
 
 ## Refaire / modifier un épisode
 
