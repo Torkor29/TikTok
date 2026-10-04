@@ -19,6 +19,11 @@ Dans `output/<joueur>/` :
 1. `<slug>.mp4` : vidéo finale, voix off + bruitages, sans musique (l'utilisateur ajoute un son tendance sur TikTok).
 2. `<slug>_sans_voix.mp4` : bruitages seuls.
 3. `<slug>_couverture.jpg` : couverture accrocheuse et lisible en miniature, sans mentir.
+   **Varier la mise en page d'un épisode à l'autre**. Les épisodes 1 à 7 suivent tous le même gabarit (fond à rayons, titre, joueur bras levés,
+   bandeau « l'histoire folle de… ») et l'utilisateur le trouve répétitif. Préférer une **question qui fait débat** (« LE PLUS GRAND CLUB DE FRANCE ?
+   …ET D'EUROPE ?! ») et une composition propre au sujet. Exemple, PSG (`cover()` dans `episodes/psg/psg.py`) : question en lettres découpées façon lettre
+   anonyme (`ransom_line`), nuit + projecteur, joueur couronné sur un podium « PSG », 2e et 3e marches « ? ». Le nom du club doit rester lisible,
+   et le texte important doit tenir dans le cadre 3:4 de la grille du profil (y ≈ 240 à 1680).
 4. `<slug>_voix_off.txt` : script voix off complet (généré par `render_episode`).
 5. `<slug>_script.md` : minutage, ce qu'on voit, carte des transitions, légende TikTok, hashtags, **sources**.
 

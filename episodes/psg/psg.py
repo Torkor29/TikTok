@@ -608,15 +608,60 @@ SCENES[5].trans_dur = 99      # la photo figée reste épinglée pendant toute l
 SCENES[5].post = s6_post
 
 # ------------------------------------------------------------------ couverture
-def cover(path):
-    cv = background(0, TITLE); stage_fill(cv, 0, NAVY, "pscov"); d = ImageDraw.Draw(cv)
-    rays(cv, (CX, 1150), 0.3, 1.0, 16, 1500, (40, 70, 140))
-    PSG_T.draw(cv, 0, CX, 330, 1.0, -3)
-    Label("EN 3e DIVISION…", "pscv1", font("title", 100), PAL["ink"], BLANC, maxw=1040, padx=30, pady=10, rough=5).draw(cv, 0, CX, 580, 1, 2)
-    Label("…DOUBLE CHAMPION D'EUROPE ?!", "pscv2", font("title", 60), PAL["ink"], GOLD, maxw=1040, padx=30, pady=10, rough=5).draw(cv, 0, CX, 730, 1, -2)
-    for k, x in enumerate((250, 830)): UCL.draw(cv, 0, x, 1150, 1.25, (-8, 8)[k])
-    PSGP.draw(cv, 0, CX, 1640, 1.1, age=1, kit="psg", mood="cheer", arms=(150, 150), legs=(14, 14), t=1)
-    Label("L'HISTOIRE DU PSG EN 1 MINUTE", "pscv3", font("title", 56), PAL["cream"], ROUGE, maxw=1040, padx=30, pady=12).draw(cv, 0, CX, 1690, 1, 1)
+# Couverture « débat » (différente du gabarit habituel titre + joueur + bandeau) : question en lettres découpées façon lettre anonyme,
+# nuit + projecteur, joueur couronné sur la 1re marche d'un podium « PSG », 2e et 3e marches avec « ? » (qui d'autre ?).
+RANSOM = [(BLANC, NOIR), (ROUGE, BLANC), (GOLD, NOIR), (NOIR, GOLD), (BLANC, ROUGE), (64, 110, 200), (236, 226, 204)]
+def ransom_line(cv, txt, y, size=104, maxw=980, seed=0):
+    """Une ligne de lettres découpées dans des journaux : chaque lettre sur son bout de papier, police et couleur différentes."""
+    rnd = random.Random(seed); kinds = ["title", "sans", "title", "mono", "title"]; parts = []
+    for k, ch in enumerate(txt):
+        if ch == " ": parts.append(None); continue
+        bg = RANSOM[rnd.randrange(len(RANSOM))]
+        fg = bg if isinstance(bg[0], tuple) else None
+        bg, fg = (bg if fg else (bg, BLANC if sum(bg) < 400 else NOIR))
+        f = font(kinds[rnd.randrange(len(kinds))], int(size*rnd.uniform(.88, 1.1)))
+        x0, y0, x1, y1 = f.getbbox(ch, anchor="ls"); gw, gh = x1 - x0, y1 - y0
+        spr = paper_sprite(rect_pts(max(gw, gh*.62) + 30, max(gh, size*.72) + 30), bg, seed=seed*97 + k, rough=2.6)
+        ax, ay = spr.info["anchor"]
+        ImageDraw.Draw(spr).text((ax - (x0 + x1)/2, ay - (y0 + y1)/2), ch, font=f, fill=fg, anchor="ls")
+        parts.append((spr, rnd.uniform(-7, 7), rnd.uniform(-8, 8)))
+    gap = size*.3; ws = [p[0].width - 64 if p else gap for p in parts]
+    sc = min(1.0, maxw/sum(ws)); x = CX - sum(ws)*sc/2
+    for p, wd in zip(parts, ws):
+        if p: blit(cv, p[0], x + wd*sc/2, y + p[2], sc, p[1])
+        x += wd*sc
+
+def _crown(d, a):
+    ax, ay = a
+    for k, c in enumerate((ROUGE, (40, 90, 200), ROUGE)):
+        x = ax - 60 + k*60; d.ellipse([x - 13, ay + 22, x + 13, ay + 48], fill=c, outline=NOIR, width=2)
+    d.line([(ax - 104, ay + 8), (ax + 104, ay + 8)], fill=(190, 138, 20), width=5)
+CROWN = Paper(poly_pts([(-110, 60), (-110, -40), (-62, 4), (-30, -66), (0, -16), (30, -66), (62, 4), (110, -40), (110, 60)]),
+              GOLD, "pscrown", rough=1.4, hatch=True).add(_crown)
+POD1 = Paper(rect_pts(500, 260), BLANC, "pspod1", rough=1.8, hatch=True).add(
+    lambda d, a: (d.rectangle([a[0] - 250, a[1] - 130, a[0] + 250, a[1] - 100], fill=ROUGE),
+                  d.text((a[0], a[1] + 30), "PSG", font=font("title", 190), fill=NAVY, anchor="mm")))
+def _pod(n, w_, h_):
+    return Paper(rect_pts(w_, h_), (150, 156, 172), f"pspod{n}", rough=1.8, hatch=True).add(
+        lambda d, a: d.text((a[0], a[1]), "?", font=font("title", 130), fill=BLANC, anchor="mm", stroke_width=6, stroke_fill=NAVY_D))
+POD2, POD3 = _pod(2, 250, 190), _pod(3, 250, 130)
+
+def cover(path, l1="LE PLUS GRAND", l2="CLUB DE FRANCE ?", strip="…ET D'EUROPE ?!"):
+    cv = background(0, TITLE); stage_fill(cv, 0, NAVY_D, "pscovn"); d = ImageDraw.Draw(cv)
+    beam(cv, (CX, -80), [(CX + 360, 1440), (CX - 360, 1440)], .13)                 # projecteur sur le n° 1
+    L = Image.new("RGBA", cv.size, (0, 0, 0, 0)); ImageDraw.Draw(L).ellipse([CX - 420, 1380, CX + 420, 1500], fill=(255, 244, 200, 60))
+    cv.paste(L, (0, 0), L)
+    confetti(cv, 0, "pscovc", 1.6, 70, 4, [GOLD, BLANC, ROUGE])
+    POD2.draw(cv, 0, CX - 375, 1540 + 30, 1, 0); POD3.draw(cv, 0, CX + 375, 1540 + 60, 1, 0)
+    POD1.draw(cv, 0, CX, 1540, 1, 0)
+    for k, x in enumerate((CX - 175, CX + 175)): UCL.draw(cv, 0, x, 1410 - 105*.75 + 8, .75, (-6, 6)[k])
+    PSGP.draw(cv, 0, CX, 1418, .92, age=1, kit="psg", mood="cheer", arms=(150, 150), legs=(10, 10), t=1)
+    CROWN.draw(cv, 0, CX + 4, 1418 - 668*.92, .78, -6)
+    ransom_line(cv, l1, 320, 138, seed=8)
+    ransom_line(cv, l2, 490, 138, seed=21)
+    Label(strip, "pscvq", font("title", 76), NOIR, GOLD, maxw=1040, padx=30, pady=8, rough=5).draw(cv, 0, CX, 655, 1, -3)
+    sw = Label("EN 1 MIN", "pscv1m", font("title", 44), BLANC, ROUGE, padx=18, pady=6, rough=3)
+    sw.draw(cv, 0, 880, 960, 1, 10)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 # ------------------------------------------------------------------ planches de contrôle (avec transitions)

@@ -20,6 +20,11 @@
 - Le gros bouton « j'aime » qui s'enfonce (petits cœurs, compteur qui grimpe).
 - La 3e coupe en silhouette avec « ? ».
 
+**Couverture** : question qui fait débat, « LE PLUS GRAND CLUB DE FRANCE ? …ET D'EUROPE ?! ».
+- La question est en lettres découpées façon lettre anonyme, de nuit, sous un projecteur.
+- Le joueur porte une couronne, sur la 1re marche d'un podium « PSG », avec les deux coupes ; les 2e et 3e marches portent un « ? ».
+- Variante : « LE PLUS GRAND CLUB D'EUROPE ? 2 C1 D'AFFILÉE ! » (`cover(path, "LE PLUS GRAND", "CLUB D'EUROPE ?", "2 C1 D'AFFILÉE !")`).
+
 **Musique** : aucune, à ajouter dans TikTok (son tendance, volume 5-10 %).
 
 ## Déroulé
@@ -39,7 +44,7 @@
 ## Description TikTok (à coller)
 
 ```
-Envoyé en 3e division 2 ans après sa création… et aujourd'hui double champion d'Europe 🤯 L'histoire du PSG en 1 minute ⏱️
+Le plus grand club de France ? 👑 Envoyé en 3e division 2 ans après sa création… et aujourd'hui double champion d'Europe 🤯 L'histoire du PSG en 1 minute ⏱️
 
 Les 20 000 « oui » de 1970, le divorce avec le Paris FC, le boulet de N'Gotty, le Qatar, la remontada… et le 5-0 contre l'Inter 🔴🔵
 
@@ -51,7 +56,7 @@ Une 3e Ligue des champions, tu y crois ? 👇
 
 **Commentaire à épingler** :
 ```
-Une 3e Ligue des champions d'affilée : OUI ou NON ? ❤️ Like + abonne-toi pour la suite de la série !
+Le PSG, plus grand club de France de l'histoire : OUI ou NON ? 👇 Et une 3e Ligue des champions d'affilée, tu y crois ? ❤️ Like + abonne-toi pour la suite de la série !
 ```
 
 ## Sources (vérifiées le 04/10/2026)
