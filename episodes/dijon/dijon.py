@@ -177,7 +177,7 @@ def shaft(cv, fr, t, speed=0.0, key="djshaft"):
         d.rectangle([sx0, y, sx1, y + 16], fill=(70, 66, 80)); d.line([(sx0, y + 30), (sx1, y + 30)], fill=(56, 52, 64), width=4)
 
 def calendar(cv, fr, x, y, txt, s=1.0, rot=0.0, a=1.0, top=""):
-    if a <= .01: return
+    if a <= .01 or s < .05: return
     L = layer(int(300*s), int(320*s), (150*s, 160*s)); d = ImageDraw.Draw(L)
     d.rectangle([10*s, 30*s, 290*s, 310*s], fill=(250, 248, 238), outline=PAL["ink"], width=max(2, int(5*s)))
     d.rectangle([10*s, 30*s, 290*s, 100*s], fill=ROUGE)
