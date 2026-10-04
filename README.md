@@ -34,6 +34,14 @@ scripts/build_skill.sh  fabrique dist/tiktok-foot-legendes.skill
 scripts/minutage_provisoire.py  voix muettes + alignement estimé (avant de générer les voix)
 ```
 
+## Épisodes en attente de voix (Dijon, PSG)
+
+Scènes, couvertures et scripts prêts ; il manque les voix ElevenLabs (crédits épuisés le 02/10). Pour finir : ouvrir une session
+**sur la branche `claude/footballer-stories-tiktok-h7k2q9`** avec le connecteur ElevenLabs actif et dire « Finis PSG et Dijon ».
+La marche à suivre est dans le skill du projet, [`.claude/skills/tiktok-foot-legendes/SKILL.md`](.claude/skills/tiktok-foot-legendes/SKILL.md),
+qui se charge tout seul dans les sessions ouvertes sur ce dépôt. Aperçu muet au minutage provisoire :
+`LEGENDES_PROVISOIRE=<dossier> python3 episodes/<club>/<club>.py <sortie> --apercu`.
+
 ## Refaire / modifier un épisode
 
 Depuis l'épisode 6, les vidéos sont en plein écran, sans la barre de fenêtre façon Mac en haut. Les épisodes 1 à 5 ont été publiés avec cette barre ;

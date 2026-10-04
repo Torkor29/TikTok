@@ -700,6 +700,8 @@ def loudnorm(src, dst, lufs=-14.0, tp=-1.5):
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", src, "-af", f"loudnorm=I={lufs}:TP={tp}:LRA=11:print_format=json",
                         "-f", "null", "-"], capture_output=True, text=True).stderr
     m = json.loads(r[r.rindex("{"):r.rindex("}")+1])
+    if "inf" in str(m["input_i"]):   # piste muette (aperçu sans voix) : rien à normaliser
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-ar", str(SR), dst], check=True); return
     af = (f"loudnorm=I={lufs}:TP={tp}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-af", af, "-ar", str(SR), dst], check=True)

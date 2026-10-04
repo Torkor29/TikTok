@@ -1,6 +1,6 @@
 ---
 name: tiktok-foot-legendes
-description: Crée des vidéos TikTok « Légendes du foot » (1080x1920, ~1 min 30 – 2 min) qui racontent la vie d'un footballeur (enfance, galères, anecdotes, contrats, records, transferts) dans un style papier déchiré / gouache / stop-motion : joueur en papier découpé qui grandit et change de maillot, transitions en déchirure de papier, tampons, compteurs, confettis, voix off ElevenLabs et vrais bruitages. Utilise ce skill dès que l'utilisateur demande l'histoire, la bio, les anecdotes ou les contrats d'un joueur ou d'une joueuse (« fais Ronaldo », « l'histoire de Zidane », « épisode sur Mbappé »), même s'il ne dit pas « skill ».
+description: Crée des vidéos TikTok « Légendes du foot » (1080x1920, format court ~1 min 15 ou long ~2 min) qui racontent la vie d'un footballeur ou l'histoire d'un club (enfance, galères, anecdotes, contrats, records, transferts) dans un style papier déchiré / gouache / stop-motion : joueur en papier découpé qui grandit et change de maillot, transitions en déchirure de papier, tampons, compteurs, confettis, voix off ElevenLabs et vrais bruitages. Utilise ce skill dès que l'utilisateur demande l'histoire, la bio, les anecdotes ou les contrats d'un joueur ou d'une joueuse (« fais Ronaldo », « l'histoire de Zidane », « épisode sur Mbappé »), ou d'un club (« fais l'histoire de Le Mans », « l'histoire du PSG »), ou de finir un épisode en attente de voix, même s'il ne dit pas « skill ».
 ---
 
 # TikTok « Légendes du foot » — motion design papier

@@ -647,5 +647,6 @@ if __name__ == "__main__":
     if "--stills" in args:
         k = args.index("--stills"); only = [int(x) for x in args[k+1].split(",")] if len(args) > k+1 and not args[k+1].startswith("--") else None
         print(stills(os.environ.get("STILLS_DIR", "/tmp/psg_stills"), only=only)); sys.exit()
-    if os.environ.get("LEGENDES_PROVISOIRE"): sys.exit("Minutage provisoire : pas de rendu final sans les vraies voix.")
+    if os.environ.get("LEGENDES_PROVISOIRE") and "--apercu" not in args:
+        sys.exit("Minutage provisoire : pas de rendu final sans les vraies voix (--apercu pour un aperçu muet).")
     print(render_episode(SCENES, out, SLUG, TITLE, voice_files=VOICE, sfx_dir=SFX_DIR, sfx_db=6.0, lufs=-14.0, crf=25))
