@@ -15,6 +15,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 5 | Neymar — 222 millions… génie ou gâchis ? (devinette par les âges, remontada minute par minute, 14 min au sol, fin au Mondial 2026 dans le stade de son 1er but) | 1:56 | [`output/neymar/`](output/neymar) |
 | 6 | Le Mans FC — faillite en 2013… Ligue 1 en 2026 ?! (demandé par un abonné ; plein écran sans barre : ascenseur D6 → L1, Drogba ×300, usine à pépites, Djokovic actionnaire, montée validée malgré les fumigènes) | 2:02 | [`output/lemans/`](output/lemans) |
 | 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image ; **voix en attente de crédits ElevenLabs**) | — | [`output/dijon/`](output/dijon) |
+| 8 | PSG — envoyé en 3e division… double champion d'Europe ?! (format court, CTA like + abonne-toi ; **voix en attente de crédits ElevenLabs**) | — | [`output/psg/`](output/psg) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -30,6 +31,7 @@ output/<joueur>/      livrables
 branding/             compte TikTok « Foot Découpé » : nom, bio, description, photo de profil (pp.py)
 scripts/setup.sh      dépendances (Pillow, numpy, ffmpeg, polices)
 scripts/build_skill.sh  fabrique dist/tiktok-foot-legendes.skill
+scripts/minutage_provisoire.py  voix muettes + alignement estimé (avant de générer les voix)
 ```
 
 ## Refaire / modifier un épisode
@@ -48,4 +50,5 @@ python3 episodes/om/om.py output/om                       # épisode 4 (un club)
 python3 episodes/neymar/neymar.py output/neymar           # épisode 5
 python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club, plein écran)
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
+python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```

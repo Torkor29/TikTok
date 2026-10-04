@@ -63,6 +63,9 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   Le nom du club / de la ville doit se lire **dès la 1re image et sur la couverture** (« DIJON » géant + un objet symbole : pot de moutarde).
   Promettre la durée dans l'accroche (« l'histoire du DFCO en une minute ») et afficher une barre chrono en haut (`chrono_bar()` dans `dijon.py`,
   à y≈176 sous les onglets TikTok), qui se remplit sur toute la vidéo. Annoncer les 3 retournements dès les 9 premières secondes.
+- **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
+  qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
+  `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).
 - **Appel à commenter au milieu** (~50 % de la vidéo, juste après un moment fort) : scène courte (5 s) avec `trans="polaroid"` +
   `trans_dur=99` (l'image se fige en photo noir et blanc épinglée, scratch de vinyle), « Quel joueur tu veux voir ? »,
   cartes de joueurs, bulle qui s'écrit, flèche vers le bouton commentaire, puis « Allez, on reprend ! ».
@@ -162,4 +165,5 @@ nohup python3 episodes/<joueur>/<joueur>.py output/<joueur> > render.log 2>&1 & 
   Une voix de ~170 caractères coûte ~170 crédits (`eleven_multilingual_v2`) : vérifier avec `estimate_only=True` avant de lancer un épisode.
   En attendant les voix : minutage provisoire (voix muettes à ~6 syllabes/s + pauses de ponctuation, alignement estimé) dans un dossier
   pointé par `LEGENDES_PROVISOIRE=<dossier avec voix/ et alignement.json>` pour écrire les scènes, sortir planches et couverture ; le rendu final est bloqué.
+  Le fabriquer : `python3 scripts/minutage_provisoire.py episodes/<club>/textes_voix.json <dossier>` (textes des voix gardés dans le repo).
 - Vérifier le **contexte temporel** : Messi a quitté Paris en 2023, pas « un an plus tard ». Relire le script voix off contre les dates avant de générer l'audio (chaque prise coûte des crédits).

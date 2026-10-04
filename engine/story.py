@@ -269,3 +269,18 @@ def beam(cv, apex, pts, a=.35, col=(255, 244, 200)):
     """Faisceau lumineux semi-transparent (projecteur, lampe torche)."""
     L = Image.new("RGBA", cv.size, (0, 0, 0, 0)); ImageDraw.Draw(L).polygon([apex] + pts, fill=(*col, int(255*a)))
     cv.paste(L, (0, 0), L)
+
+_chrono = {}
+def chrono_bar(cv, fr, scenes, fill=(222, 176, 34), knob=(214, 26, 42), y=176):
+    """Barre « chrono » en haut de l'écran (« l'histoire en une minute ») : se remplit sur toute la vidéo.
+    y≈176 : juste sous les onglets de l'appli TikTok. `scenes` : la liste SCENES (durées calculées au rendu)."""
+    key = id(scenes)
+    if key not in _chrono:
+        tot = sum(getattr(sc, "T", 0) for sc in scenes)
+        if tot <= 0: return
+        _chrono[key] = tot
+    u = clamp(fr/FPS/_chrono[key]); d = ImageDraw.Draw(cv)
+    x0, x1 = 60, W - 60
+    d.rounded_rectangle([x0, y - 9, x1, y + 9], 9, fill=(30, 28, 32))
+    if u > 0: d.rounded_rectangle([x0, y - 9, x0 + 18 + (x1 - x0 - 18)*u, y + 9], 9, fill=fill)
+    cx = x0 + 9 + (x1 - x0 - 18)*u; d.ellipse([cx - 16, y - 16, cx + 16, y + 16], fill=knob, outline=(250, 250, 246), width=4)
