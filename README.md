@@ -16,6 +16,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 6 | Le Mans FC — faillite en 2013… Ligue 1 en 2026 ?! (demandé par un abonné ; plein écran sans barre : ascenseur D6 → L1, Drogba ×300, usine à pépites, Djokovic actionnaire, montée validée malgré les fumigènes) | 2:02 | [`output/lemans/`](output/lemans) |
 | 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image, poulet Gaston Gérard, Dijon 2-1 PSG, chute en National, retour en L2) | 1:11 | [`output/dijon/`](output/dijon) |
 | 8 | PSG — envoyé en 3e division… double champion d'Europe ?! (format court avec barre chrono, « PSG » + tour Eiffel dès la 1re image, 20 000 « oui », divorce de 1972, N'Gotty, le Qatar, 5-0 contre l'Inter ; CTA like + abonne-toi) | 1:15 | [`output/psg/`](output/psg) |
+| 9 | Liverpool — né d'une dispute de loyer… 6 fois champion d'Europe ?! (présentation du club, format court avec barre chrono, « LIVERPOOL » + facture de loyer dès la 1re image, Everton quitte Anfield, Shankly, YNWA, Istanbul 2005, Klopp, 20e titre ; CTA like + abonne-toi) | 1:13 | [`output/liverpool/`](output/liverpool) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -68,6 +69,7 @@ python3 episodes/om/om.py output/om                       # épisode 4 (un club)
 python3 episodes/neymar/neymar.py output/neymar           # épisode 5
 python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club, plein écran)
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
+python3 episodes/liverpool/liverpool.py output/liverpool  # épisode 9 (format court)
 python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```

@@ -70,6 +70,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   Le nom du club / de la ville doit se lire **dès la 1re image et sur la couverture** (« DIJON » géant + un objet symbole : pot de moutarde).
   Promettre la durée dans l'accroche (« l'histoire du DFCO en une minute ») et afficher une barre chrono en haut (`chrono_bar()` dans `dijon.py`,
   à y≈176 sous les onglets TikTok), qui se remplit sur toute la vidéo. Annoncer les 3 retournements dès les 9 premières secondes.
+- **Présenter un club avec un fil rouge d'objet** (épisode Liverpool) : un objet qui raconte l'origine (la **facture de loyer** d'Anfield « 100 £ → 250 £ »
+  + tampon « IMPAYÉ ») ouvre la vidéo avec « LIVERPOOL » en énorme, et revient à la fin avec les tampons « 6 COUPES D'EUROPE » / « 20 TITRES ».
+  Couverture sans le gabarit habituel : nom du club, bande « NÉ D'UNE DISPUTE DE LOYER… », la facture, bande « …6 FOIS CHAMPION D'EUROPE ?! », les 6 coupes.
+  Avec une actualité récente (entraîneur remercié, nouveau coach), vérifier deux sources et ne donner aucun motif à l'écran.
+  Faits sensibles (Heysel, Hillsborough) : ne pas les traiter dans un format court et dynamique, le dire dans le script.
 - **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
   qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
   `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).

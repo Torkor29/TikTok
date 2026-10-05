@@ -15,6 +15,8 @@ INK = PAL["ink"]
 KITS = {
     "newells": dict(kind="halves", c1=(206, 34, 44), c2=(34, 32, 32), sleeve=(206, 34, 44), shorts=(34, 32, 32), socks=(206, 34, 44), trim=(34, 32, 32)),
     "barca":   dict(kind="stripes", c1=(0, 77, 152), c2=(165, 0, 68), n=5, sleeve=(165, 0, 68), shorts=(0, 60, 128), socks=(165, 0, 68), trim=(238, 190, 60)),
+    "liverpool": dict(kind="plain", c1=(200, 16, 46), sleeve=(200, 16, 46), shorts=(200, 16, 46), socks=(200, 16, 46), trim=(250, 250, 246)),
+    "everton": dict(kind="plain", c1=(0, 60, 170), sleeve=(0, 60, 170), shorts=(250, 250, 246), socks=(0, 60, 170), trim=(250, 250, 246)),
     "psg":     dict(kind="band", c1=(16, 40, 86), c2=(210, 36, 42), c3=(250, 248, 240), sleeve=(16, 40, 86), shorts=(16, 40, 86), socks=(16, 40, 86), trim=(210, 36, 42)),
     "arg":     dict(kind="stripes", c1=(116, 174, 226), c2=(252, 250, 244), n=5, sleeve=(116, 174, 226), shorts=(34, 32, 32), socks=(252, 250, 244), trim=(34, 32, 32)),
     "miami":   dict(kind="plain", c1=(246, 170, 200), sleeve=(246, 170, 200), shorts=(246, 170, 200), socks=(246, 170, 200), trim=(34, 32, 32)),
