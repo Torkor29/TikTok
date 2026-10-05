@@ -20,6 +20,11 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
+## Carrousel TikTok (mode photo)
+
+8 images 1080×1920 dans le même style, à publier en « Photo » sur TikTok : `python3 episodes/liverpool/carrousel.py output/liverpool/carrousel`
+(accroche, une date par image, question + CTA à la fin). Mode d'emploi, légende et sources : [`output/liverpool/carrousel/carrousel_guide.md`](output/liverpool/carrousel/carrousel_guide.md).
+
 ## Quiz « T'es un vrai fan de X si tu as plus de 5/8 »
 
 Autre format, même style et même voix : 8 questions QCM (4 réponses, 5 s de chrono qui s'écoule), CTA « abonne-toi et like » au milieu, barème final.

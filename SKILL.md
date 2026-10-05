@@ -33,6 +33,7 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 ```
 
 ## Méthode
+> **Carrousel photo** (mode photo TikTok, 8 images 9:16) : voir `episodes/liverpool/carrousel.py` et `output/liverpool/carrousel/carrousel_guide.md` (1re slide = accroche, une date par slide, dernière = question + CTA ; contenu entre y 180 et 1 420).
 > Format **quiz** (« T'es un vrai fan de X si tu as plus de 5/8 », 8 QCM, chrono 5 s) : skill dédié `.claude/skills/tiktok-foot-quiz/SKILL.md`, moteur `engine/quiz.py`.
 
 1. **Recherche d'abord** (web_search) : dates, clubs, chiffres des contrats, records, anecdotes. Tout chiffre à l'écran doit avoir une source dans le `_script.md`.
