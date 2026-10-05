@@ -610,27 +610,6 @@ SCENES[5].post = s6_post
 # ------------------------------------------------------------------ couverture
 # Couverture « débat » (différente du gabarit habituel titre + joueur + bandeau) : question en lettres découpées façon lettre anonyme,
 # nuit + projecteur, joueur couronné sur la 1re marche d'un podium « PSG », 2e et 3e marches avec « ? » (qui d'autre ?).
-RANSOM = [(BLANC, NOIR), (ROUGE, BLANC), (GOLD, NOIR), (NOIR, GOLD), (BLANC, ROUGE), (64, 110, 200), (236, 226, 204)]
-def ransom_line(cv, txt, y, size=104, maxw=980, seed=0):
-    """Une ligne de lettres découpées dans des journaux : chaque lettre sur son bout de papier, police et couleur différentes."""
-    rnd = random.Random(seed); kinds = ["title", "sans", "title", "mono", "title"]; parts = []
-    for k, ch in enumerate(txt):
-        if ch == " ": parts.append(None); continue
-        bg = RANSOM[rnd.randrange(len(RANSOM))]
-        fg = bg if isinstance(bg[0], tuple) else None
-        bg, fg = (bg if fg else (bg, BLANC if sum(bg) < 400 else NOIR))
-        f = font(kinds[rnd.randrange(len(kinds))], int(size*rnd.uniform(.88, 1.1)))
-        x0, y0, x1, y1 = f.getbbox(ch, anchor="ls"); gw, gh = x1 - x0, y1 - y0
-        spr = paper_sprite(rect_pts(max(gw, gh*.62) + 30, max(gh, size*.72) + 30), bg, seed=seed*97 + k, rough=2.6)
-        ax, ay = spr.info["anchor"]
-        ImageDraw.Draw(spr).text((ax - (x0 + x1)/2, ay - (y0 + y1)/2), ch, font=f, fill=fg, anchor="ls")
-        parts.append((spr, rnd.uniform(-7, 7), rnd.uniform(-8, 8)))
-    gap = size*.3; ws = [p[0].width - 64 if p else gap for p in parts]
-    sc = min(1.0, maxw/sum(ws)); x = CX - sum(ws)*sc/2
-    for p, wd in zip(parts, ws):
-        if p: blit(cv, p[0], x + wd*sc/2, y + p[2], sc, p[1])
-        x += wd*sc
-
 def _crown(d, a):
     ax, ay = a
     for k, c in enumerate((ROUGE, (40, 90, 200), ROUGE)):

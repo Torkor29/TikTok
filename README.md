@@ -19,12 +19,23 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
+## Quiz « T'es un vrai fan de X si tu as plus de 5/8 »
+
+Autre format, même style et même voix : 8 questions QCM (4 réponses, 5 s de chrono qui s'écoule), CTA « abonne-toi et like » au milieu, barème final.
+Moteur : [`engine/quiz.py`](engine/quiz.py). Skill dédié : [`.claude/skills/tiktok-foot-quiz/SKILL.md`](.claude/skills/tiktok-foot-quiz/SKILL.md),
+version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skill.sh`).
+
+| # | Quiz | Durée | Fichiers |
+|---|---|---|---|
+| 1 | PSG — stade, Qatar, Neymar 222 M€, 1970, remontada, 5-0 contre l'Inter, Stade Saint-Germain, meilleur buteur | 1:52 | [`output/quiz_psg/`](output/quiz_psg) |
+
 ## Structure
 
 ```
 engine/engine.py      moteur papier (Paper, Label…) + déchirures, effets, bruitages, rendu parallèle
 engine/foot.py        kit foot : joueur qui grandit / change de maillot, ballon, cages, trophées, toise…
 engine/story.py       outils de montage : mots clés calés sur la voix, plusieurs plans par scène, zooms, glitch
+engine/quiz.py        format quiz : questions QCM, chrono 5 s, révélation, CTA, barème, couverture
 episodes/<joueur>/    script de l'épisode + voix off (voix/scene_N.mp3)
 assets/sfx/           bruitages ElevenLabs réutilisables (déchirure, foule, sifflet, caisse, flashs…)
 output/<joueur>/      livrables
@@ -57,5 +68,6 @@ python3 episodes/om/om.py output/om                       # épisode 4 (un club)
 python3 episodes/neymar/neymar.py output/neymar           # épisode 5
 python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club, plein écran)
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
+python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```

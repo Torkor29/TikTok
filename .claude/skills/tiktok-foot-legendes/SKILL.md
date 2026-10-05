@@ -5,6 +5,8 @@ description: Crée des vidéos TikTok « Légendes du foot » (1080x1920, format
 
 # Légendes du foot (skill de ce dépôt)
 
+Pour un **quiz** (« t'es un vrai fan de X ? », QCM + chrono), utiliser le skill `tiktok-foot-quiz` (`.claude/skills/tiktok-foot-quiz/SKILL.md`).
+
 Tout le skill est dans ce dépôt. Avant de toucher à un épisode, lire :
 - `SKILL.md` à la racine : la méthode complète (accroche, rythme, CTA, montage calé sur la voix, kit foot, effets, bruitages, pièges) ;
 - `README.md` : la liste des épisodes et les commandes.

@@ -22,7 +22,7 @@ Dans `output/<joueur>/` :
    **Varier la mise en page d'un épisode à l'autre**. Les épisodes 1 à 7 suivent tous le même gabarit (fond à rayons, titre, joueur bras levés,
    bandeau « l'histoire folle de… ») et l'utilisateur le trouve répétitif. Préférer une **question qui fait débat** (« LE PLUS GRAND CLUB DE FRANCE ?
    …ET D'EUROPE ?! ») et une composition propre au sujet. Exemple, PSG (`cover()` dans `episodes/psg/psg.py`) : question en lettres découpées façon lettre
-   anonyme (`ransom_line`), nuit + projecteur, joueur couronné sur un podium « PSG », 2e et 3e marches « ? ». Le nom du club doit rester lisible,
+   anonyme (`ransom_line`, dans `engine/story.py`), nuit + projecteur, joueur couronné sur un podium « PSG », 2e et 3e marches « ? ». Le nom du club doit rester lisible,
    et le texte important doit tenir dans le cadre 3:4 de la grille du profil (y ≈ 240 à 1680).
 4. `<slug>_voix_off.txt` : script voix off complet (généré par `render_episode`).
 5. `<slug>_script.md` : minutage, ce qu'on voit, carte des transitions, légende TikTok, hashtags, **sources**.
@@ -33,6 +33,8 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
 ```
 
 ## Méthode
+> Format **quiz** (« T'es un vrai fan de X si tu as plus de 5/8 », 8 QCM, chrono 5 s) : skill dédié `.claude/skills/tiktok-foot-quiz/SKILL.md`, moteur `engine/quiz.py`.
+
 1. **Recherche d'abord** (web_search) : dates, clubs, chiffres des contrats, records, anecdotes. Tout chiffre à l'écran doit avoir une source dans le `_script.md`.
    Pour les événements récents (moins d'un an), vérifier deux sources ; si elles divergent, formuler sans le chiffre (« le plus titré », « ancien record : Klose, 16 »).
 2. **Un fil rouge** qui fait tenir l'histoire (Messi : « trop petit » à 10 ans → le plus grand). L'accroche l'annonce, la dernière scène y répond.

@@ -665,7 +665,7 @@ SFX_GAIN = dict(rip=.9, crowd=.55, whistle=.45, cash=.7, flash=.55, stamp=.95, w
                 gavel=.8, plane=.5, groan=.5, heart=1.0, riser=.45, sparkle=.45, crowd_long=.5,
                 scratch=.8, glitch=.6, notif=.7, laser=.6, laugh=.6, monitor=.55,
                 rewind=.6, bar=.8, horn=.5, gasp=.6, coin=.7, siren=.45, dig=.7, jail=.9, bell=.6, elevator=.8, crash=.8, samba=.6,
-                race=.6, tennis=.7, cluck=.7, phone=.6)
+                race=.6, tennis=.7, cluck=.7, phone=.6, tictac=.8, correct=.7, buzzer=.5)
 
 def load_sfx_dir(path):
     """Charge un dossier de bruitages : silence de tête coupé, crête normalisée (le 'top' tombe à l'instant voulu)."""
@@ -694,14 +694,26 @@ def _last_frame(scenes, i, starts, title):
     sc = scenes[i]; f = max(0, int(round(starts[i+1]*FPS))-1)
     cv = background(f, title); sc.draw_fn(cv, f, sc.T-1e-3, sc.T); return cv
 
-def loudnorm(src, dst, lufs=-14.0, tp=-1.5):
-    """Normalisation EBU R128 en deux passes (mesure puis correction linéaire)."""
+def loudnorm(src, dst, lufs=-14.0, tp=-1.5, limit=False):
+    """Normalisation EBU R128 en deux passes (mesure puis correction linéaire).
+    limit=True : si le gain linéaire ferait dépasser le true peak, gain + limiteur (alimiter) au lieu de rester sous la cible
+    (utile quand de longs silences — le chrono des quiz — font baisser le niveau intégré)."""
     import json
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", src, "-af", f"loudnorm=I={lufs}:TP={tp}:LRA=11:print_format=json",
                         "-f", "null", "-"], capture_output=True, text=True).stderr
     m = json.loads(r[r.rindex("{"):r.rindex("}")+1])
     if "inf" in str(m["input_i"]):   # piste muette (aperçu sans voix) : rien à normaliser
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-ar", str(SR), dst], check=True); return
+    gain = lufs - float(m["input_i"])
+    if limit and float(m["input_tp"]) + gain > tp:
+        for _ in range(4):   # le limiteur mange un peu de niveau : on remesure et on corrige le gain
+            af = f"volume={gain:.2f}dB,alimiter=limit={10**((tp - .3)/20):.4f}:attack=2:release=60:level=false"
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-af", af, "-ar", str(SR), dst], check=True)
+            r = subprocess.run(["ffmpeg", "-hide_banner", "-i", dst, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
+            I = float(re.findall(r"I:\s+(-?[\d.]+) LUFS", r)[-1])
+            if abs(I - lufs) < .25: break
+            gain += lufs - I
+        return
     af = (f"loudnorm=I={lufs}:TP={tp}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-af", af, "-ar", str(SR), dst], check=True)
@@ -729,7 +741,7 @@ def _render_range(scenes, starts, title, f0, f1, out_path, preview_dir=None, pre
 
 def render_episode(scenes, out_dir, slug, title="~/savoir $ ./episode", voice_scale=1.12, preview_every=None,
                    voice_files=None, voice_block=None, sfx_dir=None, workers=None, duck=0.35, voice_gain=1.0,
-                   sfx_db=9.0, lufs=-14.0, crf=25, audio_only=False):
+                   sfx_db=9.0, lufs=-14.0, crf=25, audio_only=False, limit=False):
     """voice_files : liste de fichiers audio, un par scène (ex. générés via un MCP ElevenLabs / Google TTS).
     voice_block : un seul fichier pour toute la voix off, découpé automatiquement aux silences.
     Sans les deux : voix Piper hors-ligne.
@@ -780,7 +792,7 @@ def render_episode(scenes, out_dir, slug, title="~/savoir $ ./episode", voice_sc
         a = np.where(np.abs(a) > .9, np.sign(a)*(.9 + .1*np.tanh((np.abs(a)-.9)/.1)), a)   # limiteur doux
         with wave.open(f"{tmp}/{nm}_raw.wav", "w") as w:
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(a, -1, 1)*32767).astype(np.int16).tobytes())
-        loudnorm(f"{tmp}/{nm}_raw.wav", f"{tmp}/{nm}.wav", lufs)
+        loudnorm(f"{tmp}/{nm}_raw.wav", f"{tmp}/{nm}.wav", lufs, limit=limit)
     if audio_only: return [f"{tmp}/audio_full.wav", f"{tmp}/audio_sfx_only.wav"]
     # 3) images, en parallèle
     starts = np.cumsum([0]+[sc.T for sc in scenes])

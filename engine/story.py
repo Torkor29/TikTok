@@ -284,3 +284,37 @@ def chrono_bar(cv, fr, scenes, fill=(222, 176, 34), knob=(214, 26, 42), y=176):
     d.rounded_rectangle([x0, y - 9, x1, y + 9], 9, fill=(30, 28, 32))
     if u > 0: d.rounded_rectangle([x0, y - 9, x0 + 18 + (x1 - x0 - 18)*u, y + 9], 9, fill=fill)
     cx = x0 + 9 + (x1 - x0 - 18)*u; d.ellipse([cx - 16, y - 16, cx + 16, y + 16], fill=knob, outline=(250, 250, 246), width=4)
+
+# ------------------------------------------------------------------ titre en lettres découpées (lettre anonyme)
+_W, _K, _R, _G = (250, 250, 246), (30, 28, 28), (210, 36, 42), (236, 186, 48)
+RANSOM = [(_W, _K), (_R, _W), (_G, _K), (_K, _G), (_W, _R), (64, 110, 200), (236, 226, 204)]
+_ransom = {}
+def ransom_line(cv, txt, y, size=104, maxw=980, seed=0, fr=None, scale=1.0, alpha=1.0):
+    """Une ligne de lettres découpées dans des journaux : chaque lettre sur son bout de papier, police et couleur différentes.
+    fr : numéro d'image (les lettres frétillent en stop-motion) ; les bouts de papier sont mis en cache (vidéo)."""
+    if scale <= .01 or alpha <= .01: return
+    key = (txt, size, seed)
+    if key not in _ransom: _ransom[key] = _ransom_parts(txt, size, seed)
+    parts = _ransom[key]
+    gap = size*.3; ws = [p[0].width - 64 if p else gap for p in parts]
+    sc = min(1.0, maxw/sum(ws))*scale; x = CX - sum(ws)*sc/2
+    for k, (p, wd) in enumerate(zip(parts, ws)):
+        if p:
+            jx, jy = jit(f"rs{seed}{k}", boil(fr), 2.0) if fr is not None else (0, 0)
+            blit(cv, p[0], x + wd*sc/2 + jx, y + p[2]*scale + jy, sc, p[1] + jx*.4, alpha)
+        x += wd*sc
+
+def _ransom_parts(txt, size, seed):
+    rnd = random.Random(seed); kinds = ["title", "sans", "title", "mono", "title"]; parts = []
+    for k, ch in enumerate(txt):
+        if ch == " ": parts.append(None); continue
+        bg = RANSOM[rnd.randrange(len(RANSOM))]
+        fg = bg if isinstance(bg[0], tuple) else None
+        bg, fg = (bg if fg else (bg, _W if sum(bg) < 400 else _K))
+        f = font(kinds[rnd.randrange(len(kinds))], int(size*rnd.uniform(.88, 1.1)))
+        x0, y0, x1, y1 = f.getbbox(ch, anchor="ls"); gw, gh = x1 - x0, y1 - y0
+        spr = paper_sprite(rect_pts(max(gw, gh*.62) + 30, max(gh, size*.72) + 30), bg, seed=seed*97 + k, rough=2.6)
+        ax, ay = spr.info["anchor"]
+        ImageDraw.Draw(spr).text((ax - (x0 + x1)/2, ay - (y0 + y1)/2), ch, font=f, fill=fg, anchor="ls")
+        parts.append((spr, rnd.uniform(-7, 7), rnd.uniform(-8, 8)))
+    return parts
