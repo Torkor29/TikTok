@@ -87,6 +87,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   main sur le cœur, brassard, lumière latérale) ; stades de nuit avec foule dessinée supporter par supporter, mis en cache puis floutés
   derrière les gros plans (profondeur de champ) + bokeh. Pour s'inspirer d'une vidéo existante (pub, montage) : reprendre l'émotion
   et les faits, jamais les plans, les phrases, la musique ni les logos.
+- **Version « manga en papier »** (`episodes/messi_manga/`, module `engine/manga.py`) : nos dessins passent par `manga_filter`
+  (encrage, trames de points, hachures, seuls bleu ciel / or / rouge restent en couleur, grain) ; mise en page en cases (`panel` :
+  contenu plein cadre + caméra centre/zoom/rotation, bords inclinés ou cases rondes, entrée glissée), `focus_lines`, `action_lines`,
+  `rain`, `impact_frame`, `ono` (onomatopées), `caption` (cartouches), transition `ink`. Pour une animation fluide :
+  `engine.boil = lambda f: 0`. Privilégier les gros plans `Portrait` (les joueurs en pied restent simples de près).
 - **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
   qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
   `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).
