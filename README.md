@@ -34,6 +34,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | # | Quiz | Durée | Fichiers |
 |---|---|---|---|
 | 1 | PSG — stade, Qatar, Neymar 222 M€, 1970, remontada, 5-0 contre l'Inter, Stade Saint-Germain, meilleur buteur | 1:52 | [`output/quiz_psg/`](output/quiz_psg) |
+| 2 | PSG niveau 2 (plus dur) — 1986, Luis Enrique, Arsenal 2026, N'Gotty, Rapid Vienne, Coman, Kombouaré, Marquinhos (**voix en attente de crédits ElevenLabs**) | — | [`output/quiz_psg2/`](output/quiz_psg2) |
 
 ## Structure
 

@@ -227,6 +227,7 @@ def intro_scene(theme, Wd, hero):
         ransom_line(cv, l1, 330, 120, seed=3, fr=fr, scale=lerp(1.25, 1, ease_out_cubic(prog(t, 0, .25))))
         ransom_line(cv, l2, 500, 140, seed=11, fr=fr)
         STRIP.draw(cv, fr, CX, 680, 1 if fr == 0 else slam(t, .02, .2), -3)
+        if theme.get("niveau"): STAMP(theme["niveau"], "qzniv", RED, 92).draw(cv, fr, 770, 850, 1 if fr == 0 else slam(t, .25, .2), 9)
     def shot2(cv, fr, t):
         stage_fill(cv, fr, theme["bgs"][1], "qzi2"); rays(cv, (CX, 900), t, .5, 14, 1500, (255, 255, 255), .08, .2)
         t8, t5, tc, tp = Wd("Huit", 2), Wd("cinq", 2), Wd("Compte"), Wd("parti")
@@ -299,7 +300,7 @@ def quiz_cover(path, theme, hero, title="~/quiz"):
     rays(cv, (CX, 1250), .3, .8, 16, 1500, theme.get("ray2", (40, 70, 140)), .12)
     ransom_line(cv, l1, 300, 130, seed=3); ransom_line(cv, l2, 470, 150, seed=11)
     Label(f"PLUS DE {theme.get('seuil', 5)}/8 ?", "qzcv1", font("title", 96), INK, GOLD, padx=30, pady=8, rough=5).draw(cv, 0, CX, 650, 1, -3)
-    STAMP("QUIZ", "qzcv2", RED, 110).draw(cv, 0, 860, 820, 1, 12)
+    STAMP(theme.get("tampon", "QUIZ"), "qzcv2", RED, 110 if len(theme.get("tampon", "QUIZ")) < 6 else 80).draw(cv, 0, 850, 820, 1, 12)
     chrono(cv, 0, CHRONO*.4 + 1.0, 1.0, y=820, cx=170, x0=290, x1=700)
     for k in range(4):
         box = answer_box(f"qzcvb{k}", "?", LETTERS[k], theme["badge"])
