@@ -1,4 +1,4 @@
-"""Épisode « Légendes du foot » #10 : l'histoire du Toulouse FC, format court (~1 min 10), CTA « like + abonne-toi pour plus d'épisodes ».
+"""Épisode « Légendes du foot » #10 : l'histoire du Toulouse FC, format court (~1 min), CTA « like + abonne-toi pour plus d'épisodes ».
 « TOULOUSE » dès la 1re image : en faillite en 2001… et 22 ans plus tard, il bat Liverpool (clin d'œil à l'épisode #9).
 1970 nouveau club, 1979 Toulouse FC ; 2001 faillite, National, L1 dès 2003 ; 2007 3e de L1, Liverpool élimine le TFC (0-5 cumulé) ;
 2020 dernier, L2, 2022 champion de L2 ; pause like + abonne-toi ; 2023 Coupe de France 5-1 contre Nantes ; 9 nov 2023 TFC 3-2 Liverpool ;
@@ -110,7 +110,7 @@ def s2a(cv, fr, t):
     bricks(cv, fr, "ts2a")
     kw(cv, fr, K2a, t, w(2, "Mille") - .05, None, CX, 420, -3)
     show(cv, fr, T2a, t, w(2, "nouveau") - .05, None, CX, 600, 2)
-    SH_TFC70.draw(cv, fr, CX, 1080, 1.7*slam(t, w(2, "naît") - .05, .22), -3)
+    SH_TFC70.draw(cv, fr, CX, 1080, 1.7*slam(t, w(2, "un") - .05, .22), -3)
     particles(cv, fr, "tp2", (CX, 1080), prog(t, w(2, "naît"), .6), 18, 300, [VIO, BLANC, GOLD], 16)
 
 def s2b(cv, fr, t):
@@ -291,10 +291,12 @@ def s9b(cv, fr, t):
     tl, ta = w(9, "like"), w(9, "abonne-toi")
     kw(cv, fr, K9a, t, w(9, "Toulouse") - .05, None, CX, 360, -3)
     kw(cv, fr, K9b, t, w(9, "sous-coté") - .1, None, CX, 500, 2)
+    sb = 1.5*pop_in(t, w(9, "Toulouse") + .15, .3)*(1 - prog(t, w(9, "Dis-le") - .25, .2))   # l'écusson occupe le centre pendant la question
+    if sb > .02: SH_TFC.draw(cv, fr, CX, 1050, sb, -3 + 2*math.sin(t*3))
     kw(cv, fr, K9c, t, w(9, "Dis-le") - .05, None, CX, 760, -3)
-    like_button(cv, fr, 200, 1100, .75*pop_in(t, tl - .1, .3), t, tl)
-    sub_button(cv, fr, 730, 1100, t, ta - .1, ta + .25)
-    kw(cv, fr, K9d, t, w(9, "d'épisodes") - .1, None, 700, 1360, 3)
+    like_button(cv, fr, CX, 1000, .75*pop_in(t, tl - .1, .3), t, tl)      # empilés au centre : rien sous la colonne de boutons TikTok (x > 940)
+    sub_button(cv, fr, CX, 1255, t, ta - .1, ta + .25)
+    kw(cv, fr, K9d, t, w(9, "d'épisodes") - .1, None, CX, 1435, 3)
     confetti(cv, fr, "tc9", t - ta, 90, 5, [BLANC, GOLD, VIO_D])
 
 def s9(cv, fr, t, T):

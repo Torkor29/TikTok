@@ -46,11 +46,12 @@ Toulouse le plus sous-coté de France : OUI ou NON ? Réponds avec ton club 👇
 - **Une promesse** (« le plus cité aura son épisode ») : ça donne une raison de commenter et de revenir.
 - Réponds aux premiers commentaires dans la demi-heure : chaque réponse relance la discussion.
 
-## Sources (vérifiées le 05/10/2026)
+## Sources (vérifiées les 05 et 06/10/2026)
 - 1970 : Union Sportive Toulouse, nom Toulouse FC en 1979 ; faillite en 2001, redépart en National, Ligue 1 en 2003 ; 3e de Ligue 1 en 2006-07, Liverpool élimine le TFC (5-0 sur les deux matchs) : [Wikipedia – Toulouse FC](https://en.wikipedia.org/wiki/Toulouse_FC)
 - Coupe de France : Toulouse 5-1 Nantes, 29 avril 2023 : [Wikipedia – Finale 2023](https://en.wikipedia.org/wiki/2023_Coupe_de_France_final), [CNews](https://www.cnews.fr/sport/2023-04-29/coupe-de-france-toulouse-ecrase-nantes-5-1-en-finale-au-stade-de-france-1349476)
 - Ligue Europa : Toulouse 3-2 Liverpool, 9 novembre 2023 : [ESPN](https://www.espn.com/soccer/match/_/gameId/687687/liverpool-toulouse), [Liverpool FC](https://www.liverpoolfc.com/news/liverpool-beaten-3-2-europa-league-clash-toulouse)
-- **À revérifier avant publication** (connus mais pas recoupés aujourd'hui) : dernier de Ligue 1 en 2020, champion de Ligue 2 en 2022.
+- 2020 : dernier de Ligue 1 (20e, saison 2019-20 arrêtée par le Covid), relégué en Ligue 2 : [Wikipedia – saison 2019-20 du TFC](https://en.wikipedia.org/wiki/2019%E2%80%9320_Toulouse_FC_season)
+- 2022 : champion de Ligue 2 (saison 2021-22), retour en Ligue 1 : [Wikipedia – Ligue 2 2021-22](https://en.wikipedia.org/wiki/2021%E2%80%9322_Ligue_2)
 
 **Précautions** :
 - « Premier grand trophée du club » : vrai pour le TFC actuel, fondé en 1970. L'ancien Toulouse FC (1937-1967), un autre club, avait gagné la Coupe de France 1957.

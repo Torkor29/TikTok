@@ -17,6 +17,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 7 | Dijon FCO — a battu le PSG… puis la 3e division ?! (format court ~1 min 15 avec barre chrono, « DIJON » + moutarde dès la 1re image, poulet Gaston Gérard, Dijon 2-1 PSG, chute en National, retour en L2) | 1:11 | [`output/dijon/`](output/dijon) |
 | 8 | PSG — envoyé en 3e division… double champion d'Europe ?! (format court avec barre chrono, « PSG » + tour Eiffel dès la 1re image, 20 000 « oui », divorce de 1972, N'Gotty, le Qatar, 5-0 contre l'Inter ; CTA like + abonne-toi) | 1:15 | [`output/psg/`](output/psg) |
 | 9 | Liverpool — né d'une dispute de loyer… 6 fois champion d'Europe ?! (présentation du club, format court avec barre chrono, « LIVERPOOL » + facture de loyer dès la 1re image, Everton quitte Anfield, Shankly, YNWA, Istanbul 2005, Klopp, 20e titre ; CTA like + abonne-toi) | 1:13 | [`output/liverpool/`](output/liverpool) |
+| 10 | Toulouse FC — en faillite en 2001… et 22 ans plus tard, il bat Liverpool ?! (format court avec barre chrono, « TOULOUSE » sur briques roses dès la 1re image, ascenseur L2 → D3 → L1, 2007 éliminé par Liverpool, Coupe de France 5-1, revanche 3-2 ; carrousel à poster juste avant + descriptions qui font commenter) | 1:01 | [`output/toulouse/`](output/toulouse) |
 
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
@@ -24,6 +25,7 @@ Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couve
 
 8 images 1080×1920 dans le même style, à publier en « Photo » sur TikTok : `python3 episodes/liverpool/carrousel.py output/liverpool/carrousel`
 (accroche, une date par image, question + CTA à la fin). Mode d'emploi, légende et sources : [`output/liverpool/carrousel/carrousel_guide.md`](output/liverpool/carrousel/carrousel_guide.md).
+Toulouse : `python3 episodes/toulouse/carrousel.py output/toulouse/carrousel`, à poster juste avant la vidéo ; ordre, descriptions et commentaires épinglés : [`output/toulouse/toulouse_publication.md`](output/toulouse/toulouse_publication.md).
 
 ## Quiz « T'es un vrai fan de X si tu as plus de 5/8 »
 
@@ -76,6 +78,7 @@ python3 episodes/neymar/neymar.py output/neymar           # épisode 5
 python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club, plein écran)
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
 python3 episodes/liverpool/liverpool.py output/liverpool  # épisode 9 (format court)
+python3 episodes/toulouse/toulouse.py output/toulouse      # épisode 10 (format court)
 python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
 python3 episodes/quiz_psg2/quiz_psg2.py output/quiz_psg2  # quiz 2 (niveau 2, plus dur)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)

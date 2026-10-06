@@ -76,6 +76,12 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   Couverture sans le gabarit habituel : nom du club, bande « NÉ D'UNE DISPUTE DE LOYER… », la facture, bande « …6 FOIS CHAMPION D'EUROPE ?! », les 6 coupes.
   Avec une actualité récente (entraîneur remercié, nouveau coach), vérifier deux sources et ne donner aucun motif à l'écran.
   Faits sensibles (Heysel, Hillsborough) : ne pas les traiter dans un format court et dynamique, le dire dans le script.
+- **Fil rouge « rival / revanche »** (épisode Toulouse) : un adversaire qui revient (Liverpool élimine le TFC en 2007, le TFC le bat en 2023,
+  « 16 ans après, la revanche ! ») et qui raccroche l'épisode à un épisode déjà en ligne. Publier un **carrousel juste avant** la vidéo
+  et écrire des descriptions qui font commenter : question à réponse courte (OUI / NON, « un seul club »), léger débat (« le plus sous-coté
+  de France ? »), appel aux souvenirs, promesse (« le plus cité aura son épisode ») ; voir `output/toulouse/toulouse_publication.md`.
+  Boutons like / abonne-toi de la fin : **empilés au centre** (cœur y≈1000, « + ABONNE-TOI » y≈1255, « + D'ÉPISODES » y≈1435) ;
+  côte à côte, le bouton « + ABONNE-TOI » (≈ 670 px de large) déborde sous la colonne d'icônes TikTok (x > 940).
 - **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
   qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
   `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).
