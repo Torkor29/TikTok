@@ -92,6 +92,12 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   contenu plein cadre + caméra centre/zoom/rotation, bords inclinés ou cases rondes, entrée glissée), `focus_lines`, `action_lines`,
   `rain`, `impact_frame`, `ono` (onomatopées), `caption` (cartouches), transition `ink`. Pour une animation fluide :
   `engine.boil = lambda f: 0`. Privilégier les gros plans `Portrait` (les joueurs en pied restent simples de près).
+- **Version « papier réaliste »** (`episodes/messi_papier/`, module `engine/parallax.py`) : images IA « photo de maquette en papier »
+  (gpt-image-2, 9:16, 1K) ; plans SANS visage d'une personne réelle animés en vidéo IA (Veo refuse les visages de personnalités : ne pas
+  contourner) ; plans avec visage animés en 2,5D : détourage BiRefNet, `prep_layers` (fond rebouché « push-pull » + flou, personnage
+  net), `still()` (caméra : zoom/pan, le fond bouge `par` fois moins ; respiration ; `move` = mouvement propre, mise à l'échelle depuis
+  le bas du cadre pour ne pas révéler un buste coupé), `clip()` pour les vidéos, `cuts()` (raccords filé / fondu / flash),
+  `light_leak`, `motes`, `grade`, `post_fx` (vignettage + grain, sur `Scene.post`). Rappeler de cocher « Contenu généré par IA » sur TikTok.
 - **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
   qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
   `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).
