@@ -97,3 +97,14 @@ la bonne réponse passe au vert avec ✓, les autres s'éteignent, l'illustratio
 - Seuil : `THEME["seuil"]` (5 par défaut → « plus de 5/8 », barème 0-3 / 4-5 / 6-8).
 - Quiz joueur (« t'es un vrai fan de Zidane ? ») : même chose, `du` = « DE ZIDANE », `hero()` = le joueur avec son kit.
 - CTA après une autre question : `assemble(..., cta_after=k)` et `cta_scene(theme, Wd, after=k)`.
+- **Niveau 2 (plus dur)** : `THEME["niveau"] = "NIVEAU 2"` (sticker sur l'intro) et `THEME["tampon"] = "NIVEAU 2"` (tampon de la couverture).
+  Aucune question facile (MOYEN → LA PLUS DURE), des pièges plausibles (la 1re Coupe au lieu du 1er titre, le coach arrivé six mois après…),
+  illustrations « silhouette noire + ? » ou tableau « ??? ». Le CTA et la fin gardent le même texte : réutiliser les voix du quiz 1
+  (et leurs mots dans `alignement.json`), aucun crédit dépensé. Exemple : `examples/quiz_psg2/`.
+
+## Crédits ElevenLabs épuisés
+Tout préparer quand même avec un minutage provisoire, puis finir dès qu'il y a des crédits :
+`python3 scripts/minutage_provisoire_quiz.py episodes/quiz_<club> <dossier>` (silences de la durée estimée pour les voix manquantes,
+vraies voix sinon), puis `LEGENDES_PROVISOIRE=<dossier> python3 episodes/quiz_<club>/quiz_<club>.py <sortie> --stills | --apercu`.
+Le rendu final est bloqué tant que la variable est définie. Avec les crédits : générer les voix manquantes, refaire `alignement.json`
+avec les vraies voix (étape 4), planches, rendu, vérifications.

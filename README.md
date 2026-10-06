@@ -34,7 +34,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | # | Quiz | Durée | Fichiers |
 |---|---|---|---|
 | 1 | PSG — stade, Qatar, Neymar 222 M€, 1970, remontada, 5-0 contre l'Inter, Stade Saint-Germain, meilleur buteur | 1:52 | [`output/quiz_psg/`](output/quiz_psg) |
-| 2 | PSG niveau 2 (plus dur) — 1986, Luis Enrique, Arsenal 2026, N'Gotty, Rapid Vienne, Coman, Kombouaré, Marquinhos (**voix en attente de crédits ElevenLabs**) | — | [`output/quiz_psg2/`](output/quiz_psg2) |
+| 2 | PSG niveau 2 (plus dur) — 1986, Luis Enrique, Arsenal 2026, N'Gotty, Rapid Vienne, Coman, Kombouaré, Marquinhos ; sticker « NIVEAU 2 » | 2:04 | [`output/quiz_psg2/`](output/quiz_psg2) |
 
 ## Structure
 
@@ -77,5 +77,6 @@ python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club,
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
 python3 episodes/liverpool/liverpool.py output/liverpool  # épisode 9 (format court)
 python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
+python3 episodes/quiz_psg2/quiz_psg2.py output/quiz_psg2  # quiz 2 (niveau 2, plus dur)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```
