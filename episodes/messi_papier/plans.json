@@ -1,0 +1,108 @@
+{
+ "style": "Photograph of a handmade paper-craft diorama. Everything is built from cut, folded and layered paper and thin cardstock: visible paper fibers, slightly torn edges, tiny cast shadows between paper layers, matte gouache-painted paper. Macro lens, shallow depth of field. Tall vertical 9:16 composition.",
+ "adult": "the same paper football captain as in the reference: short dark-brown paper hair swept to the side, full dark-brown paper beard with a few grey strands, slim, sky-blue and white vertical striped shirt, white captain armband on his left arm",
+ "young": "the same young paper player as in the reference: 18 years old, shaggy medium-length dark-brown paper hair with a fringe, no beard, boyish face, slim and small, sky-blue and white vertical striped shirt, black shorts",
+ "constraints": "Constraints: no text, no letters, no numbers, no logos, no brand marks, no crests on any shirt.",
+ "plans": {
+  "01_adulte_emu": {
+   "ref": null,
+   "who": "adult",
+   "scene": "night stadium, blurred crowd of tiny paper fans with sky-blue and white paper flags. Chest-up close-up, moved, one small paper tear on his cheek."
+  },
+  "02_stade_nuit": {
+   "ref": null,
+   "who": null,
+   "scene": "wide view of a huge paper stadium at night packed with thousands of tiny paper cutout fans waving sky-blue and white paper flags and scarves, floodlight beams, glittering phone lights made of tiny foil dots, a green paper pitch in the foreground."
+  },
+  "03_jeune_entree": {
+   "ref": null,
+   "who": "young",
+   "scene": "night match in 2005, touchline, crowd of tiny paper fans in red, white and green, a paper fourth official in black holds a substitution board with a green arrow; the young player waits nervously to come on."
+  },
+  "04_carton_rouge": {
+   "ref": null,
+   "who": null,
+   "scene": "dramatic low-angle shot of a bald paper referee in a black kit thrusting a bright red paper card up into the air, floodlights flaring behind, crowd of tiny paper fans in red, white and green blurred."
+  },
+  "05_jeune_larmes": {
+   "ref": "young",
+   "who": "young",
+   "scene": "he walks off the pitch into a dark paper tunnel, head down, crying, wiping his eyes with his hand, a cold light from the tunnel, tiny paper tear drops."
+  },
+  "06_jeune_frappe": {
+   "ref": "young",
+   "who": "young",
+   "scene": "2006 World Cup match, he strikes a white paper football with his left foot, dynamic action pose, motion streaks made of thin paper strips, stadium crowd of tiny paper fans."
+  },
+  "07_filet": {
+   "ref": null,
+   "who": null,
+   "scene": "close-up of a white paper football hitting the back of a paper goal net that bulges outward, the net made of fine paper threads, an explosion of sky-blue, white and gold paper confetti, crowd of tiny paper fans behind."
+  },
+  "08_finales": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "younger version with only a short beard. He stands alone on a paper pitch after a lost final, hands on his hips, looking down, grey paper rain falling, opponents celebrating as small blurred paper figures in the background, gloomy blue light."
+  },
+  "09_penalty": {
+   "ref": null,
+   "who": null,
+   "scene": "view from behind the penalty spot at night: a white paper football flies high over the crossbar of a paper goal, a paper goalkeeper in grey dives the wrong way, crowd of tiny paper fans in sky-blue and red blurred behind."
+  },
+  "10_banc": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "younger version with only a short beard. He sits alone on a paper bench, elbows on knees, head down, tears, desaturated cold grey-blue light, empty paper stadium seats behind."
+  },
+  "11_retour": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "younger version with only a short beard. Determined close-up, jaw set, looking straight ahead, warm backlight rim on his paper hair, he is back."
+  },
+  "12_lance_en_lair": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "night, golden paper fireworks: his teammates (paper figures in the same striped shirts) throw him up into the air in celebration, he holds a silver paper trophy above his head, paper confetti."
+  },
+  "13_coupe_monde": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "low-angle shot, he lifts a tall golden paper trophy cup high above his head with both hands, rays of golden light, golden and sky-blue paper confetti raining down, ecstatic."
+  },
+  "14_cri_de_joie": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "close-up, he screams with joy, tears of joy, mouth wide open, golden paper confetti all around, warm golden light."
+  },
+  "15_finale_perdue": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "on the pitch after a lost final, he stands with his head down in the foreground, behind him blurred opponents in red paper shirts celebrate, red and yellow paper confetti falling, night."
+  },
+  "16_main_coeur": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "close-up, he places his right hand flat on his heart over the striped shirt, eyes glistening, soft light, grey strands visible in the beard."
+  },
+  "17_entree_pelouse": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "seen from behind and slightly above, he walks out of the tunnel onto the green paper pitch of a gigantic packed paper stadium at night, thousands of tiny paper fans with sky-blue and white flags, a long white paper banner across the stand, floodlights."
+  },
+  "18_salut": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "medium shot, smiling, he waves to the crowd with his right hand raised, the stadium lights and tiny phone lights glitter behind him."
+  },
+  "19_merci": {
+   "ref": "adult",
+   "who": "adult",
+   "scene": "close-up, eyes closed, gentle smile, right hand on his heart, warm golden light, a few paper confetti floating."
+  },
+  "20_foule_fin": {
+   "ref": null,
+   "who": null,
+   "scene": "close view of the paper stand: rows of tiny paper fans holding up sky-blue and white paper flags and scarves, sky-blue and white paper confetti in the air, night."
+  }
+ }
+}
