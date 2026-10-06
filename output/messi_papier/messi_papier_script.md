@@ -38,7 +38,7 @@
 
 | # | Temps | Voix off | Plans | Transition d'entrée |
 |---|---|---|---|---|
-| 1 | 0:00 | Vingt et un ans. Plus de deux cents matchs. Lionel Messi dit adieu à l'Argentine. | Vidéo IA : la caméra avance au ras de la pelouse vers une tribune en papier bleu ciel et blanc qui ondule (drapeaux, flashs de téléphones, confettis) ; « 21 ANS », « + DE 200 MATCHS ». Flash blanc : gros plan ému, une larme en papier sur la joue, la caméra s'approche lentement ; « MESSI DIT ADIEU / À L'ARGENTINE ». | — |
+| 1 | 0:00 | Vingt et un ans. Plus de deux cents matchs. Lionel Messi dit adieu à l'Argentine. | Vidéo IA : la caméra avance au ras de la pelouse vers une tribune en papier bleu ciel et blanc qui ondule (drapeaux, flashs de téléphones, confettis) ; « 21 ANS », « en sélection · 2005-2026 », « + DE 200 MATCHS ». Flash blanc : gros plan ému, une larme en papier sur la joue, la caméra s'approche lentement ; « MESSI DIT ADIEU / À L'ARGENTINE ». | — |
 | 2 | 0:04 | Deux mille cinq : son tout premier match. Il entre… et prend un carton rouge, quarante-sept secondes plus tard. Il sort en larmes. | Bord du terrain à Budapest (foule rouge, blanc, vert), le jeune Messi attend à côté du panneau de changement ; « 2005 », « 1er match · Hongrie - Argentine ». Vidéo IA : contre-plongée sur l'arbitre qui brandit le carton rouge, chrono 0:00 → 0:47, « CARTON ROUGE ! ». Fondu : il sort par le tunnel en pleurant, lumière froide ; « IL SORT EN LARMES ». | zoom |
 | 3 | 0:10 | Un an après, à dix-huit ans : son premier but en Coupe du monde. | Il frappe du gauche au coucher du soleil, la caméra recule ; « 2006 », « 18 ANS ». Flash : vidéo IA du ballon qui gonfle le filet, explosion de confettis, flashs ; « 1er but en Coupe du monde ». | filé |
 | 4 | 0:14 | Puis trois finales perdues, en trois ans. En deux mille seize, il rate son penalty… et quitte la sélection. Avant de revenir. | Seul sous la pluie, mains sur les hanches ; « 3 FINALES PERDUES », tampons « 2014 », « 2015 », « 2016 ». Vidéo IA : le penalty passe au-dessus de la barre, le gardien plonge ; « 2016 », « RATÉ ». Noir et blanc : assis seul sur le banc, « IL QUITTE LA SÉLECTION ». Flash : regard déterminé, la couleur et un contre-jour chaud reviennent, « … AVANT DE REVENIR ! ». | déchirure horizontale |
@@ -70,7 +70,7 @@ Merci Leo 🐐 Ton plus beau souvenir de Messi avec l'Argentine ? 👇
 - **2005, premier match** : 17 août 2005 contre la Hongrie à Budapest. Il entre à la 63e minute, est expulsé 47 secondes plus tard et sort en larmes.
   - [Goal](https://www.goal.com/en-us/lists/a-nightmare-debut-whats-happened-to-lionel-messis-argentina-team-/3tp9stvyezzq1hh83wid5s5dk)
   - [Planet Football](https://www.planetfootball.com/quick-reads/lionel-messi-argentina-debut-hungary-sent-off-red-card-xi-2005-where-now)
-- **2006, premier but en Coupe du monde** : 16 juin 2006 contre la Serbie-et-Monténégro (6-0). À 18 ans et 358 jours, il devient le plus jeune buteur argentin en Coupe du monde.
+- **2006, premier but en Coupe du monde** : 16 juin 2006 contre la Serbie-et-Monténégro (6-0). À 18 ans et 357 jours, il devient le plus jeune buteur argentin en Coupe du monde.
   - [FC Barcelona](https://www.fcbarcelona.com/en/news/698788/barca-at-the-world-cup-part-2-the-unforgettable-debut-of-leo-messi)
   - [TBS News](https://www.tbsnews.net/sports/twenty-years-one-date-one-legend-messi-goes-first-wc-goal-all-time-record-1465511)
 - **Trois finales perdues** :

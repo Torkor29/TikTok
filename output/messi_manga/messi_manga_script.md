@@ -59,7 +59,7 @@ Merci Leo 🐐 Ton plus beau souvenir de Messi avec l'Argentine ? 👇
 - **2005, premier match** : 17 août 2005 contre la Hongrie à Budapest. Il entre à la 63e minute, est expulsé 47 secondes plus tard et sort en larmes.
   - [Goal](https://www.goal.com/en-us/lists/a-nightmare-debut-whats-happened-to-lionel-messis-argentina-team-/3tp9stvyezzq1hh83wid5s5dk)
   - [Planet Football](https://www.planetfootball.com/quick-reads/lionel-messi-argentina-debut-hungary-sent-off-red-card-xi-2005-where-now)
-- **2006, premier but en Coupe du monde** : 16 juin 2006 contre la Serbie-et-Monténégro (6-0). À 18 ans et 358 jours, il devient le plus jeune buteur argentin en Coupe du monde.
+- **2006, premier but en Coupe du monde** : 16 juin 2006 contre la Serbie-et-Monténégro (6-0). À 18 ans et 357 jours, il devient le plus jeune buteur argentin en Coupe du monde.
   - [FC Barcelona](https://www.fcbarcelona.com/en/news/698788/barca-at-the-world-cup-part-2-the-unforgettable-debut-of-leo-messi)
   - [TBS News](https://www.tbsnews.net/sports/twenty-years-one-date-one-legend-messi-goes-first-wc-goal-all-time-record-1465511)
 - **Trois finales perdues** :

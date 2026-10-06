@@ -62,7 +62,7 @@ def gray_mix(cv, a):
 ZERO = lambda tl, u: (0, 0, 1.0, None)
 
 # ------------------------------------------------------------------ étiquettes
-K1a, K1b = M.K1a, M.K1b
+K1a, K1b = M.K1a, M.K1b; T1a = TAG("en sélection · 2005-2026", "pt1a", PAL["paper"], size=66)      # « 21 ANS » seul se lit comme son âge
 K2a = KW("2005", "pk2a", INK, size=150); T2a = TAG("1er match · Hongrie - Argentine", "pt2a", PAL["paper"], size=62)
 K2b = STAMP("CARTON ROUGE !", "pk2b", RED, 104); K2c = KW("IL SORT EN LARMES", "pk2c", PAL["paper"], NOIR, 84)
 K3a = KW("2006", "pk3a", INK, size=150); K3b = STAMP("18 ANS", "pk3b", CIEL, 120, NOIR)
@@ -90,8 +90,9 @@ def s1(cv, fr, t, T):
                 fx=lambda c, f, tl, u: light_leak(c, 120, 260, 520, FLOOD, flicker(tl, .35, .1)),
                 post=lambda c, f, tl, u: (motes(c, tl, 22, 1, (255, 236, 200), a=.75), light_leak(c, 980, 1500, 600, WARM, .22)))
     cuts(cv, fr, t, [(0, p02), (b, p01)], [("flash", .32)])
-    show_stamp(cv, fr, K1a, t, w(1, "Vingt") - .05, CX, 420, -4, t_out=b - .25)
-    kw(cv, fr, K1b, t, w(1, "Plus") - .05, b - .2, CX, 630, 3)
+    show_stamp(cv, fr, K1a, t, w(1, "Vingt") - .05, CX, 400, -4, t_out=b - .25)
+    show(cv, fr, T1a, t, w(1, "ans") - .2, b - .2, CX, 530, 2)
+    kw(cv, fr, K1b, t, w(1, "Plus") - .05, b - .2, CX, 680, 3)
     ransom_line(cv, "MESSI DIT ADIEU", 1290, 112, seed=3, fr=fr, scale=pop_in(t, w(1, "Messi") - .1, .3))
     ransom_line(cv, "À L'ARGENTINE", 1440, 100, seed=5, fr=fr, scale=pop_in(t, w(1, "l'Argentine") - .1, .3))
     impact(cv, t, w(1, "Vingt"), 12); impact(cv, t, w(1, "Plus"), 8)
