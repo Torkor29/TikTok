@@ -82,6 +82,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   de France ? »), appel aux souvenirs, promesse (« le plus cité aura son épisode ») ; voir `output/toulouse/toulouse_publication.md`.
   Boutons like / abonne-toi de la fin : **empilés au centre** (cœur y≈1000, « + ABONNE-TOI » y≈1255, « + D'ÉPISODES » y≈1435) ;
   côte à côte, le bouton « + ABONNE-TOI » (≈ 670 px de large) déborde sous la colonne d'icônes TikTok (x > 940).
+- **Version « ultra détaillée »** (hommage Messi, `episodes/messi_adieu/`) : gros plans papier `Portrait` (`engine/portrait.py` :
+  styles young / mid / adult, poils gris `grey`, humeurs neutral / smile / cheer / sad / cry / emotional / proud / determined, larmes,
+  main sur le cœur, brassard, lumière latérale) ; stades de nuit avec foule dessinée supporter par supporter, mis en cache puis floutés
+  derrière les gros plans (profondeur de champ) + bokeh. Pour s'inspirer d'une vidéo existante (pub, montage) : reprendre l'émotion
+  et les faits, jamais les plans, les phrases, la musique ni les logos.
 - **Ou CTA « like + abonne-toi pour plus d'épisodes »** (épisode PSG, à la demande) : même pause polaroid, mais un gros bouton cœur
   qui s'enfonce (petits cœurs qui s'envolent, compteur qui grimpe : `like_button()` dans `psg.py`) puis « + ABONNE-TOI » ; le redire à la fin.
   `chrono_bar(cv, fr, SCENES)` est dans `story.py` (à appeler à la fin de chaque scène, et dans le `post` de la pause).

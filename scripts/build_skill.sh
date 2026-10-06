@@ -3,10 +3,10 @@
 set -e
 cd "$(dirname "$0")/.."
 T=$(mktemp -d); S=$T/tiktok-foot-legendes
-mkdir -p $S/scripts $S/examples/messi $S/examples/ronaldo $S/examples/zidane $S/examples/om $S/examples/neymar $S/examples/lemans $S/examples/dijon $S/examples/psg $S/examples/liverpool $S/examples/toulouse $S/assets
+mkdir -p $S/scripts $S/examples/messi $S/examples/ronaldo $S/examples/zidane $S/examples/om $S/examples/neymar $S/examples/lemans $S/examples/dijon $S/examples/psg $S/examples/liverpool $S/examples/toulouse $S/examples/messi_adieu $S/assets
 cp SKILL.md $S/
 cp .claude/skills/tiktok-foot-legendes/SKILL.md $S/FINIR_UN_EPISODE.md
-cp engine/engine.py engine/foot.py engine/story.py scripts/setup.sh scripts/minutage_provisoire.py $S/scripts/
+cp engine/engine.py engine/foot.py engine/story.py engine/portrait.py scripts/setup.sh scripts/minutage_provisoire.py $S/scripts/
 cp episodes/messi/messi.py output/messi/messi_legende_script.md $S/examples/messi/
 cp episodes/ronaldo/ronaldo.py episodes/ronaldo/alignement.json output/ronaldo/ronaldo_legende_script.md $S/examples/ronaldo/
 cp episodes/zidane/zidane.py episodes/zidane/alignement.json output/zidane/zidane_legende_script.md $S/examples/zidane/
@@ -17,6 +17,7 @@ cp episodes/dijon/dijon.py episodes/dijon/textes_voix.json output/dijon/dijon_le
 cp episodes/psg/psg.py episodes/psg/textes_voix.json output/psg/psg_legende_script.md $S/examples/psg/
 cp episodes/liverpool/liverpool.py episodes/liverpool/carrousel.py episodes/liverpool/textes_voix.json output/liverpool/liverpool_legende_script.md $S/examples/liverpool/
 cp episodes/toulouse/toulouse.py episodes/toulouse/carrousel.py episodes/toulouse/textes_voix.json output/toulouse/toulouse_legende_script.md output/toulouse/toulouse_publication.md $S/examples/toulouse/
+cp episodes/messi_adieu/messi_adieu.py episodes/messi_adieu/textes_voix.json output/messi_adieu/messi_adieu_script.md $S/examples/messi_adieu/
 cp -r assets/sfx $S/assets/
 mkdir -p dist; rm -f dist/tiktok-foot-legendes.skill
 (cd $T && zip -qr tiktok-foot-legendes.skill tiktok-foot-legendes) && mv $T/tiktok-foot-legendes.skill dist/

@@ -53,6 +53,8 @@ KITS = {
     "tennis":  dict(kind="plain", c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(40, 44, 60), socks=(250, 250, 246), trim=(40, 44, 60)),
     "pilote":  dict(kind="plain", c1=(200, 24, 34), sleeve=(200, 24, 34), shorts=(200, 24, 34), socks=(30, 28, 28), trim=(250, 250, 246), pants=True),
     "dijon":   dict(kind="plain", c1=(214, 26, 42), sleeve=(214, 26, 42), shorts=(214, 26, 42), socks=(214, 26, 42), trim=(250, 250, 246)),
+    "hungary": dict(kind="plain", c1=(200, 30, 44), sleeve=(200, 30, 44), shorts=(250, 250, 246), socks=(30, 130, 70), trim=(250, 250, 246)),
+    "spain":   dict(kind="plain", c1=(196, 20, 36), sleeve=(196, 20, 36), shorts=(24, 36, 90), socks=(24, 36, 90), trim=(250, 200, 30)),
 }
 
 def kit_pattern(kit, x0, x1):
@@ -104,6 +106,9 @@ class Player:
         elif hair_style == "mullet":  # coupe mulet : court devant, long sur la nuque (Waddle, années 90)
             hpts = [(-60, 46), (-58, -18), (-54, -52), (-34, -72), (-4, -78), (28, -74), (50, -58), (58, -18), (60, 46),
                     (48, 50), (48, -30), (26, -44), (4, -42), (-22, -46), (-48, -30), (-48, 50)]
+        elif hair_style == "shaggy":  # cheveux mi-longs, frange, couvrent les oreilles (années 2000)
+            hpts = [(-64, 44), (-62, -20), (-56, -56), (-34, -78), (-2, -84), (32, -78), (54, -60), (62, -20), (64, 44),
+                    (52, 50), (50, 10), (40, -26), (22, -34), (8, -24), (-6, -34), (-22, -26), (-38, -32), (-50, 10), (-52, 50)]
         elif hair_style == "quiff":   # cheveux courts sur les côtés, houppette relevée devant
             hpts = [(-55, -14), (-56, -46), (-40, -66), (-18, -80), (6, -104), (30, -98), (46, -80), (56, -50), (56, -14),
                     (46, -34), (30, -44), (8, -46), (-16, -46), (-40, -38)]

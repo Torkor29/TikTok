@@ -19,6 +19,8 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 9 | Liverpool — né d'une dispute de loyer… 6 fois champion d'Europe ?! (présentation du club, format court avec barre chrono, « LIVERPOOL » + facture de loyer dès la 1re image, Everton quitte Anfield, Shankly, YNWA, Istanbul 2005, Klopp, 20e titre ; CTA like + abonne-toi) | 1:13 | [`output/liverpool/`](output/liverpool) |
 | 10 | Toulouse FC — en faillite en 2001… et 22 ans plus tard, il bat Liverpool ?! (format court avec barre chrono, « TOULOUSE » sur briques roses dès la 1re image, ascenseur L2 → D3 → L1, 2007 éliminé par Liverpool, Coupe de France 5-1, revanche 3-2 ; carrousel à poster juste avant + descriptions qui font commenter) | 1:01 | [`output/toulouse/`](output/toulouse) |
 
+| Hommage | Lionel Messi dit adieu à l'Argentine (version « ultra détaillée » : gros plans papier aux trois âges, stades de nuit avec foule détaillée, profondeur de champ ; 2005 rouge après 47 s, 2006, 3 finales perdues, 2021-2022, finale 2026, Monumental) | 0:43 | [`output/messi_adieu/`](output/messi_adieu) |
+
 Chaque épisode livre : la vidéo (`<slug>.mp4`), la version sans voix, la couverture, le script voix off et le script minuté avec légende, hashtags et sources.
 
 ## Carrousel TikTok (mode photo)
@@ -79,6 +81,7 @@ python3 episodes/lemans/lemans.py output/lemans           # épisode 6 (un club,
 python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format court)
 python3 episodes/liverpool/liverpool.py output/liverpool  # épisode 9 (format court)
 python3 episodes/toulouse/toulouse.py output/toulouse      # épisode 10 (format court)
+python3 episodes/messi_adieu/messi_adieu.py output/messi_adieu  # hommage (ultra détaillé)
 python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
 python3 episodes/quiz_psg2/quiz_psg2.py output/quiz_psg2  # quiz 2 (niveau 2, plus dur)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
