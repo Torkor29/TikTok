@@ -1,6 +1,6 @@
 # Légendes du foot — L'histoire du RC Lens (test « vrai supporter »)
 
-**Format** : TikTok vertical 1080×1920, 24 i/s, **1 min 01**, 11 scènes.
+**Format** : TikTok vertical 1080×1920, 24 i/s, **1 min 02**, 11 scènes.
 **Voix** : ElevenLabs « Léo – Energetic & Engaging », `eleven_multilingual_v2`.
 **Musique** : aucune. À ajouter dans TikTok : un son tendance, volume 5-10 %, à partir de 1 s pour laisser passer le son de hook.
 
@@ -11,42 +11,45 @@
   - la voix démarre juste après, et l'image claque sur l'impact ;
   - fichier : `assets/sfx/hook.mp3`, réutilisable dans les prochains épisodes.
 - **Question piège à 9,8 s, SANS la réponse** :
-  - quatre propositions avec des pastilles de couleur, et un chrono de 3 s ;
+  - quatre joueurs de l'époque en propositions, une silhouette mystère « ? » du buteur, et un chrono de 3 s ;
   - à la fin du chrono, un gros « ? » apparaît, puis la voix dit : « Ta réponse en commentaire ! Et non… on ne te la donne pas » ;
   - un tampon « TOP SECRET » passe sur les réponses ;
   - la question revient à la fin avec les pastilles A, B, C, D, toujours sans la réponse.
 
 ## La réponse (pour toi, à ne PAS donner dans la vidéo)
 
-**C — Noir et vert.**
-- **À la création en 1906** : le noir pour le charbon des mines, le vert pour la place Verte, où le club a été fondé (aujourd'hui place de la République).
-- **Le « sang et or »** : il n'arrive qu'en 1924, avec le président Pierre Moglia.
+**B — Yoann Lachor.**
+- **Le match** : le 9 mai 1998, Lens va à Auxerre pour la dernière journée et a besoin d'un point.
+- **Le but** : Auxerre ouvre le score, ce qui met Metz provisoirement en tête. Lachor égalise sur une passe de Frédéric Dahu : 1-1.
+- **Le résultat** : Lens est champion à la différence de buts devant Metz. C'est le seul titre de champion du club.
 
-Le piège : presque tout le monde répondra A (sang et or). Laisse le débat s'installer dans les commentaires avant de répondre.
-- Tu peux épingler un commentaire du type « Vous êtes nombreux à dire A… 👀 ».
-- Ne donne la réponse qu'après 24-48 h, en réponse vidéo à un commentaire : ça fait une 2e vidéo.
+**Le piège** : les fans récents répondront Šmicer ou Vairelles, les noms les plus connus de l'époque.
+- **Debève** est un faux ami : c'est lui qui marque à Wembley six mois plus tard. La vidéo parle de Wembley sans jamais dire qui a marqué.
+- **Après la publication** : laisse le débat s'installer avant de répondre.
+  - Tu peux épingler un commentaire du type « Beaucoup de Šmicer… vous êtes sûrs ? 👀 ».
+  - Donne la réponse au bout de 24 à 48 h, en réponse vidéo à un commentaire : ça fait une 2e vidéo.
 
 ## Déroulé
 
 | # | Temps | Voix off | À l'écran | Transition d'entrée |
 |---|---|---|---|---|
 | 1 | 0:00 | *(son de hook seul)* Lensois ? T'es sûr d'être un vrai supporter ? Tu connais vraiment l'histoire de ton club ? | Bandes sang et or, projecteur, « LENSOIS ? » en lettres découpées dès la 1re image ; impact à 0,45 s (flash + zoom). Un supporter en maillot sang et or transpire, « VRAI SUPPORTER ? ». Puis « TU CONNAIS L'HISTOIRE / DE TON CLUB ? », livre « RC LENS · L'HISTOIRE · 1906 - 2026 », points d'interrogation. | — |
-| 2 | 0:05 | Mille neuf cent six. Des jeunes mineurs et des étudiants fondent le Racing Club de Lens. | Vieux film sépia : chevalement, terrils ; « 1906 », deux jeunes mineurs (casque + lampe), deux étudiants, un ballon ; « RACING CLUB DE LENS ». Aucun maillot ni couleur d'époque à l'écran (pour ne pas souffler la réponse). | déchirure verticale |
-| 3 | 0:09 | Question piège : en mille neuf cent six, le tout premier maillot de Lens était de quelles couleurs ? | « QUESTION PIÈGE », carte de la question, maillot gris « ? », réponses A Sang et or / B Bleu et blanc / C Noir et vert / D Rouge et noir (avec pastilles), chrono 3-2-1 (tic-tac), puis gros « ? ». | zoom |
-| 4 | 0:17 | Ta réponse en commentaire ! Et non… on ne te la donne pas. | « RÉPONSE EN COMMENTAIRE », bulle « … », flèche vers la colonne des boutons TikTok, tampon « TOP SECRET » sur les réponses (rires). | — |
+| 2 | 0:05 | Mille neuf cent six. Des jeunes mineurs et des étudiants fondent le Racing Club de Lens. | Vieux film sépia : chevalement, terrils ; « 1906 », deux jeunes mineurs (casque + lampe), deux étudiants, un ballon ; « RACING CLUB DE LENS ». | déchirure verticale |
+| 3 | 0:09 | Question pour les vrais : neuf mai quatre-vingt-dix-huit, dernière journée à Auxerre… Qui marque le but du titre ? | « QUESTION PIÈGE », carte « 9 mai 1998, dernière journée à Auxerre : qui marque le but du titre ? », réponses A Vladimir Šmicer / B Yoann Lachor / C Tony Vairelles / D Mickaël Debève, silhouette noire du buteur bras levés avec un « ? » dans un rond de projecteur, chrono 3-2-1 (tic-tac), puis gros « ? ». | zoom |
+| 4 | 0:18 | Ta réponse en commentaire ! Et non… on ne te la donne pas. | « RÉPONSE EN COMMENTAIRE », bulle « … », flèche vers la colonne des boutons TikTok, tampon « TOP SECRET » sur le « ? » (rires) ; les 4 réponses restent lisibles et aucune n'est cachée (ce serait un indice). | — |
 | 5 | 0:21 | Leur stade, Bollaert, a été construit par cent quatre-vingts mineurs. Aujourd'hui : trente-huit mille places… pour à peine trente-trois mille habitants ! | Nuit : 180 lampes de mineurs qui s'allument une à une, « BOLLAERT », « construit par 180 mineurs », compteur « 180 MINEURS ». Puis stade vu du dessus « 38 223 PLACES » face aux corons « 32 697 HABITANTS », tampon « PLUS DE PLACES QUE D'HABITANTS ! ». | déchirure horizontale |
-| 6 | 0:28 | À la mi-temps, tout le stade chante Les Corons. Et en mille neuf cent quatre-vingt-dix-huit : champion de France, à la toute dernière journée ! | Tribune sang et or de nuit, notes de musique, « LES CORONS », « chantés à chaque mi-temps ». Puis « 1998 », « CHAMPION DE FRANCE », « à la dernière journée », trophée, confettis. | filé |
+| 6 | 0:29 | À la mi-temps, tout le stade chante Les Corons. Et en mille neuf cent quatre-vingt-dix-huit : champion de France, à la toute dernière journée ! | Tribune sang et or de nuit, notes de musique, « LES CORONS », « chantés à chaque mi-temps ». Puis « 1998 », « CHAMPION DE FRANCE », « à la dernière journée », trophée, confettis. | filé |
 | 7 | 0:35 | Six mois plus tard, Lens devient le premier club français à gagner à Wembley. Contre Arsenal ! | Les deux tours de l'ancien Wembley, « WEMBLEY », « 6 mois plus tard · novembre 1998 », « 1er CLUB FRANÇAIS À Y GAGNER », tableau « ARSENAL 0-1 LENS ». | zoom |
-| 8 | 0:39 | Puis la chute : la Ligue 2, les caisses vides… le club est au bord du gouffre. | Noir et blanc : « LA CHUTE », chute d'ascenseur L1 → L2, « CAISSES VIDES », la dernière pièce roule ; puis le joueur au bord d'une falaise sous la pluie, « AU BORD DU GOUFFRE ». | déchirure diagonale |
-| 9 | 0:44 | Retour en Ligue 1 en deux mille vingt. Trois ans plus tard : deuxième, à un point du PSG… et Arsenal battu à Bollaert, en Ligue des champions ! | L'ascenseur remonte, « 2020 », « retour en Ligue 1 », L1. « 2023 », classement « 1. PSG 85 pts / 2. LENS 84 pts », « À 1 POINT DU TITRE ! ». Tribune de nuit, étoiles, « Ligue des champions · oct. 2023 », « LENS 2-1 ARSENAL ». | filé |
-| 10 | 0:51 | Et en mai deux mille vingt-six : la toute première Coupe de France de son histoire ! | Rayons dorés, « MAI 2026 », « 1re COUPE DE FRANCE ! », « 3-1 contre Nice », coupe levée, confettis, flashs. | zoom |
-| 11 | 0:55 | Alors, t'es un vrai Lensois ? Ta réponse à la question piège en commentaire… et abonne-toi ! | « T'ES UN VRAI LENSOIS ? », rappel « 1906 : le 1er maillot ? » + pastilles A B C D (sans la réponse), « RÉPONDS EN COMMENTAIRE ! », bouton cœur, « + ABONNE-TOI » (tout au centre, hors de la colonne d'icônes TikTok), confettis. | filé |
+| 8 | 0:40 | Puis la chute : la Ligue 2, les caisses vides… le club est au bord du gouffre. | Noir et blanc : « LA CHUTE », chute d'ascenseur L1 → L2, « CAISSES VIDES », la dernière pièce roule ; puis le joueur au bord d'une falaise sous la pluie, « AU BORD DU GOUFFRE ». | déchirure diagonale |
+| 9 | 0:45 | Retour en Ligue 1 en deux mille vingt. Trois ans plus tard : deuxième, à un point du PSG… et Arsenal battu à Bollaert, en Ligue des champions ! | L'ascenseur remonte, « 2020 », « retour en Ligue 1 », L1. « 2023 », classement « 1. PSG 85 pts / 2. LENS 84 pts », « À 1 POINT DU TITRE ! ». Tribune de nuit, étoiles, « Ligue des champions · oct. 2023 », « LENS 2-1 ARSENAL ». | filé |
+| 10 | 0:52 | Et en mai deux mille vingt-six : la toute première Coupe de France de son histoire ! | Rayons dorés, « MAI 2026 », « 1re COUPE DE FRANCE ! », « 3-1 contre Nice », coupe levée, confettis, flashs. | zoom |
+| 11 | 0:56 | Alors, t'es un vrai Lensois ? Ta réponse à la question piège en commentaire… et abonne-toi ! | « T'ES UN VRAI LENSOIS ? », rappel « Le but du titre en 98 ? » + A ŠMICER / B LACHOR / C VAIRELLES / D DEBÈVE (sans la réponse), « RÉPONDS EN COMMENTAIRE ! », bouton cœur, « + ABONNE-TOI » (tout au centre, hors de la colonne d'icônes TikTok), confettis. | filé |
 
 ## Description TikTok (à coller)
 
 ```
 Lensois ? T'es sûr d'être un VRAI supporter ? 🟡🔴
-Question piège : en 1906, le tout 1er maillot de Lens était de quelles couleurs ? A, B, C ou D ? 👇 (on ne te donne pas la réponse 🤫)
+Question pour les vrais : 9 mai 1998, dernière journée à Auxerre… qui marque le but du titre ? A, B, C ou D ? 👇 (on ne te donne pas la réponse 🤫)
 
 ❤️ Like + abonne-toi pour l'histoire de ton club
 
@@ -55,7 +58,7 @@ Question piège : en 1906, le tout 1er maillot de Lens était de quelles couleur
 
 **Commentaire à épingler** (après les premières réponses) :
 ```
-Beaucoup de A dans les commentaires… vous êtes sûrs ? 👀 Réponse dans 48 h
+Beaucoup de Šmicer dans les commentaires… vous êtes sûrs ? 👀 Réponse dans 48 h
 ```
 
 ## Sources (vérifiées le 06/10/2026)
@@ -63,9 +66,11 @@ Beaucoup de A dans les commentaires… vous êtes sûrs ? 👀 Réponse dans 48 
 - **Fondation en 1906** : le club naît de la rencontre de jeunes mineurs (les « gallibots ») et d'étudiants, sur la place Verte de Lens.
   - [Wikipédia (miroir areq.net)](https://areq.net/lang/fr/Racing_Club_de_Lens.html)
   - [Brut, « Une vie : le RC Lens »](https://www.brut.media/fr/videos/une-vie-le-rc-lens)
-- **Couleurs d'origine noir et vert, puis sang et or en 1924** (président Pierre Moglia, inspiré par les couleurs espagnoles) :
-  - [90min](https://www.90min.com/fr/posts/l-histoire-du-logo-du-rc-lens-couleurs-emblemes-signification-et-symbolique)
-  - [Wikipédia (miroir areq.net)](https://areq.net/lang/fr/Racing_Club_de_Lens.html)
+- **But du titre, 9 mai 1998** : Auxerre 1-1 Lens. Après l'ouverture du score d'Auxerre, Yoann Lachor égalise sur une passe de Frédéric Dahu, et Lens est champion à la différence de buts devant Metz.
+  - [Wikipédia (Yohan Lachor)](https://en.wikipedia.org/wiki/Yohan_Lachor)
+  - [Maxifoot, entretien avec Lachor](https://www.maxifoot.fr/football/article-6643.htm)
+  - [Wikipédia (Division 1 1997-98)](https://en.wikipedia.org/wiki/1997%E2%80%9398_French_Division_1)
+- **Les autres propositions** : Šmicer, Vairelles et Debève jouaient tous à Lens cette saison-là. Debève marque à Wembley le 25 novembre 1998 (voir plus bas).
 - **Bollaert** : construit à partir de 1932 par 180 mineurs de la Compagnie des mines de Lens, inauguré le 18 juin 1933. Il compte 38 223 places.
   - [UEFA](https://www.uefa.com/uefaeuro/history/news/0253-0d7f4d3eec67-8c97d8a55a28-1000--stade-bollaert-delelis)
   - [StadiumDB](https://stadiumdb.com/stadiums/fra/stade_felix_bollaert)
@@ -98,6 +103,6 @@ Beaucoup de A dans les commentaires… vous êtes sûrs ? 👀 Réponse dans 48 
 
 **Précautions** :
 - **Places et habitants** : la voix dit « trente-huit mille places… pour à peine trente-trois mille habitants ». L'écran montre les chiffres exacts : 38 223 places, 32 697 habitants (Insee 2022). Certains sites parlent de « 37 000 habitants » : le chiffre Insee reste en dessous du nombre de places.
-- **Légende du sang et or** : l'histoire de l'église et du drapeau espagnol est une tradition locale, elle n'est pas racontée dans la vidéo. Seule la question sur les couleurs de 1906 est posée.
+- **Orthographe** : on trouve « Yoann » et « Yohan » Lachor selon les sources ; la vidéo écrit « Yoann Lachor » (forme la plus courante dans la presse française).
 - **« Au bord du gouffre »** : c'est une image, pas une faillite. Le club n'a pas été liquidé.
 - **Saison en cours (2026-2027)** : pas de classement à l'écran, il change chaque semaine.

@@ -86,8 +86,11 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   à l'image 0 (« LENSOIS ? »), un **son de hook** seul avant la voix (`assets/sfx/hook.mp3` : scratch + impact, 1,2 s ; `pad_in=.85` sur la
   scène 1, et l'image claque sur l'impact à 0,45 s), puis vers 10 s une **question piège A-D SANS la réponse** (cartes avec pastilles de couleur,
   chrono de 3 s via `quiz.chrono` avec `quiz.CHRONO = 3.0`, gros « ? », « ta réponse en commentaire… on ne te la donne pas », tampon
-  « TOP SECRET »), rappelée à la fin. Choisir une question dont la réponse n'apparaît nulle part dans la vidéo, et piégeuse (la réponse
-  instinctive est fausse). Donner la réponse à l'utilisateur dans le script, pas à l'écran.
+  « TOP SECRET » posé sur le « ? », jamais sur une réponse : ce serait un indice), rappelée à la fin. La question doit être DURE, un vrai
+  fait de supporter (ex. Lens : « qui marque le but du titre à Auxerre en 98 ? » → Lachor ; propositions = joueurs de la même équipe,
+  dont un « faux ami » cité ailleurs dans la vidéo) : PAS une couleur, une date ou un chiffre qui se devine (la 1re version « couleurs du
+  maillot de 1906 » a été jugée bien trop facile). La réponse ne doit apparaître nulle part dans la vidéo ; la donner à l'utilisateur
+  dans le script, avec deux sources.
 - **Version « ultra détaillée »** (hommage Messi, `episodes/messi_adieu/`) : gros plans papier `Portrait` (`engine/portrait.py` :
   styles young / mid / adult, poils gris `grey`, humeurs neutral / smile / cheer / sad / cry / emotional / proud / determined, larmes,
   main sur le cœur, brassard, lumière latérale) ; stades de nuit avec foule dessinée supporter par supporter, mis en cache puis floutés

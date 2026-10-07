@@ -1,6 +1,7 @@
 """Épisode « Légendes du foot » : l'histoire du RC Lens, format court (~1 min), accroche « vrai supporter » + question piège.
 Accroche : « Lensois ? T'es sûr d'être un vrai supporter ? » sur un son de hook (scratch + impact, 1,2 s) avant la voix.
-Vers 9 s : QUESTION PIÈGE (A-D) avec chrono de 3 s… et on ne donne PAS la réponse (« ta réponse en commentaire »).
+Vers 10 s : QUESTION PIÈGE (A-D) « 9 mai 1998 à Auxerre : qui marque le but du titre ? » avec chrono de 3 s… et on ne donne PAS
+la réponse (Lachor, B ; voir output/lens/lens_legende_script.md) : « ta réponse en commentaire ».
 Puis : 1906 jeunes mineurs + étudiants ; Bollaert construit par 180 mineurs, plus de places que d'habitants ; Les Corons ;
 1998 champion à la dernière journée ; Wembley (1er club français à y gagner) ; la chute ; 2020 retour, 2023 2e à 1 point du PSG,
 Arsenal battu à Bollaert ; mai 2026 1re Coupe de France ; fin : « t'es un vrai Lensois ? ta réponse en commentaire ».
@@ -134,27 +135,31 @@ def ranking(cv, fr, y, rows, hl, a=1.0):
         lab = LBL(f"{rk}.  {club}   {pts} pts", f"lrank{k}{on}", font("title", 70), (NOIR if on else BLANC), (OR if on else CHARBON), padx=40, pady=10, rough=2)
         lab.draw(cv, fr, CX, y + k*150, a*(1.06 if on else 1), (-1.5 if on else 1))
 
-# ------------------------------------------------------------------ question piège (A-D) : réponses avec pastilles de couleurs
-QA = [("Sang et or", SANG, OR), ("Bleu et blanc", (40, 90, 190), BLANC), ("Noir et vert", NOIR, (0, 140, 70)), ("Rouge et noir", SANG, NOIR)]
+# ------------------------------------------------------------------ question piège (A-D) : qui marque le but du titre en 1998 ?
+QA = ["Vladimir Šmicer", "Yoann Lachor", "Tony Vairelles", "Mickaël Debève"]      # réponse : B (jamais montrée)
 QX, QY0, QDY = quiz.AX, quiz.ANS_Y0, quiz.ANS_DY
 def _qbox(k):
-    txt, c1, c2 = QA[k]; letter = "ABCD"[k]; f = font("title", 58)
+    txt = QA[k]; letter = "ABCD"[k]; f = font("title", 60)
     def dec(d, a):
         ax, ay = a
         d.ellipse([ax - 418, ay - 42, ax - 334, ay + 42], fill=SANG_D)
         d.text((ax - 376, ay + 2), letter, font=font("title", 60), fill=BLANC, anchor="mm")
         d.text((ax - 306, ay + 2), txt, font=f, fill=INK, anchor="lm")
-        x0, y0 = ax + 270, ay - 36
-        d.polygon([(x0, y0), (x0 + 120, y0), (x0, y0 + 72)], fill=c1); d.polygon([(x0 + 120, y0), (x0 + 120, y0 + 72), (x0, y0 + 72)], fill=c2)
-        d.rectangle([x0, y0, x0 + 120, y0 + 72], outline=INK, width=4)
-    return Paper(rect_pts(860, 108), BLANC, f"lqa{k}", rough=1.8).add(dec)
+    return Paper(rect_pts(860, 108), BLANC, f"lqb{k}", rough=1.8).add(dec)
 QBOX = [_qbox(k) for k in range(4)]
 QHEAD = Label("QUESTION PIÈGE", "lqhead", font("title", 74), BLANC, SANG, padx=34, pady=8, rough=3)
-QCARD = Label("En 1906, le tout 1er maillot de Lens était de quelles couleurs ?", "lqcard", font("title", 62), INK, PAL["cream"], maxw=880, padx=34, pady=16, rough=3)
-MYST = jersey_front("mystere", "lmyst").add(lambda d, a: d.text((a[0], a[1] + 20), "?", font=font("title", 300), fill=BLANC, anchor="mm", stroke_width=10, stroke_fill=INK))
+QCARD = Label("9 mai 1998, dernière journée à Auxerre : qui marque le but du titre ?", "lqcard2", font("title", 62), INK, PAL["cream"], maxw=880, padx=34, pady=16, rough=3)
+def _mystery_scorer():
+    """Silhouette du buteur (bras au ciel) avec un grand « ? »."""
+    L = silhouette(LENSP.render_layer(0, 1.0, age=1, kit="lens", mood="cheer", arms=(150, 150), legs=(14, 14)), (26, 22, 30))
+    ax, ay = L.info["anchor"]; d = ImageDraw.Draw(L)
+    d.text((ax, ay - 400), "?", font=font("title", 330), fill=OR, anchor="mm", stroke_width=12, stroke_fill=INK)
+    return L
 QM = Label("?", "lqm", font("title", 300), OR, None, stroke=10, stroke_fill=INK)
 SECRET = STAMP("TOP SECRET", "lsecret", SANG, 130)
 COMM = STAMP("RÉPONSE EN COMMENTAIRE", "lcomm", SANG, 76)
+
+SCORER = _mystery_scorer()
 
 def board(cv, fr, t, t_in=None, chrono_ts=None):
     """La carte question : en-tête, question, réponses A-D (t_in : début des apparitions, None = déjà là)."""
@@ -190,7 +195,8 @@ K9b = KW("2023", "lk9b", INK, size=170); K9c = STAMP("À 1 POINT DU TITRE !", "l
 T9c = TAG("Ligue des champions · oct. 2023", "lt9c", OR, size=56)
 K10a = KW("MAI 2026", "lk10a", INK, size=150); K10b = STAMP("1re COUPE DE FRANCE !", "lk10b", SANG, 92); T10a = TAG("3-1 contre Nice", "lt10a", OR, size=62)
 K11a = KW("T'ES UN VRAI LENSOIS ?", "lk11a", BLANC, NOIR, 80); K11b = KW("RÉPONDS EN COMMENTAIRE !", "lk11b", OR, NOIR, 70)
-MINI = Label("1906 : le 1er maillot ?", "lmini", font("title", 64), INK, PAL["cream"], padx=30, pady=10, rough=3)
+MINI = Label("Le but du titre en 98 ?", "lmini2", font("title", 64), INK, PAL["cream"], padx=30, pady=10, rough=3)
+CHIPS = [Label(f"{'ABCD'[k]}  {n.split()[-1].upper()}", f"lchip{k}", font("title", 60), INK, BLANC, padx=22, pady=6, rough=2) for k, n in enumerate(QA)]
 
 # ------------------------------------------------------------------ SCÈNE 1 — LENSOIS ? T'es sûr d'être un vrai supporter ?
 def s1a(cv, fr, t):
@@ -245,10 +251,13 @@ def s2(cv, fr, t, T):
 # ------------------------------------------------------------------ SCÈNES 3 et 4 — QUESTION PIÈGE, sans la réponse
 quiz.CHRONO = 3.0
 def s3(cv, fr, t, T):
-    ts = w(3, "couleurs", end=True) + .15
+    ts = w(3, "titre", end=True) + .15
     board(cv, fr, t, 0.0, ts)
-    a = pop_in(t, w(3, "maillot") - .15, .35)
-    if a > .01: MYST.draw(cv, fr, CX, 870, .5*a, 3*math.sin(t*3))
+    a = pop_in(t, w(3, "Qui") - .15, .35)
+    if a > .01:
+        d = ImageDraw.Draw(cv); r = 200*a                     # rond de projecteur derrière la silhouette
+        d.ellipse([CX - r, 870 - r*.95, CX + r, 870 + r*.95], fill=(236, 214, 170), outline=OR, width=8)
+        blit(cv, SCORER, CX, 1030 + 6*math.sin(t*4), .55*a, 3*math.sin(t*3))
     if t > ts + 3.0: QM.draw(cv, fr, CX, 870, slam(t, ts + 3.0, .2)*.9, -6)
     flashes(cv, t, ts + 3.0, .12, .4); drift(cv, t, T, .02)
 
@@ -260,7 +269,7 @@ def s4(cv, fr, t, T):
     if sb > .01:
         speech_bubble(cv, fr, "lbub", "…", 560, 900, sb, (1, 1), 90)
         d = ImageDraw.Draw(cv); arrow(d, (700, 900), (985, 960), prog(t, w(4, "commentaire"), .4), OR, 14, 3, 44, .25)
-    show_stamp(cv, fr, SECRET, t, w(4, "non") - .05, QX, 1280, -10)
+    show_stamp(cv, fr, SECRET, t, w(4, "non") - .05, CX, 880, -10)      # sur le « ? », jamais sur une réponse (ce serait un indice)
     impact(cv, t, w(4, "non"), 16)
 
 # ------------------------------------------------------------------ SCÈNE 5 — Bollaert : 180 mineurs, plus de places que d'habitants
@@ -411,16 +420,11 @@ def s11(cv, fr, t, T):
     a = pop_in(t, .3, .3)
     if a > .01:
         MINI.draw(cv, fr, CX, 520, a, 2)
-        d = ImageDraw.Draw(cv)
-        for k, (txt, c1, c2) in enumerate(QA):          # les 4 propositions en pastilles, toujours sans la réponse
-            x = 210 + k*220; y = 680; s = pop_in(t, .4 + .08*k, .3)
-            if s < .02: continue
-            d.rounded_rectangle([x - 90*s, y - 60*s, x + 90*s, y + 60*s], int(16*s), fill=BLANC, outline=INK, width=5)
-            d.polygon([(x - 70*s, y - 40*s), (x + 70*s, y - 40*s), (x - 70*s, y + 40*s)], fill=c1); d.polygon([(x + 70*s, y - 40*s), (x + 70*s, y + 40*s), (x - 70*s, y + 40*s)], fill=c2)
-            d.text((x, y), "ABCD"[k], font=font("title", int(64*s)), fill=BLANC, anchor="mm", stroke_width=5, stroke_fill=INK)
-    kw(cv, fr, K11b, t, tr, None, CX, 840, 3)
-    like_button(cv, fr, CX, 1080, .75*pop_in(t, w(11, "commentaire") - .1, .3), t, w(11, "commentaire"))     # empilés au centre (x < 940)
-    sub_button(cv, fr, CX, 1340, t, ta - .1, ta + .25)
+        for k, chip in enumerate(CHIPS):          # les 4 propositions, toujours sans la réponse
+            chip.draw(cv, fr, (290, 790)[k % 2], 650 + (k // 2)*110, pop_in(t, .4 + .08*k, .3), (-3, 2, 2, -2)[k])
+    kw(cv, fr, K11b, t, tr, None, CX, 900, 3)
+    like_button(cv, fr, CX, 1120, .75*pop_in(t, w(11, "commentaire") - .1, .3), t, w(11, "commentaire"))     # empilés au centre (x < 940)
+    sub_button(cv, fr, CX, 1370, t, ta - .1, ta + .25)
     confetti(cv, fr, "lc11", t - ta, 90, 5, [SANG, OR, BLANC])
     impact(cv, t, w(11, "commentaire"), 10); impact(cv, t, ta, 12); drift(cv, t, T, .04)
 
@@ -428,15 +432,15 @@ def s11(cv, fr, t, T):
 def SC(name, n, fn, sfx, trans=None, trans_dur=.25, pad_out=.25):
     return Scene(name, TEXTS[n-1], fn, sfx, pad_in=PADS[n-1], pad_out=pad_out, trans=trans, trans_dur=trans_dur)
 W_ = w
-TS3 = w(3, "couleurs", end=True) + .15
+TS3 = w(3, "titre", end=True) + .15
 SCENES = [
     SC("hook", 1, s1, [(.0, "hook", 1.3), (W_(1, "Lensois"), "pop", .5), (W_(1, "vrai"), "stamp", .8), (W_(1, "Tu") - .1, "whoosh", .5),
                        (W_(1, "l'histoire") - .05, "boom", .5), (W_(1, "club"), "pop2", .6)]),
     SC("1906", 2, s2, [(.0, "rip", .5), (.03, "stamp", .6), (W_(2, "mineurs") - .1, "dig", .6, .8), (W_(2, "étudiants") - .1, "pop", .5),
                        (W_(2, "Racing"), "stamp", .9), (W_(2, "Racing"), "crowd", .6)], trans="tear_v", trans_dur=.45),
-    SC("question", 3, s3, [(.0, "whoosh", .45), (.1, "stamp", .6)] + [(.45 + k*.12, "pop", .45) for k in range(4)] + [(W_(3, "maillot") - .1, "pop2", .6)]
+    SC("question", 3, s3, [(.0, "whoosh", .45), (.1, "stamp", .6)] + [(.45 + k*.12, "pop", .45) for k in range(4)] + [(W_(3, "Auxerre") - .1, "pop2", .6), (W_(3, "Qui") - .1, "whoosh", .4)]
        + [(TS3 + k, "tictac", .75 if k < 2 else 1.0, .45) for k in range(3)] + [(TS3 + 3.0, "boom", .7), (TS3 + 3.0, "gasp", .6)],
-       trans="punch", trans_dur=.3, pad_out=TS3 - W_(3, "couleurs", end=True) + 3.25),
+       trans="punch", trans_dur=.3, pad_out=TS3 - W_(3, "titre", end=True) + 3.25),
     SC("pas_de_reponse", 4, s4, [(W_(4, "réponse") - .1, "stamp", .8), (W_(4, "commentaire"), "notif", .9), (W_(4, "non"), "stamp", 1.0), (W_(4, "non") + .05, "laugh", .5, 1.2)]),
     SC("bollaert", 5, s5, [(.0, "rip", .5), (W_(5, "Bollaert"), "stamp", .6), (W_(5, "cent"), "dig", .5, 1.2), (W_(5, "Aujourd'hui") - .1, "whoosh", .5),
                            (W_(5, "trente-huit"), "coin", .5), (W_(5, "trente-trois"), "coin", .5), (W_(5, "habitants") + .1, "stamp", .9),
@@ -464,14 +468,10 @@ def cover(path):
     beam(cv, (CX, 0), [(CX - 420, 1920), (CX + 420, 1920)], .2)
     ransom_line(cv, "LENSOIS ?", 400, 200, seed=17, fr=0)
     Label("T'ES SÛR D'ÊTRE UN VRAI SUPPORTER ?", "lcv2", font("title", 66), BLANC, NOIR, maxw=1000, padx=30, pady=10, rough=5).draw(cv, 0, CX, 620, 1, -2)
-    MYST.draw(cv, 0, CX, 990, .62, -4)
-    Label("1906 : QUELLES COULEURS ?", "lcv3", font("title", 72), INK, OR, maxw=1040, padx=30, pady=10, rough=5).draw(cv, 0, CX, 1330, 1, 2)
-    d = ImageDraw.Draw(cv)
-    for k, (txt, c1, c2) in enumerate(QA):
-        x = 210 + k*220; y = 1520
-        d.rounded_rectangle([x - 90, y - 60, x + 90, y + 60], 16, fill=BLANC, outline=INK, width=5)
-        d.polygon([(x - 70, y - 40), (x + 70, y - 40), (x - 70, y + 40)], fill=c1); d.polygon([(x + 70, y - 40), (x + 70, y + 40), (x - 70, y + 40)], fill=c2)
-        d.text((x, y), "ABCD"[k], font=font("title", 64), fill=BLANC, anchor="mm", stroke_width=5, stroke_fill=INK)
+    d = ImageDraw.Draw(cv); d.ellipse([CX - 230, 1010 - 220, CX + 230, 1010 + 220], fill=(236, 214, 170), outline=OR, width=10)
+    blit(cv, SCORER, CX, 1220, .6, -3)
+    Label("QUI A MARQUÉ LE BUT DU TITRE EN 98 ?", "lcv3b", font("title", 66), INK, OR, maxw=1000, padx=30, pady=10, rough=5).draw(cv, 0, CX, 1370, 1, 2)
+    for k, chip in enumerate(CHIPS): chip.draw(cv, 0, (290, 790)[k % 2], 1525 + (k // 2)*110, 1, (-3, 2, 2, -2)[k])
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 def stills(out, fracs=(.05, .18, .32, .46, .6, .74, .88, .98), only=None):
