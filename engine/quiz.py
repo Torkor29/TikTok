@@ -267,13 +267,36 @@ def cta_scene(theme, Wd, after=4):
            (Wd("like") - .25, "pop"), (Wd("like"), "notif"), (Wd("contenu"), "pop2"), (Wd("Allez") - .1, "whoosh", .5), (Wd("Allez"), "stamp", .6)]
     return draw, sfx
 
-def outro_scene(theme, Wd, hero):
+def cta_score_scene(theme, Wd, after=3, suite="NIVEAU 2"):
+    """Pause « dis ton score en commentaire, lâche un like et abonne-toi pour le niveau 2 » (texte voix : …combien… Dis… commentaire…
+    like… abonne-toi… niveau… Allez…)."""
+    KA = KW("PETITE PAUSE !", "qzs1", INK, size=96); TS = TAG(f"t'en es à combien sur {after} ?", "qzs2", PAL["paper"], INK, 56)
+    KC = KW("DIS TON SCORE EN COMMENTAIRE !", "qzs3", WHITE, INK, 62)
+    KN = STAMP(f"{suite} BIENTÔT !", "qzs4", RED, 84); KR = KW("ON REPREND !", "qzs5", INK, size=96)
+    def draw(cv, fr, t, T):
+        stage_fill(cv, fr, (240, 50, 80), "qzscta"); rays(cv, (CX, 1000), t, .5, 14, 1400, (250, 110, 130))
+        tb, td, tc, tl, ta, tn, tr = Wd("combien"), Wd("Dis"), Wd("commentaire"), Wd("like"), Wd("abonne-toi"), Wd("niveau"), Wd("Allez")
+        kw(cv, fr, KA, t, .05, None, CX, 300, -3)
+        show(cv, fr, TS, t, tb - .2, None, CX, 430, 2)
+        kw(cv, fr, KC, t, td - .05, None, CX, 570, 2)
+        speech_bubble(cv, fr, "qzsbub", f"J'ai ?/{after} !", 640, 730, pop_in(t, tc - .15, .3), (-1, 1), 58)
+        like_button(cv, fr, CX, 920, .75*pop_in(t, tl - .25, .3), t, tl)
+        sub_button(cv, fr, CX, 1235, t, ta - .15, ta + .25)
+        show_stamp(cv, fr, KN, t, tn - .05, CX, 1375, -4)
+        kw(cv, fr, KR, t, tr - .05, None, CX, 1505, 3)
+        drift(cv, t, T, .02)
+    sfx = [(.0, "scratch", .7), (.05, "stamp", .6), (Wd("combien") - .2, "pop"), (Wd("Dis") - .05, "stamp", .6), (Wd("commentaire"), "notif"),
+           (Wd("like") - .25, "pop"), (Wd("like"), "notif"), (Wd("abonne-toi") - .15, "pop2"), (Wd("abonne-toi") + .25, "notif"),
+           (Wd("niveau"), "stamp", .7), (Wd("Allez") - .1, "whoosh", .5), (Wd("Allez"), "stamp", .6)]
+    return draw, sfx
+
+def outro_scene(theme, Wd, hero, tag="le quiz de ton club ?"):
     """« T'as eu combien ? » : barème (0-3 touriste, 4-5 supporter, 6-8 vrai fan), commentaire, abonne-toi."""
     KA = KW("T'AS EU COMBIEN ?", "qzo1", INK, size=100)
     s = theme.get("seuil", 5)
     rows = [(f"0 – {s-2}", "TOURISTE", DIM, INK), (f"{s-1} – {s}", "SUPPORTER", WHITE, INK), (f"{s+1} – 8", "VRAI FAN", GOLD, INK)]
     LR = [Label(f"{a}   {b}", f"qzo2{k}", font("title", 70), fg, bg, padx=30, pady=6, rough=3) for k, (a, b, bg, fg) in enumerate(rows)]
-    TK = TAG("le quiz de ton club ?", "qzo3", PAL["paper"], INK, 54)
+    TK = TAG(tag, "qzo3" + tag, PAL["paper"], INK, 54)
     def draw(cv, fr, t, T):
         stage_fill(cv, fr, theme["bgs"][0], "qzout"); rays(cv, (CX, 900), t, .6, 16, 1500, (230, 190, 80), .1, .15)
         tp, tf, tc, ta = Wd("Plus"), Wd("fan"), Wd("commentaire"), Wd("abonne-toi")

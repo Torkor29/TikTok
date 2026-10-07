@@ -97,6 +97,10 @@ la bonne réponse passe au vert avec ✓, les autres s'éteignent, l'illustratio
 - Seuil : `THEME["seuil"]` (5 par défaut → « plus de 5/8 », barème 0-3 / 4-5 / 6-8).
 - Quiz joueur (« t'es un vrai fan de Zidane ? ») : même chose, `du` = « DE ZIDANE », `hero()` = le joueur avec son kit.
 - CTA après une autre question : `assemble(..., cta_after=k)` et `cta_scene(theme, Wd, after=k)`.
+- **CTA « dis ton score en commentaire + abonne-toi pour le niveau 2 »** (quiz OM, après la Q3) : `assemble(..., cta_after=3)`,
+  `cta_score_scene(theme, Wd, after=3)` (texte voix : « Petite pause ! T'en es à combien sur trois ? Dis ton score en commentaire, lâche un like
+  et abonne-toi pour le niveau deux ! Allez, on reprend ! ») et `outro_scene(..., tag="le niveau 2 arrive bientôt !")` ; sticker
+  `THEME["niveau"] = THEME["tampon"] = "NIVEAU 1"`. Exemple : `examples/quiz_om/`.
 - **Niveau 2 (plus dur)** : `THEME["niveau"] = "NIVEAU 2"` (sticker sur l'intro) et `THEME["tampon"] = "NIVEAU 2"` (tampon de la couverture).
   Aucune question facile (MOYEN → LA PLUS DURE), des pièges plausibles (la 1re Coupe au lieu du 1er titre, le coach arrivé six mois après…),
   illustrations « silhouette noire + ? » ou tableau « ??? ». Le CTA et la fin gardent le même texte : réutiliser les voix du quiz 1

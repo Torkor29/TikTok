@@ -1,0 +1,61 @@
+QUIZ OM — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+T'es un vrai fan de l'OM si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+=== SCÈNE 2 ===
+Comment s'appelle le stade de l'OM ?  [chrono 5 s]  Réponse B : le Vélodrome !
+
+=== SCÈNE 3 ===
+En quelle année l'OM a-t-il gagné la Ligue des champions ?  [chrono 5 s]  Réponse D : mille neuf cent quatre-vingt-treize ! Le premier club français.
+
+=== SCÈNE 4 ===
+Finale de quatre-vingt-treize contre Milan : qui marque le seul but ?  [chrono 5 s]  Réponse C : Basile Boli, de la tête !
+
+=== SCÈNE 5 ===
+Petite pause ! T'en es à combien sur trois ? Dis ton score en commentaire, lâche un like et abonne-toi pour le niveau deux ! Allez, on reprend !
+
+=== SCÈNE 6 ===
+Quelle devise est écrite sur le logo de l'OM ?  [chrono 5 s]  Réponse A : Droit au but !
+
+=== SCÈNE 7 ===
+Quel joueur de l'OM a gagné le Ballon d'or en quatre-vingt-onze ?  [chrono 5 s]  Réponse B : Jean-Pierre Papin !
+
+=== SCÈNE 8 ===
+En quelle année l'OM a-t-il été fondé ?  [chrono 5 s]  Réponse D : mille huit cent quatre-vingt-dix-neuf !
+
+=== SCÈNE 9 ===
+En quatre-vingt-onze, l'OM perd la finale de la Ligue des champions… contre qui ?  [chrono 5 s]  Réponse C : l'Étoile rouge de Belgrade, aux tirs au but.
+
+=== SCÈNE 10 ===
+Dernière question, la plus dure : combien de buts Josip Skoblar a-t-il marqués en championnat, lors de la saison soixante-dix, soixante et onze ?  [chrono 5 s]  Réponse A : quarante-quatre buts ! C'est toujours le record du championnat de France.
+
+=== SCÈNE 11 ===
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+T'es un vrai fan de l'OM si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+Comment s'appelle le stade de l'OM ?  [chrono 5 s]  Réponse B : le Vélodrome !
+
+En quelle année l'OM a-t-il gagné la Ligue des champions ?  [chrono 5 s]  Réponse D : mille neuf cent quatre-vingt-treize ! Le premier club français.
+
+Finale de quatre-vingt-treize contre Milan : qui marque le seul but ?  [chrono 5 s]  Réponse C : Basile Boli, de la tête !
+
+Petite pause ! T'en es à combien sur trois ? Dis ton score en commentaire, lâche un like et abonne-toi pour le niveau deux ! Allez, on reprend !
+
+Quelle devise est écrite sur le logo de l'OM ?  [chrono 5 s]  Réponse A : Droit au but !
+
+Quel joueur de l'OM a gagné le Ballon d'or en quatre-vingt-onze ?  [chrono 5 s]  Réponse B : Jean-Pierre Papin !
+
+En quelle année l'OM a-t-il été fondé ?  [chrono 5 s]  Réponse D : mille huit cent quatre-vingt-dix-neuf !
+
+En quatre-vingt-onze, l'OM perd la finale de la Ligue des champions… contre qui ?  [chrono 5 s]  Réponse C : l'Étoile rouge de Belgrade, aux tirs au but.
+
+Dernière question, la plus dure : combien de buts Josip Skoblar a-t-il marqués en championnat, lors de la saison soixante-dix, soixante et onze ?  [chrono 5 s]  Réponse A : quarante-quatre buts ! C'est toujours le record du championnat de France.
+
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
