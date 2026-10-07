@@ -82,6 +82,12 @@ bash scripts/setup.sh        # Pillow, numpy, ffmpeg, polices Google Fonts -> /t
   de France ? »), appel aux souvenirs, promesse (« le plus cité aura son épisode ») ; voir `output/toulouse/toulouse_publication.md`.
   Boutons like / abonne-toi de la fin : **empilés au centre** (cœur y≈1000, « + ABONNE-TOI » y≈1255, « + D'ÉPISODES » y≈1435) ;
   côte à côte, le bouton « + ABONNE-TOI » (≈ 670 px de large) déborde sous la colonne d'icônes TikTok (x > 940).
+- **Accroche « T'es sûr d'être un vrai supporter ? »** (épisode Lens, `episodes/lens/lens.py`) : le nom des supporters en lettres découpées
+  à l'image 0 (« LENSOIS ? »), un **son de hook** seul avant la voix (`assets/sfx/hook.mp3` : scratch + impact, 1,2 s ; `pad_in=.85` sur la
+  scène 1, et l'image claque sur l'impact à 0,45 s), puis vers 10 s une **question piège A-D SANS la réponse** (cartes avec pastilles de couleur,
+  chrono de 3 s via `quiz.chrono` avec `quiz.CHRONO = 3.0`, gros « ? », « ta réponse en commentaire… on ne te la donne pas », tampon
+  « TOP SECRET »), rappelée à la fin. Choisir une question dont la réponse n'apparaît nulle part dans la vidéo, et piégeuse (la réponse
+  instinctive est fausse). Donner la réponse à l'utilisateur dans le script, pas à l'écran.
 - **Version « ultra détaillée »** (hommage Messi, `episodes/messi_adieu/`) : gros plans papier `Portrait` (`engine/portrait.py` :
   styles young / mid / adult, poils gris `grey`, humeurs neutral / smile / cheer / sad / cry / emotional / proud / determined, larmes,
   main sur le cœur, brassard, lumière latérale) ; stades de nuit avec foule dessinée supporter par supporter, mis en cache puis floutés
