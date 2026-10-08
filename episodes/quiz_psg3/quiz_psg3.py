@@ -18,7 +18,7 @@ TITLE = "~/quiz $ ./psg --niveau 3"
 SLUG = "quiz_psg3"
 SFX_DIR = os.path.join(ROOT, "assets", "sfx")
 CTA_AFTER = 4
-HOOK_PAD = .85                         # le son de hook joue seul avant la voix
+HOOK_PAD = .55                         # le son de hook joue seul avant la voix
 TEXTES = json.load(open(os.path.join(HERE, "textes_voix.json")))
 KEYS, VOICE, TMS = assemble(os.path.join(HERE, "voix"), f"/tmp/{SLUG}_voix", cta_after=CTA_AFTER)
 WS, _ = load_words(os.path.join(HERE, "alignement.json"))          # intro, cta, outro

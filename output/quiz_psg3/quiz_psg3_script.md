@@ -1,7 +1,7 @@
 # Quiz Légendes du foot — Fan du PSG ? Plus de 6/8 (NIVEAU 3)
 
 **Format quiz** : TikTok vertical 1080×1920, 24 i/s, **1 min 52**. Même style papier découpé que les niveaux 1 et 2.
-- **Ouverture** : son de hook (scratch + impact) seul pendant 0,85 s, puis la voix : « Fan du PSG ? C'est ce qu'on va tester. T'es un vrai fan seulement si t'as plus de six sur huit ! ».
+- **Ouverture** : son de hook (scratch + impact) seul pendant 0,55 s, puis la voix enchaîne d'une traite : « Toi, tu te dis fan du PSG ? Alors prouve-le : six sur huit minimum, sinon t'es un touriste. »
 - **Questions** : 8 QCM très pointues ; **chrono raccourci à 4 secondes**.
 - **Sticker « NIVEAU 3 »** sur l'intro et sur la couverture.
 - **CTA après la question 4** : « Petite pause ! Alors, tu vas pleurer ou c'est trop dur maintenant ? Abonne-toi et lâche un like pour avoir plus de contenu sur ton club préféré ! Allez, on reprend ! ».
@@ -13,7 +13,7 @@
 
 | # | Voix off | Réponses à l'écran | Bonne réponse |
 |---|---|---|---|
-| Intro | Fan du PSG ? C'est ce qu'on va tester. T'es un vrai fan seulement si t'as plus de six sur huit ! Huit questions, quatre secondes pour répondre. Compte tes points… c'est parti ! | « T'ES UN VRAI FAN DU PSG ? / SI TU AS PLUS DE 6/8 », « 8 QUESTIONS », « 4 SECONDES » | — |
+| Intro | Toi, tu te dis fan du PSG ? Alors prouve-le : six sur huit minimum, sinon t'es un touriste. Huit questions, quatre secondes chacune, compte tes points, c'est parti ! | « T'ES UN VRAI FAN DU PSG ? / SI TU AS PLUS DE 6/8 », « 8 QUESTIONS », « 4 SECONDES » | — |
 | Q1 | Comment s'appelle la mascotte du PSG ? | Titi le moineau / Germain le lynx / Parisou le chat / Léo le lion | **B** Germain le lynx |
 | Q2 | Finale de la Ligue des champions 2025 : qui ouvre le score ? | Désiré Doué / Kvaratskhelia / Vitinha / Achraf Hakimi | **D** Hakimi (contre l'Inter, son ancien club) |
 | Q3 | Cette saison-là, contre qui le PSG joue-t-il son quart de finale ? | Liverpool / Bayern Munich / Aston Villa / FC Barcelone | **C** Aston Villa (5-4 cumulé) |

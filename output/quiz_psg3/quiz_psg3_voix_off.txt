@@ -3,7 +3,7 @@ QUIZ PSG3 — VOIX OFF
 Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 
 === SCÈNE 1 ===
-Fan du PSG ? C'est ce qu'on va tester. T'es un vrai fan seulement si t'as plus de six sur huit ! Huit questions, quatre secondes pour répondre. Compte tes points… c'est parti !
+Toi, tu te dis fan du PSG ? Alors prouve-le : six sur huit minimum, sinon t'es un touriste. Huit questions, quatre secondes chacune, compte tes points, c'est parti !
 
 === SCÈNE 2 ===
 Comment s'appelle la mascotte du PSG ?  [chrono 4 s]  Réponse B : Germain le lynx !
@@ -38,7 +38,7 @@ Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en comme
 
 ----- VERSION EN UN SEUL BLOC -----
 
-Fan du PSG ? C'est ce qu'on va tester. T'es un vrai fan seulement si t'as plus de six sur huit ! Huit questions, quatre secondes pour répondre. Compte tes points… c'est parti !
+Toi, tu te dis fan du PSG ? Alors prouve-le : six sur huit minimum, sinon t'es un touriste. Huit questions, quatre secondes chacune, compte tes points, c'est parti !
 
 Comment s'appelle la mascotte du PSG ?  [chrono 4 s]  Réponse B : Germain le lynx !
 
