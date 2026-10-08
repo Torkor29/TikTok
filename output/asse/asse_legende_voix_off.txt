@@ -3,7 +3,7 @@ ASSE LEGENDE — VOIX OFF
 Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 
 === SCÈNE 1 ===
-Ce club a perdu une finale européenne… à cause de deux poteaux carrés. Et trente-sept ans plus tard, il les a rachetés ! Voici l'histoire de Saint-Étienne.
+Saint-Étienne a perdu une finale à cause de poteaux carrés ! Trente-sept ans après, le club les a rachetés !
 
 === SCÈNE 2 ===
 Mille neuf cent dix-neuf. Des employés des magasins Casino créent une équipe de foot. Leur couleur ? Le vert… celui de l'enseigne.
@@ -38,7 +38,7 @@ Aujourd'hui, les Verts sont en Ligue deux… mais le Chaudron attend leur retour
 
 ----- VERSION EN UN SEUL BLOC -----
 
-Ce club a perdu une finale européenne… à cause de deux poteaux carrés. Et trente-sept ans plus tard, il les a rachetés ! Voici l'histoire de Saint-Étienne.
+Saint-Étienne a perdu une finale à cause de poteaux carrés ! Trente-sept ans après, le club les a rachetés !
 
 Mille neuf cent dix-neuf. Des employés des magasins Casino créent une équipe de foot. Leur couleur ? Le vert… celui de l'enseigne.
 

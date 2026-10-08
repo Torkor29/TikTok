@@ -1,6 +1,6 @@
 # Légendes du foot — AS Saint-Étienne : les poteaux carrés
 
-**Format court** : TikTok vertical 1080×1920, 24 i/s, **1 min 10**, 11 scènes, style papier découpé.
+**Format court** : TikTok vertical 1080×1920, 24 i/s, **1 min 01** (v2 : hook court, blancs de voix coupés ; la v1 de 1 min 10 est gardée en `asse_legende_v1.mp4` pour un test A/B), 11 scènes, style papier découpé.
 **Voix** : ElevenLabs « Léo », `eleven_multilingual_v2`. **Musique** : aucune, à ajouter dans TikTok (5-10 %).
 **Fil rouge** : les poteaux carrés de Hampden Park, annoncés dans le hook, revus dans la pause et à la finale de Glasgow.
 
@@ -8,7 +8,7 @@
 
 | # | Temps | Voix off | À l'écran |
 |---|---|---|---|
-| 1 Hook | 0:00 | Son de hook seul (0,85 s), puis : « Ce club a perdu une finale européenne… à cause de deux poteaux carrés. Et trente-sept ans plus tard, il les a rachetés ! Voici l'histoire de Saint-Étienne. » | Stade de nuit, le ballon claque sur un poteau carré dès la 1re image (« BOÏNG ! »), « PERDU À CAUSE… » / « POTEAUX CARRÉS ?! », puis « 37 ANS PLUS TARD », étiquette « VENDUS ! », tampon « RACHETÉS ! », « SAINT-ÉTIENNE » |
+| 1 Hook | 0:00 | Son de hook seul (0,55 s), puis : « Saint-Étienne a perdu une finale à cause de poteaux carrés ! Trente-sept ans après, le club les a rachetés ! » | « SAINT-ÉTIENNE » en lettres découpées dès l'image 0, ballon qui claque sur un poteau carré (« BOÏNG ! »), « PERDU À CAUSE… » / « POTEAUX CARRÉS ?! », puis « 37 ANS PLUS TARD », « VENDUS ! », « RACHETÉS ! » |
 | 2 | 0:09 | 1919 : des employés des magasins Casino créent une équipe. Leur couleur ? Le vert… celui de l'enseigne. | Vieux film sépia, épicerie ; la peinture verte envahit l'écran, les joueurs passent en maillot vert |
 | 3 | 0:16 | Le stade prend le nom du patron : Geoffroy-Guichard. Les supporters l'appellent… le Chaudron. | Tribunes, fumigènes, marmite géante qui bouillonne, tampon « LE CHAUDRON » |
 | 4 | 0:22 | Fin des années 60, les Verts écrasent tout : quatre titres de suite ! | 1967, 1968, 1969, 1970 qui claquent, trophée levé |

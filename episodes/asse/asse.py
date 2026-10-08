@@ -22,7 +22,7 @@ SLUG = "asse_legende"
 VOICE = [os.path.join(HERE, "voix", f"scene_{i}.mp3") for i in range(1, 12)]
 SFX_DIR = os.path.join(ROOT, "assets", "sfx")
 ALIGN = os.path.join(HERE, "alignement.json")
-PADS = [.85] + [.12]*10          # scène 1 : le son de hook passe seul avant la voix
+PADS = [.55] + [.12]*10          # scène 1 : le son de hook passe seul avant la voix (0,55 s, skill viral)
 WS, TEXTS = load_words(ALIGN)
 def w(i, word, n=1, end=False):
     return PADS[i-1] + WS[i-1](word, n, end)
@@ -156,26 +156,25 @@ def s1a(cv, fr, t):
     square_goal(cv, GX, GY, 1.15, prog(t, .45, .8))
     ball_to_post(cv, fr, t, .45, CX - 120, 1820, GX + 437, GY - 300)
     bong(cv, fr, t, .45, GX + 260, 930)
-    kw(cv, fr, K1a, t, w(1, "perdu") - .1, None, CX, 330, -3)
-    show_stamp(cv, fr, K1b, t, w(1, "poteaux") - .05, CX, 500, 4)
+    ransom_line(cv, "SAINT-ÉTIENNE", 330, 130, seed=5, fr=fr, scale=slam(t, -.12, .22))      # le mot-clé lisible dès l'image 0
+    kw(cv, fr, K1a, t, w(1, "perdu") - .1, None, CX, 520, -3)
+    show_stamp(cv, fr, K1b, t, w(1, "poteaux") - .05, CX, 690, 4)
 
 def s1b(cv, fr, t):
     green_bg(cv, fr, "as1b", VERT_DD, VERT_D, t)
     rays(cv, (CX, 1100), t, .8, 16, 1500, (40, 150, 90))
-    kw(cv, fr, K1c, t, w(1, "trente-sept") - .1, None, CX, 330, -2)
+    kw(cv, fr, K1c, t, w(1, "Trente-sept") - .1, None, CX, 330, -2)
     tr = w(1, "rachetés") - .05
     square_goal(cv, CX, 1240, .8*pop_in(t, w(1, "trente-sept"), .3) if t < tr else .8)
     if t > tr:
         PTAG.draw(cv, fr, CX + 300, 1120, slam(t, tr, .2), 14)
         show_stamp(cv, fr, K1d, t, tr, CX, 620, -6)
         confetti(cv, fr, "ac1", t - tr, 60, 2.5, [VERT, BLANC, OR])
-    a = slam(t, w(1, "Saint-Étienne") - .1, .22)
-    if a > 0: SAINTE.draw(cv, fr, CX, 1480, a, -3)
 
 def s1(cv, fr, t, T):
-    shots(cv, fr, t, [(0, s1a), (w(1, "Et") - .1, s1b)], d=.24)
+    shots(cv, fr, t, [(0, s1a), (w(1, "Trente-sept") - .1, s1b)], d=.24)
     impact(cv, t, .45, 22); flashes(cv, t, .45, .12, .55); punch(cv, t, .45, 1.08)        # l'impact du son de hook = le ballon sur le poteau
-    impact(cv, t, w(1, "carrés"), 14); impact(cv, t, w(1, "rachetés"), 16); impact(cv, t, w(1, "Saint-Étienne"), 12); drift(cv, t, T, .05)
+    impact(cv, t, w(1, "carrés"), 14); impact(cv, t, w(1, "rachetés"), 16); drift(cv, t, T, .05)
 
 # ------------------------------------------------------------------ SCÈNE 2 — 1919 : employés des magasins Casino, le vert
 def s2(cv, fr, t, T):
@@ -368,9 +367,9 @@ def SC(name, n, fn, sfx, trans=None, trans_dur=.25, pad_out=.25):
     return Scene(name, TEXTS[n-1], fn, sfx, pad_in=PADS[n-1], pad_out=pad_out, trans=trans, trans_dur=trans_dur)
 W_ = w
 SCENES = [
-    SC("hook", 1, s1, [(.0, "hook", 1.3), (.45, "bar", .9), (W_(1, "perdu"), "pop", .5), (W_(1, "poteaux"), "stamp", .8), (W_(1, "Et") - .1, "whoosh", .5),
+    SC("hook", 1, s1, [(.0, "hook", 1.3), (.45, "bar", .9), (W_(1, "perdu"), "pop", .5), (W_(1, "poteaux"), "stamp", .8), (W_(1, "Trente-sept") - .1, "whoosh", .5),
                        (W_(1, "trente-sept"), "pop2", .6), (W_(1, "rachetés"), "cash", .7), (W_(1, "rachetés"), "stamp", .8),
-                       (W_(1, "Saint-Étienne"), "boom", .6), (W_(1, "Saint-Étienne"), "crowd", .6)]),
+                       (W_(1, "rachetés") + .1, "crowd", .6)]),
     SC("1919", 2, s2, [(.0, "rip", .5), (.03, "stamp", .6), (W_(2, "employés") - .1, "pop", .5), (W_(2, "foot"), "kick", .5),
                        (W_(2, "vert") - .1, "whoosh_up", .6), (W_(2, "vert"), "stamp", .8)], trans="tear_v", trans_dur=.45),
     SC("chaudron", 3, s3, [(.0, "crowd_long", .6), (W_(3, "Geoffroy-Guichard") - .1, "stamp", .6), (W_(3, "supporters"), "crowd", .7),

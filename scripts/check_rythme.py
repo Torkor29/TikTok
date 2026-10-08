@@ -22,7 +22,7 @@ def main():
     T = json.load(open(os.path.join(ep, "textes_voix.json")))
     T = T if isinstance(T, list) else list(T.values())
     ok = True
-    hook = T[0]; first = re.split(r"[.?!…]", hook)[0]
+    hook = T[0]; first = re.split(r"[.?!…]", hook)[0]; hook = re.sub(r"\s[!?:;…]", "", hook)
     print(f"Hook : {len(hook.split())} mots, 1re phrase {len(first.split())} mots")
     if len(hook.split()) > 18: print("  ! hook trop long (> 18 mots)"); ok = False
     if len(first.split()) > 12: print("  ! 1re phrase trop longue (> 12 mots)"); ok = False
