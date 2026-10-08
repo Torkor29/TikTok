@@ -215,8 +215,8 @@ def ttl(theme):
 def intro_scene(theme, Wd, hero):
     """Titre dès la 1re image (« T'ES UN VRAI FAN / DU PSG ? / SI TU AS PLUS DE 5/8 »), puis les règles.
     Wd : Words de l'intro ; hero(cv, fr, t, x, y, s) dessine le joueur du club."""
-    l1, l2, l3 = ttl(theme)
-    K8 = KW("8 QUESTIONS", "qzi8", INK, size=120); K5 = KW("5 SECONDES", "qzi5", theme["accent"], size=110)
+    l1, l2, l3 = ttl(theme); mc, mn = theme.get("mot_chrono", ("cinq", 2))       # mot de la voix qui annonce le chrono
+    K8 = KW("8 QUESTIONS", "qzi8", INK, size=120); K5 = KW(f"{CHRONO:g} SECONDES", f"qzi5_{CHRONO:g}", theme["accent"], size=110)
     KP = TAG("compte tes points !", "qzip", PAL["paper"], INK, 60); KG = STAMP("C'EST PARTI !", "qzig", theme["badge"], 130)
     STRIP = Label(l3, "qzis", font("title", 78), INK, GOLD, maxw=1000, padx=30, pady=8, rough=5)
     QM = LBL("?/8", "qziqm", font("title", 170), WHITE, theme["badge"], padx=30, pady=4, rough=3)
@@ -230,7 +230,7 @@ def intro_scene(theme, Wd, hero):
         if theme.get("niveau"): STAMP(theme["niveau"], "qzniv", RED, 92).draw(cv, fr, 770, 850, 1 if fr == 0 else slam(t, .25, .2), 9)
     def shot2(cv, fr, t):
         stage_fill(cv, fr, theme["bgs"][1], "qzi2"); rays(cv, (CX, 900), t, .5, 14, 1500, (255, 255, 255), .08, .2)
-        t8, t5, tc, tp = Wd("Huit", 2), Wd("cinq", 2), Wd("Compte"), Wd("parti")
+        t8, t5, tc, tp = Wd("Huit", 2), Wd(mc, mn), Wd("Compte"), Wd("parti")
         kw(cv, fr, K8, t, t8, None, CX, 380, -3)
         if t > t5 - .1:
             K5.draw(cv, fr, CX, 540, pop_in(t, t5 - .1, .3), 3)
@@ -245,7 +245,7 @@ def intro_scene(theme, Wd, hero):
         shots(cv, fr, t, [(0, shot1), (Wd("Huit", 2) - .15, shot2)], d=.24)
         drift(cv, t, T, .02)
     sfx = [(.0, "boom", .8), (.0, "stamp", .7), (.05, "riser", .35), (.5, "stamp", .6), (Wd("Huit", 2) - .15, "whoosh", .5),
-           (Wd("Huit", 2), "stamp", .6), (Wd("cinq", 2), "pop2"), (Wd("cinq", 2) + .2, "tictac", .7, .45), (Wd("Compte"), "pop"),
+           (Wd("Huit", 2), "stamp", .6), (Wd(mc, mn), "pop2"), (Wd(mc, mn) + .2, "tictac", .7, .45), (Wd("Compte"), "pop"),
            (Wd("parti") - .1, "stamp", .8), (Wd("parti"), "whoosh_up", .6)]
     return draw, sfx
 

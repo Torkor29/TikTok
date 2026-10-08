@@ -43,6 +43,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | 1 | PSG — stade, Qatar, Neymar 222 M€, 1970, remontada, 5-0 contre l'Inter, Stade Saint-Germain, meilleur buteur | 1:52 | [`output/quiz_psg/`](output/quiz_psg) |
 | 2 | PSG niveau 2 (plus dur) — 1986, Luis Enrique, Arsenal 2026, N'Gotty, Rapid Vienne, Coman, Kombouaré, Marquinhos ; sticker « NIVEAU 2 » | 2:04 | [`output/quiz_psg2/`](output/quiz_psg2) |
 | 3 | OM niveau 1 — Vélodrome, 1993, Boli, « Droit au but », Papin Ballon d'or 1991, 1899, finale 1991 contre l'Étoile rouge, Skoblar 44 buts ; pause après la Q3 « dis ton score en commentaire, like, abonne-toi pour le niveau 2 » | 1:53 | [`output/quiz_om/`](output/quiz_om) |
+| 4 | PSG niveau 3 — son de hook, chrono 4 s ; Germain le lynx, Hakimi en finale 2025, Aston Villa, Hechter, Coupe de France 1982, 9-0 contre Guingamp, Pauleta « l'Aigle des Açores », 10-0 contre Côte Chaude ; pause après la Q4 « tu vas pleurer ou c'est trop dur ? » | 1:52 | [`output/quiz_psg3/`](output/quiz_psg3) |
 
 ## Structure
 
@@ -92,5 +93,6 @@ python3 episodes/messi_papier/messi_papier.py output/messi_papier  # hommage ver
 python3 episodes/quiz_psg/quiz_psg.py output/quiz_psg     # quiz 1 (format quiz)
 python3 episodes/quiz_psg2/quiz_psg2.py output/quiz_psg2  # quiz 2 (niveau 2, plus dur)
 python3 episodes/quiz_om/quiz_om.py output/quiz_om        # quiz 3 (OM niveau 1, CTA « score en commentaire » après la Q3)
+python3 episodes/quiz_psg3/quiz_psg3.py output/quiz_psg3  # quiz 4 (PSG niveau 3, hook sonore, chrono 4 s)
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```
