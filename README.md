@@ -19,6 +19,7 @@ Moteur repris et étendu du skill `tiktok-edu-motion` : voir [`SKILL.md`](SKILL.
 | 9 | Liverpool — né d'une dispute de loyer… 6 fois champion d'Europe ?! (présentation du club, format court avec barre chrono, « LIVERPOOL » + facture de loyer dès la 1re image, Everton quitte Anfield, Shankly, YNWA, Istanbul 2005, Klopp, 20e titre ; CTA like + abonne-toi) | 1:13 | [`output/liverpool/`](output/liverpool) |
 | 10 | Toulouse FC — en faillite en 2001… et 22 ans plus tard, il bat Liverpool ?! (format court avec barre chrono, « TOULOUSE » sur briques roses dès la 1re image, ascenseur L2 → D3 → L1, 2007 éliminé par Liverpool, Coupe de France 5-1, revanche 3-2 ; carrousel à poster juste avant + descriptions qui font commenter) | 1:01 | [`output/toulouse/`](output/toulouse) |
 | 11 | RC Lens — « Lensois ? T'es sûr d'être un vrai supporter ? » (son de hook seul avant la voix, question piège à 10 s « qui marque le but du titre en 98 ? » SANS la réponse pour faire commenter ; 1906 mineurs + étudiants, Bollaert construit par 180 mineurs = plus de places que d'habitants, Les Corons, 1998, Wembley, la chute, 2023 à 1 point du PSG, Arsenal battu, 1re Coupe de France 2026) | 1:02 | [`output/lens/`](output/lens) |
+| 12 | AS Saint-Étienne — hook « perdu une finale à cause de poteaux carrés… et rachetés 37 ans plus tard » (son de hook, ballon sur le poteau dès la 1re image) ; 1919 employés des magasins Casino et le vert, Geoffroy-Guichard / le Chaudron, 4 titres 1967-70, Kiev renversé en 1976, pause « tu savais ? » + like, Glasgow 1976, Champs-Élysées, Platini et le 10e titre 1981, la chute, Coupe de la Ligue 2013, aujourd'hui en L2 | 1:10 | [`output/asse/`](output/asse) |
 
 | Hommage | Lionel Messi dit adieu à l'Argentine (version « ultra détaillée » : gros plans papier aux trois âges, stades de nuit avec foule détaillée, profondeur de champ ; 2005 rouge après 47 s, 2006, 3 finales perdues, 2021-2022, finale 2026, Monumental) | 0:43 | [`output/messi_adieu/`](output/messi_adieu) |
 | Hommage manga | Lionel Messi dit adieu à l'Argentine, version MANGA EN PAPIER (mêmes voix ; encrage, trames, accents bleu ciel / or / rouge, cases qui glissent, lignes de concentration, images d'impact, onomatopées, transitions à l'encre, animation fluide) | 0:43 | [`output/messi_manga/`](output/messi_manga) |
@@ -87,6 +88,7 @@ python3 episodes/dijon/dijon.py output/dijon              # épisode 7 (format c
 python3 episodes/liverpool/liverpool.py output/liverpool  # épisode 9 (format court)
 python3 episodes/toulouse/toulouse.py output/toulouse      # épisode 10 (format court)
 python3 episodes/lens/lens.py output/lens                  # épisode 11 (hook « vrai supporter » + question piège sans réponse)
+python3 episodes/asse/asse.py output/asse                  # épisode 12 (hook « poteaux carrés »)
 python3 episodes/messi_adieu/messi_adieu.py output/messi_adieu  # hommage (ultra détaillé)
 python3 episodes/messi_manga/messi_manga.py output/messi_manga  # hommage version manga papier
 python3 episodes/messi_papier/messi_papier.py output/messi_papier  # hommage version papier réaliste (images IA + 2,5D)

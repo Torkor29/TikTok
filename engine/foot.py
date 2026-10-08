@@ -13,6 +13,9 @@ INK = PAL["ink"]
 # ------------------------------------------------------------------ maillots
 # kind : plain | stripes | halves | band (bande verticale centrale, style PSG) | suit (costume)
 KITS = {
+    "asse":    dict(kind="plain", c1=(0, 132, 72), sleeve=(0, 132, 72), shorts=(250, 250, 246), socks=(0, 132, 72), trim=(250, 250, 246)),
+    "bayern":  dict(kind="plain", c1=(206, 20, 40), sleeve=(206, 20, 40), shorts=(206, 20, 40), socks=(206, 20, 40), trim=(250, 250, 246)),
+    "kiev":    dict(kind="plain", c1=(250, 250, 246), sleeve=(30, 80, 170), shorts=(30, 80, 170), socks=(250, 250, 246), trim=(30, 80, 170)),
     "newells": dict(kind="halves", c1=(206, 34, 44), c2=(34, 32, 32), sleeve=(206, 34, 44), shorts=(34, 32, 32), socks=(206, 34, 44), trim=(34, 32, 32)),
     "barca":   dict(kind="stripes", c1=(0, 77, 152), c2=(165, 0, 68), n=5, sleeve=(165, 0, 68), shorts=(0, 60, 128), socks=(165, 0, 68), trim=(238, 190, 60)),
     "toulouse": dict(kind="plain", c1=(98, 46, 140), sleeve=(98, 46, 140), shorts=(98, 46, 140), socks=(98, 46, 140), trim=(250, 250, 246)),
