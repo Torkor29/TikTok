@@ -14,6 +14,15 @@ avec un kit football (`engine/foot.py`) et des effets en plus (`engine/engine.py
 `episodes/om/om.py` pour **l'histoire d'un club** (pas de joueur fil rouge : un joueur « générique » au maillot du club + les légendes du club),
 et `episodes/messi/messi.py` (9 scènes, 2 min 03, plus posé).
 
+## Description TikTok qui fait commenter (À CHAQUE LIVRAISON, demandé par l'utilisateur)
+Toujours donner dans la réponse finale (et dans le `_script.md`) une description prête à coller + un commentaire à épingler :
+- 1re ligne = le fait choc / la promesse de la vidéo (ce qui s'affiche avant « plus »), avec 1-2 émojis.
+- Une question à réponse COURTE et clivante (OUI / NON, un nom, un score, A ou B) : « Les poteaux ronds, Sainté gagnait ? OUI ou NON 👇 ».
+- Un léger débat ou une provocation bon enfant (« le club le plus sous-coté de France ? »), un appel aux souvenirs (« t'étais né en 76 ? »).
+- Une promesse liée aux commentaires (« le club le plus cité aura son épisode »).
+- 5 à 9 hashtags : club, ville, surnom, #football #foot #histoire (+ #quiz #quizfoot pour un quiz).
+- Commentaire à épingler = une 2e question différente, ou la réponse à moitié cachée pour relancer.
+
 ## Livrables (toujours, sans s'arrêter au storyboard)
 Dans `output/<joueur>/` :
 1. `<slug>.mp4` : vidéo finale, voix off + bruitages, sans musique (l'utilisateur ajoute un son tendance sur TikTok).
