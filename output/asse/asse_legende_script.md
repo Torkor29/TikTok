@@ -25,18 +25,12 @@
 ## Description TikTok (à coller)
 
 ```
-Saint-Étienne a perdu une finale de C1… à cause de POTEAUX CARRÉS 😱💚
-Avec des poteaux ronds, Sainté était champion d'Europe en 76 ? OUI ou NON 👇
-Et le pire : le club les a rachetés 37 ans plus tard 🤯
-Le club le plus cité en commentaire aura son épisode 👀
-
-#asse #saintetienne #lesverts #allezlesverts #chaudron #football #foot #histoire #ligue2
+Finale de C1 perdue à cause de poteaux CARRÉS 😱💚
+Avec des poteaux ronds, Sainté gagnait ? OUI ou NON 👇
+#asse #saintetienne #lesverts #football #foot
 ```
 
-**Commentaire à épingler** :
-```
-Les Verts remontent en Ligue 1 cette saison ? Pronostic en commentaire 💚👇
-```
+**Commentaire à épingler** : `Les Verts remontent cette saison ? 👀`
 
 ## Sources (vérifiées le 08/10/2026)
 

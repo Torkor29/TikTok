@@ -114,10 +114,8 @@ Le rendu final est bloqué tant que la variable est définie. Avec les crédits 
 avec les vraies voix (étape 4), planches, rendu, vérifications.
 
 ## Description TikTok qui fait commenter (À CHAQUE LIVRAISON, demandé par l'utilisateur)
-Toujours donner dans la réponse finale (et dans le `_script.md`) une description prête à coller + un commentaire à épingler :
-- 1re ligne = le fait choc / la promesse de la vidéo (ce qui s'affiche avant « plus »), avec 1-2 émojis.
-- Une question à réponse COURTE et clivante (OUI / NON, un nom, un score, A ou B) : « Les poteaux ronds, Sainté gagnait ? OUI ou NON 👇 ».
-- Un léger débat ou une provocation bon enfant (« le club le plus sous-coté de France ? »), un appel aux souvenirs (« t'étais né en 76 ? »).
-- Une promesse liée aux commentaires (« le club le plus cité aura son épisode »).
-- 5 à 9 hashtags : club, ville, surnom, #football #foot #histoire (+ #quiz #quizfoot pour un quiz).
-- Commentaire à épingler = une 2e question différente, ou la réponse à moitié cachée pour relancer.
+Toujours donner dans la réponse finale (et dans le `_script.md`) une description prête à coller + un commentaire à épingler.
+**COURTE** (l'utilisateur a trouvé la 1re version trop longue) : 2 lignes max + 5 hashtags.
+- Ligne 1 = le fait choc, 1-2 émojis. Ligne 2 = une question à réponse courte et clivante (OUI / NON, un nom, un score) + 👇.
+- Hashtags : club / sujet + #football #foot (+ #quizfoot pour un quiz).
+- Commentaire à épingler : une seule phrase, une 2e question pour relancer.
