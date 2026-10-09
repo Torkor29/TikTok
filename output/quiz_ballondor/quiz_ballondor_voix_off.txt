@@ -1,0 +1,61 @@
+QUIZ BALLONDOR — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+Ballon d'or : plus de six sur huit, sinon t'es pas un vrai fan ! Huit questions, quatre secondes, compte tes points, c'est parti !
+
+=== SCÈNE 2 ===
+Qui a gagné le plus de Ballons d'or ?  [chrono 4 s]  Réponse B : Lionel Messi, huit fois !
+
+=== SCÈNE 3 ===
+Le dernier Français Ballon d'or, en deux mille vingt-cinq ?  [chrono 4 s]  Réponse D : Ousmane Dembélé !
+
+=== SCÈNE 4 ===
+Le tout premier Ballon d'or, en cinquante-six ?  [chrono 4 s]  Réponse C : l'Anglais Stanley Matthews !
+
+=== SCÈNE 5 ===
+Le seul gardien Ballon d'or ?  [chrono 4 s]  Réponse A : Lev Yachine, en soixante-trois !
+
+=== SCÈNE 6 ===
+Petite pause ! Tu tiens le coup ? Abonne-toi et lâche un like pour plus de contenu foot ! Allez, on reprend !
+
+=== SCÈNE 7 ===
+Deux mille dix-huit : qui casse le duel Messi-Ronaldo ?  [chrono 4 s]  Réponse B : Luka Modrić !
+
+=== SCÈNE 8 ===
+Combien de Ballons d'or pour Michel Platini ?  [chrono 4 s]  Réponse D : trois, d'affilée !
+
+=== SCÈNE 9 ===
+Le premier Ballon d'or africain ?  [chrono 4 s]  Réponse C : George Weah, en quatre-vingt-quinze !
+
+=== SCÈNE 10 ===
+Dernière, la plus dure : quelle année le Ballon d'or a été annulé ?  [chrono 4 s]  Réponse A : deux mille vingt, à cause du Covid !
+
+=== SCÈNE 11 ===
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Et en commentaire : qui gagne le Ballon d'or le vingt-six octobre ? Abonne-toi !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+Ballon d'or : plus de six sur huit, sinon t'es pas un vrai fan ! Huit questions, quatre secondes, compte tes points, c'est parti !
+
+Qui a gagné le plus de Ballons d'or ?  [chrono 4 s]  Réponse B : Lionel Messi, huit fois !
+
+Le dernier Français Ballon d'or, en deux mille vingt-cinq ?  [chrono 4 s]  Réponse D : Ousmane Dembélé !
+
+Le tout premier Ballon d'or, en cinquante-six ?  [chrono 4 s]  Réponse C : l'Anglais Stanley Matthews !
+
+Le seul gardien Ballon d'or ?  [chrono 4 s]  Réponse A : Lev Yachine, en soixante-trois !
+
+Petite pause ! Tu tiens le coup ? Abonne-toi et lâche un like pour plus de contenu foot ! Allez, on reprend !
+
+Deux mille dix-huit : qui casse le duel Messi-Ronaldo ?  [chrono 4 s]  Réponse B : Luka Modrić !
+
+Combien de Ballons d'or pour Michel Platini ?  [chrono 4 s]  Réponse D : trois, d'affilée !
+
+Le premier Ballon d'or africain ?  [chrono 4 s]  Réponse C : George Weah, en quatre-vingt-quinze !
+
+Dernière, la plus dure : quelle année le Ballon d'or a été annulé ?  [chrono 4 s]  Réponse A : deux mille vingt, à cause du Covid !
+
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Et en commentaire : qui gagne le Ballon d'or le vingt-six octobre ? Abonne-toi !
