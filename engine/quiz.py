@@ -46,6 +46,8 @@ def _write_wav(path, a):
         w.writeframes((np.clip(a, -1, 1)*32767).astype(np.int16).tobytes())
 
 def order(n_q=8, cta_after=4):
+    if not cta_after:                # pas de pause au milieu (CTA seulement à la fin)
+        return ["intro"] + [f"q{i}" for i in range(1, n_q + 1)] + ["outro"]
     return ["intro"] + [f"q{i}" for i in range(1, cta_after + 1)] + ["cta"] + [f"q{i}" for i in range(cta_after + 1, n_q + 1)] + ["outro"]
 
 def assemble(vdir, out, n_q=8, cta_after=4):
@@ -210,16 +212,17 @@ def sub_button(cv, fr, x, y, t, t_in, t_tap):
 
 # ------------------------------------------------------------------ intro, CTA, fin (génériques)
 def ttl(theme):
-    return ("T'ES UN VRAI FAN", f"{theme['du']} ?", f"SI TU AS PLUS DE {theme.get('seuil', 5)}/8")
+    return ("T'ES UN VRAI FAN", f"{theme['du']} ?", f"SI TU AS PLUS DE {theme.get('seuil', 5)}/{theme.get('nq', 8)}")
 
 def intro_scene(theme, Wd, hero):
     """Titre dès la 1re image (« T'ES UN VRAI FAN / DU PSG ? / SI TU AS PLUS DE 5/8 »), puis les règles.
     Wd : Words de l'intro ; hero(cv, fr, t, x, y, s) dessine le joueur du club."""
     l1, l2, l3 = ttl(theme); mc, mn = theme.get("mot_chrono", ("cinq", 2))       # mot de la voix qui annonce le chrono
-    K8 = KW("8 QUESTIONS", "qzi8", INK, size=120); K5 = KW(f"{CHRONO:g} SECONDES", f"qzi5_{CHRONO:g}", theme["accent"], size=110)
+    N = theme.get("nq", 8); mq, mqn = theme.get("mot_nq", ("Huit", 2))
+    K8 = KW(f"{N} QUESTIONS", f"qzi8_{N}", INK, size=120); K5 = KW(f"{CHRONO:g} SECONDES", f"qzi5_{CHRONO:g}", theme["accent"], size=110)
     KP = TAG("compte tes points !", "qzip", PAL["paper"], INK, 60); KG = STAMP("C'EST PARTI !", "qzig", theme["badge"], 130)
     STRIP = Label(l3, "qzis", font("title", 78), INK, GOLD, maxw=1000, padx=30, pady=8, rough=5)
-    QM = LBL("?/8", "qziqm", font("title", 170), WHITE, theme["badge"], padx=30, pady=4, rough=3)
+    QM = LBL(f"?/{N}", "qziqm", font("title", 170), WHITE, theme["badge"], padx=30, pady=4, rough=3)
     def shot1(cv, fr, t):
         stage_fill(cv, fr, theme["bgs"][0], "qzi1"); rays(cv, (CX, 1300), t, .5, 16, 1500, theme.get("ray2", (40, 70, 140)), .12, .15)
         hero(cv, fr, t, CX + 90, 1780, 1.05)
@@ -230,7 +233,7 @@ def intro_scene(theme, Wd, hero):
         if theme.get("niveau"): STAMP(theme["niveau"], "qzniv", RED, 92).draw(cv, fr, 770, 850, 1 if fr == 0 else slam(t, .25, .2), 9)
     def shot2(cv, fr, t):
         stage_fill(cv, fr, theme["bgs"][1], "qzi2"); rays(cv, (CX, 900), t, .5, 14, 1500, (255, 255, 255), .08, .2)
-        t8, t5, tc, tp = Wd("Huit", 2), Wd(mc, mn), Wd("Compte"), Wd("parti")
+        t8, t5, tc, tp = Wd(mq, mqn), Wd(mc, mn), Wd("Compte"), Wd("parti")
         kw(cv, fr, K8, t, t8, None, CX, 380, -3)
         if t > t5 - .1:
             K5.draw(cv, fr, CX, 540, pop_in(t, t5 - .1, .3), 3)
@@ -242,10 +245,10 @@ def intro_scene(theme, Wd, hero):
         show(cv, fr, KP, t, tc, None, CX, 1420, -3)
         show_stamp(cv, fr, KG, t, tp - .1, CX, 1110, -6)
     def draw(cv, fr, t, T):
-        shots(cv, fr, t, [(0, shot1), (Wd("Huit", 2) - .15, shot2)], d=.24)
+        shots(cv, fr, t, [(0, shot1), (Wd(mq, mqn) - .15, shot2)], d=.24)
         drift(cv, t, T, .02)
-    sfx = [(.0, "boom", .8), (.0, "stamp", .7), (.05, "riser", .35), (.5, "stamp", .6), (Wd("Huit", 2) - .15, "whoosh", .5),
-           (Wd("Huit", 2), "stamp", .6), (Wd(mc, mn), "pop2"), (Wd(mc, mn) + .2, "tictac", .7, .45), (Wd("Compte"), "pop"),
+    sfx = [(.0, "boom", .8), (.0, "stamp", .7), (.05, "riser", .35), (.5, "stamp", .6), (Wd(mq, mqn) - .15, "whoosh", .5),
+           (Wd(mq, mqn), "stamp", .6), (Wd(mc, mn), "pop2"), (Wd(mc, mn) + .2, "tictac", .7, .45), (Wd("Compte"), "pop"),
            (Wd("parti") - .1, "stamp", .8), (Wd("parti"), "whoosh_up", .6)]
     return draw, sfx
 
@@ -294,7 +297,7 @@ def outro_scene(theme, Wd, hero, tag="le quiz de ton club ?"):
     """« T'as eu combien ? » : barème (0-3 touriste, 4-5 supporter, 6-8 vrai fan), commentaire, abonne-toi."""
     KA = KW("T'AS EU COMBIEN ?", "qzo1", INK, size=100)
     s = theme.get("seuil", 5)
-    rows = [(f"0 – {s-2}", "TOURISTE", DIM, INK), (f"{s-1} – {s}", "SUPPORTER", WHITE, INK), (f"{s+1} – 8", "VRAI FAN", GOLD, INK)]
+    rows = [(f"0 – {s-2}", "TOURISTE", DIM, INK), (f"{s-1} – {s}", "SUPPORTER", WHITE, INK), (f"{s+1} – {theme.get('nq', 8)}", "VRAI FAN", GOLD, INK)]
     LR = [Label(f"{a}   {b}", f"qzo2{k}", font("title", 70), fg, bg, padx=30, pady=6, rough=3) for k, (a, b, bg, fg) in enumerate(rows)]
     TK = TAG(tag, "qzo3" + tag, PAL["paper"], INK, 54)
     def draw(cv, fr, t, T):
@@ -304,7 +307,7 @@ def outro_scene(theme, Wd, hero, tag="le quiz de ton club ?"):
         for k, lab in enumerate(LR):
             a = pop_in(t, tp - .2 + k*.15, .3)
             if a > 0: lab.draw(cv, fr, CX, 520 + k*125, a*(1 + (.12*bump(prog(t, tf, .35)) if k == 2 else 0)), (-2, 2, -3)[k])
-        speech_bubble(cv, fr, "qzbub", "J'ai eu ?/8 !", 620, 960, pop_in(t, tc - .2, .3), (-1, 1), 60)
+        speech_bubble(cv, fr, "qzbub", f"J'ai eu ?/{theme.get('nq', 8)} !", 620, 960, pop_in(t, tc - .2, .3), (-1, 1), 60)
         sub_button(cv, fr, CX, 1150, t, ta - .15, ta + .2)
         show(cv, fr, TK, t, ta + .1, None, CX, 1265, -2)
         hero(cv, fr, t, 300, 1760, .7, crown=t > tf)
@@ -322,7 +325,7 @@ def quiz_cover(path, theme, hero, title="~/quiz"):
     cv = background(0, title); stage_fill(cv, 0, theme["bgs"][0], "qzcov")
     rays(cv, (CX, 1250), .3, .8, 16, 1500, theme.get("ray2", (40, 70, 140)), .12)
     ransom_line(cv, l1, 300, 130, seed=3); ransom_line(cv, l2, 470, 150, seed=11)
-    Label(f"PLUS DE {theme.get('seuil', 5)}/8 ?", "qzcv1", font("title", 96), INK, GOLD, padx=30, pady=8, rough=5).draw(cv, 0, CX, 650, 1, -3)
+    Label(f"PLUS DE {theme.get('seuil', 5)}/{theme.get('nq', 8)} ?", "qzcv1", font("title", 96), INK, GOLD, padx=30, pady=8, rough=5).draw(cv, 0, CX, 650, 1, -3)
     STAMP(theme.get("tampon", "QUIZ"), "qzcv2", RED, 110 if len(theme.get("tampon", "QUIZ")) < 6 else 80).draw(cv, 0, 850, 820, 1, 12)
     chrono(cv, 0, CHRONO*.4 + 1.0, 1.0, y=820, cx=170, x0=290, x1=700)
     for k in range(4):

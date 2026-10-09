@@ -60,7 +60,10 @@ Le rythme vient de l'**élocution** et du **montage**.
 - **Montage** : un changement visuel toutes les **1,2 à 2 s** (nouveau plan `shots()`, mot clé `kw()`, tampon, zoom `punch`), un bruitage sur chaque changement.
   Marges `pad_in=.12`, `pad_out=.2`. Pas de plan fixe de plus de 2,5 s.
   **Relance** toutes les ~15 s (question, « mais… », retournement) pour éviter la chute de rétention.
-- **Durée** : histoire 55 s à 1 min 15 (format court par défaut) ; quiz > 1 min (chrono 4 s).
+- **Durée** : histoire 55 s à 1 min 15 (format court par défaut).
+  Quiz : **6 questions** (≈ 1 min 05-1 min 10, juste au-dessus de la minute pour la monétisation), chrono 4 s, **pas de pause au milieu** (CTA à la fin).
+  Le taux de complétion compte plus que la durée. Moteur : `THEME(nq=6, seuil=4, mot_nq=("Six", 2))` + `assemble(..., n_q=6, cta_after=0)` (exemple : `episodes/quiz_ballondor6/`).
+  Test A/B en cours contre la version 8 questions : garder la meilleure selon le % de vues complètes.
 
 ## 4) Le format (le cerveau reste sur ce qu'il reconnaît)
 Choisir le format qui colle au sujet, le dire dans le plan :
