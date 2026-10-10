@@ -47,6 +47,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | 4 | PSG niveau 3 — son de hook, chrono 4 s ; Germain le lynx, Hakimi en finale 2025, Aston Villa, Hechter, Coupe de France 1982, 9-0 contre Guingamp, Pauleta « l'Aigle des Açores », 10-0 contre Côte Chaude ; pause après la Q4 « tu vas pleurer ou c'est trop dur ? » | 1:52 | [`output/quiz_psg3/`](output/quiz_psg3) |
 | 5 | Ballon d'or (méthode viral : actu du 26 octobre, hook 0,55 s, voix sans blancs) — Messi 8, Dembélé 2025, Matthews 1956, Yachine, Modric 2018, Platini 3, Weah 1995, 2020 annulé ; fin « qui gagne le 26 octobre ? » | 1:29 | [`output/quiz_ballondor/`](output/quiz_ballondor) |
 | 6 | Ballon d'or VERSION 6 QUESTIONS (test A/B : plus court, sans pause au milieu, CTA à la fin) | 1:08 | [`output/quiz_ballondor6/`](output/quiz_ballondor6) |
+| 7 | Top 8 PSG « le meilleur de l'histoire ? toi, tu choisis ! » (format débat, bulles photo, vote en commentaire, résultat promis) | 0:45 | [`output/psg_top8/`](output/psg_top8) |
 
 ## Structure
 

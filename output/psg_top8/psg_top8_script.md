@@ -1,6 +1,6 @@
 # Top 8 PSG — « Le meilleur joueur de l'histoire du PSG ? Toi, tu choisis ! »
 
-**Format TOP / DÉBAT** (skill `tiktok-foot-viral`), ≈ 52 s, 10 scènes. Voix Léo avec les blancs coupés ; contrôle de rythme OK.
+**Format TOP / DÉBAT** (skill `tiktok-foot-viral`), **45 s**, 10 scènes. Voix Léo avec les blancs coupés ; contrôle de rythme OK.
 - **Sujet (9/10)** : le plus gros club français, débat garanti (Mbappé contre Zlatan contre Ronaldinho…). Les absents (Pauleta, Weah, Verratti, Marquinhos) feront commenter eux aussi.
 - **Hook** : « Le meilleur joueur de l'histoire du PSG ? On en a gardé huit. Toi, tu choisis ! »
   - « PSG » dit à 1 s ; le hook fait 15 mots.
@@ -39,3 +39,5 @@ Et dis pourquoi, le résultat dans la prochaine vidéo 👀
 - **Cavani, le premier à 200 buts au club** : [Goal](https://www.goal.com/fr/news/cavani-meilleur-buteur-du-psg-le-2000e-but-au-parcles-3-choses-a-retenir-de-psg-mhsc-4-0/12wth9svfthx51gsg3yvgeoq21).
 - **Neymar, 222 M€ (2017)**, transfert le plus cher de l'histoire : fait notoire.
 - **Raí, capitaine de la Coupe des coupes 1996**, et **Dembélé, Ballon d'or + Ligue des champions 2025** : voir les sources des quiz PSG et Ballon d'or.
+
+**Photos utilisées** : fournies par l'utilisateur (photos de presse), recadrées sur le visage. Risque de réclamation de droits sur TikTok, faible pour des bulles de 4 s, mais pas nul.
