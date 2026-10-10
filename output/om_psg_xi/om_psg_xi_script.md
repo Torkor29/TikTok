@@ -29,3 +29,23 @@ Ton onze en commentaire 👇 plus de Marseillais ou de Parisiens ?
 #om #psg #classique #football #foot
 ```
 **Commentaire à épingler** : `Barthez ou Lama ? Le premier duel divise déjà 👀`
+
+## Crédits photos
+Photos Wikimedia Commons (licences libres), affichées en fin de vidéo :
+- barthez : Auteur inconnu, CC BY-SA 3.0
+- boli : Christophe95, CC BY-SA 3.0
+- desailly : Barcex, CC BY-SA 4.0
+- dimeco : Baduld, CC0
+- deschamps : Bryan Berlin, CC BY-SA 4.0
+- abedipele : Christophe95, CC BY-SA 3.0
+- waddle : Shane Rounce, CC BY-SA 2.0
+- payet : Supporterhéninois, CC0
+- papin : Leo Medvedev, CC BY-SA 4.0
+- drogba : Y.Leclercq©, CC BY-SA 4.0
+- lama : schuey, CC BY 2.0
+- hakimi : Bryan Berlin, CC BY-SA 4.0
+- marquinhos : Bryan Berlin, CC BY-SA 4.0
+- nunomendes : Bryan Berlin, CC BY-SA 4.0
+- verratti : Sandro Halank, CC BY-SA 4.0
+- angloma : photo fournie par l'utilisateur (pas de photo libre sur Commons), droits non libres
+- thiago, rai, ronaldinho, neymar, zlatan, mbappe : photos fournies précédemment (hors Commons)

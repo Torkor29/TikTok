@@ -49,6 +49,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | 5 | Ballon d'or (méthode viral : actu du 26 octobre, hook 0,55 s, voix sans blancs) — Messi 8, Dembélé 2025, Matthews 1956, Yachine, Modric 2018, Platini 3, Weah 1995, 2020 annulé ; fin « qui gagne le 26 octobre ? » | 1:29 | [`output/quiz_ballondor/`](output/quiz_ballondor) |
 | 6 | Ballon d'or VERSION 6 QUESTIONS (test A/B : plus court, sans pause au milieu, CTA à la fin) | 1:08 | [`output/quiz_ballondor6/`](output/quiz_ballondor6) |
 | 7 | Top 8 PSG « le meilleur de l'histoire ? toi, tu choisis ! » (format débat, bulles photo, vote en commentaire, résultat promis) | 0:45 | [`output/psg_top8/`](output/psg_top8) |
+| 8 | OM ou PSG ? Le onze de légende (format duels / débat : 11 postes, bulle OM vs bulle PSG, vote 2 s, mini-terrain qui se remplit, « ton onze en commentaire » ; photos libres Wikimedia créditées en fin) | 0:57 | [`output/om_psg_xi/`](output/om_psg_xi) |
 
 ## Structure
 

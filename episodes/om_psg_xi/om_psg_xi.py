@@ -42,8 +42,11 @@ DUELS = [
     ("AVANT-CENTRE", (.5, .14), "papin", "PAPIN", "zlatan", "ZLATAN"),
     ("ATTAQUANT", (.18, .22), "drogba", "DROGBA", "mbappe", "MBAPPÉ"),
 ]
+NOMS = {d[2]: d[3] for d in DUELS} | {d[4]: d[5] for d in DUELS}
 SLUGS = [d[2] for d in DUELS] + [d[4] for d in DUELS]
 top8.HERE = HERE                              # les bulles lisent nos photos
+_CRED = os.path.join(HERE, "photos", "credits.json")
+CREDITS = json.load(open(_CRED)) if os.path.exists(_CRED) else {}
 
 def bubble(cv, slug, x, y, r, s=1.0, rot=0.0, ring=ROUGE):
     if s > .02: blit(cv, top8.bubble_sprite(slug, r, ring), x, y, s, rot)
@@ -124,6 +127,11 @@ def s13(cv, fr, t, T):
     LBL("OM", "o13om", font("title", 80), CIEL_D, BLANC, padx=16, pady=0, rough=2).draw(cv, fr, 330, 1380, pop_in(t, w(13, "Marseillais") - .1, .25), -5)
     LBL("PSG", "o13psg", font("title", 80), NAVY, BLANC, padx=16, pady=0, rough=2).draw(cv, fr, 750, 1380, pop_in(t, w(13, "Parisiens") - .1, .25), 5)
     show_stamp(cv, fr, K13b, t, w(13, "débat") - .1, CX, 1520, -4)
+    if CREDITS and t > T - 2.6:            # crédits photos (licences libres) en fin de vidéo
+        auteurs = {}
+        for c in CREDITS.values(): a, l = c.rsplit(", ", 1); auteurs.setdefault(a, set()).add(l)
+        txt = "Photos Wikimedia Commons : " + " · ".join(f"{a} ({', '.join(sorted(l))})" for a, l in auteurs.items())
+        Label(txt, "ocred", font("sans", 22), BLANC, NOIR, maxw=1000, padx=12, pady=6, rough=0).draw(cv, fr, CX, 1780, 1, 0)
     impact(cv, t, w(13, "débat"), 12); drift(cv, t, T, .03)
 
 # ------------------------------------------------------------------ scènes
