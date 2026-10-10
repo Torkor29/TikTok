@@ -73,6 +73,7 @@ Choisir le format qui colle au sujet, le dire dans le plan :
 - **Quiz / défi** (skill quiz) : « t'es un vrai fan si… », score en commentaire.
 - **Avant / après** (« à 10 ans… à 30 ans… ») ou **qui est-ce ?** (silhouette + indices).
 - **Classement / débat** (« les 5 meilleurs 10 de l'histoire du PSG ») : fait commenter (« t'aurais mis qui ? »).
+- **« 5 anecdotes de fou » en compte à rebours** (épisode Lyon, `episodes/ol_anecdotes/`) : gros numéro 5 → 1, pastilles en haut, la plus folle en n°1 annoncée dès le hook ; DA hybride = images IA « maquette papier » (paysage 16:9, présentées en photo encadrée sur le même plan flouté, `plate()`) + étiquettes papier par-dessus.
 - **Réaction à l'actu** (transfert, record) : publier vite, sujet court, 30-45 s.
 Les **trends** (son, structure) sont reprises si elles collent au sujet ; ne jamais copier les plans, les phrases ni les logos.
 
