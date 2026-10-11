@@ -71,15 +71,26 @@ def name_tag(cv, fr, u, txt, key, sub=None, x=CX + 190, size=80):
     if sub: TAG(sub, key + "s", PAL["paper"], NOIR, 44).draw(cv, fr, x, ILLU_Y + 90, pop_in(u, .3, .4), -3)
 
 def i1(cv, fr, t, u, tm):
-    SH_PSG.draw(cv, fr, CX - 230, ILLU_Y, .9, -5)
-    LBL("VS", "qz4vs", font("title", 120), BLANC, None, stroke=6, stroke_fill=NOIR).draw(cv, fr, CX - 10, ILLU_Y, 1 + .06*math.sin(t*6), 0)
-    (SH_OM if u > .1 else SH_Q).draw(cv, fr, CX + 210, ILLU_Y, .9*(slam(u, .1, .3) if u > .1 else 1), 5)
-    if u > .3: STAMP("LE CLASSIQUE", "qz4s1", ROUGE, 66).draw(cv, fr, CX, ILLU_Y + 140, slam(u, .3, .3), -4)
+    MARQ.draw(cv, fr, CX - 200, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
+    if u <= .1: LBL("?", "qz4q1", font("title", 180), BLANC, NAVY, padx=34, pady=0, rough=2).draw(cv, fr, CX + 180, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    else:
+        L = layer(330, 230, (165, 115)); d = ImageDraw.Draw(L)                  # drapeau du Brésil en papier
+        d.rectangle([5, 5, 325, 225], fill=(30, 150, 70)); d.polygon([(165, 20), (310, 115), (165, 210), (20, 115)], fill=(250, 210, 40))
+        d.ellipse([110, 60, 220, 170], fill=(30, 60, 150))
+        blit(cv, L, CX + 180, ILLU_Y - 20, slam(u, .1, .3), 5)
+        TAG("Marquinhos, capitaine", "qz4t1", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 180, ILLU_Y + 130, pop_in(u, .3, .4), -3)
+SCOREBOARD = scoreboard_sprite(820, 300, "qz4score")
+def board(cv, fr, la, lb, a, b, sub="", s=.8, y=ILLU_Y):
+    L = layer(900, 400, (450, 200)); SCOREBOARD.draw(L, fr, 450, 200, 1, 0, 1); d = ImageDraw.Draw(L)
+    for x_, lab in ((180, la), (720, lb)): d.text((x_, 120), lab, font=font("mono", 64 if len(lab) <= 5 else 48), fill=(200, 196, 190), anchor="mm")
+    d.text((450, 210), f"{a} - {b}", font=font("title", 150), fill=(255, 204, 70), anchor="mm")
+    if sub: d.text((450, 310), sub, font=font("mono", 36), fill=(170, 166, 160), anchor="mm")
+    blit(cv, L, CX, y, s)
 def i2(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, MESSI, "psg", "m2")
-    LBL("2021", "qz4y2", font("title", 80), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y + 120 if u > .1 else ILLU_Y, 1, 6)
-    name_tag(cv, fr, u, "MESSI", "qz4n2", None)
-    if u > .1: confetti(cv, fr, "qz4c2", t - tm["te"], 50, 2.5, [(110, 180, 230), BLANC, GOLD], (200, 600, 900, 1000))
+    board(cv, fr, "PSG", "???" if u <= .05 else "INTER", 5, 0, "finale 2025, Munich")
+    if u > 0:
+        UCL.draw(cv, fr, CX - 400, ILLU_Y + 10, .55*slam(u, .1, .3), -10)
+        confetti(cv, fr, "qz4c2", t - tm["te"], 70, 3, [GOLD, BLANC, ROUGE])
 def i3(cv, fr, t, u, tm):
     reveal_player(cv, fr, t, u, NASSER, "suit", "n3")
     name_tag(cv, fr, u, "NASSER AL-KHELAÏFI", "qz4n3", "président depuis 2011", size=62)
@@ -101,17 +112,18 @@ def i7(cv, fr, t, u, tm):
     name_tag(cv, fr, u, "RONALDINHO", "qz4n7", "PSG 2001-2003", size=72)
     if u > .3: draw_ballon_or(cv, fr, CX + 380, ILLU_Y + 150, .45*slam(u, .3, .3))
 def i8(cv, fr, t, u, tm):
-    MARQ.draw(cv, fr, CX - 220, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
-    if u <= .1: LBL("N° ?", "qz4q8", font("title", 150), BLANC, NAVY, padx=24, pady=0, rough=2).draw(cv, fr, CX + 170, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    MESSI.draw(cv, fr, CX - 240, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
+    draw_ballon_or(cv, fr, CX + 20, ILLU_Y - 20, .55)
+    if u <= .1: LBL("× ?", "qz4q8", font("title", 150), BLANC, NAVY, padx=24, pady=0, rough=2).draw(cv, fr, CX + 250, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
     else:
-        LBL("5", "qz4n8", font("title", 230), NOIR, GOLD, padx=40, pady=0, rough=3).draw(cv, fr, CX + 170, ILLU_Y - 30, slam(u, .1, .3), 4)
-        TAG("Marquinhos, capitaine", "qz4t8", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 170, ILLU_Y + 120, pop_in(u, .3, .4), -3)
+        LBL("× 6", "qz4n8", font("title", 170), NOIR, GOLD, padx=30, pady=0, rough=3).draw(cv, fr, CX + 250, ILLU_Y - 30, slam(u, .1, .3), 4)
+        TAG("le 7e en 2021, à Paris", "qz4t8", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 200, ILLU_Y + 120, pop_in(u, .3, .4), -3)
 
 # ------------------------------------------------------------------ les 8 questions (facile -> plus dur, mais tout reste jouable)
 QUESTIONS = [
-    Q("Quel est le grand rival historique du PSG ?", ["OL", "OM", "LOSC", "ASSE"], 1, "FACILE", i1, [(.1, "boo", .5)]),
-    Q("En 2021, quel Argentin signe au PSG ?", ["Lionel Messi", "Sergio Agüero", "Paulo Dybala", "Ángel Di María"], 0, "FACILE", i2, [(.1, "camera", .7)]),
-    Q("Comment s'appelle le président du PSG ?", ["Jean-Michel Aulas", "Florentino Pérez", "Nasser Al-Khelaïfi", "Joan Laporta"], 2, "FACILE", i3, [(.1, "cash", .6)]),
+    Q("De quel pays vient le capitaine Marquinhos ?", ["Argentine", "Portugal", "Brésil", "Uruguay"], 2, "FACILE", i1, [(.1, "samba", .6)]),
+    Q("Finale de C1 2025 : le PSG a battu quel club ?", ["Inter Milan", "Real Madrid", "Arsenal", "Bayern Munich"], 0, "FACILE", i2, [(.1, "crowd_long", .7), (.1, "sparkle")]),
+    Q("Comment s'appelle le président du PSG ?", ["Jean-Michel Aulas", "Nasser Al-Khelaïfi", "Florentino Pérez", "Joan Laporta"], 1, "FACILE", i3, [(.1, "cash", .6)]),
     Q("Avant le PSG, Mbappé jouait dans quel club ?", ["Lyon", "Lille", "Rennes", "Monaco"], 3, "MOYEN", i4, [(.1, "stamp", .6)]),
     Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
       "MOYEN", i5, [(.1, "lion", .7), (.1, "fanfare", .5)]),
@@ -119,7 +131,7 @@ QUESTIONS = [
       [(.1, "crowd_long", .7), (.1, "sparkle")]),
     Q("Quel Brésilien est passé par le PSG avant d'être Ballon d'or au Barça ?", ["Ronaldinho", "Neymar", "Kaká", "Raí"], 0, "DIFFICILE", i7,
       [(.1, "samba", .7), (.2, "sparkle")]),
-    Q("Quel numéro porte le capitaine Marquinhos ?", ["2", "3", "4", "5"], 3, "LA PLUS DURE", i8, [(.1, "drumroll", .6), (.3, "stamp", .7)]),
+    Q("Combien de Ballons d'or avait Messi en arrivant au PSG ?", ["4", "5", "6", "7"], 2, "LA PLUS DURE", i8, [(.1, "drumroll", .6), (.3, "sparkle", .7)]),
 ]
 
 # ------------------------------------------------------------------ scènes
