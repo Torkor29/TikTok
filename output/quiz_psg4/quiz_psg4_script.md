@@ -1,13 +1,13 @@
-# Quiz PSG — NIVEAU 1 (facile)
+# Quiz PSG #4
 
-Même moteur et même DA que le 1er quiz PSG (engine/quiz.py) ; seuil 6/8 ; tampon NIVEAU 1.
+Même moteur et même DA que le 1er quiz PSG (engine/quiz.py) ; même intro / CTA / fin (voix reprises du 1er quiz).
 
 ## Voix off
-- **intro** : T'es un vrai fan du PSG si t'as plus de six sur huit ! Niveau un, facile. Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
-- **q1** : En quelle année le Qatar a-t-il racheté le PSG ?
-- **r1** : Réponse C : deux mille onze !
-- **q2** : En finale de la Ligue des champions deux mille vingt-cinq, le PSG a battu quel club ?
-- **r2** : Réponse A : l'Inter Milan ! Cinq à zéro.
+- **intro** : T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+- **q1** : En quelle année Lionel Messi a-t-il quitté le PSG ?
+- **r1** : Réponse B : deux mille vingt-trois !
+- **q2** : En deux mille vingt-quatre, quel club élimine le PSG en demi-finale de Ligue des champions ?
+- **r2** : Réponse A : le Borussia Dortmund !
 - **q3** : Qui entraînait le PSG juste avant Luis Enrique ?
 - **r3** : Réponse B : Christophe Galtier !
 - **q4** : En deux mille vingt, le PSG perd sa première finale de Ligue des champions contre quel club ?
@@ -21,11 +21,11 @@ Même moteur et même DA que le 1er quiz PSG (engine/quiz.py) ; seuil 6/8 ; tamp
 - **r7** : Réponse A : Ronaldinho !
 - **q8** : Dernière question, la plus dure : combien de Ballons d'or avait Messi en arrivant au PSG ?
 - **r8** : Réponse C : six ! Le septième, il l'a gagné pendant sa première saison à Paris.
-- **outro** : Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+- **outro** : Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le quiz de ton club !
 
 ## Vérification des réponses
-1. Rachat par Qatar Sports Investments en 2011.
-2. Finale C1 2025 : PSG 5-0 Inter Milan (31 mai 2025, Munich).
+1. Messi quitte le PSG en juin 2023 (2021-2023).
+2. Demi-finale C1 2024 : Dortmund 1-0 puis PSG 0-1 (0-2 au total).
 3. Christophe Galtier entraîne le PSG en 2022-2023, Luis Enrique lui succède en juillet 2023.
 4. Finale C1 2020 (23 août, Lisbonne) : Bayern 1-0 PSG.
 5. Zlatan, mai 2016 : « I came like a king, left like a legend ».

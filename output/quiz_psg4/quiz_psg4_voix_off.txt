@@ -3,13 +3,13 @@ QUIZ PSG4 — VOIX OFF
 Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 
 === SCÈNE 1 ===
-T'es un vrai fan du PSG si t'as plus de six sur huit ! Niveau un, facile. Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
 
 === SCÈNE 2 ===
-En quelle année le Qatar a-t-il racheté le PSG ?  [chrono 5 s]  Réponse C : deux mille onze !
+En quelle année Lionel Messi a-t-il quitté le PSG ?  [chrono 5 s]  Réponse B : deux mille vingt-trois !
 
 === SCÈNE 3 ===
-En finale de la Ligue des champions deux mille vingt-cinq, le PSG a battu quel club ?  [chrono 5 s]  Réponse A : l'Inter Milan ! Cinq à zéro.
+En deux mille vingt-quatre, quel club élimine le PSG en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse A : le Borussia Dortmund !
 
 === SCÈNE 4 ===
 Qui entraînait le PSG juste avant Luis Enrique ?  [chrono 5 s]  Réponse B : Christophe Galtier !
@@ -33,16 +33,16 @@ Quel Brésilien a joué au PSG avant de devenir Ballon d'or avec le Barça ?  [c
 Dernière question, la plus dure : combien de Ballons d'or avait Messi en arrivant au PSG ?  [chrono 5 s]  Réponse C : six ! Le septième, il l'a gagné pendant sa première saison à Paris.
 
 === SCÈNE 11 ===
-Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le quiz de ton club !
 
 
 ----- VERSION EN UN SEUL BLOC -----
 
-T'es un vrai fan du PSG si t'as plus de six sur huit ! Niveau un, facile. Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
 
-En quelle année le Qatar a-t-il racheté le PSG ?  [chrono 5 s]  Réponse C : deux mille onze !
+En quelle année Lionel Messi a-t-il quitté le PSG ?  [chrono 5 s]  Réponse B : deux mille vingt-trois !
 
-En finale de la Ligue des champions deux mille vingt-cinq, le PSG a battu quel club ?  [chrono 5 s]  Réponse A : l'Inter Milan ! Cinq à zéro.
+En deux mille vingt-quatre, quel club élimine le PSG en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse A : le Borussia Dortmund !
 
 Qui entraînait le PSG juste avant Luis Enrique ?  [chrono 5 s]  Réponse B : Christophe Galtier !
 
@@ -58,4 +58,4 @@ Quel Brésilien a joué au PSG avant de devenir Ballon d'or avec le Barça ?  [c
 
 Dernière question, la plus dure : combien de Ballons d'or avait Messi en arrivant au PSG ?  [chrono 5 s]  Réponse C : six ! Le septième, il l'a gagné pendant sa première saison à Paris.
 
-Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le quiz de ton club !

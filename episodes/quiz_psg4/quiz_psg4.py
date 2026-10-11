@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
 import engine
 
-TITLE = "~/quiz $ ./psg --niveau 1"
+TITLE = "~/quiz $ ./psg"
 SLUG = "quiz_psg4"
 SFX_DIR = os.path.join(ROOT, "assets", "sfx")
 TEXTES = json.load(open(os.path.join(HERE, "textes_voix.json")))
@@ -21,7 +21,7 @@ def Wd(k):
     return lambda word, n=1, end=False: PAD_IN + WS[k](word, n, end)
 
 NAVY = (16, 40, 86); NAVY_D = (10, 24, 54); ROUGE = (210, 36, 42); BLANC = (250, 250, 246); NOIR = (30, 28, 28); MAROON = (138, 21, 56)
-THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140), seuil=6, niveau="NIVEAU 1", mot_nq=("Huit", 2), mot_chrono=("cinq", 1), tampon="FACILE")
+THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140))
 
 PSGP = Player("qzpsg", hair=(70, 50, 36), skin=(230, 186, 150))
 NEY = Player("qzney", hair=(48, 34, 26), skin=(196, 146, 108), hair_style="quiff")
@@ -71,22 +71,9 @@ def name_tag(cv, fr, u, txt, key, sub=None, x=CX + 190, size=80):
     if sub: TAG(sub, key + "s", PAL["paper"], NOIR, 44).draw(cv, fr, x, ILLU_Y + 90, pop_in(u, .3, .4), -3)
 
 def i1(cv, fr, t, u, tm):
-    flag(cv, CX - 170, ILLU_Y - 30, 330, 200, t, qatar=u > .1)
-    if u <= .1: LBL("20??", "qz4y1", font("title", 120), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 250, ILLU_Y + 20, 1, 6)
-    else:
-        LBL("2011", "qz4y1b", font("title", 130), NOIR, GOLD, padx=20, pady=2, rough=2).draw(cv, fr, CX + 250, ILLU_Y + 20, slam(u, .1, .3), 6)
-        TAG("rachat par QSI", "qz4t1", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 200, ILLU_Y + 140, pop_in(u, .3, .4), -3)
-def flag(cv, x, y, w, h, t, qatar=False):
-    L = layer(int(w + 40), int(h + 60), (w/2 + 20, h/2 + 30)); d = ImageDraw.Draw(L); n = 26
-    for k in range(n):
-        off = 10*math.sin(k/n*math.pi*2 - t*5)*(k/n); x0 = 20 + k*w/n
-        d.rectangle([x0, 30 + off, x0 + w/n + 1, 30 + h + off], fill=BLANC if (not qatar or k < n*.3) else MAROON)
-    if qatar:
-        xb = 20 + w*.3; pts = [(xb - 2, 30)]
-        for k in range(9): pts += [(xb + w*.08, 30 + (k + .5)*h/9), (xb - 2, 30 + (k + 1)*h/9)]
-        d.polygon(pts + [(xb + w*.1, 30 + h), (xb + w*.1, 30)], fill=MAROON)
-    else: d.text((20 + w/2, 30 + h/2), "?", font=font("title", 130), fill=NOIR, anchor="mm")
-    blit(cv, L, x, y, 1, 0, 1)
+    reveal_player(cv, fr, t, u, MESSI, "psg", "m1")
+    if u <= .1: LBL("20??", "qz4y1", font("title", 120), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y, 1, 6)
+    else: name_tag(cv, fr, u, "2023", "qz4n1", "2 saisons à Paris", size=120)
 SCOREBOARD = scoreboard_sprite(820, 300, "qz4score")
 def board(cv, fr, la, lb, a, b, sub="", s=.8, y=ILLU_Y):
     L = layer(900, 400, (450, 200)); SCOREBOARD.draw(L, fr, 450, 200, 1, 0, 1); d = ImageDraw.Draw(L)
@@ -95,10 +82,8 @@ def board(cv, fr, la, lb, a, b, sub="", s=.8, y=ILLU_Y):
     if sub: d.text((450, 310), sub, font=font("mono", 36), fill=(170, 166, 160), anchor="mm")
     blit(cv, L, CX, y, s)
 def i2(cv, fr, t, u, tm):
-    board(cv, fr, "PSG", "???" if u <= .05 else "INTER", 5, 0, "finale 2025, Munich")
-    if u > 0:
-        UCL.draw(cv, fr, CX - 400, ILLU_Y + 10, .55*slam(u, .1, .3), -10)
-        confetti(cv, fr, "qz4c2", t - tm["te"], 70, 3, [GOLD, BLANC, ROUGE])
+    board(cv, fr, "PSG", "???" if u <= .05 else "DORTMUND", 0, 2, "demi-finale 2024 (aller + retour)")
+    if u > .1: STAMP("ÉLIMINÉS", "qz4s2", ROUGE, 66).draw(cv, fr, CX + 200, ILLU_Y + 120, slam(u, .1, .3), -6)
 GALT = Player("qz4galt", hair=(120, 116, 110), skin=(230, 190, 156))
 def i3(cv, fr, t, u, tm):
     reveal_player(cv, fr, t, u, GALT, "coach", "g3")
@@ -129,8 +114,8 @@ def i8(cv, fr, t, u, tm):
 
 # ------------------------------------------------------------------ les 8 questions (facile -> plus dur, mais tout reste jouable)
 QUESTIONS = [
-    Q("En quelle année le Qatar a racheté le PSG ?", ["2008", "2010", "2011", "2013"], 2, "FACILE", i1, [(.1, "cash", .6)]),
-    Q("Finale de C1 2025 : le PSG a battu quel club ?", ["Inter Milan", "Real Madrid", "Arsenal", "Bayern Munich"], 0, "FACILE", i2, [(.1, "crowd_long", .7), (.1, "sparkle")]),
+    Q("En quelle année Messi a quitté le PSG ?", ["2022", "2023", "2024", "2021"], 1, "FACILE", i1, [(.1, "whoosh", .5)]),
+    Q("Demi-finale de C1 2024 : qui élimine le PSG ?", ["Borussia Dortmund", "Real Madrid", "Manchester City", "Bayern Munich"], 0, "FACILE", i2, [(.0, "groan", .5), (.1, "stamp", .6)]),
     Q("Qui entraînait le PSG juste avant Luis Enrique ?", ["Mauricio Pochettino", "Christophe Galtier", "Thomas Tuchel", "Unai Emery"], 1, "FACILE", i3, [(.1, "whistle", .6)]),
     Q("Première finale de C1 du PSG en 2020 : perdue contre… ?", ["Liverpool", "Real Madrid", "Chelsea", "Bayern Munich"], 3, "MOYEN", i4, [(.0, "groan", .5), (.1, "stamp", .6)]),
     Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
@@ -145,7 +130,7 @@ QUESTIONS = [
 # ------------------------------------------------------------------ scènes
 intro_draw, intro_sfx = intro_scene(THEME, Wd(0), hero)
 cta_draw, cta_sfx = cta_scene(THEME, Wd(1))
-outro_draw, outro_sfx = outro_scene(THEME, Wd(2), hero, tag="le niveau 2 arrive bientôt !")
+outro_draw, outro_sfx = outro_scene(THEME, Wd(2), hero)
 SCENES = []
 for k, key in enumerate(KEYS):
     if key == "intro": SCENES.append(Scene("intro", TEXTES["intro"], intro_draw, intro_sfx, pad_in=PAD_IN, pad_out=.2))
