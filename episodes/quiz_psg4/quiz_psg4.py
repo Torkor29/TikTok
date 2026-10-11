@@ -1,0 +1,170 @@
+"""Quiz PSG NIVEAU 1 (facile, pour faire commenter les scores) : « T'es un vrai fan du PSG si tu as plus de 6/8 » (format quiz, voir engine/quiz.py).
+8 questions QCM (4 réponses, 5 s de chrono) du plus facile au plus dur ; CTA « abonne-toi + like » après la 4e ; barème final.
+
+  python3 episodes/quiz_psg4/quiz_psg4.py output/quiz_psg4 --stills [2,3]
+  python3 episodes/quiz_psg4/quiz_psg4.py output/quiz_psg4 --cover
+  python3 episodes/quiz_psg4/quiz_psg4.py output/quiz_psg4
+"""
+import sys, os, json, math, random
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+sys.path.insert(0, os.path.join(ROOT, "engine"))
+from quiz import *
+import engine
+
+TITLE = "~/quiz $ ./psg --niveau 1"
+SLUG = "quiz_psg4"
+SFX_DIR = os.path.join(ROOT, "assets", "sfx")
+TEXTES = json.load(open(os.path.join(HERE, "textes_voix.json")))
+KEYS, VOICE, TMS = assemble(os.path.join(HERE, "voix"), f"/tmp/{SLUG}_voix")
+WS, _ = load_words(os.path.join(HERE, "alignement.json"))          # intro, cta, outro
+def Wd(k):
+    return lambda word, n=1, end=False: PAD_IN + WS[k](word, n, end)
+
+NAVY = (16, 40, 86); NAVY_D = (10, 24, 54); ROUGE = (210, 36, 42); BLANC = (250, 250, 246); NOIR = (30, 28, 28); MAROON = (138, 21, 56)
+THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140), seuil=6, niveau="NIVEAU 1", mot_nq=("Huit", 2), mot_chrono=("cinq", 1), tampon="FACILE")
+
+PSGP = Player("qzpsg", hair=(70, 50, 36), skin=(230, 186, 150))
+NEY = Player("qzney", hair=(48, 34, 26), skin=(196, 146, 108), hair_style="quiff")
+MBAP = Player("qzmbap", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
+
+def hero(cv, fr, t, x, y, s, crown=False):
+    PSGP.draw(cv, fr, x, y, s, age=1, kit="psg", mood="cheer", arms=(150 + 8*math.sin(t*6), 150 - 8*math.sin(t*6)), legs=(10, 10), t=t)
+    if crown: crown_on(cv, fr, x, y, s, t, 0)
+
+def mystery(cv, fr, x, y, u, s=1.0):
+    """Gros « ? » qui frétille avant la révélation, puis s'envole."""
+    a = 1 - prog(u, 0, .4)
+    if a > .01: LBL("?", "qzmq", font("title", 150), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, x, y - 60*(1 - a), s*a, 8*math.sin(fr*.3))
+
+# ------------------------------------------------------------------ illustrations (u = 0 avant la révélation, puis 0 → 1)
+CIEL = (40, 160, 220)
+def _shield(key, col, col2, txt, size=52, band=False):
+    def dec(d, a):
+        ax, ay = a
+        if band: d.rectangle([ax-30, ay-130, ax+30, ay+140], fill=BLANC); d.rectangle([ax-20, ay-130, ax+20, ay+140], fill=ROUGE)
+        else: d.polygon([(ax-110, ay-130), (ax, ay-130), (ax, ay+140), (ax-60, ay+100), (ax-110, ay+10)], fill=col2)
+        if txt: d.text((ax, ay-10), txt, font=font("title", size), fill=BLANC, anchor="mm", stroke_width=5, stroke_fill=NOIR)
+    return Paper(poly_pts([(-110, -130), (110, -130), (110, 10), (60, 100), (0, 140), (-60, 100), (-110, 10)]), col, key, rough=1.6, hatch=True).add(dec)
+SH_PSG = _shield("qz4shpsg", NAVY, NAVY, "PSG", 70, band=True)
+SH_OM = _shield("qz4shom", (235, 240, 246), CIEL, "OM", 90)
+SH_ASM = _shield("qz4shasm", ROUGE, BLANC, "ASM", 76)
+SH_Q = _shield("qz4shq", (90, 90, 100), (120, 120, 130), "?", 120)
+
+MESSI = Player("qz4messi", hair=(70, 46, 30), skin=(222, 178, 140))
+NASSER = Player("qz4nas", hair=(30, 26, 24), skin=(190, 146, 110))
+MBAP = Player("qz4mbap", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
+ZLAT = Player("qz4zlat", hair=(40, 30, 24), skin=(226, 186, 150))
+GIGIO = Player("qz4gk", hair=(30, 24, 20), skin=(226, 186, 150))
+DINHO = Player("qz4dinho", hair=(26, 20, 18), skin=(150, 100, 70), hair_style="shaggy")
+MARQ = Player("qz4marq", hair=(30, 24, 20), skin=(196, 150, 112))
+_sil = {}
+def reveal_player(cv, fr, t, u, P, kit, key, x=CX - 190, y=ILLU_Y + 165, s=.52):
+    """Silhouette noire + « ? » avant la révélation, puis le joueur en couleurs qui exulte."""
+    if u <= .1:
+        if key not in _sil: _sil[key] = silhouette(P.render_layer(0, s, age=1, kit=kit, mood="happy"))
+        blit(cv, _sil[key], x, y, 1); mystery(cv, fr, x, ILLU_Y - 40, u, .9)
+    else: P.draw(cv, fr, x, y, s, age=1, kit=kit, mood="cheer", arms=(150, 150), t=t)
+
+def name_tag(cv, fr, u, txt, key, sub=None, x=CX + 190, size=80):
+    if u <= .1: return
+    LBL(txt, key, font("title", size), NOIR, GOLD, padx=22, pady=6, rough=3, maxw=520).draw(cv, fr, x, ILLU_Y - 40, slam(u, .1, .3), 5)
+    if sub: TAG(sub, key + "s", PAL["paper"], NOIR, 44).draw(cv, fr, x, ILLU_Y + 90, pop_in(u, .3, .4), -3)
+
+def i1(cv, fr, t, u, tm):
+    SH_PSG.draw(cv, fr, CX - 230, ILLU_Y, .9, -5)
+    LBL("VS", "qz4vs", font("title", 120), BLANC, None, stroke=6, stroke_fill=NOIR).draw(cv, fr, CX - 10, ILLU_Y, 1 + .06*math.sin(t*6), 0)
+    (SH_OM if u > .1 else SH_Q).draw(cv, fr, CX + 210, ILLU_Y, .9*(slam(u, .1, .3) if u > .1 else 1), 5)
+    if u > .3: STAMP("LE CLASSIQUE", "qz4s1", ROUGE, 66).draw(cv, fr, CX, ILLU_Y + 140, slam(u, .3, .3), -4)
+def i2(cv, fr, t, u, tm):
+    reveal_player(cv, fr, t, u, MESSI, "psg", "m2")
+    LBL("2021", "qz4y2", font("title", 80), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y + 120 if u > .1 else ILLU_Y, 1, 6)
+    name_tag(cv, fr, u, "MESSI", "qz4n2", None)
+    if u > .1: confetti(cv, fr, "qz4c2", t - tm["te"], 50, 2.5, [(110, 180, 230), BLANC, GOLD], (200, 600, 900, 1000))
+def i3(cv, fr, t, u, tm):
+    reveal_player(cv, fr, t, u, NASSER, "suit", "n3")
+    name_tag(cv, fr, u, "NASSER AL-KHELAÏFI", "qz4n3", "président depuis 2011", size=62)
+def i4(cv, fr, t, u, tm):
+    MBAP.draw(cv, fr, CX - 190, ILLU_Y + 165, .52, age=1, kit="psg", mood="happy", t=t)
+    (SH_ASM if u > .1 else SH_Q).draw(cv, fr, CX + 210, ILLU_Y - 10, .85*(slam(u, .1, .3) if u > .1 else 1), 5)
+    if u > .3: TAG("arrivé en 2017", "qz4t4", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 210, ILLU_Y + 140, pop_in(u, .3, .4), -3)
+def i5(cv, fr, t, u, tm):
+    reveal_player(cv, fr, t, u, ZLAT, "psg", "z5")
+    if u > .1: crown_on(cv, fr, CX - 190, ILLU_Y + 165, .52, t, tm["te"])
+    speech_bubble(cv, fr, "qz4b5", "Venu en roi…", CX + 190, ILLU_Y - 110, 1, (-1, 1), 52)
+    name_tag(cv, fr, u, "ZLATAN", "qz4n5", "parti en légende (2016)")
+def i6(cv, fr, t, u, tm):
+    reveal_player(cv, fr, t, u, GIGIO, "gk", "g6")
+    name_tag(cv, fr, u, "DONNARUMMA", "qz4n6", "finale 2025 : 5-0", size=70)
+    if u > .1: UCL.draw(cv, fr, CX + 380, ILLU_Y + 60, .4*slam(u, .2, .3), 8)
+def i7(cv, fr, t, u, tm):
+    reveal_player(cv, fr, t, u, DINHO, "psg", "d7")
+    name_tag(cv, fr, u, "RONALDINHO", "qz4n7", "PSG 2001-2003", size=72)
+    if u > .3: draw_ballon_or(cv, fr, CX + 380, ILLU_Y + 150, .45*slam(u, .3, .3))
+def i8(cv, fr, t, u, tm):
+    MARQ.draw(cv, fr, CX - 220, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
+    if u <= .1: LBL("N° ?", "qz4q8", font("title", 150), BLANC, NAVY, padx=24, pady=0, rough=2).draw(cv, fr, CX + 170, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    else:
+        LBL("5", "qz4n8", font("title", 230), NOIR, GOLD, padx=40, pady=0, rough=3).draw(cv, fr, CX + 170, ILLU_Y - 30, slam(u, .1, .3), 4)
+        TAG("Marquinhos, capitaine", "qz4t8", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 170, ILLU_Y + 120, pop_in(u, .3, .4), -3)
+
+# ------------------------------------------------------------------ les 8 questions (facile -> plus dur, mais tout reste jouable)
+QUESTIONS = [
+    Q("Quel est le grand rival historique du PSG ?", ["OL", "OM", "LOSC", "ASSE"], 1, "FACILE", i1, [(.1, "boo", .5)]),
+    Q("En 2021, quel Argentin signe au PSG ?", ["Lionel Messi", "Sergio Agüero", "Paulo Dybala", "Ángel Di María"], 0, "FACILE", i2, [(.1, "camera", .7)]),
+    Q("Comment s'appelle le président du PSG ?", ["Jean-Michel Aulas", "Florentino Pérez", "Nasser Al-Khelaïfi", "Joan Laporta"], 2, "FACILE", i3, [(.1, "cash", .6)]),
+    Q("Avant le PSG, Mbappé jouait dans quel club ?", ["Lyon", "Lille", "Rennes", "Monaco"], 3, "MOYEN", i4, [(.1, "stamp", .6)]),
+    Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
+      "MOYEN", i5, [(.1, "lion", .7), (.1, "fanfare", .5)]),
+    Q("Le gardien du PSG en finale de C1 2025 ?", ["Keylor Navas", "Matvey Safonov", "Gianluigi Donnarumma", "Alphonse Areola"], 2, "MOYEN", i6,
+      [(.1, "crowd_long", .7), (.1, "sparkle")]),
+    Q("Quel Brésilien est passé par le PSG avant d'être Ballon d'or au Barça ?", ["Ronaldinho", "Neymar", "Kaká", "Raí"], 0, "DIFFICILE", i7,
+      [(.1, "samba", .7), (.2, "sparkle")]),
+    Q("Quel numéro porte le capitaine Marquinhos ?", ["2", "3", "4", "5"], 3, "LA PLUS DURE", i8, [(.1, "drumroll", .6), (.3, "stamp", .7)]),
+]
+
+# ------------------------------------------------------------------ scènes
+intro_draw, intro_sfx = intro_scene(THEME, Wd(0), hero)
+cta_draw, cta_sfx = cta_scene(THEME, Wd(1))
+outro_draw, outro_sfx = outro_scene(THEME, Wd(2), hero, tag="le niveau 2 arrive bientôt !")
+SCENES = []
+for k, key in enumerate(KEYS):
+    if key == "intro": SCENES.append(Scene("intro", TEXTES["intro"], intro_draw, intro_sfx, pad_in=PAD_IN, pad_out=.2))
+    elif key == "cta": SCENES.append(Scene("cta", TEXTES["cta"], cta_draw, cta_sfx, pad_in=PAD_IN, pad_out=.25, trans="punch", trans_dur=.3))
+    elif key == "outro": SCENES.append(Scene("fin", TEXTES["outro"], outro_draw, outro_sfx, pad_in=PAD_IN, pad_out=1.2, trans="punch", trans_dur=.3))
+    else:
+        i = int(key[1:]); q = QUESTIONS[i - 1]; tm = TMS[k]
+        SCENES.append(Scene(key, f"{TEXTES[key]}  [chrono 5 s]  {TEXTES['r' + key[1:]]}", question_scene(q, i, 8, tm, THEME, last=i == 8),
+                            question_sfx(q, tm), pad_in=PAD_IN, pad_out=.45, trans="whip", trans_dur=.3))
+
+# ------------------------------------------------------------------ couverture, planches
+def cover(path): return quiz_cover(path, THEME, hero, TITLE)
+
+def stills(out, only=None):
+    scene_timing(SCENES, VOICE); starts = np.cumsum([0] + [sc.T for sc in SCENES])
+    os.makedirs(out, exist_ok=True); sheets = []
+    for i, sc in enumerate(SCENES):
+        if only and (i + 1) not in only: continue
+        tm = TMS[i]
+        ts_ = ([.05, .4, tm["tq"] - .2, tm["ts"] + 1.2, tm["ts"] + 4.2, tm["te"] + .25, tm["te"] + .9, sc.T - .1] if tm else
+               [f*sc.T for f in (.02, .15, .3, .45, .6, .75, .9, .99)])
+        prev = engine._last_frame(SCENES, i - 1, starts, TITLE) if (i > 0 and sc.trans) else None
+        ims = []
+        for t in ts_:
+            f = int((starts[i] + t)*FPS); cv = background(f, TITLE); sc.draw_fn(cv, f, t, sc.T)
+            if prev is not None and t < sc.trans_dur: engine.TRANSITIONS[sc.trans](cv, prev, t, sc.trans_dur, i)
+            finish(cv, TITLE); ims.append(cv.resize((300, 533)))
+        sheet = Image.new("RGB", (300*len(ims), 575), (20, 20, 20)); dd = ImageDraw.Draw(sheet)
+        for k, im in enumerate(ims):
+            sheet.paste(im, (k*300, 42)); dd.text((k*300 + 8, 6), f"S{i+1} {ts_[k]:.1f}/{sc.T:.1f}", font=font("mono", 24), fill=(230, 230, 230))
+        p = os.path.join(out, f"qz4_sheet_s{i+1}.jpg"); sheet.save(p, quality=80); sheets.append(p)
+    return sheets
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    out = args[0] if args and not args[0].startswith("--") else os.path.join(ROOT, "output", SLUG)
+    os.makedirs(out, exist_ok=True)
+    if "--cover" in args: print(cover(os.path.join(out, f"{SLUG}_couverture.jpg"))); sys.exit()
+    if "--stills" in args:
+        k = args.index("--stills"); only = [int(x) for x in args[k+1].split(",")] if len(args) > k+1 and not args[k+1].startswith("--") else None
+        print(stills(os.environ.get("STILLS_DIR", f"/tmp/{SLUG}_stills"), only=only)); sys.exit()
+    print(render_episode(SCENES, out, SLUG, TITLE, voice_files=VOICE, sfx_dir=SFX_DIR, sfx_db=6.0, lufs=-14.0, crf=25, limit=True))

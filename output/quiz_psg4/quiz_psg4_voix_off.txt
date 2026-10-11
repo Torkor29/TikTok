@@ -1,0 +1,61 @@
+QUIZ PSG4 — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+T'es un vrai fan du PSG si t'as plus de six sur huit ! Niveau un, facile. Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+=== SCÈNE 2 ===
+Quel est le grand rival historique du PSG ?  [chrono 5 s]  Réponse B : l'OM ! Le Classique.
+
+=== SCÈNE 3 ===
+En deux mille vingt-et-un, quel Argentin signe au PSG ?  [chrono 5 s]  Réponse A : Lionel Messi !
+
+=== SCÈNE 4 ===
+Comment s'appelle le président du PSG ?  [chrono 5 s]  Réponse C : Nasser Al-Khelaïfi !
+
+=== SCÈNE 5 ===
+Avant le PSG, Kylian Mbappé jouait dans quel club ?  [chrono 5 s]  Réponse D : Monaco !
+
+=== SCÈNE 6 ===
+Petite pause ! Abonne-toi et lâche un like pour avoir plus de contenu sur ton club préféré ! Allez, on reprend !
+
+=== SCÈNE 7 ===
+Quel attaquant suédois a dit : je suis arrivé comme un roi, je pars comme une légende ?  [chrono 5 s]  Réponse B : Zlatan Ibrahimović !
+
+=== SCÈNE 8 ===
+Qui était le gardien du PSG en finale de la Ligue des champions deux mille vingt-cinq ?  [chrono 5 s]  Réponse C : Gianluigi Donnarumma !
+
+=== SCÈNE 9 ===
+Quel Brésilien a joué au PSG avant de devenir Ballon d'or avec le Barça ?  [chrono 5 s]  Réponse A : Ronaldinho !
+
+=== SCÈNE 10 ===
+Dernière question, la plus dure : quel numéro porte le capitaine Marquinhos ?  [chrono 5 s]  Réponse D : le numéro cinq !
+
+=== SCÈNE 11 ===
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+T'es un vrai fan du PSG si t'as plus de six sur huit ! Niveau un, facile. Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+Quel est le grand rival historique du PSG ?  [chrono 5 s]  Réponse B : l'OM ! Le Classique.
+
+En deux mille vingt-et-un, quel Argentin signe au PSG ?  [chrono 5 s]  Réponse A : Lionel Messi !
+
+Comment s'appelle le président du PSG ?  [chrono 5 s]  Réponse C : Nasser Al-Khelaïfi !
+
+Avant le PSG, Kylian Mbappé jouait dans quel club ?  [chrono 5 s]  Réponse D : Monaco !
+
+Petite pause ! Abonne-toi et lâche un like pour avoir plus de contenu sur ton club préféré ! Allez, on reprend !
+
+Quel attaquant suédois a dit : je suis arrivé comme un roi, je pars comme une légende ?  [chrono 5 s]  Réponse B : Zlatan Ibrahimović !
+
+Qui était le gardien du PSG en finale de la Ligue des champions deux mille vingt-cinq ?  [chrono 5 s]  Réponse C : Gianluigi Donnarumma !
+
+Quel Brésilien a joué au PSG avant de devenir Ballon d'or avec le Barça ?  [chrono 5 s]  Réponse A : Ronaldinho !
+
+Dernière question, la plus dure : quel numéro porte le capitaine Marquinhos ?  [chrono 5 s]  Réponse D : le numéro cinq !
+
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan ! Dis ton score en commentaire… et abonne-toi pour le niveau deux !
