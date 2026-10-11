@@ -71,14 +71,22 @@ def name_tag(cv, fr, u, txt, key, sub=None, x=CX + 190, size=80):
     if sub: TAG(sub, key + "s", PAL["paper"], NOIR, 44).draw(cv, fr, x, ILLU_Y + 90, pop_in(u, .3, .4), -3)
 
 def i1(cv, fr, t, u, tm):
-    MARQ.draw(cv, fr, CX - 200, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
-    if u <= .1: LBL("?", "qz4q1", font("title", 180), BLANC, NAVY, padx=34, pady=0, rough=2).draw(cv, fr, CX + 180, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    flag(cv, CX - 170, ILLU_Y - 30, 330, 200, t, qatar=u > .1)
+    if u <= .1: LBL("20??", "qz4y1", font("title", 120), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 250, ILLU_Y + 20, 1, 6)
     else:
-        L = layer(330, 230, (165, 115)); d = ImageDraw.Draw(L)                  # drapeau du Brésil en papier
-        d.rectangle([5, 5, 325, 225], fill=(30, 150, 70)); d.polygon([(165, 20), (310, 115), (165, 210), (20, 115)], fill=(250, 210, 40))
-        d.ellipse([110, 60, 220, 170], fill=(30, 60, 150))
-        blit(cv, L, CX + 180, ILLU_Y - 20, slam(u, .1, .3), 5)
-        TAG("Marquinhos, capitaine", "qz4t1", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 180, ILLU_Y + 130, pop_in(u, .3, .4), -3)
+        LBL("2011", "qz4y1b", font("title", 130), NOIR, GOLD, padx=20, pady=2, rough=2).draw(cv, fr, CX + 250, ILLU_Y + 20, slam(u, .1, .3), 6)
+        TAG("rachat par QSI", "qz4t1", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 200, ILLU_Y + 140, pop_in(u, .3, .4), -3)
+def flag(cv, x, y, w, h, t, qatar=False):
+    L = layer(int(w + 40), int(h + 60), (w/2 + 20, h/2 + 30)); d = ImageDraw.Draw(L); n = 26
+    for k in range(n):
+        off = 10*math.sin(k/n*math.pi*2 - t*5)*(k/n); x0 = 20 + k*w/n
+        d.rectangle([x0, 30 + off, x0 + w/n + 1, 30 + h + off], fill=BLANC if (not qatar or k < n*.3) else MAROON)
+    if qatar:
+        xb = 20 + w*.3; pts = [(xb - 2, 30)]
+        for k in range(9): pts += [(xb + w*.08, 30 + (k + .5)*h/9), (xb - 2, 30 + (k + 1)*h/9)]
+        d.polygon(pts + [(xb + w*.1, 30 + h), (xb + w*.1, 30)], fill=MAROON)
+    else: d.text((20 + w/2, 30 + h/2), "?", font=font("title", 130), fill=NOIR, anchor="mm")
+    blit(cv, L, x, y, 1, 0, 1)
 SCOREBOARD = scoreboard_sprite(820, 300, "qz4score")
 def board(cv, fr, la, lb, a, b, sub="", s=.8, y=ILLU_Y):
     L = layer(900, 400, (450, 200)); SCOREBOARD.draw(L, fr, 450, 200, 1, 0, 1); d = ImageDraw.Draw(L)
@@ -91,13 +99,13 @@ def i2(cv, fr, t, u, tm):
     if u > 0:
         UCL.draw(cv, fr, CX - 400, ILLU_Y + 10, .55*slam(u, .1, .3), -10)
         confetti(cv, fr, "qz4c2", t - tm["te"], 70, 3, [GOLD, BLANC, ROUGE])
+GALT = Player("qz4galt", hair=(120, 116, 110), skin=(230, 190, 156))
 def i3(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, NASSER, "suit", "n3")
-    name_tag(cv, fr, u, "NASSER AL-KHELAÏFI", "qz4n3", "président depuis 2011", size=62)
+    reveal_player(cv, fr, t, u, GALT, "coach", "g3")
+    name_tag(cv, fr, u, "GALTIER", "qz4n3", "PSG 2022-2023")
 def i4(cv, fr, t, u, tm):
-    MBAP.draw(cv, fr, CX - 190, ILLU_Y + 165, .52, age=1, kit="psg", mood="happy", t=t)
-    (SH_ASM if u > .1 else SH_Q).draw(cv, fr, CX + 210, ILLU_Y - 10, .85*(slam(u, .1, .3) if u > .1 else 1), 5)
-    if u > .3: TAG("arrivé en 2017", "qz4t4", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 210, ILLU_Y + 140, pop_in(u, .3, .4), -3)
+    board(cv, fr, "PSG", "???" if u <= .05 else "BAYERN", 0, 1, "finale 2020, Lisbonne")
+    if u > .1: STAMP("1re FINALE", "qz4s4", ROUGE, 66).draw(cv, fr, CX + 200, ILLU_Y + 120, slam(u, .1, .3), -6)
 def i5(cv, fr, t, u, tm):
     reveal_player(cv, fr, t, u, ZLAT, "psg", "z5")
     if u > .1: crown_on(cv, fr, CX - 190, ILLU_Y + 165, .52, t, tm["te"])
@@ -121,10 +129,10 @@ def i8(cv, fr, t, u, tm):
 
 # ------------------------------------------------------------------ les 8 questions (facile -> plus dur, mais tout reste jouable)
 QUESTIONS = [
-    Q("De quel pays vient le capitaine Marquinhos ?", ["Argentine", "Portugal", "Brésil", "Uruguay"], 2, "FACILE", i1, [(.1, "samba", .6)]),
+    Q("En quelle année le Qatar a racheté le PSG ?", ["2008", "2010", "2011", "2013"], 2, "FACILE", i1, [(.1, "cash", .6)]),
     Q("Finale de C1 2025 : le PSG a battu quel club ?", ["Inter Milan", "Real Madrid", "Arsenal", "Bayern Munich"], 0, "FACILE", i2, [(.1, "crowd_long", .7), (.1, "sparkle")]),
-    Q("Comment s'appelle le président du PSG ?", ["Jean-Michel Aulas", "Nasser Al-Khelaïfi", "Florentino Pérez", "Joan Laporta"], 1, "FACILE", i3, [(.1, "cash", .6)]),
-    Q("Avant le PSG, Mbappé jouait dans quel club ?", ["Lyon", "Lille", "Rennes", "Monaco"], 3, "MOYEN", i4, [(.1, "stamp", .6)]),
+    Q("Qui entraînait le PSG juste avant Luis Enrique ?", ["Mauricio Pochettino", "Christophe Galtier", "Thomas Tuchel", "Unai Emery"], 1, "FACILE", i3, [(.1, "whistle", .6)]),
+    Q("Première finale de C1 du PSG en 2020 : perdue contre… ?", ["Liverpool", "Real Madrid", "Chelsea", "Bayern Munich"], 3, "MOYEN", i4, [(.0, "groan", .5), (.1, "stamp", .6)]),
     Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
       "MOYEN", i5, [(.1, "lion", .7), (.1, "fanfare", .5)]),
     Q("Le gardien du PSG en finale de C1 2025 ?", ["Keylor Navas", "Matvey Safonov", "Gianluigi Donnarumma", "Alphonse Areola"], 2, "MOYEN", i6,
