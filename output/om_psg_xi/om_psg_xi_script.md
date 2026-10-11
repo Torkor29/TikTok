@@ -30,6 +30,9 @@ Ton onze en commentaire 👇 plus de Marseillais ou de Parisiens ?
 ```
 **Commentaire à épingler** : `Barthez ou Lama ? Le premier duel divise déjà 👀`
 
+## Voix
+Voix off : Corentin (ElevenLabs `IHngRooVccHyPqB4uQkG`, eleven_multilingual_v2) ; version Léo gardée dans `om_psg_xi_voix_leo.mp4` pour un test A/B.
+
 ## Crédits photos
 Photos Wikimedia Commons (licences libres), affichées en fin de vidéo :
 - barthez : Auteur inconnu, CC BY-SA 3.0
