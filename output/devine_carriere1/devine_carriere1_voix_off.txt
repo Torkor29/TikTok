@@ -9,19 +9,19 @@ Devine le joueur juste avec sa carrière ! Cinq joueurs, du plus facile au plus 
 Joueur numéro un.  [chrono 5 s]  C'était Karim Benzema !
 
 === SCÈNE 3 ===
-Joueur numéro deux.  [chrono 5 s]  Antoine Griezmann !
+Joueur numéro deux.  [chrono 5 s]  Alors, t'as trouvé ?
 
 === SCÈNE 4 ===
-Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évidemment !
+Numéro trois. Attention, ça voyage.  [chrono 5 s]  Tu l'as, celui-là ?
 
 === SCÈNE 5 ===
-Numéro quatre.  [chrono 5 s]  Olivier Giroud !
+Numéro quatre.  [chrono 5 s]  Allez, c'est facile non ?
 
 === SCÈNE 6 ===
 Le dernier, le plus dur.  [chrono 5 s]  
 
 === SCÈNE 7 ===
-Celui-là… je te donne pas la réponse ! Écris son nom en commentaire, et dis-moi à quel club tu l'as trouvé. Facile ou difficile ? Abonne-toi pour la partie deux !
+Je te donne pas les réponses ! Écris-les en commentaire, numéro par numéro, et dis-moi lequel t'as trouvé le plus vite. Les réponses, c'est dans la prochaine vidéo : abonne-toi pour pas la rater !
 
 
 ----- VERSION EN UN SEUL BLOC -----
@@ -30,12 +30,12 @@ Devine le joueur juste avec sa carrière ! Cinq joueurs, du plus facile au plus 
 
 Joueur numéro un.  [chrono 5 s]  C'était Karim Benzema !
 
-Joueur numéro deux.  [chrono 5 s]  Antoine Griezmann !
+Joueur numéro deux.  [chrono 5 s]  Alors, t'as trouvé ?
 
-Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évidemment !
+Numéro trois. Attention, ça voyage.  [chrono 5 s]  Tu l'as, celui-là ?
 
-Numéro quatre.  [chrono 5 s]  Olivier Giroud !
+Numéro quatre.  [chrono 5 s]  Allez, c'est facile non ?
 
 Le dernier, le plus dur.  [chrono 5 s]  
 
-Celui-là… je te donne pas la réponse ! Écris son nom en commentaire, et dis-moi à quel club tu l'as trouvé. Facile ou difficile ? Abonne-toi pour la partie deux !
+Je te donne pas les réponses ! Écris-les en commentaire, numéro par numéro, et dis-moi lequel t'as trouvé le plus vite. Les réponses, c'est dans la prochaine vidéo : abonne-toi pour pas la rater !

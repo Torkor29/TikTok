@@ -63,7 +63,7 @@ def chips(cv, fr, t, i, car, t0, t1):
 def player_scene(i, tm):
     name, kit, car = CAREERS[i - 1]; P = PLAYERS[i - 1]; bg = BGS[i - 1]
     card = LBL("QUI A FAIT CETTE CARRIÈRE ?", "dc1card", font("title", 60), NOIR, CREAM, maxw=880, padx=34, pady=16, rough=3)
-    last = i == N
+    last = i == N; hide = i >= 2
     head = LBL("LE DERNIER !" if last else f"JOUEUR {i}/{N}", f"dc1h{i}", font("title", 62), NOIR if last else BLANC, GOLD if last else RED, padx=28, pady=6, rough=3)
     NAME = LBL(name, f"dc1n{i}", font("title", 70), NOIR, GOLD, padx=24, pady=8, rough=3, maxw=620)
     def draw(cv, fr, t, T):
@@ -75,7 +75,7 @@ def player_scene(i, tm):
         chrono(cv, fr, t, ts, y=TIMER_Y - 30)
         chips(cv, fr, t, i, car, .35, ts + CHRONO*.55)
         px, py, s = 860, 1470, .42
-        if u <= .1 or last:
+        if u <= .1 or hide:
             if i not in _sil: _sil[i] = silhouette(P.render_layer(0, s, age=1, kit=kit, mood="happy"))
             blit(cv, _sil[i], px, py, 1)
             LBL("?", "dc1q", font("title", 150), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, px, py - 330, 1, 8*math.sin(fr*.3))
@@ -83,13 +83,13 @@ def player_scene(i, tm):
             P.draw(cv, fr, px, py, s, age=1, kit=kit, mood="cheer", arms=(150, 150), t=t)
             NAME.draw(cv, fr, 400, 1800, slam(u, .1, .3), -3)
             if t > te + .6: TAG("Trouvé à quel club ?", "dc1tq", PAL["paper"], NOIR, 46).draw(cv, fr, 400, 1660, pop_in(t, te + .6, .3), 3)
-        if last and t > te: STAMP("RÉPONSE EN COMMENTAIRE", "dc1rc", RED, 54).draw(cv, fr, 420, 1700, slam(t, te + .1, .25), -5)
-        mood = "reflechit" if t < ts else ("stress" if t < te else ("choc" if t < te + .5 else "celebre"))
+        if hide and t > te: STAMP("TA RÉPONSE EN COMMENTAIRE", "dc1rc", RED, 50).draw(cv, fr, 420, 1700, slam(t, te + .1, .25), -5)
+        mood = "reflechit" if t < ts else ("stress" if t < te else ("choc" if t < te + .5 else ("malin" if hide else "celebre")))
         mascot(cv, t, mood, hop_t=te)
         flashes(cv, t, te, .12, .5); punch(cv, t, te, 1.04, .25); drift(cv, t, T, .02)
     sfx = [(.0, "whoosh", .45), (.1, "stamp", .55)]
     sfx += [(.35 + k*(tm["ts"] + CHRONO*.55 - .35)/max(1, len(car) - 1), "pop", .5) for k in range(len(car))]
-    sfx += chrono_sfx(tm["ts"]) + ([(tm["te"] + .1, "stamp", .8)] if i == N else [(tm["te"] + .05, "correct", .8), (tm["te"] + .1, "crowd", .6)])
+    sfx += chrono_sfx(tm["ts"]) + ([(tm["te"] + .1, "stamp", .8)] if i >= 2 else [(tm["te"] + .05, "correct", .8), (tm["te"] + .1, "crowd", .6)])
     return draw, sfx
 
 # ------------------------------------------------------------------ intro / fin (sans alignement : repères en fraction de la voix)
@@ -112,7 +112,8 @@ def intro_draw(cv, fr, t, T):
     drift(cv, t, T, .02)
 intro_sfx = [(.0, "boom", .8), (.0, "stamp", .7), (.05, "riser", .35), (1.0, "pop"), (1.45, "pop"), (1.9, "pop2")]
 
-KA = KW("ET LUI, C'EST QUI ?", "dc1o1", NOIR, size=96)
+KA = KW("TES RÉPONSES EN COMMENTAIRE !", "dc1o1", NOIR, size=70)
+KP = STAMP("RÉPONSES DANS LA PROCHAINE !", "dc1op", RED, 64)
 KF = STAMP("FACILE ?", "dc1of", (46, 164, 86), 80); KD = STAMP("DIFFICILE ?", "dc1od", RED, 80)
 DANCE = ["celebre", "saut", "mort_de_rire", "coucou", "celebre", "saut", "clin_doeil", "fier"]
 def dance(cv, t, x, y, h, bpm=128):
@@ -122,20 +123,19 @@ def dance(cv, t, x, y, h, bpm=128):
 def outro_draw(cv, fr, t, T):
     stage_fill(cv, fr, VERT_D, "dc1out"); rays(cv, (CX, 900), t, .6, 16, 1500, (230, 190, 80), .1, .15)
     kw(cv, fr, KA, t, .05, None, CX, 290, -3)
-    if N not in _sil: _sil[N] = silhouette(PLAYERS[N - 1].render_layer(0, .42, age=1, kit=CAREERS[N - 1][1], mood="happy"))
-    blit(cv, _sil[N], 290, 1560, 2.0)
-    LBL("?", "dc1q", font("title", 200), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, 290, 1000, 1 + .08*math.sin(t*6), 8*math.sin(t*3))
-    speech_bubble(cv, fr, "dc1bub", "C'est ... ! Trouvé à LEICESTER", 720, 520, pop_in(t, T*.18, .3), (-1, 1), 50)
-    TAG("À quel club tu l'as trouvé ?", "dc1oq", GOLD, NOIR, 52, maxw=560).draw(cv, fr, 720, 720, pop_in(t, T*.4, .3), -2) if t > T*.4 else None
-    if t > T*.6: show_stamp(cv, fr, KF, t, T*.6, 560, 900, -6)
-    if t > T*.67: show_stamp(cv, fr, KD, t, T*.67, 820, 1010, 5)
-    sub_button(cv, fr, CX, 1180, t, T*.78, T*.84)
+    KR = [LBL(f"{k}. " + ("BENZEMA" if k == 1 else "?????"), f"dc1r{k}", font("title", 64), NOIR, GOLD if k == 1 else BLANC, padx=22, pady=4, rough=2.5)
+          for k in range(1, N + 1)]
+    for k, lab in enumerate(KR):
+        a = pop_in(t, T*.12 + k*.15, .25)
+        if a > 0: lab.draw(cv, fr, 300, 480 + k*105, a, (-2, 1.5, -1, 2, -1.5)[k])
+    if t > T*.38: TAG("Lequel t'as trouvé le plus vite ?", "dc1oq", GOLD, NOIR, 50, maxw=520).draw(cv, fr, 760, 520, pop_in(t, T*.38, .3), 3)
+    if t > T*.6: show_stamp(cv, fr, KP, t, T*.6, CX, 990, -5)
+    sub_button(cv, fr, CX, 1140, t, T*.8, T*.86)
     dance(cv, t, 820, 1890, 560)
     if t > T*.6: confetti(cv, fr, "dc1oc", t - T*.6, 60, 3.5, [GOLD, BLANC, RED])
     drift(cv, t, T, .02)
 def outro_sfx_for(T):
-    return [(.0, "boom", .6), (.05, "stamp", .6), (T*.18, "notif"), (T*.4, "pop2"), (T*.6, "stamp", .7), (T*.67, "stamp", .7),
-            (T*.78, "pop2"), (T*.84, "notif")] + [(k*60/128, "pop", .25) for k in range(int(T*128/60))]
+    return [(.0, "boom", .6), (.05, "stamp", .6), (T*.12, "pop"), (T*.38, "pop2"), (T*.6, "stamp", .8), (T*.8, "pop2"), (T*.86, "notif")] + [(k*60/128, "pop", .25) for k in range(int(T*128/60))]
 
 DUR_OUT = load_audio(VOICE[-1]).shape[0]/SR + PAD_IN + 1.2
 SCENES = []
