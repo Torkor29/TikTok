@@ -1,0 +1,61 @@
+QUIZ PSG4B — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+Salut, c'est Ballon ! T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+=== SCÈNE 2 ===
+En quelle année Lionel Messi a-t-il quitté le PSG ?  [chrono 5 s]  Réponse B : deux mille vingt-trois !
+
+=== SCÈNE 3 ===
+En deux mille vingt-quatre, quel club élimine le PSG en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse A : le Borussia Dortmund !
+
+=== SCÈNE 4 ===
+Qui entraînait le PSG juste avant Luis Enrique ?  [chrono 5 s]  Réponse B : Christophe Galtier !
+
+=== SCÈNE 5 ===
+En deux mille vingt, le PSG perd sa première finale de Ligue des champions contre quel club ?  [chrono 5 s]  Réponse D : le Bayern Munich ! Un à zéro, à Lisbonne.
+
+=== SCÈNE 6 ===
+Petite pause ! Moi, j'ai eu quatre sur quatre… et toi ? Abonne-toi et lâche un like pour avoir plus de contenu sur ton club préféré ! Allez, on reprend !
+
+=== SCÈNE 7 ===
+Combien de buts Zlatan Ibrahimović a-t-il marqués avec le PSG ?  [chrono 5 s]  Réponse B : cent cinquante-six buts !
+
+=== SCÈNE 8 ===
+Qui était le gardien du PSG en finale de la Ligue des champions deux mille vingt-cinq ?  [chrono 5 s]  Réponse C : Gianluigi Donnarumma !
+
+=== SCÈNE 9 ===
+En deux mille douze, de quel club le PSG a-t-il recruté Thiago Silva ?  [chrono 5 s]  Réponse D : l'AC Milan !
+
+=== SCÈNE 10 ===
+Dernière question, la plus dure : combien de Ballons d'or avait Messi en arrivant au PSG ?  [chrono 5 s]  Réponse C : six ! Le septième, il l'a gagné pendant sa première saison à Paris.
+
+=== SCÈNE 11 ===
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Moi, huit sur huit, évidemment. Dis ton score en commentaire… et abonne-toi pour le quiz de ton club !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+Salut, c'est Ballon ! T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
+
+En quelle année Lionel Messi a-t-il quitté le PSG ?  [chrono 5 s]  Réponse B : deux mille vingt-trois !
+
+En deux mille vingt-quatre, quel club élimine le PSG en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse A : le Borussia Dortmund !
+
+Qui entraînait le PSG juste avant Luis Enrique ?  [chrono 5 s]  Réponse B : Christophe Galtier !
+
+En deux mille vingt, le PSG perd sa première finale de Ligue des champions contre quel club ?  [chrono 5 s]  Réponse D : le Bayern Munich ! Un à zéro, à Lisbonne.
+
+Petite pause ! Moi, j'ai eu quatre sur quatre… et toi ? Abonne-toi et lâche un like pour avoir plus de contenu sur ton club préféré ! Allez, on reprend !
+
+Combien de buts Zlatan Ibrahimović a-t-il marqués avec le PSG ?  [chrono 5 s]  Réponse B : cent cinquante-six buts !
+
+Qui était le gardien du PSG en finale de la Ligue des champions deux mille vingt-cinq ?  [chrono 5 s]  Réponse C : Gianluigi Donnarumma !
+
+En deux mille douze, de quel club le PSG a-t-il recruté Thiago Silva ?  [chrono 5 s]  Réponse D : l'AC Milan !
+
+Dernière question, la plus dure : combien de Ballons d'or avait Messi en arrivant au PSG ?  [chrono 5 s]  Réponse C : six ! Le septième, il l'a gagné pendant sa première saison à Paris.
+
+Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Moi, huit sur huit, évidemment. Dis ton score en commentaire… et abonne-toi pour le quiz de ton club !
