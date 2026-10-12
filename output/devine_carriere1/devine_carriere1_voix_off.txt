@@ -18,10 +18,10 @@ Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évide
 Numéro quatre.  [chrono 5 s]  Olivier Giroud !
 
 === SCÈNE 6 ===
-Le dernier, le plus dur.  [chrono 5 s]  N'Golo Kanté !
+Le dernier, le plus dur.  [chrono 5 s]  
 
 === SCÈNE 7 ===
-Alors, combien t'en as trouvé ? Dis ton score en commentaire, et abonne-toi pour la partie deux !
+Celui-là… je te donne pas la réponse ! Écris son nom en commentaire, et dis-moi à quel club tu l'as trouvé. Facile ou difficile ? Abonne-toi pour la partie deux !
 
 
 ----- VERSION EN UN SEUL BLOC -----
@@ -36,6 +36,6 @@ Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évide
 
 Numéro quatre.  [chrono 5 s]  Olivier Giroud !
 
-Le dernier, le plus dur.  [chrono 5 s]  N'Golo Kanté !
+Le dernier, le plus dur.  [chrono 5 s]  
 
-Alors, combien t'en as trouvé ? Dis ton score en commentaire, et abonne-toi pour la partie deux !
+Celui-là… je te donne pas la réponse ! Écris son nom en commentaire, et dis-moi à quel club tu l'as trouvé. Facile ou difficile ? Abonne-toi pour la partie deux !

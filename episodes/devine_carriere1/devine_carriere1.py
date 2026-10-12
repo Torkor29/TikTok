@@ -75,19 +75,21 @@ def player_scene(i, tm):
         chrono(cv, fr, t, ts, y=TIMER_Y - 30)
         chips(cv, fr, t, i, car, .35, ts + CHRONO*.55)
         px, py, s = 860, 1470, .42
-        if u <= .1:
+        if u <= .1 or last:
             if i not in _sil: _sil[i] = silhouette(P.render_layer(0, s, age=1, kit=kit, mood="happy"))
             blit(cv, _sil[i], px, py, 1)
             LBL("?", "dc1q", font("title", 150), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, px, py - 330, 1, 8*math.sin(fr*.3))
         else:
             P.draw(cv, fr, px, py, s, age=1, kit=kit, mood="cheer", arms=(150, 150), t=t)
             NAME.draw(cv, fr, 400, 1800, slam(u, .1, .3), -3)
+            if t > te + .6: TAG("Trouvé à quel club ?", "dc1tq", PAL["paper"], NOIR, 46).draw(cv, fr, 400, 1660, pop_in(t, te + .6, .3), 3)
+        if last and t > te: STAMP("RÉPONSE EN COMMENTAIRE", "dc1rc", RED, 54).draw(cv, fr, 420, 1700, slam(t, te + .1, .25), -5)
         mood = "reflechit" if t < ts else ("stress" if t < te else ("choc" if t < te + .5 else "celebre"))
         mascot(cv, t, mood, hop_t=te)
         flashes(cv, t, te, .12, .5); punch(cv, t, te, 1.04, .25); drift(cv, t, T, .02)
     sfx = [(.0, "whoosh", .45), (.1, "stamp", .55)]
     sfx += [(.35 + k*(tm["ts"] + CHRONO*.55 - .35)/max(1, len(car) - 1), "pop", .5) for k in range(len(car))]
-    sfx += chrono_sfx(tm["ts"]) + [(tm["te"] + .05, "correct", .8), (tm["te"] + .1, "crowd", .6)]
+    sfx += chrono_sfx(tm["ts"]) + ([(tm["te"] + .1, "stamp", .8)] if i == N else [(tm["te"] + .05, "correct", .8), (tm["te"] + .1, "crowd", .6)])
     return draw, sfx
 
 # ------------------------------------------------------------------ intro / fin (sans alignement : repères en fraction de la voix)
@@ -110,26 +112,36 @@ def intro_draw(cv, fr, t, T):
     drift(cv, t, T, .02)
 intro_sfx = [(.0, "boom", .8), (.0, "stamp", .7), (.05, "riser", .35), (1.0, "pop"), (1.45, "pop"), (1.9, "pop2")]
 
-KA = KW("T'EN AS TROUVÉ COMBIEN ?", "dc1o1", NOIR, size=78)
-ROWS = [("0 – 1", "TOURISTE", DIM), ("2 – 3", "CONNAISSEUR", BLANC), ("4 – 5", "VRAI FAN", GOLD)]
-LR = [Label(f"{a}   {b}", f"dc1o2{k}", font("title", 70), NOIR, c, padx=30, pady=6, rough=3) for k, (a, b, c) in enumerate(ROWS)]
+KA = KW("ET LUI, C'EST QUI ?", "dc1o1", NOIR, size=96)
+KF = STAMP("FACILE ?", "dc1of", (46, 164, 86), 80); KD = STAMP("DIFFICILE ?", "dc1od", RED, 80)
+DANCE = ["celebre", "saut", "mort_de_rire", "coucou", "celebre", "saut", "clin_doeil", "fier"]
+def dance(cv, t, x, y, h, bpm=128):
+    """Mascotte qui danse : une pose par temps, saut sur chaque temps, miroir un temps sur deux, balancement."""
+    b = 60/bpm; k = int(t/b)
+    draw_sprite(cv, DANCE[k % len(DANCE)], x, y, h, t, hop_t=k*b, rot=7*math.sin(t*math.pi/b), flip=k % 2 == 1)
 def outro_draw(cv, fr, t, T):
     stage_fill(cv, fr, VERT_D, "dc1out"); rays(cv, (CX, 900), t, .6, 16, 1500, (230, 190, 80), .1, .15)
-    kw(cv, fr, KA, t, .05, None, CX, 300, -3)
-    for k, lab in enumerate(LR):
-        a = pop_in(t, .5 + k*.2, .3)
-        if a > 0: lab.draw(cv, fr, CX, 500 + k*125, a, (-2, 2, -3)[k])
-    speech_bubble(cv, fr, "dc1bub", "J'en ai trouvé ?/5 !", 620, 940, pop_in(t, 1.6, .3), (-1, 1), 58)
-    sub_button(cv, fr, CX, 1140, t, 2.6, 3.0)
-    mascot(cv, t, "celebre" if t < 1.5 else "fier", hop_t=0, h=600, x=300, y=1880)
-    confetti(cv, fr, "dc1oc", t, 70, 3.5, [GOLD, BLANC, RED])
+    kw(cv, fr, KA, t, .05, None, CX, 290, -3)
+    if N not in _sil: _sil[N] = silhouette(PLAYERS[N - 1].render_layer(0, .42, age=1, kit=CAREERS[N - 1][1], mood="happy"))
+    blit(cv, _sil[N], 290, 1560, 2.0)
+    LBL("?", "dc1q", font("title", 200), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, 290, 1000, 1 + .08*math.sin(t*6), 8*math.sin(t*3))
+    speech_bubble(cv, fr, "dc1bub", "C'est ... ! Trouvé à LEICESTER", 720, 520, pop_in(t, T*.18, .3), (-1, 1), 50)
+    TAG("À quel club tu l'as trouvé ?", "dc1oq", GOLD, NOIR, 52, maxw=560).draw(cv, fr, 720, 720, pop_in(t, T*.4, .3), -2) if t > T*.4 else None
+    if t > T*.6: show_stamp(cv, fr, KF, t, T*.6, 560, 900, -6)
+    if t > T*.67: show_stamp(cv, fr, KD, t, T*.67, 820, 1010, 5)
+    sub_button(cv, fr, CX, 1180, t, T*.78, T*.84)
+    dance(cv, t, 820, 1890, 560)
+    if t > T*.6: confetti(cv, fr, "dc1oc", t - T*.6, 60, 3.5, [GOLD, BLANC, RED])
     drift(cv, t, T, .02)
-outro_sfx = [(.0, "boom", .6), (.05, "stamp", .6), (.5, "pop"), (.7, "pop"), (.9, "pop2"), (1.6, "notif"), (2.6, "pop2"), (3.0, "notif")]
+def outro_sfx_for(T):
+    return [(.0, "boom", .6), (.05, "stamp", .6), (T*.18, "notif"), (T*.4, "pop2"), (T*.6, "stamp", .7), (T*.67, "stamp", .7),
+            (T*.78, "pop2"), (T*.84, "notif")] + [(k*60/128, "pop", .25) for k in range(int(T*128/60))]
 
+DUR_OUT = load_audio(VOICE[-1]).shape[0]/SR + PAD_IN + 1.2
 SCENES = []
 for k, key in enumerate(KEYS):
     if key == "intro": SCENES.append(Scene("intro", TEXTES["intro"], intro_draw, intro_sfx, pad_in=PAD_IN, pad_out=.2))
-    elif key == "outro": SCENES.append(Scene("fin", TEXTES["outro"], outro_draw, outro_sfx, pad_in=PAD_IN, pad_out=1.2, trans="punch", trans_dur=.3))
+    elif key == "outro": SCENES.append(Scene("fin", TEXTES["outro"], outro_draw, outro_sfx_for(DUR_OUT), pad_in=PAD_IN, pad_out=1.2, trans="punch", trans_dur=.3))
     else:
         i = int(key[1:]); d, s = player_scene(i, TMS[k])
         SCENES.append(Scene(key, f"{TEXTES['p' + key[1:]]}  [chrono 5 s]  {TEXTES['r' + key[1:]]}", d, s, pad_in=PAD_IN, pad_out=.8, trans="whip", trans_dur=.3))
