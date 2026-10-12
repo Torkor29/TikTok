@@ -21,7 +21,7 @@ def Wd(k):
     return lambda word, n=1, end=False: PAD_IN + WS[k](word, n, end)
 
 NAVY = (16, 40, 86); NAVY_D = (10, 24, 54); ROUGE = (210, 36, 42); BLANC = (250, 250, 246); NOIR = (30, 28, 28); MAROON = (138, 21, 56)
-THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140))
+THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140), niveau="NIVEAU 1 · PARTIE 2", niveau_pos=(CX, 850), niveau_size=74, niveau_rot=-4, tampon="PARTIE 2")
 
 PSGP = Player("qzpsg", hair=(70, 50, 36), skin=(230, 186, 150))
 NEY = Player("qzney", hair=(48, 34, 26), skin=(196, 146, 108), hair_style="quiff")
@@ -92,18 +92,21 @@ def i4(cv, fr, t, u, tm):
     board(cv, fr, "PSG", "???" if u <= .05 else "BAYERN", 0, 1, "finale 2020, Lisbonne")
     if u > .1: STAMP("1re FINALE", "qz4s4", ROUGE, 66).draw(cv, fr, CX + 200, ILLU_Y + 120, slam(u, .1, .3), -6)
 def i5(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, ZLAT, "psg", "z5")
-    if u > .1: crown_on(cv, fr, CX - 190, ILLU_Y + 165, .52, t, tm["te"])
-    speech_bubble(cv, fr, "qz4b5", "Venu en roi…", CX + 190, ILLU_Y - 110, 1, (-1, 1), 52)
-    name_tag(cv, fr, u, "ZLATAN", "qz4n5", "parti en légende (2016)")
+    ZLAT.draw(cv, fr, CX - 200, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
+    if u <= .1: LBL("??? BUTS", "qz4q5", font("title", 100), BLANC, NAVY, padx=24, pady=4, rough=2).draw(cv, fr, CX + 190, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    else:
+        LBL("156 BUTS", "qz4n5", font("title", 110), NOIR, GOLD, padx=24, pady=4, rough=3).draw(cv, fr, CX + 190, ILLU_Y - 30, slam(u, .1, .3), 4)
+        TAG("Zlatan, 2012-2016", "qz4t5", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 190, ILLU_Y + 90, pop_in(u, .3, .4), -3)
 def i6(cv, fr, t, u, tm):
     reveal_player(cv, fr, t, u, GIGIO, "gk", "g6")
     name_tag(cv, fr, u, "DONNARUMMA", "qz4n6", "finale 2025 : 5-0", size=70)
     if u > .1: UCL.draw(cv, fr, CX + 380, ILLU_Y + 60, .4*slam(u, .2, .3), 8)
+TSIL = Player("qz4ts", hair=(30, 24, 20), skin=(176, 124, 92))
+SH_MIL = _shield("qz4mil", ROUGE, NOIR, "MILAN", 60)
 def i7(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, DINHO, "psg", "d7")
-    name_tag(cv, fr, u, "RONALDINHO", "qz4n7", "PSG 2001-2003", size=72)
-    if u > .3: draw_ballon_or(cv, fr, CX + 380, ILLU_Y + 150, .45*slam(u, .3, .3))
+    TSIL.draw(cv, fr, CX - 200, ILLU_Y + 165, .52, age=1, kit="psg", mood="happy", t=t)
+    (SH_MIL if u > .1 else SH_Q).draw(cv, fr, CX + 200, ILLU_Y - 10, .85*(slam(u, .1, .3) if u > .1 else 1), 5)
+    if u > .3: TAG("Thiago Silva, 2012", "qz4t7", PAL["paper"], NOIR, 44).draw(cv, fr, CX + 200, ILLU_Y + 140, pop_in(u, .3, .4), -3)
 def i8(cv, fr, t, u, tm):
     MESSI.draw(cv, fr, CX - 240, ILLU_Y + 165, .52, age=1, kit="psg", mood="cheer" if u > .1 else "happy", arms=(150, 150) if u > .1 else (25, 25), t=t)
     draw_ballon_or(cv, fr, CX + 20, ILLU_Y - 20, .55)
@@ -118,10 +121,9 @@ QUESTIONS = [
     Q("Demi-finale de C1 2024 : qui élimine le PSG ?", ["Borussia Dortmund", "Real Madrid", "Manchester City", "Bayern Munich"], 0, "FACILE", i2, [(.1, "whoosh", .4)]),
     Q("Qui entraînait le PSG juste avant Luis Enrique ?", ["Mauricio Pochettino", "Christophe Galtier", "Thomas Tuchel", "Unai Emery"], 1, "FACILE", i3, [(.1, "cash", .8)]),
     Q("Première finale de C1 du PSG en 2020 : perdue contre… ?", ["Liverpool", "Real Madrid", "Chelsea", "Bayern Munich"], 3, "MOYEN", i4, [(.1, "stamp", .6)]),
-    Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
-      "MOYEN", i5, [(.0, "glitch", .6), (.1, "stamp", .6)]),
+    Q("Combien de buts Zlatan a marqués avec le PSG ?", ["113", "156", "200", "256"], 1, "MOYEN", i5, [(.0, "glitch", .6), (.1, "stamp", .6)]),
     Q("Le gardien du PSG en finale de C1 2025 ?", ["Keylor Navas", "Matvey Safonov", "Gianluigi Donnarumma", "Alphonse Areola"], 2, "MOYEN", i6, [(.1, "crowd_long", .7), (.1, "sparkle")]),
-    Q("Quel Brésilien est passé par le PSG avant d'être Ballon d'or au Barça ?", ["Ronaldinho", "Neymar", "Kaká", "Raí"], 0, "DIFFICILE", i7, [(.1, "stamp", .6), (.4, "pop2")]),
+    Q("En 2012, de quel club le PSG a recruté Thiago Silva ?", ["Juventus", "Inter Milan", "Fluminense", "AC Milan"], 3, "DIFFICILE", i7, [(.1, "stamp", .6), (.4, "pop2")]),
     Q("Combien de Ballons d'or avait Messi en arrivant au PSG ?", ["4", "5", "6", "7"], 2, "LA PLUS DURE", i8, [(.1, "crowd", .8), (.1, "stamp", .6)]),
 ]
 

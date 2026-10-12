@@ -230,7 +230,9 @@ def intro_scene(theme, Wd, hero):
         ransom_line(cv, l1, 330, 120, seed=3, fr=fr, scale=lerp(1.25, 1, ease_out_cubic(prog(t, 0, .25))))
         ransom_line(cv, l2, 500, 140, seed=11, fr=fr)
         STRIP.draw(cv, fr, CX, 680, 1 if fr == 0 else slam(t, .02, .2), -3)
-        if theme.get("niveau"): STAMP(theme["niveau"], "qzniv", RED, 92).draw(cv, fr, 770, 850, 1 if fr == 0 else slam(t, .25, .2), 9)
+        if theme.get("niveau"):
+            nx, ny = theme.get("niveau_pos", (770, 850))
+            STAMP(theme["niveau"], "qzniv" + theme["niveau"], RED, theme.get("niveau_size", 92)).draw(cv, fr, nx, ny, 1 if fr == 0 else slam(t, .25, .2), theme.get("niveau_rot", 9))
     def shot2(cv, fr, t):
         stage_fill(cv, fr, theme["bgs"][1], "qzi2"); rays(cv, (CX, 900), t, .5, 14, 1500, (255, 255, 255), .08, .2)
         t8, t5, tc, tp = Wd(mq, mqn), Wd(mc, mn), Wd("Compte"), Wd("parti")
