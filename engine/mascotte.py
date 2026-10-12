@@ -159,9 +159,9 @@ class Ballon:
 
 # ------------------------------------------------------------------ sprites IA (assets/mascotte) : 12 poses + 16 émotions
 import os as _os
-_SPR_DIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "mascotte")
-POSES = ["face", "trois_quarts_gauche", "profil_gauche", "dos", "trois_quarts_droite", "profil_droite", "trois_quarts_dos",
-         "plongee", "coucou", "pointe", "bras_croises", "saut"]
+_SPR_DIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "mascotte", "v2")   # mascotte n°4 (casquette + sweat)
+POSES = ["face", "trois_quarts_gauche", "profil_gauche", "dos", "trois_quarts_droite", "profil_droite", "marche",
+         "court", "coucou", "pointe", "bras_croises", "saut"]
 EMOTIONS = ["neutre", "blase", "malin", "rire", "stress", "choc", "triste", "fier", "colere", "perplexe", "reflechit",
             "celebre", "facepalm", "mort_de_rire", "clin_doeil", "fatigue"]
 _spr = {}
