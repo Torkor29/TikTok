@@ -156,3 +156,28 @@ class Ballon:
         out.info["anchor"] = (ox/S, oy/S)
         rot = tilt if tilt is not None else {"blase": -6, "malin": 5, "triste": -4}.get(mood, 0) + 2*math.sin(t*1.3)
         blit_sxy(cv, out, x, y + bob + dy, sx, sy, rot, alpha)
+
+# ------------------------------------------------------------------ sprites IA (assets/mascotte) : 12 poses + 16 émotions
+import os as _os
+_SPR_DIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "mascotte")
+POSES = ["face", "trois_quarts_gauche", "profil_gauche", "dos", "trois_quarts_droite", "profil_droite", "trois_quarts_dos",
+         "plongee", "coucou", "pointe", "bras_croises", "saut"]
+EMOTIONS = ["neutre", "blase", "malin", "rire", "stress", "choc", "triste", "fier", "colere", "perplexe", "reflechit",
+            "celebre", "facepalm", "mort_de_rire", "clin_doeil", "fatigue"]
+_spr = {}
+def sprite(name):
+    """Image RGBA détourée d'une pose ou d'une émotion (ancre = centre bas, aux pieds)."""
+    if name not in _spr:
+        sub = "poses" if name in POSES else "emotions"
+        im = Image.open(_os.path.join(_SPR_DIR, sub, f"{name}.png")).convert("RGBA")
+        im.info["anchor"] = (im.width/2, im.height); _spr[name] = im
+    return _spr[name]
+
+def draw_sprite(cv, name, x, y, h=420, t=0.0, hop_t=None, rot=0.0, alpha=1.0, flip=False):
+    """Dessine la mascotte (sprite IA) pieds en (x, y), hauteur h px ; respiration + saut Lasseter."""
+    im = sprite(name)
+    if flip:
+        im = im.transpose(Image.FLIP_LEFT_RIGHT); im.info["anchor"] = (im.width/2, im.height)
+    s = h/im.height; breathe = 1 + .015*math.sin(t*2.6)
+    dy, sx, sy = hop(t, hop_t, .3*h, .5) if hop_t is not None else (0, 1, 1)
+    blit_sxy(cv, im, x, y + dy, s*sx*(2 - breathe), s*sy*breathe, rot, alpha)
