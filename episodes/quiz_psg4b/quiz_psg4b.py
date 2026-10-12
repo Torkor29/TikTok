@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
 import engine
-from mascotte import Ballon, envelope
+from mascotte import draw_sprite, envelope
 
 TITLE = "~/quiz $ ./psg"
 SLUG = "quiz_psg4b"
@@ -28,15 +28,15 @@ PSGP = Player("qzpsg", hair=(70, 50, 36), skin=(230, 186, 150))
 NEY = Player("qzney", hair=(48, 34, 26), skin=(196, 146, 108), hair_style="quiff")
 MBAP = Player("qzmbap", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
 
-BALLON = Ballon()
 _cur = {"env": None}                      # enveloppe de la voix de la scène en cours (bouche synchronisée)
 def talk(t):
     e = _cur["env"]; return e(t - PAD_IN) if e else 0.0
 def hero(cv, fr, t, x, y, s, crown=False):
     """Mascotte Ballon à la place du joueur (pieds en (x, y))."""
-    m = 1.55*s; cy = y - 215*m
-    BALLON.draw(cv, fr, x, cy, m, t, "fier" if crown and talk(t) < .08 else "neutre", talk(t), wave=not crown and t < 2.5)
-    if crown: CROWN.draw(cv, fr, x, cy - 150*m - 40*m - 260*m*(1 - ease_out_back(prog(t, 0, .35))), .8*m, -8)
+    h = 640*s
+    name = ("celebre" if t < 1.6 else "fier") if crown else ("coucou" if t < 2.5 else ("malin" if talk(t) > .08 else "neutre"))
+    draw_sprite(cv, name, x, y, h, t, hop_t=0 if crown else None)
+    if crown: CROWN.draw(cv, fr, x, y - h - 30*s - 260*s*(1 - ease_out_back(prog(t, 0, .35))), 1.2*s, -8)
 
 def mystery(cv, fr, x, y, u, s=1.0):
     """Gros « ? » qui frétille avant la révélation, puis s'envole."""
@@ -155,10 +155,10 @@ def with_mascot(k, draw, tm):
         _cur["env"] = ENVS[k]; draw(cv, fr, t, T)
         if tm:                                                   # question : petit Ballon en bas à droite
             ts, te = tm["ts"], tm["te"]
-            mood = "stress" if ts <= t < te else ("choc" if te <= t < te + .5 else ("malin" if t >= te + .5 else "neutre"))
-            BALLON.draw(cv, fr, 870, 1660, .78, t, mood, talk(t) if not ts <= t < te else 0, look=(-1, -.6), hop_t=te)
+            mood = "stress" if ts <= t < te else ("choc" if te <= t < te + .5 else ("celebre" if t >= te + .5 else "reflechit"))
+            draw_sprite(cv, mood, 880, 1900, 340, t, hop_t=te)
         elif SCENES[k].name == "cta":
-            BALLON.draw(cv, fr, CX, 1690, 1.05, t, "malin", talk(t), wave=t < 2.0)
+            draw_sprite(cv, "pointe" if t < 2.0 else "clin_doeil", CX, 1880, 560, t, hop_t=0)
     return d
 for k, sc in enumerate(SCENES): sc.draw_fn = with_mascot(k, sc.draw_fn, TMS[k])
 
