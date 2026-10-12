@@ -1,0 +1,41 @@
+DEVINE CARRIERE1 — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+Devine le joueur juste avec sa carrière ! Cinq joueurs, du plus facile au plus dur. Si tu trouves les cinq, t'es un vrai. C'est parti !
+
+=== SCÈNE 2 ===
+Joueur numéro un.  [chrono 5 s]  C'était Karim Benzema !
+
+=== SCÈNE 3 ===
+Joueur numéro deux.  [chrono 5 s]  Antoine Griezmann !
+
+=== SCÈNE 4 ===
+Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évidemment !
+
+=== SCÈNE 5 ===
+Numéro quatre.  [chrono 5 s]  Olivier Giroud !
+
+=== SCÈNE 6 ===
+Le dernier, le plus dur.  [chrono 5 s]  N'Golo Kanté !
+
+=== SCÈNE 7 ===
+Alors, combien t'en as trouvé ? Dis ton score en commentaire, et abonne-toi pour la partie deux !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+Devine le joueur juste avec sa carrière ! Cinq joueurs, du plus facile au plus dur. Si tu trouves les cinq, t'es un vrai. C'est parti !
+
+Joueur numéro un.  [chrono 5 s]  C'était Karim Benzema !
+
+Joueur numéro deux.  [chrono 5 s]  Antoine Griezmann !
+
+Numéro trois. Attention, ça voyage.  [chrono 5 s]  Zlatan Ibrahimović, évidemment !
+
+Numéro quatre.  [chrono 5 s]  Olivier Giroud !
+
+Le dernier, le plus dur.  [chrono 5 s]  N'Golo Kanté !
+
+Alors, combien t'en as trouvé ? Dis ton score en commentaire, et abonne-toi pour la partie deux !
