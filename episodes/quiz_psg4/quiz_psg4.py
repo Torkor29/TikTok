@@ -114,17 +114,15 @@ def i8(cv, fr, t, u, tm):
 
 # ------------------------------------------------------------------ les 8 questions (facile -> plus dur, mais tout reste jouable)
 QUESTIONS = [
-    Q("En quelle année Messi a quitté le PSG ?", ["2022", "2023", "2024", "2021"], 1, "FACILE", i1, [(.1, "whoosh", .5)]),
-    Q("Demi-finale de C1 2024 : qui élimine le PSG ?", ["Borussia Dortmund", "Real Madrid", "Manchester City", "Bayern Munich"], 0, "FACILE", i2, [(.0, "groan", .5), (.1, "stamp", .6)]),
-    Q("Qui entraînait le PSG juste avant Luis Enrique ?", ["Mauricio Pochettino", "Christophe Galtier", "Thomas Tuchel", "Unai Emery"], 1, "FACILE", i3, [(.1, "whistle", .6)]),
-    Q("Première finale de C1 du PSG en 2020 : perdue contre… ?", ["Liverpool", "Real Madrid", "Chelsea", "Bayern Munich"], 3, "MOYEN", i4, [(.0, "groan", .5), (.1, "stamp", .6)]),
+    Q("En quelle année Messi a quitté le PSG ?", ["2022", "2023", "2024", "2021"], 1, "FACILE", i1, [(.1, "crowd", .6)]),
+    Q("Demi-finale de C1 2024 : qui élimine le PSG ?", ["Borussia Dortmund", "Real Madrid", "Manchester City", "Bayern Munich"], 0, "FACILE", i2, [(.1, "whoosh", .4)]),
+    Q("Qui entraînait le PSG juste avant Luis Enrique ?", ["Mauricio Pochettino", "Christophe Galtier", "Thomas Tuchel", "Unai Emery"], 1, "FACILE", i3, [(.1, "cash", .8)]),
+    Q("Première finale de C1 du PSG en 2020 : perdue contre… ?", ["Liverpool", "Real Madrid", "Chelsea", "Bayern Munich"], 3, "MOYEN", i4, [(.1, "stamp", .6)]),
     Q("Quel Suédois : « arrivé comme un roi, parti comme une légende » ?", ["Henrik Larsson", "Zlatan Ibrahimovic", "Alexander Isak", "Dejan Kulusevski"], 1,
-      "MOYEN", i5, [(.1, "lion", .7), (.1, "fanfare", .5)]),
-    Q("Le gardien du PSG en finale de C1 2025 ?", ["Keylor Navas", "Matvey Safonov", "Gianluigi Donnarumma", "Alphonse Areola"], 2, "MOYEN", i6,
-      [(.1, "crowd_long", .7), (.1, "sparkle")]),
-    Q("Quel Brésilien est passé par le PSG avant d'être Ballon d'or au Barça ?", ["Ronaldinho", "Neymar", "Kaká", "Raí"], 0, "DIFFICILE", i7,
-      [(.1, "samba", .7), (.2, "sparkle")]),
-    Q("Combien de Ballons d'or avait Messi en arrivant au PSG ?", ["4", "5", "6", "7"], 2, "LA PLUS DURE", i8, [(.1, "drumroll", .6), (.3, "sparkle", .7)]),
+      "MOYEN", i5, [(.0, "glitch", .6), (.1, "stamp", .6)]),
+    Q("Le gardien du PSG en finale de C1 2025 ?", ["Keylor Navas", "Matvey Safonov", "Gianluigi Donnarumma", "Alphonse Areola"], 2, "MOYEN", i6, [(.1, "crowd_long", .7), (.1, "sparkle")]),
+    Q("Quel Brésilien est passé par le PSG avant d'être Ballon d'or au Barça ?", ["Ronaldinho", "Neymar", "Kaká", "Raí"], 0, "DIFFICILE", i7, [(.1, "stamp", .6), (.4, "pop2")]),
+    Q("Combien de Ballons d'or avait Messi en arrivant au PSG ?", ["4", "5", "6", "7"], 2, "LA PLUS DURE", i8, [(.1, "crowd", .8), (.1, "stamp", .6)]),
 ]
 
 # ------------------------------------------------------------------ scènes
