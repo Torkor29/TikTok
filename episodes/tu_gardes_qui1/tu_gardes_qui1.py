@@ -9,6 +9,8 @@ import sys, os, json, math
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
+import quiz
+quiz.CHRONO = CHRONO = 3.0                      # 3 s pour choisir (plus nerveux que le quiz)
 from mascotte import draw_sprite
 
 TITLE = "~/duel $ ./tu_gardes_qui"
@@ -30,6 +32,29 @@ DUELS = [
 ]
 KITS = ["france", "france", "france", "france", "gk"]
 BGS = [(28, 44, 96), (96, 24, 40), (24, 70, 62), (70, 40, 100), (30, 30, 40)]
+
+IMG_DIR = os.path.join(ROOT, "assets", "tu_gardes_qui1")
+_por = {}
+def portrait(i, L, h=560):
+    """Buste papier IA du joueur (assets/tu_gardes_qui1/d{i}{A|B}.png), ancré en bas au centre."""
+    k = (i, L, h)
+    if k not in _por:
+        im = Image.open(os.path.join(IMG_DIR, f"d{i}{L}.png")).convert("RGBA"); im = im.resize((int(im.width*h/im.height), h), Image.LANCZOS)
+        im.info["anchor"] = (im.width/2, im.height); _por[k] = im
+    return _por[k]
+
+def draw_portrait(cv, i, L, x, y, t, t0, ts, te, side):
+    """Entrée en glissade depuis son bord (dépassement + rebond), balancement, pulsation alternée pendant le chrono, secousse au buzzer."""
+    u = prog(t, t0, .45)
+    if u <= 0: return
+    im = portrait(i, L)
+    dx = side*(1 - ease_out_back(u))*700
+    bob = 8*math.sin(t*3 + (0 if L == "A" else 1.7))
+    beat = 0.0
+    if ts <= t < te: beat = .07*max(0, math.sin((t - ts)*math.pi*2 + (0 if L == "A" else math.pi)))
+    shake = 10*math.sin(t*70)*clamp(1 - prog(t, te, .35)) if t >= te else 0
+    rot = side*-4 + 2*math.sin(t*2.2 + (0 if L == "A" else 1)) + (shake*.3)
+    blit_sxy(cv, im, x + dx + shake, y + bob, 1 + beat, 1 + beat, rot)
 
 def letter_badge(cv, x, y, L, col, s=1.0):
     if s <= .02: return
@@ -68,9 +93,9 @@ def duel_scene(i, tm):
         for (x, Pl, NL, VL, L, col, rot, t0) in ((280, pa, NA, VA, "A", BLEU, -3, .15), (800, pb, NB, VB, "B", ROUGEB, 3, .35)):
             s = slam(t, t0, .2)
             if s <= 0: continue
-            pulse = 1 + (.06*math.sin(t*9 + (0 if L == "A" else 1.6)) if ts <= t < te else 0)
-            Pl.draw(cv, fr, x, 1200, .5*pulse, age=1, kit=kit, mood="happy", arms=(25, 25), t=t)
-            letter_badge(cv, x, 720, L, col, s)
+            pulse = 1
+            draw_portrait(cv, i, L, x, 1215, t, t0, ts, te, -1 if L == "A" else 1)
+            letter_badge(cv, x + (-190 if L == "A" else 190), 740, L, col, s)
             NL.draw(cv, fr, x, 1280, s, rot)
             VL.draw(cv, fr, x, 1400, s*pulse, -rot)
         VS.draw(cv, fr, CX, 980, slam(t, .55, .2)*(1 + .08*math.sin(t*7)), -8)
@@ -84,7 +109,7 @@ def duel_scene(i, tm):
     return draw, sfx
 
 # ------------------------------------------------------------------ intro / fin
-KR = Label("5 DUELS · 5 SECONDES · A OU B", "tg1i5", font("title", 64), NOIR, GOLD, maxw=1000, padx=30, pady=8, rough=5)
+KR = Label("5 DUELS · 3 SECONDES · A OU B", "tg1i5", font("title", 64), NOIR, GOLD, maxw=1000, padx=30, pady=8, rough=5)
 KG = STAMP("C'EST PARTI !", "tg1go", RED, 120)
 def intro_draw(cv, fr, t, T):
     stage_fill(cv, fr, NUIT, "tg1i"); rays(cv, (CX, 1300), t, .5, 16, 1500, (50, 60, 110), .12, .15)
@@ -134,7 +159,7 @@ def cover(path):
     ransom_line(cv, "TU GARDES QUI ?", 320, 140, seed=5); ransom_line(cv, "LÉGENDES DES BLEUS", 500, 96, seed=13)
     na, pa, _, nb, pb, _, _ = DUELS[0]
     for x, Pl, nm, L, col, r in ((280, pa, na, "A", BLEU, -3), (800, pb, nb, "B", ROUGEB, 3)):
-        Pl.draw(cv, 0, x, 1240, .55, age=1, kit="france", mood="happy", t=1.0); letter_badge(cv, x, 730, L, col)
+        blit_sxy(cv, portrait(1, L, 600), x, 1260, 1, 1, r); letter_badge(cv, x + (-190 if L == "A" else 190), 740, L, col)
         LBL(nm, f"tg1cv{L}", font("title", 80), BLANC, col, padx=22, pady=4, rough=2.5).draw(cv, 0, x, 1330, 1, r)
     STAMP("VS", "tg1vs", RED, 140).draw(cv, 0, CX, 1000, 1, -8)
     draw_sprite(cv, "perplexe", CX, 1890, 420, 1.0)

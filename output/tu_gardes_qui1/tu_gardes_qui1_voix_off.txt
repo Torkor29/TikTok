@@ -3,7 +3,7 @@ TU GARDES QUI1 — VOIX OFF
 Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 
 === SCÈNE 1 ===
-Tu gardes qui ? Cinq duels de légendes françaises, cinq secondes pour choisir. Note tes lettres, A ou B. C'est parti !
+Tu gardes qui ? Cinq duels de légendes françaises, trois secondes pour choisir. Note tes lettres, A ou B. C'est parti !
 
 === SCÈNE 2 ===
 Duel numéro un : Zidane ou Platini ?  [chrono 5 s]  Note ta lettre !
@@ -26,7 +26,7 @@ Dernier duel : Lloris ou Barthez ?  [chrono 5 s]  Alors ?
 
 ----- VERSION EN UN SEUL BLOC -----
 
-Tu gardes qui ? Cinq duels de légendes françaises, cinq secondes pour choisir. Note tes lettres, A ou B. C'est parti !
+Tu gardes qui ? Cinq duels de légendes françaises, trois secondes pour choisir. Note tes lettres, A ou B. C'est parti !
 
 Duel numéro un : Zidane ou Platini ?  [chrono 5 s]  Note ta lettre !
 
