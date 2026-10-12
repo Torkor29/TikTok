@@ -35,7 +35,7 @@ def talk(t):
 def hero(cv, fr, t, x, y, s, crown=False):
     """Mascotte Ballon à la place du joueur (pieds en (x, y))."""
     m = 1.55*s; cy = y - 215*m
-    BALLON.draw(cv, fr, x, cy, m, t, "happy", talk(t), wave=not crown and t < 2.5)
+    BALLON.draw(cv, fr, x, cy, m, t, "fier" if crown and talk(t) < .08 else "neutre", talk(t), wave=not crown and t < 2.5)
     if crown: CROWN.draw(cv, fr, x, cy - 150*m - 40*m - 260*m*(1 - ease_out_back(prog(t, 0, .35))), .8*m, -8)
 
 def mystery(cv, fr, x, y, u, s=1.0):
@@ -155,10 +155,10 @@ def with_mascot(k, draw, tm):
         _cur["env"] = ENVS[k]; draw(cv, fr, t, T)
         if tm:                                                   # question : petit Ballon en bas à droite
             ts, te = tm["ts"], tm["te"]
-            mood = "nervous" if ts <= t < te else ("wow" if te <= t < te + .6 else "happy")
+            mood = "stress" if ts <= t < te else ("choc" if te <= t < te + .5 else ("malin" if t >= te + .5 else "neutre"))
             BALLON.draw(cv, fr, 870, 1660, .78, t, mood, talk(t) if not ts <= t < te else 0, look=(-1, -.6), hop_t=te)
         elif SCENES[k].name == "cta":
-            BALLON.draw(cv, fr, CX, 1690, 1.05, t, "happy", talk(t), wave=True)
+            BALLON.draw(cv, fr, CX, 1690, 1.05, t, "malin", talk(t), wave=t < 2.0)
     return d
 for k, sc in enumerate(SCENES): sc.draw_fn = with_mascot(k, sc.draw_fn, TMS[k])
 
