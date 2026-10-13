@@ -120,6 +120,16 @@ Donc :
 - [ ] CTA au milieu (juste après un moment fort) et à la fin.
 - [ ] Description courte + commentaire à épingler donnés dans la réponse.
 
+## ⚠️ BUDGET ELEVENLABS (règle absolue, ajoutée le 13/10/2026)
+- **Vidéo IA (image-to-video / text-to-video) : JAMAIS sans accord explicite de l'utilisateur pour CETTE vidéo.** Toujours appeler
+  d'abord `estimate_only: true`, annoncer le coût en crédits ET en € , attendre le « ok ». Incident : 4 clips Seedance 2.5 de 5 s
+  = 56 000 crédits (~10 €), presque tout le forfait mensuel de l'utilisateur, lancés sans estimation.
+- Par défaut, le dynamisme vient du MONTAGE en code (gratuit) : chute physique, secousses, glitchs, lignes de vitesse, zooms,
+  Ken Burns sur photos, compteurs. Réutiliser la bibliothèque de clips déjà payés : assets/bordeaux/clips/ (gloire = stade papier
+  plein, trophees, chute = ascenseur qui plonge, stade_vide = stade sous la pluie).
+- Coûts de référence observés : voix ~100-500 crédits ; image gpt-image-2.5 ~190 ; musique 8 s ~900 ; vidéo Seedance 2.5 5 s ~14 000.
+- Images et voix restent OK sans demander, mais annoncer le total de crédits dépensés à chaque livraison.
+
 ## 8) EN TEST (oct. 2026) : règles tirées des stats réelles de la chaîne, à confirmer
 Statut : hypothèses issues des analytics du 13/10/2026. L'utilisateur envoie les résultats au fil de l'eau ; mettre à jour cette
 section (passer une règle en « validé » ou la retirer) à chaque retour. Noter ici la date et les chiffres de chaque test.
