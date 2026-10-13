@@ -138,6 +138,29 @@ Donc :
 - Coûts de référence observés : voix ~100-500 crédits ; image gpt-image-2.5 ~190 ; musique 8 s ~900 ; vidéo Seedance 2.5 5 s ~14 000.
 - Images et voix restent OK sans demander, mais annoncer le total de crédits dépensés à chaque livraison.
 
+## 9) PUBLICATION, DESCRIPTIONS, CARROUSELS (EN TEST depuis le 13/10/2026)
+**Rythme** : 2 publications/jour pendant 3 semaines, puis ajuster selon les stats.
+- Créneaux : midi 12 h-13 h et soir 18 h 30-20 h 30 (heure de Paris).
+- Semaine type : Lun quiz/histoire · Mar carrousel/quiz · Mer quiz/carrousel · Jeu histoire/quiz · Ven carrousel/quiz gros club ·
+  Sam quiz/carrousel (soir de match) · Dim histoire/carrousel débat.
+- Jours de match : publier ~2 h avant le coup d'envoi un contenu sur le club qui joue (C1 mar/mer, L1 ven-dim).
+- Jamais 2 fois le même club en 48 h. Répondre à tous les commentaires dans l'heure qui suit la publication.
+
+**Description (à chaque livraison, prête à copier)**
+- Ligne 1 = MOTS-CLÉS recherchés + 1 emoji (« Quiz équipe de France facile 🇫🇷 »), pas une phrase vague : TikTok est un moteur de recherche.
+- Ligne 2 = question qui oblige à répondre (« Ton score sur 5 ? Sois honnête 👇 »).
+- 3 à 5 hashtags : 1 large (#football), 2 niche (#quizfoot #girondins), 1 actu si possible (#ligue1 le week-end). Jamais #fyp/#pourtoi.
+- Commentaire épinglé = provocation ou mini-sondage (« 90 % ratent la 3… 👀 », « OUI ou NON ? »).
+- Les mêmes mots-clés écrits à l'écran sur l'image 0 (TikTok lit le texte à l'écran).
+
+**Carrousels (mode photo)** : poussés fort par TikTok, swipe = engagement, re-proposés si pas finis, 0 crédit ElevenLabs.
+- Formats : « X géants tombés en enfer », quiz à swiper (question / réponse), classement polémique (n°1 caché à la fin),
+  avant / maintenant, « le saviez-tu ? » (très enregistré).
+- Règles : slide 1 = hook aussi fort qu'en vidéo ; 5 à 8 slides ; 1 info par slide lisible en 2 s ; indication « swipe → » ;
+  dernière slide = question pour les commentaires. Format 1080×1920 PNG, style papier (écussons autocollants, portraits papier).
+- L'utilisateur ajoute une musique tendance dans l'appli au moment de publier.
+- Générateur : episodes/<slug>/<slug>.py → output/<slug>/slide_01.png …
+
 ## 8) EN TEST (oct. 2026) : règles tirées des stats réelles de la chaîne, à confirmer
 Statut : hypothèses issues des analytics du 13/10/2026. L'utilisateur envoie les résultats au fil de l'eau ; mettre à jour cette
 section (passer une règle en « validé » ou la retirer) à chaque retour. Noter ici la date et les chiffres de chaque test.
