@@ -164,8 +164,7 @@ def cover(path):
     ransom_line(cv, "SI T'AS PAS 5/5…", 270, 124, seed=3); ransom_line(cv, "T'ES UNE HONTE", 430, 136, seed=11)
     logo_hero(cv, 0, 1.0, CX - 120, 1400, 1.45)
     Label("QUIZ PSG · AVANT CITY", "qzpccv1", font("title", 76), NOIR, GOLD, padx=30, pady=8, rough=5).draw(cv, 0, CX, 1510, 1, -3)
-    STAMP("AUCUNE EXCUSE", "qzfrcv2", ROUGE, 100).draw(cv, 0, 840, 1720, 1, 10)
-    chrono(cv, 0, CHRONO*.4 + 1.0, 1.0, y=1740, cx=170, x0=290, x1=600)
+    STAMP("AUCUNE EXCUSE", "qzfrcv2", ROUGE, 84).draw(cv, 0, CX, 1730, 1, -4)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 
