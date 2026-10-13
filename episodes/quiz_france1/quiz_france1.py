@@ -119,7 +119,19 @@ QUESTIONS = [
 ]
 
 # ------------------------------------------------------------------ scènes
-intro_draw, intro_sfx = intro_scene(THEME, Wd(0), hero)
+LOGO = Image.open(os.path.join(ROOT, "assets", "logos", "fff_bleu_sticker.png")).convert("RGBA")
+def logo_hero(cv, fr, t, x, y, s):
+    """Couverture : gros logo FFF en autocollant papier (ombre portée, légère rotation) à la place du joueur."""
+    h = int(600*s); im = LOGO.resize((int(LOGO.width*h/LOGO.height), h), Image.LANCZOS).rotate(-6, expand=True, resample=Image.BICUBIC)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); sh.putalpha(im.getchannel("A").point(lambda v: v*90//255)); sh = sh.filter(ImageFilter.GaussianBlur(10))
+    x0, y0 = int(x + 120 - im.width/2), int(y - im.height)
+    cv.paste(sh, (x0 + 14, y0 + 18), sh); cv.paste(im, (x0, y0), im)
+def intro_logo(cv, fr, t, x, y, s):
+    """Hook : le gros logo FFF tombe et rebondit (au lieu du joueur), puis respire au rythme de la Marseillaise."""
+    k = 1.0 if fr == 0 else (ease_out_back(prog(t, 0, .45)) if t < .45 else 1 + .03*math.sin(t*5.5))
+    logo_hero(cv, fr, t, x - 200, y + 60, 1.4*max(.05, k))
+intro_draw, intro_sfx = intro_scene(THEME, Wd(0), intro_logo)
+intro_sfx = intro_sfx + [(0.0, "marseillaise", .9)]                  # hymne en fond pendant le hook (≈ 8 s, se fond sous la voix)
 cta_draw, cta_sfx = cta_scene(THEME, Wd(1))
 outro_draw, outro_sfx = outro_scene(THEME, Wd(2), hero)
 SCENES = []
@@ -133,13 +145,6 @@ for k, key in enumerate(KEYS):
                             question_sfx(q, tm), pad_in=PAD_IN, pad_out=.45, trans="whip", trans_dur=.3))
 
 # ------------------------------------------------------------------ couverture, planches
-LOGO = Image.open(os.path.join(ROOT, "assets", "logos", "fff_bleu_sticker.png")).convert("RGBA")
-def logo_hero(cv, fr, t, x, y, s):
-    """Couverture : gros logo FFF en autocollant papier (ombre portée, légère rotation) à la place du joueur."""
-    h = int(600*s); im = LOGO.resize((int(LOGO.width*h/LOGO.height), h), Image.LANCZOS).rotate(-6, expand=True, resample=Image.BICUBIC)
-    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); sh.putalpha(im.getchannel("A").point(lambda v: v*90//255)); sh = sh.filter(ImageFilter.GaussianBlur(10))
-    x0, y0 = int(x + 120 - im.width/2), int(y - im.height)
-    cv.paste(sh, (x0 + 14, y0 + 18), sh); cv.paste(im, (x0, y0), im)
 def cover(path):
     """Couverture : hook en lettres découpées, GROS logo FFF autocollant au centre, bande « quiz équipe de France », tampon FACILE ?, chrono."""
     cv = background(0, TITLE); stage_fill(cv, 0, NAVY, "qzfrcov")
