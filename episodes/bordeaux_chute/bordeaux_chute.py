@@ -56,7 +56,7 @@ def stade(cv, t, dark=.55, sep=0.0):
         if sep:
             g = im.convert("L"); im = Image.merge("RGB", (g.point(lambda v: min(255, int(v*1.1 + 20))), g.point(lambda v: int(v*.95 + 8)), g.point(lambda v: int(v*.75))))
         _bg[k] = im
-    im = _bg[k]; z = 1.0 + .04*t/10; cw, ch = W/z, H/z
+    im = _bg[k]; t = max(0.0, t); z = 1.0 + .04*t/10; cw, ch = W/z, H/z
     x0 = (im.width - cw)/2 + 60*math.sin(t*.15); y0 = (im.height - ch)/2
     cv.paste(im.resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + cw, y0 + ch)), (0, 0))
 
