@@ -10,7 +10,7 @@ import sys, os, json, math
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
-from PIL import ImageFilter, ImageEnhance
+from PIL import ImageFilter, ImageEnhance, ImageChops
 
 TITLE = "~/histoires $ ./bordeaux"
 SLUG = "bordeaux_chute"
@@ -60,6 +60,46 @@ def stade(cv, t, dark=.55, sep=0.0):
     x0 = (im.width - cw)/2 + 60*math.sin(t*.15); y0 = (im.height - ch)/2
     cv.paste(im.resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + cw, y0 + ch)), (0, 0))
 
+CLIPS = os.path.join(ROOT, "assets", "bordeaux", "clips")
+_clip = {}
+def clip(cv, name, t, dark=.25):
+    """Clip vidéo IA (assets/bordeaux/clips/<name>.mp4) en plein écran, lu à 30 i/s (frames extraites une fois, en boucle aller-retour)."""
+    if name not in _clip:
+        d = f"/tmp/bxclip_{name}"
+        if not os.path.isdir(d):
+            os.makedirs(d); os.system(f'ffmpeg -loglevel error -i "{os.path.join(CLIPS, name + ".mp4")}" -vf "fps=30,scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}" -q:v 3 {d}/%04d.jpg')
+        _clip[name] = sorted(os.path.join(d, f) for f in os.listdir(d))
+    fs = _clip[name]; n = len(fs); i = int(max(0, t)*30) % (2*n - 2) if n > 1 else 0
+    i = i if i < n else 2*n - 2 - i
+    im = Image.open(fs[i]).convert("RGB")
+    if dark: im = ImageEnhance.Brightness(im).enhance(1 - dark)
+    cv.paste(im, (0, 0))
+
+def shake(cv, t, t0, amp=26, dur=.45):
+    """Secousse caméra après un impact."""
+    if not (t0 <= t < t0 + dur): return
+    a = amp*(1 - (t - t0)/dur); dx, dy = int(a*math.sin(t*90)), int(a*math.cos(t*73))
+    cv.paste(cv.copy(), (dx, dy))
+
+def glitch(cv, t, t0, dur=.18):
+    """Coupe « glitch » : décalage RVB + bandes + flash, au changement de plan."""
+    if not (t0 <= t < t0 + dur): return
+    u = 1 - (t - t0)/dur; r, g, b = cv.convert("RGB").split(); o = int(28*u)
+    rgb = Image.merge("RGB", (ImageChops.offset(r, o, 0), g, ImageChops.offset(b, -o, 0)))
+    d = ImageDraw.Draw(rgb)
+    for k in range(6):
+        y = int((math.sin(t*97 + k*13)*.5 + .5)*H); hh = 20 + 30*k % 70
+        band = rgb.crop((0, y, W, min(H, y + hh))); rgb.paste(band, (int(60*u*math.sin(k*7)), y))
+    if u > .6: rgb = Image.blend(rgb, Image.new("RGB", rgb.size, (255, 255, 255)), (u - .6)*1.5)
+    cv.paste(rgb, (0, 0))
+
+def speedlines(cv, t, a=1.0):
+    """Lignes de vitesse verticales (chute)."""
+    d = ImageDraw.Draw(cv)
+    for k in range(26):
+        x = (k*97 + 31) % W; y = ((t*2600 + k*331) % (H + 600)) - 600; L = 180 + (k*53) % 260
+        d.line([(x, y), (x, y + L)], fill=(255, 255, 255), width=3 + k % 3)
+
 def big(txt, key, size=110, fg=BLANC, bg=NOIR, rough=3): return LBL(txt, key, font("title", size), fg, bg, padx=26, pady=6, rough=rough, maxw=1000)
 def counter_lbl(n, key, size=150): return LBL(str(n), f"{key}{n}", font("title", size), NOIR, GOLD, padx=24, pady=0, rough=2.5)
 
@@ -77,14 +117,30 @@ def s1(cv, fr, t):           # hook : image 0 = contraste chiffré lisible en 1 
     tq = w(14)                                                # « quatrième division »
     big("6 FOIS CHAMPION…", "bx1a", 104, NOIR, GOLD).draw(cv, fr, CX, 300, 1, -3)
     big("EN 4e DIVISION ?!", "bx1b", 112, BLANC, ROUGE).draw(cv, fr, CX, 460, 1, 2)
-    shake = 14*math.sin(t*60)*clamp(1 - prog(t, tq, .5)) if t > tq else 0
-    sticker(cv, "bordeaux", CX + shake, 1060, 720, 1 + .02*math.sin(t*4), -4 + .5*shake)
+    if t < tq:                                                  # l'écusson tremble avant de lâcher
+        j = 6*math.sin(t*40)*prog(t, tq - 1.2, 1.2)
+        sticker(cv, "bordeaux", CX + j, 1060, 720, 1 + .02*math.sin(t*4), -4 + .3*j)
+    else:                                                       # chute libre : gravité, rotation, rebond, éclats
+        u = t - tq; g = 5200; y = 1060 + .5*g*u*u; rot = -4 + 260*u*u
+        if y < 1700:
+            speedlines(cv, t)
+            sticker(cv, "bordeaux", CX + 40*u, y, 720, 1 - .25*clamp(u*2), rot)
+        else:
+            tb = math.sqrt(2*(1700 - 1060)/g); v = tb                  # impact
+            d = ImageDraw.Draw(cv)
+            for k in range(14):                                         # éclats de papier
+                uu = u - tb; ang = k*2.1; r = 900*uu
+                px = CX + r*math.cos(ang); py = 1700 - r*abs(math.sin(ang)) + 1800*uu*uu
+                if 0 <= py < H: d.polygon([(px, py), (px + 22, py + 8), (px + 6, py + 26)], fill=(14, 26, 64) if k % 2 else (250, 250, 246))
+            sticker(cv, "bordeaux", CX + 20, 1760, 720, .7, 78, shadow=False)
+            for k in range(7):                                          # fissures dans l'image
+                a0 = k*0.9; d.line([(CX, 1700), (CX + 600*math.cos(a0), 1700 - 500*abs(math.sin(a0)))], fill=(20, 20, 20), width=6)
     if t > w(6): sticker(cv, "p:zidane", 190, 1460, 330, pop_in(t, w(6), .25), -8)
     if t > tq:
-        sticker(cv, "n2", 860, 1480, 400, slam(t, tq, .25), 10)
+        sticker(cv, "n2", 860, 1300, 400, slam(t, tq + .45, .25), 10)
         STAMP("CHUTE LIBRE", "bx1c", ROUGE, 70).draw(cv, fr, CX, 1760, slam(t, w(16), .25), -5)
 def s2(cv, fr, t):           # la gloire : 6 titres, Zidane / Lizarazu / Dugarry, finale C3 96
-    stade(cv, t, .45, sep=.9)
+    clip(cv, "gloire", t - CUTS[1], .3)
     sticker(cv, "bordeaux_ancien", CX, 380, 420, pop_in(t, CUTS[1], .3), 4)
     n = 1 + int(5*clamp(prog(t, w(26), .9)))
     LBL(f"{n} TITRE{'S' if n > 1 else ''} DE CHAMPION", f"bxt{n}", font("title", 70), NOIR, GOLD, padx=24, pady=4, rough=2.5).draw(cv, fr, CX, 680, pop_in(t, w(26) - .1, .25), -2)
@@ -96,7 +152,7 @@ def s2(cv, fr, t):           # la gloire : 6 titres, Zidane / Lizarazu / Dugarry
         sticker(cv, "bayern", 840, 1620, 300, pop_in(t, w(44), .3), 8)
         STAMP("FINALE C3 1996", "bx2s", ROUGE, 70).draw(cv, fr, 380, 1620, slam(t, w(44) + .2, .25), -6)
 def s3(cv, fr, t):           # 2009 : Blanc, Gourcuff, Chamakh, doublé, 11 victoires de suite
-    stade(cv, t, .5)
+    clip(cv, "trophees", t - CUTS[2], .3)
     big("2009", "bx3y", 150, NOIR, GOLD).draw(cv, fr, CX, 290, slam(t, CUTS[2], .2), -3)
     for i, (nm, x, wi) in enumerate((("blanc", 220, 55), ("gourcuff", CX, 61), ("chamakh", 860, 63))):
         if t > w(wi) - .15:
@@ -111,7 +167,7 @@ def s3(cv, fr, t):           # 2009 : Blanc, Gourcuff, Chamakh, doublé, 11 vict
         STAMP("AU SOMMET", "bx3s", (46, 164, 86), 100).draw(cv, fr, CX, 1640, slam(t, w(75), .25), -6)
         confetti(cv, fr, "bx3cf", t - w(75), 60, 2.5, [GOLD, BLANC, (40, 90, 200)])
 def s4(cv, fr, t):           # relance
-    stade(cv, t, .8)
+    clip(cv, "chute", t - CUTS[3], .6)
     z = 1 + .25*prog(t, CUTS[3], 2.4)
     big("MAIS ATTENDS…", "bx4a", 120, BLANC, ROUGE).draw(cv, fr, CX, 640, z*slam(t, CUTS[3], .2), -3)
     if t > w(82): big("LA CHUTE EST ENCORE PLUS FOLLE", "bx4b", 66, NOIR, GOLD).draw(cv, fr, CX, 860, slam(t, w(82), .25), 2)
@@ -126,12 +182,13 @@ def ascenseur(cv, fr, t, a, b, t0, ta, y0=560, y1=1340):
         d.polygon([(CX - 55, yb - 10), (CX + 55, yb - 10), (CX, yb + 60)], fill=ROUGE)
     if u >= 1: sticker(cv, b, CX, y1, 380, slam(t, t0 + .5, .25), 5)
 def s5(cv, fr, t):           # 2022 : dernier de L1 → L2
-    stade(cv, t, .7)
+    clip(cv, "chute", t - CUTS[4], .35); speedlines(cv, t)
     big("2022", "bx5y", 130, NOIR, GOLD).draw(cv, fr, CX, 230, slam(t, w(92), .2), -3)
     ascenseur(cv, fr, t, "ligue1", "ligue2", w(103), CUTS[4] + .1)
     if t > w(98): STAMP("20e SUR 20", "bx5s", ROUGE, 80).draw(cv, fr, 800, 900, slam(t, w(98), .25), 8)
 def s6(cv, fr, t):           # 2024 : pas de repreneur → statut pro abandonné → N2
-    stade(cv, t, .75)
+    if t < w(126): clip(cv, "chute", t - CUTS[4], .35); speedlines(cv, t)
+    else: clip(cv, "stade_vide", t - w(126), .25)
     big("2024", "bx6y", 130, NOIR, GOLD).draw(cv, fr, CX, 230, slam(t, CUTS[5], .2), -3)
     if t > w(113): TAG("pas de repreneur…", "bx6r", PAL["paper"], NOIR, 54).draw(cv, fr, 800, 330, pop_in(t, w(113), .25), -2)
     ascenseur(cv, fr, t, "ligue2", "n2", w(126) - .2, CUTS[5] + .1)
@@ -144,7 +201,7 @@ def s7(cv, fr, t):           # 1991 : déjà rétrogradé pour l'argent
     if t > w(142): big("1991", "bx7y", 160, NOIR, GOLD).draw(cv, fr, CX, 1150, slam(t, w(142), .2), 4)
     if t > w(148): STAMP("RÉTROGRADÉ EN D2", "bx7s", ROUGE, 76).draw(cv, fr, CX, 1380, slam(t, w(148), .25), -6)
 def s8(cv, fr, t):           # boucle + CTA
-    stade(cv, t, .5)
+    clip(cv, "stade_vide", t - CUTS[7] + 3, .35)
     sticker(cv, "bordeaux", CX, 600, 560, 1 + .02*math.sin(t*4), -4)
     big("6× CHAMPION… EN N2", "bx8a", 92, NOIR, GOLD).draw(cv, fr, CX, 1000, slam(t, CUTS[7], .2), -3)
     if t > w(165):
@@ -154,11 +211,14 @@ def s8(cv, fr, t):           # boucle + CTA
     if t > w(173): TAG("dis-le en commentaire 👇".replace("👇", ""), "bx8c", PAL["paper"], NOIR, 54).draw(cv, fr, CX, 1530, pop_in(t, w(173), .25), -2)
     sub_button(cv, fr, CX, 1690, t, w(175) - .15, w(175) + .25)
 
+IMPACTS = [w(14) + .5, w(14) + .45, w(59), w(75), w(103) + .5, w(121), w(126) + .3, w(148)]
 SHOTS = [s1, s2, s3, s4, s5, s6, s7, s8]
 def draw(cv, fr, t, T):
     tv = t - T0; k = shot_of(tv); SHOTS[k](cv, fr, tv)
     c = CUTS[k]
     if k and tv - c < .25: punch(cv, tv, c, 1.06, .25)                 # coup de zoom à chaque changement de plan
+    for ti in IMPACTS: shake(cv, tv, ti)
+    if k: glitch(cv, tv, c)
     drift(cv, t, T, .02)
 
 SFX = [(0.0, "boom", .9), (0.0, "braam", .6), (T0 + w(14), "crash", .7), (T0 + w(16), "stamp", .7)]
