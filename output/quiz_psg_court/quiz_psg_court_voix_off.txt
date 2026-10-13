@@ -1,0 +1,41 @@
+QUIZ PSG COURT — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+[titre défi, 1,5 s]
+
+=== SCÈNE 2 ===
+Contre quel club le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse C : l'Inter Milan, cinq à zéro !
+
+=== SCÈNE 3 ===
+En quelle année le PSG a été fondé ?  [chrono 3 s]  Réponse B : mille neuf cent soixante-dix !
+
+=== SCÈNE 4 ===
+Qui est le meilleur buteur de l'histoire du PSG ?  [chrono 3 s]  Réponse A : Kylian Mbappé !
+
+=== SCÈNE 5 ===
+Quel joueur est arrivé au PSG pour deux cent vingt-deux millions d'euros ?  [chrono 3 s]  Réponse D : Neymar !
+
+=== SCÈNE 6 ===
+Dernière question : comment on appelle le match PSG contre l'OM ?  [chrono 3 s]  Réponse B : le Classique !
+
+=== SCÈNE 7 ===
+Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan du PSG. Dis ton score en commentaire… et abonne-toi avant le match !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+[titre défi, 1,5 s]
+
+Contre quel club le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse C : l'Inter Milan, cinq à zéro !
+
+En quelle année le PSG a été fondé ?  [chrono 3 s]  Réponse B : mille neuf cent soixante-dix !
+
+Qui est le meilleur buteur de l'histoire du PSG ?  [chrono 3 s]  Réponse A : Kylian Mbappé !
+
+Quel joueur est arrivé au PSG pour deux cent vingt-deux millions d'euros ?  [chrono 3 s]  Réponse D : Neymar !
+
+Dernière question : comment on appelle le match PSG contre l'OM ?  [chrono 3 s]  Réponse B : le Classique !
+
+Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan du PSG. Dis ton score en commentaire… et abonne-toi avant le match !
