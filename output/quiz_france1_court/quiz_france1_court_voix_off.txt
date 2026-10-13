@@ -3,25 +3,30 @@ QUIZ FRANCE1 COURT — VOIX OFF
 Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 
 === SCÈNE 1 ===
-Combien d'étoiles sur le maillot des Bleus ?  [chrono 3 s]  Réponse B : deux étoiles !
+[titre défi, 1,5 s]
 
 === SCÈNE 2 ===
-En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 3 s]  Réponse B : Zinédine Zidane !
+Combien d'étoiles sur le maillot des Bleus ?  [chrono 3 s]  Réponse B : deux étoiles !
 
 === SCÈNE 3 ===
-La finale deux mille dix-huit, c'était contre qui ?  [chrono 3 s]  Réponse A : la Croatie, quatre à deux !
+En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 3 s]  Réponse B : Zinédine Zidane !
 
 === SCÈNE 4 ===
-En deux mille six, Zidane met un coup de tête à qui ?  [chrono 3 s]  Réponse D : Marco Materazzi !
+La finale deux mille dix-huit, c'était contre qui ?  [chrono 3 s]  Réponse A : la Croatie, quatre à deux !
 
 === SCÈNE 5 ===
-Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 3 s]  Réponse C : trois buts, un triplé en finale !
+En deux mille six, Zidane met un coup de tête à qui ?  [chrono 3 s]  Réponse D : Marco Materazzi !
 
 === SCÈNE 6 ===
+Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 3 s]  Réponse C : trois buts, un triplé en finale !
+
+=== SCÈNE 7 ===
 Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan. Dis ton score en commentaire… et abonne-toi pour le niveau deux !
 
 
 ----- VERSION EN UN SEUL BLOC -----
+
+[titre défi, 1,5 s]
 
 Combien d'étoiles sur le maillot des Bleus ?  [chrono 3 s]  Réponse B : deux étoiles !
 

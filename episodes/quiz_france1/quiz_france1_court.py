@@ -151,13 +151,25 @@ def with_hook(draw):
         ransom_line(cv, "SI T'AS PAS 5/5…", 740, 118, seed=3, fr=fr, alpha=a, scale=lerp(1.2, 1, ease_out_cubic(prog(t, 0, .2))) if fr else 1)
         ransom_line(cv, "T'ES UNE HONTE", 900, 130, seed=11, fr=fr, alpha=a)
     return d
+STRIP_T = Label("SI T'AS PAS 5/5… T'ES UNE HONTE", "qzfrct", font("title", 58), NOIR, GOLD, maxw=1040, padx=30, pady=8, rough=5)
+def titre_draw(cv, fr, t, T):
+    """1,5 s de défi plein écran (comme le quiz PSG à 164 K) : titre lisible d'un coup, gros logo, puis on enchaîne."""
+    stage_fill(cv, fr, NAVY, "qzfrct"); rays(cv, (CX, 1300), t, .5, 16, 1500, (40, 70, 140), .12, .15)
+    ransom_line(cv, "T'ES UN VRAI FAN", 300, 120, seed=3, fr=fr)
+    ransom_line(cv, "DES BLEUS ?", 470, 150, seed=11, fr=fr)
+    STRIP_T.draw(cv, fr, CX, 650, 1, -3)
+    logo_hero(cv, fr, t, CX - 120, 1640, 1.45*(1 + .03*math.sin(t*6)))
+    drift(cv, t, T, .02)
+VOICE.insert(0, os.path.join(HERE, "voix_court", "silence_titre.mp3")); TMS.insert(0, None); KEYS.insert(0, "titre")
 SCENES = []
 for k, key in enumerate(KEYS):
+    if key == "titre":
+        SCENES.append(Scene("titre", "[titre défi, 1,5 s]", titre_draw, [(0.0, "boom", .8), (0.0, "stamp", .7), (0.0, "marseillaise", .7)], pad_in=0, pad_out=.2)); continue
     if key == "outro": SCENES.append(Scene("fin", TEXTE_OUTRO, outro_draw, outro_sfx, pad_in=PAD_IN, pad_out=1.2, trans="punch", trans_dur=.3))
     else:
         i = int(key[1:]); q = QUESTIONS[i - 1]; tm = TMS[k]
-        SCENES.append(Scene(key, f"{TEXTES['q%d' % (1, 2, 4, 6, 8)[i - 1]]}  [chrono 3 s]  {TEXTES['r%d' % (1, 2, 4, 6, 8)[i - 1]]}", (with_hook if i == 1 else (lambda f: f))(question_scene(q, i, 5, tm, THEME, last=i == 5)),
-                            question_sfx(q, tm) + ([(0.0, "marseillaise", .55), (0.0, "boom", .7)] if i == 1 else []), pad_in=PAD_IN, pad_out=.45, trans="whip", trans_dur=.3))
+        SCENES.append(Scene(key, f"{TEXTES['q%d' % (1, 2, 4, 6, 8)[i - 1]]}  [chrono 3 s]  {TEXTES['r%d' % (1, 2, 4, 6, 8)[i - 1]]}", question_scene(q, i, 5, tm, THEME, last=i == 5),
+                            question_sfx(q, tm), pad_in=PAD_IN, pad_out=.45, trans="whip", trans_dur=.3))
 
 # ------------------------------------------------------------------ couverture, planches
 def cover(path):
