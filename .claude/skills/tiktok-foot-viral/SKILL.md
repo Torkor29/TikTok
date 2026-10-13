@@ -153,6 +153,11 @@ Donc :
 - Commentaire épinglé = provocation ou mini-sondage (« 90 % ratent la 3… 👀 », « OUI ou NON ? »).
 - Les mêmes mots-clés écrits à l'écran sur l'image 0 (TikTok lit le texte à l'écran).
 
+**Quiz : JAMAIS de question déjà posée** (règle ajoutée le 13/10/2026 après un doublon)
+- Avant d'écrire un quiz sur un club, lister toutes les questions existantes de ce club :
+  `grep -ho 'Q("[^"]*"' episodes/quiz_<club>*/*.py` — et ne reprendre ni la question ni le même fait sous une autre forme
+  (ex. « meilleur buteur », « année de fondation », « prix de Neymar » déjà utilisés pour le PSG).
+
 **Jour de match : l'actu AUTOUR de la vidéo, pas DEDANS** (EN TEST)
 - Voix et titre à l'écran restent intemporels (« T'es un vrai fan du PSG ? Si t'as pas 5/5… ») : une vidéo vit des jours/semaines,
   « prêt pour ce soir ? » la périme dès le lendemain.

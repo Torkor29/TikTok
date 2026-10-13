@@ -6,16 +6,16 @@ Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 [titre défi, 1,5 s]
 
 === SCÈNE 2 ===
-Contre quel club le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse C : l'Inter Milan, cinq à zéro !
+Comment s'appelle le président du PSG ?  [chrono 3 s]  Réponse C : Nasser Al-Khelaïfi !
 
 === SCÈNE 3 ===
-En quelle année le PSG a été fondé ?  [chrono 3 s]  Réponse B : mille neuf cent soixante-dix !
+De quelle couleur est la tour Eiffel sur l'écusson du PSG ?  [chrono 3 s]  Réponse B : rouge !
 
 === SCÈNE 4 ===
-Qui est le meilleur buteur de l'histoire du PSG ?  [chrono 3 s]  Réponse A : Kylian Mbappé !
+Dans quelle ville le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse A : Munich !
 
 === SCÈNE 5 ===
-Quel joueur est arrivé au PSG pour deux cent vingt-deux millions d'euros ?  [chrono 3 s]  Réponse D : Neymar !
+Quel coach italien a rendu le PSG champion en deux mille treize ?  [chrono 3 s]  Réponse D : Carlo Ancelotti !
 
 === SCÈNE 6 ===
 Dernière question : comment on appelle le match PSG contre l'OM ?  [chrono 3 s]  Réponse B : le Classique !
@@ -28,13 +28,13 @@ Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan du PSG. Dis ton score
 
 [titre défi, 1,5 s]
 
-Contre quel club le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse C : l'Inter Milan, cinq à zéro !
+Comment s'appelle le président du PSG ?  [chrono 3 s]  Réponse C : Nasser Al-Khelaïfi !
 
-En quelle année le PSG a été fondé ?  [chrono 3 s]  Réponse B : mille neuf cent soixante-dix !
+De quelle couleur est la tour Eiffel sur l'écusson du PSG ?  [chrono 3 s]  Réponse B : rouge !
 
-Qui est le meilleur buteur de l'histoire du PSG ?  [chrono 3 s]  Réponse A : Kylian Mbappé !
+Dans quelle ville le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse A : Munich !
 
-Quel joueur est arrivé au PSG pour deux cent vingt-deux millions d'euros ?  [chrono 3 s]  Réponse D : Neymar !
+Quel coach italien a rendu le PSG champion en deux mille treize ?  [chrono 3 s]  Réponse D : Carlo Ancelotti !
 
 Dernière question : comment on appelle le match PSG contre l'OM ?  [chrono 3 s]  Réponse B : le Classique !
 

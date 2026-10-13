@@ -82,30 +82,33 @@ def club(cv, name, x, y, h, s=1.0, rot=0):
     cv.paste(im, (int(x - im.width/2), int(y - im.height/2)), im)
 MBP = Player("qzpcmb", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
 NEY = Player("qzpcney", hair=(40, 30, 24), skin=(196, 146, 108), hair_style="quiff")
+NAS = Player("qzpcnas", hair=(30, 26, 24), skin=(190, 146, 110))
+ANC = Player("qzpcanc", hair=(90, 84, 80), skin=(226, 186, 150))
 def i1(cv, fr, t, u, tm):
-    board(cv, fr, "PSG", "???" if u <= .05 else "INTER", 5, 0, "finale 2025, Munich")
-    if u > .1: STAMP("1re C1 !", "qzpcs1", ROUGE, 70).draw(cv, fr, CX + 200, ILLU_Y + 120, slam(u, .1, .3), -6)
+    reveal_player(cv, fr, t, u, NAS, "suit", "nas1")
+    name_tag(cv, fr, u, "AL-KHELAÏFI", "qzpcn1", "président depuis 2011", size=66)
 def i2(cv, fr, t, u, tm):
-    club(cv, "psg", CX - 220, ILLU_Y, 300, 1, -6)
-    if u <= .1: LBL("19??", "qzpcq2", font("title", 140), BLANC, NOIR, padx=24, pady=4, rough=2).draw(cv, fr, CX + 200, ILLU_Y, 1, 4 + 2*math.sin(t*4))
-    else: LBL("1970", "qzpcn2", font("title", 150), NOIR, GOLD, padx=26, pady=4, rough=3).draw(cv, fr, CX + 200, ILLU_Y - 10, slam(u, .1, .3), 4)
+    club(cv, "psg", CX - 200, ILLU_Y, 320, 1 + (.08*math.sin(t*6) if u > .1 else 0), -6)
+    if u <= .1: LBL("?", "qzpcq2", font("title", 160), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, CX + 220, ILLU_Y, 1, 8*math.sin(fr*.3))
+    else: LBL("ROUGE", "qzpcn2", font("title", 120), BLANC, ROUGE, padx=26, pady=4, rough=3).draw(cv, fr, CX + 210, ILLU_Y - 10, slam(u, .1, .3), 4)
 def i3(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, MBP, "psg", "m3")
-    name_tag(cv, fr, u, "MBAPPÉ", "qzpcn3", "record de buts du club")
+    if u <= .1: LBL("??????", "qzpcq3", font("title", 120), BLANC, NOIR, padx=24, pady=4, rough=2).draw(cv, fr, CX, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
+    else:
+        LBL("MUNICH", "qzpcn3", font("title", 140), NOIR, GOLD, padx=30, pady=6, rough=3).draw(cv, fr, CX, ILLU_Y - 30, slam(u, .1, .3), 4)
+        TAG("finale 2025 : PSG 5-0 Inter", "qzpct3", PAL["paper"], NOIR, 46).draw(cv, fr, CX, ILLU_Y + 100, pop_in(u, .3, .4), -3)
 def i4(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, NEY, "psg", "n4")
-    if u <= .1: LBL("222 M€", "qzpcq4", font("title", 110), BLANC, NAVY, padx=22, pady=4, rough=2).draw(cv, fr, CX + 190, ILLU_Y - 10, 1, 4)
-    else: name_tag(cv, fr, u, "NEYMAR", "qzpcn4", "record du monde, 2017")
+    reveal_player(cv, fr, t, u, ANC, "coach", "anc4")
+    name_tag(cv, fr, u, "ANCELOTTI", "qzpcn4", "champion 2013", size=72)
 def i5(cv, fr, t, u, tm):
     club(cv, "psg", CX - 230, ILLU_Y - 40, 250, 1, -8); club(cv, "om", CX + 230, ILLU_Y - 40, 250, 1, 8)
     STAMP("VS", "qzpcvs", ROUGE, 90).draw(cv, fr, CX, ILLU_Y - 40, 1, -6)
     if u > .1: STAMP("LE CLASSIQUE", "qzpcs5", ROUGE, 60).draw(cv, fr, CX, ILLU_Y + 105, slam(u, .1, .3), 4)
 
 QUESTIONS_PSG = [
-    Q("Contre quel club le PSG a gagné sa 1re Ligue des champions ?", ["Arsenal", "Barcelone", "Inter Milan", "Real Madrid"], 2, "FACILE", i1, [(.1, "crowd", .8), (.1, "stamp", .6)]),
-    Q("En quelle année le PSG a été fondé ?", ["1950", "1970", "1985", "1904"], 1, "FACILE", i2, [(.1, "stamp", .6)]),
-    Q("Le meilleur buteur de l'histoire du PSG ?", ["Kylian Mbappé", "Edinson Cavani", "Zlatan Ibrahimovic", "Pauleta"], 0, "MOYEN", i3, [(.1, "crowd", .7)]),
-    Q("Quel joueur est arrivé au PSG pour 222 M€ ?", ["Kylian Mbappé", "Lionel Messi", "Achraf Hakimi", "Neymar"], 3, "MOYEN", i4, [(.1, "cash", .7)]),
+    Q("Comment s'appelle le président du PSG ?", ["Florentino Pérez", "Jean-Michel Aulas", "Nasser Al-Khelaïfi", "Joan Laporta"], 2, "FACILE", i1, [(.1, "cash", .6)]),
+    Q("De quelle couleur est la tour Eiffel sur l'écusson ?", ["Bleue", "Rouge", "Blanche", "Dorée"], 1, "FACILE", i2, [(.1, "stamp", .6)]),
+    Q("Dans quelle ville le PSG a gagné sa 1re C1 ?", ["Munich", "Londres", "Paris", "Madrid"], 0, "MOYEN", i3, [(.1, "crowd", .8), (.1, "stamp", .6)]),
+    Q("Quel coach italien a rendu le PSG champion en 2013 ?", ["Antonio Conte", "Claudio Ranieri", "Fabio Capello", "Carlo Ancelotti"], 3, "MOYEN", i4, [(.1, "crowd", .6)]),
     Q("Comment on appelle le match PSG – OM ?", ["Le Derby de France", "Le Classique", "Le Choc des titans", "L'Olympico"], 1, "LA PLUS DURE", i5, [(.1, "stamp", .7), (.1, "crowd", .6)]),
 ]
 
