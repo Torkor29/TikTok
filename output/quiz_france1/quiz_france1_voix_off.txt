@@ -1,0 +1,61 @@
+QUIZ FRANCE1 — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+Ce quiz sur les Bleus est tellement facile que si t'as pas six sur huit… t'es une honte nationale. Huit questions, cinq secondes. Compte tes points… c'est parti !
+
+=== SCÈNE 2 ===
+Combien d'étoiles sur le maillot des Bleus ?  [chrono 5 s]  Réponse B : deux étoiles !
+
+=== SCÈNE 3 ===
+En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 5 s]  Réponse B : Zinédine Zidane !
+
+=== SCÈNE 4 ===
+Qui était le sélectionneur champion du monde en deux mille dix-huit ?  [chrono 5 s]  Réponse C : Didier Deschamps !
+
+=== SCÈNE 5 ===
+La finale deux mille dix-huit, c'était contre qui ?  [chrono 5 s]  Réponse A : la Croatie, quatre à deux !
+
+=== SCÈNE 6 ===
+Petite pause ! Si t'as déjà raté une question, abonne-toi pour réviser, et lâche un like pour plus de contenu sur les Bleus ! Allez, on reprend !
+
+=== SCÈNE 7 ===
+Dans quelle ville s'est jouée cette finale ?  [chrono 5 s]  Réponse C : Moscou !
+
+=== SCÈNE 8 ===
+En deux mille six, Zidane met un coup de tête à qui ?  [chrono 5 s]  Réponse D : Marco Materazzi !
+
+=== SCÈNE 9 ===
+La finale deux mille vingt-deux, perdue aux tirs au but contre qui ?  [chrono 5 s]  Réponse B : l'Argentine.
+
+=== SCÈNE 10 ===
+Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 5 s]  Réponse C : trois buts, un triplé en finale !
+
+=== SCÈNE 11 ===
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan des Bleus. Moins… on n'en parle pas. Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+Ce quiz sur les Bleus est tellement facile que si t'as pas six sur huit… t'es une honte nationale. Huit questions, cinq secondes. Compte tes points… c'est parti !
+
+Combien d'étoiles sur le maillot des Bleus ?  [chrono 5 s]  Réponse B : deux étoiles !
+
+En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 5 s]  Réponse B : Zinédine Zidane !
+
+Qui était le sélectionneur champion du monde en deux mille dix-huit ?  [chrono 5 s]  Réponse C : Didier Deschamps !
+
+La finale deux mille dix-huit, c'était contre qui ?  [chrono 5 s]  Réponse A : la Croatie, quatre à deux !
+
+Petite pause ! Si t'as déjà raté une question, abonne-toi pour réviser, et lâche un like pour plus de contenu sur les Bleus ! Allez, on reprend !
+
+Dans quelle ville s'est jouée cette finale ?  [chrono 5 s]  Réponse C : Moscou !
+
+En deux mille six, Zidane met un coup de tête à qui ?  [chrono 5 s]  Réponse D : Marco Materazzi !
+
+La finale deux mille vingt-deux, perdue aux tirs au but contre qui ?  [chrono 5 s]  Réponse B : l'Argentine.
+
+Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 5 s]  Réponse C : trois buts, un triplé en finale !
+
+Alors, t'as eu combien ? Plus de six : t'es un vrai fan des Bleus. Moins… on n'en parle pas. Dis ton score en commentaire… et abonne-toi pour le niveau deux !

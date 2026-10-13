@@ -212,6 +212,7 @@ def sub_button(cv, fr, x, y, t, t_in, t_tap):
 
 # ------------------------------------------------------------------ intro, CTA, fin (génériques)
 def ttl(theme):
+    if theme.get("hook"): return theme["hook"]          # titre sur mesure (3 lignes), ex. hook provocant
     return ("T'ES UN VRAI FAN", f"{theme['du']} ?", f"SI TU AS PLUS DE {theme.get('seuil', 5)}/{theme.get('nq', 8)}")
 
 def intro_scene(theme, Wd, hero):
