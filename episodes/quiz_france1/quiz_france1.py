@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
 import engine
+from PIL import ImageFilter
 
 TITLE = "~/quiz $ ./bleus"
 SLUG = "quiz_france1"
@@ -132,7 +133,24 @@ for k, key in enumerate(KEYS):
                             question_sfx(q, tm), pad_in=PAD_IN, pad_out=.45, trans="whip", trans_dur=.3))
 
 # ------------------------------------------------------------------ couverture, planches
-def cover(path): return quiz_cover(path, THEME, hero, TITLE)
+LOGO = Image.open(os.path.join(ROOT, "assets", "logos", "fff_bleu_sticker.png")).convert("RGBA")
+def logo_hero(cv, fr, t, x, y, s):
+    """Couverture : gros logo FFF en autocollant papier (ombre portée, légère rotation) à la place du joueur."""
+    h = int(600*s); im = LOGO.resize((int(LOGO.width*h/LOGO.height), h), Image.LANCZOS).rotate(-6, expand=True, resample=Image.BICUBIC)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); sh.putalpha(im.getchannel("A").point(lambda v: v*90//255)); sh = sh.filter(ImageFilter.GaussianBlur(10))
+    x0, y0 = int(x + 120 - im.width/2), int(y - im.height)
+    cv.paste(sh, (x0 + 14, y0 + 18), sh); cv.paste(im, (x0, y0), im)
+def cover(path):
+    """Couverture : hook en lettres découpées, GROS logo FFF autocollant au centre, bande « quiz équipe de France », tampon FACILE ?, chrono."""
+    cv = background(0, TITLE); stage_fill(cv, 0, NAVY, "qzfrcov")
+    rays(cv, (CX, 1150), .3, .8, 16, 1500, (40, 70, 140), .12)
+    ransom_line(cv, "SI T'AS PAS 6/8…", 270, 124, seed=3); ransom_line(cv, "T'ES UNE HONTE", 430, 136, seed=11)
+    logo_hero(cv, 0, 1.0, CX - 120, 1400, 1.45)
+    Label("QUIZ ÉQUIPE DE FRANCE", "qzfrcv1", font("title", 76), NOIR, GOLD, padx=30, pady=8, rough=5).draw(cv, 0, CX, 1510, 1, -3)
+    STAMP("FACILE ?", "qzfrcv2", ROUGE, 100).draw(cv, 0, 840, 1720, 1, 10)
+    chrono(cv, 0, CHRONO*.4 + 1.0, 1.0, y=1740, cx=170, x0=290, x1=600)
+    finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
+
 
 def stills(out, only=None):
     scene_timing(SCENES, VOICE); starts = np.cumsum([0] + [sc.T for sc in SCENES])
