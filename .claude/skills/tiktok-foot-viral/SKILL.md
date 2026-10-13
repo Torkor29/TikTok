@@ -153,6 +153,15 @@ Donc :
 - Commentaire épinglé = provocation ou mini-sondage (« 90 % ratent la 3… 👀 », « OUI ou NON ? »).
 - Les mêmes mots-clés écrits à l'écran sur l'image 0 (TikTok lit le texte à l'écran).
 
+**Jour de match : l'actu AUTOUR de la vidéo, pas DEDANS** (EN TEST)
+- Voix et titre à l'écran restent intemporels (« T'es un vrai fan du PSG ? Si t'as pas 5/5… ») : une vidéo vit des jours/semaines,
+  « prêt pour ce soir ? » la périme dès le lendemain.
+- L'actu du match va dans : (1) la description (mots-clés de l'affiche : « Avant Manchester City – PSG ce soir 🔴🔵 » +
+  #mancitypsg #championsleague) ; (2) un texte ajouté dans l'appli TikTok sur les 3 premières secondes (« Spécial City – PSG ce
+  soir ⚔️ ») ; (3) le commentaire épinglé en mode prono (« Prono City – PSG ? Je dis 1-2 Paris 👀 ») ; (4) après le match, répondre
+  aux commentaires en citant le résultat pour relancer la vidéo.
+- Horaire : 7 h a fait 164 K sur le quiz PSG d'origine → test 7 h / 12 h 30 / 19 h en cours (stats à 24 h à relever).
+
 **Carrousels (mode photo)** : poussés fort par TikTok, swipe = engagement, re-proposés si pas finis, 0 crédit ElevenLabs.
 - Formats : « X géants tombés en enfer », quiz à swiper (question / réponse), classement polémique (n°1 caché à la fin),
   avant / maintenant, « le saviez-tu ? » (très enregistré).
