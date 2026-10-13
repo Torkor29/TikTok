@@ -119,3 +119,39 @@ Donc :
 - [ ] Un changement visuel toutes les 2 s au plus, une relance toutes les ~15 s.
 - [ ] CTA au milieu (juste après un moment fort) et à la fin.
 - [ ] Description courte + commentaire à épingler donnés dans la réponse.
+
+## 8) EN TEST (oct. 2026) : règles tirées des stats réelles de la chaîne, à confirmer
+Statut : hypothèses issues des analytics du 13/10/2026. L'utilisateur envoie les résultats au fil de l'eau ; mettre à jour cette
+section (passer une règle en « validé » ou la retirer) à chaque retour. Noter ici la date et les chiffres de chaque test.
+
+**Référence : ce qui a marché**
+- Quiz PSG d'origine (5 oct.) : 164 K vues (≈ 115 K hors promo), 35,2 s de visionnage moyen, 398 abonnés, 692 commentaires.
+  Image 0 = titre DÉFI lisible en 1 s (« T'ES UN VRAI FAN DU PSG ? SI TU AS PLUS DE 5/8 ») + joueur.
+- Histoire « faillite 2013 → Ligue 1 2026 » : 18,2 K vues, 30,7 s moyen, 80 abonnés. Hook = contraste chiffré (« Faillite en 2013… L1 en 2026 ?! »).
+- Flops : hooks sans mystère (« Adieu Léo », « t'es sûr d'être un vrai supporter ? » sur Lens) → < 700 vues, ~10 s moyen.
+
+**Règles en test**
+1. **La 1re seconde décide** (toutes les courbes perdent 20 à 60 % à 0:01) : image 0 = défi ou contraste chiffré, lisible en 1 s,
+   + visuel reconnaissable (vrai écusson, logo, visage papier ressemblant) + son dès 0 s (boom, hymne…). Rien ne se superpose au titre.
+2. **Quiz : titre défi plein écran ~1,5 s, puis question 1 direct.** Pas d'écran de règles (« 8 questions / 5 secondes ») : le chrono
+   s'explique seul. Version courte testée : 5 questions, chrono 3 s, ≈ 50 s (episodes/quiz_france1/quiz_france1_court.py) vs version
+   longue 8 questions / 5 s / ≈ 1 min 50 (quiz_france1.py). → comparer visionnage moyen + commentaires.
+3. **Hook provocant** (« si t'as pas 5/5… t'es une honte ») : pousse à rester pour se prouver et à commenter son score. À comparer au
+   hook classique « t'es un vrai fan de X si t'as plus de 5/8 ».
+4. **Vrais écussons / logos** (fournis par l'utilisateur, rangés dans assets/logos/) détourés en autocollant papier (contour blanc +
+   ombre) : sur l'image 0 et la couverture, en GRAND. Ne jamais aller chercher soi-même logos ou images de match (droits).
+5. **Portraits ressemblants** : bustes papier IA (ElevenLabs gpt-image-2.5-sunburst, 2 joueurs par image sur fond blanc, détourés par
+   scripts/detoure_duo.py) plutôt que figurines génériques quand le joueur doit être reconnu.
+6. **Sujets à grosse audience d'abord** (PSG, OM, Bleus, Real, Barça, Mbappé, Messi/Ronaldo), en ESPAÇANT un même club (3 quiz PSG en
+   4 jours = lassitude : 5,8 K vues, 6,8 s moyen).
+7. **2e format : « club ressuscité / club maudit »** (contraste chiffré dans le hook) : Strasbourg, Bordeaux, Leicester, Brest…
+   60-75 s, relance vers 15-20 s (« attends la suite »).
+8. **Commentaires = carburant** : finir par une action facile (« dis ton score », « écris tes 5 lettres »), commentaire épinglé qui
+   provoque. Les réponses cachées (« réponses dans la prochaine ») sont en test sur « Devine la carrière ».
+9. **Mascotte : en pause.** Le test A/B n'a pas montré de gain (ressenti utilisateur : plutôt pire) ; ne pas l'utiliser sans demande.
+10. **Promo TikTok** : les vues payées gonflent les vues mais pas la rétention (quiz PSG niv. 3 : 6,8 s moyen). Juger un format sur le
+    visionnage moyen, le % à 1 s / 8 s, les abonnés et les commentaires, jamais sur les vues seules. Ne jamais supprimer une vidéo en
+    promo pour la remplacer : publier la variante le lendemain, en organique.
+
+**Ce qu'il faut demander à l'utilisateur après chaque publication** : vues (général / promo), visionnage moyen, % regardé en entier,
+courbe de fidélisation (% restants à 1 s et 8 s), abonnés gagnés, commentaires.
