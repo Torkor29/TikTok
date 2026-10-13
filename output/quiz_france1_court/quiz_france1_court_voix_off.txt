@@ -1,0 +1,36 @@
+QUIZ FRANCE1 COURT — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+Combien d'étoiles sur le maillot des Bleus ?  [chrono 3 s]  Réponse B : deux étoiles !
+
+=== SCÈNE 2 ===
+En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 3 s]  Réponse B : Zinédine Zidane !
+
+=== SCÈNE 3 ===
+La finale deux mille dix-huit, c'était contre qui ?  [chrono 3 s]  Réponse A : la Croatie, quatre à deux !
+
+=== SCÈNE 4 ===
+En deux mille six, Zidane met un coup de tête à qui ?  [chrono 3 s]  Réponse D : Marco Materazzi !
+
+=== SCÈNE 5 ===
+Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 3 s]  Réponse C : trois buts, un triplé en finale !
+
+=== SCÈNE 6 ===
+Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan. Dis ton score en commentaire… et abonne-toi pour le niveau deux !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+Combien d'étoiles sur le maillot des Bleus ?  [chrono 3 s]  Réponse B : deux étoiles !
+
+En finale quatre-vingt-dix-huit, qui marque deux buts de la tête ?  [chrono 3 s]  Réponse B : Zinédine Zidane !
+
+La finale deux mille dix-huit, c'était contre qui ?  [chrono 3 s]  Réponse A : la Croatie, quatre à deux !
+
+En deux mille six, Zidane met un coup de tête à qui ?  [chrono 3 s]  Réponse D : Marco Materazzi !
+
+Dernière question : combien de buts Mbappé a-t-il marqués dans cette finale ?  [chrono 3 s]  Réponse C : trois buts, un triplé en finale !
+
+Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan. Dis ton score en commentaire… et abonne-toi pour le niveau deux !
