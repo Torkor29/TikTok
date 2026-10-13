@@ -116,9 +116,9 @@ def s4(cv, fr, t):           # relance
     big("MAIS ATTENDS…", "bx4a", 120, BLANC, ROUGE).draw(cv, fr, CX, 640, z*slam(t, CUTS[3], .2), -3)
     if t > w(82): big("LA CHUTE EST ENCORE PLUS FOLLE", "bx4b", 66, NOIR, GOLD).draw(cv, fr, CX, 860, slam(t, w(82), .25), 2)
     sticker(cv, "bordeaux", CX, 1350, 520, 1, 8*math.sin(t*20)*clamp(prog(t, w(82), .2)))
-def ascenseur(cv, fr, t, a, b, t0, y0=560, y1=1340):
+def ascenseur(cv, fr, t, a, b, t0, ta, y0=560, y1=1340):
     """Écusson de ligue a en haut → flèche qui descend → b en bas (slam)."""
-    sticker(cv, a, CX, y0, 380, pop_in(t, t0 - .4, .3), -4)
+    sticker(cv, a, CX, y0, 380, pop_in(t, ta, .3)*(1 + .03*math.sin(t*5)), -4)
     u = prog(t, t0, .5)
     if u > 0:
         d = ImageDraw.Draw(cv); yb = lerp(y0 + 230, y1 - 260, u)
@@ -128,13 +128,13 @@ def ascenseur(cv, fr, t, a, b, t0, y0=560, y1=1340):
 def s5(cv, fr, t):           # 2022 : dernier de L1 → L2
     stade(cv, t, .7)
     big("2022", "bx5y", 130, NOIR, GOLD).draw(cv, fr, CX, 230, slam(t, w(92), .2), -3)
-    ascenseur(cv, fr, t, "ligue1", "ligue2", w(103))
+    ascenseur(cv, fr, t, "ligue1", "ligue2", w(103), CUTS[4] + .1)
     if t > w(98): STAMP("20e SUR 20", "bx5s", ROUGE, 80).draw(cv, fr, 800, 900, slam(t, w(98), .25), 8)
 def s6(cv, fr, t):           # 2024 : pas de repreneur → statut pro abandonné → N2
     stade(cv, t, .75)
     big("2024", "bx6y", 130, NOIR, GOLD).draw(cv, fr, CX, 230, slam(t, CUTS[5], .2), -3)
     if t > w(113): TAG("pas de repreneur…", "bx6r", PAL["paper"], NOIR, 54).draw(cv, fr, 800, 330, pop_in(t, w(113), .25), -2)
-    ascenseur(cv, fr, t, "ligue2", "n2", w(126) - .2)
+    ascenseur(cv, fr, t, "ligue2", "n2", w(126) - .2, CUTS[5] + .1)
     if t > w(121): STAMP("STATUT PRO ABANDONNÉ", "bx6s", ROUGE, 62).draw(cv, fr, CX, 920, slam(t, w(121), .25), -6)
     if t > w(131): big("4e DIVISION", "bx6d", 100, BLANC, ROUGE).draw(cv, fr, CX, 1690, slam(t, w(131), .25), 3)
 def s7(cv, fr, t):           # 1991 : déjà rétrogradé pour l'argent
