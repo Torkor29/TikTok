@@ -120,6 +120,14 @@ Donc :
 - [ ] CTA au milieu (juste après un moment fort) et à la fin.
 - [ ] Description courte + commentaire à épingler donnés dans la réponse.
 
+## 🎨 STYLE : TOUT EN MOTION DESIGN (préférence utilisateur, 13/10/2026)
+- La base de chaque vidéo = motion design en code (papier découpé / gouache / stop-motion) : animations, effets, transitions,
+  compteurs, chutes physiques, secousses, glitchs… faits par le moteur, pas par des clips vidéo IA.
+- **Même quand l'utilisateur envoie des images réelles** (photos de stade, écussons, logos), les passer dans NOTRE style :
+  écussons/logos en autocollant papier (contour blanc, ombre), photos « papierisées » (postérisation, aplats gouache, grain
+  papier, bords déchirés, virage de couleur), jamais collées brutes en plein écran.
+- Clips vidéo IA : uniquement sur demande explicite + estimation acceptée (cf. règle budget).
+
 ## ⚠️ BUDGET ELEVENLABS (règle absolue, ajoutée le 13/10/2026)
 - **Vidéo IA (image-to-video / text-to-video) : JAMAIS sans accord explicite de l'utilisateur pour CETTE vidéo.** Toujours appeler
   d'abord `estimate_only: true`, annoncer le coût en crédits ET en € , attendre le « ok ». Incident : 4 clips Seedance 2.5 de 5 s
