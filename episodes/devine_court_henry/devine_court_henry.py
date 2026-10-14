@@ -131,8 +131,9 @@ def cover(path):
     ransom_line(cv, "DEVINE", 230, 170, seed=3); ransom_line(cv, "LE JOUEUR", 420, 150, seed=9)
     LBL("95 % NE LE TROUVENT PAS", "dchcv1", font("title", 70), NOIR, GOLD, padx=24, pady=6, rough=3).draw(cv, 0, CX, 590, 1, -3)
     mystery(cv, CX, 1150, 900, 1, 2); STAMP("???", "dchcv2", ROUGE, 170).draw(cv, 0, CX, 1150, 1, 8)
-    for j, (lg, x, y, r) in enumerate([("monaco", 170, 900, -8), ("juventus", 910, 880, 7), ("arsenal", 170, 1500, 6), ("barca", 910, 1520, -6)]):
-        sticker(cv, lg, x, y, 260, 1, r)
+    sticker(cv, "monaco", 170, 900, 260, 1, -8)                     # 1 seul indice : le reste reste caché
+    for j, (x, y, r) in enumerate([(910, 880, 7), (170, 1500, 6), (910, 1520, -6)]):
+        big("?", f"dchcvq{j}", 170, NOIR, GOLD).draw(cv, 0, x, y, 1, r)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 def stills(out):
