@@ -6,10 +6,10 @@ Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 [titre défi, 1,5 s]
 
 === SCÈNE 2 ===
-Comment s'appelle le président du PSG ?  [chrono 3 s]  Réponse C : Nasser Al-Khelaïfi !
+Qui était le capitaine du PSG en finale de Ligue des champions deux mille vingt-cinq ?  [chrono 3 s]  Réponse C : Marquinhos !
 
 === SCÈNE 3 ===
-De quelle couleur est la tour Eiffel sur l'écusson du PSG ?  [chrono 3 s]  Réponse B : rouge !
+De quel club le PSG a recruté Ousmane Dembélé en deux mille vingt-trois ?  [chrono 3 s]  Réponse B : le FC Barcelone !
 
 === SCÈNE 4 ===
 Dans quelle ville le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse A : Munich !
@@ -28,9 +28,9 @@ Alors, combien sur cinq ? Plus de quatre, t'es un vrai fan du PSG. Dis ton score
 
 [titre défi, 1,5 s]
 
-Comment s'appelle le président du PSG ?  [chrono 3 s]  Réponse C : Nasser Al-Khelaïfi !
+Qui était le capitaine du PSG en finale de Ligue des champions deux mille vingt-cinq ?  [chrono 3 s]  Réponse C : Marquinhos !
 
-De quelle couleur est la tour Eiffel sur l'écusson du PSG ?  [chrono 3 s]  Réponse B : rouge !
+De quel club le PSG a recruté Ousmane Dembélé en deux mille vingt-trois ?  [chrono 3 s]  Réponse B : le FC Barcelone !
 
 Dans quelle ville le PSG a gagné sa première Ligue des champions ?  [chrono 3 s]  Réponse A : Munich !
 

@@ -84,13 +84,14 @@ MBP = Player("qzpcmb", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
 NEY = Player("qzpcney", hair=(40, 30, 24), skin=(196, 146, 108), hair_style="quiff")
 NAS = Player("qzpcnas", hair=(30, 26, 24), skin=(190, 146, 110))
 ANC = Player("qzpcanc", hair=(90, 84, 80), skin=(226, 186, 150))
+MARQ = Player("qzpcmarq", hair=(30, 24, 20), skin=(196, 150, 112))
+DEMB = Player("qzpcdemb", hair=(24, 20, 18), skin=(126, 86, 62), hair_style="bald")
 def i1(cv, fr, t, u, tm):
-    reveal_player(cv, fr, t, u, NAS, "suit", "nas1")
-    name_tag(cv, fr, u, "AL-KHELAÏFI", "qzpcn1", "président depuis 2011", size=66)
+    reveal_player(cv, fr, t, u, MARQ, "psg", "marq1")
+    name_tag(cv, fr, u, "MARQUINHOS", "qzpcn1", "capitaine, finale 2025", size=66)
 def i2(cv, fr, t, u, tm):
-    club(cv, "psg", CX - 200, ILLU_Y, 320, 1 + (.08*math.sin(t*6) if u > .1 else 0), -6)
-    if u <= .1: LBL("?", "qzpcq2", font("title", 160), GOLD, None, stroke=8, stroke_fill=NOIR).draw(cv, fr, CX + 220, ILLU_Y, 1, 8*math.sin(fr*.3))
-    else: LBL("ROUGE", "qzpcn2", font("title", 120), BLANC, ROUGE, padx=26, pady=4, rough=3).draw(cv, fr, CX + 210, ILLU_Y - 10, slam(u, .1, .3), 4)
+    reveal_player(cv, fr, t, u, DEMB, "psg", "demb2")
+    if u > .1: club(cv, "barca", CX + 190, ILLU_Y - 20, 260, slam(u, .1, .3), 6)
 def i3(cv, fr, t, u, tm):
     if u <= .1: LBL("??????", "qzpcq3", font("title", 120), BLANC, NOIR, padx=24, pady=4, rough=2).draw(cv, fr, CX, ILLU_Y - 10, 1, 4 + 2*math.sin(t*4))
     else:
@@ -105,8 +106,8 @@ def i5(cv, fr, t, u, tm):
     if u > .1: STAMP("LE CLASSIQUE", "qzpcs5", ROUGE, 60).draw(cv, fr, CX, ILLU_Y + 105, slam(u, .1, .3), 4)
 
 QUESTIONS_PSG = [
-    Q("Comment s'appelle le président du PSG ?", ["Florentino Pérez", "Jean-Michel Aulas", "Nasser Al-Khelaïfi", "Joan Laporta"], 2, "FACILE", i1, [(.1, "cash", .6)]),
-    Q("De quelle couleur est la tour Eiffel sur l'écusson ?", ["Bleue", "Rouge", "Blanche", "Dorée"], 1, "FACILE", i2, [(.1, "stamp", .6)]),
+    Q("Le capitaine du PSG en finale de C1 2025 ?", ["Achraf Hakimi", "Gianluigi Donnarumma", "Marquinhos", "Vitinha"], 2, "MOYEN", i1, [(.1, "crowd", .7)]),
+    Q("De quel club le PSG a recruté Dembélé en 2023 ?", ["Dortmund", "FC Barcelone", "Rennes", "Arsenal"], 1, "MOYEN", i2, [(.1, "cash", .6)]),
     Q("Dans quelle ville le PSG a gagné sa 1re C1 ?", ["Munich", "Londres", "Paris", "Madrid"], 0, "MOYEN", i3, [(.1, "crowd", .8), (.1, "stamp", .6)]),
     Q("Quel coach italien a rendu le PSG champion en 2013 ?", ["Antonio Conte", "Claudio Ranieri", "Fabio Capello", "Carlo Ancelotti"], 3, "MOYEN", i4, [(.1, "crowd", .6)]),
     Q("Comment on appelle le match PSG – OM ?", ["Le Derby de France", "Le Classique", "Le Choc des titans", "L'Olympico"], 1, "LA PLUS DURE", i5, [(.1, "stamp", .7), (.1, "crowd", .6)]),
