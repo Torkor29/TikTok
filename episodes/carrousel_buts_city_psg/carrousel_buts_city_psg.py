@@ -1,5 +1,5 @@
 """CARROUSEL « ÉLECTION DU PLUS BEAU BUT » — Man City 2-4 PSG (LDC, 2e journée, 14/10/2026). 8 slides, 0 crédit.
-Pas d'images de match (droits) : schéma papier de chaque but (demi-terrain vu du dessus, trajectoire), écussons autocollants.
+Pas d'images de match : grosse icône ronde du buteur (photos fournies -> scripts/icone_joueur.py, assets/psg_city), écussons autocollants.
 Buts (footmercato.net + eurosport.fr) : 13' Doué, 15' Dembélé (tête), 32' Vitinha, 53' Haaland, 63' Akliouche, 75' Haaland.
 
   python3 episodes/carrousel_buts_city_psg/carrousel_buts_city_psg.py output/carrousel_buts_city_psg
@@ -90,9 +90,8 @@ def slides():
         sticker(cv, crest(club), 170, 470, 230, -8)
         big(who, f"cbw{n}", 120, BLANC, ROUGE if club == "psg" else NOIR).draw(cv, 0, 600, 430, 1, 3)
         big(f"{mn}  •  {sc}", f"cbm{n}", 64, NOIR, BLANC).draw(cv, 0, 600, 570, 1, -2)
-        card, sh = schema(cv, shot, kind, n)
-        cv.paste(sh, (CX - card.width//2 + 14, 1080 - card.height//2 + 20), sh); cv.paste(card, (CX - card.width//2, 1080 - card.height//2), card)
-        LBL("schéma indicatif", f"cbi{n}", font("mono", 30), BLANC, NOIR, padx=10, pady=2, rough=1).draw(cv, 0, 830, 1415, 1, 0)
+        icon = {"DOUÉ": "doue", "DEMBÉLÉ": "dembele", "VITINHA": "vitinha", "HAALAND": "haaland", "AKLIOUCHE": "akliouche"}[who]
+        sticker(cv, A("psg_city", f"{icon}.png"), CX, 1060, 800, (-3, 2, -2, 3, -2, 2)[i])
         TAG(desc, f"cbd{n}", PAL["paper"], NOIR, 54, maxw=920).draw(cv, 0, CX, 1530, 1, -2)
         STAMP(f"TON VOTE : {n} ?", f"cbv{n}", ROUGE, 70).draw(cv, 0, CX, 1720, 1, 4)
         page(cv, i + 1, N); out.append(cv)
