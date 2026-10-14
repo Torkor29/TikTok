@@ -210,3 +210,12 @@ section (passer une règle en « validé » ou la retirer) à chaque retour. Not
 
 **Ce qu'il faut demander à l'utilisateur après chaque publication** : vues (général / promo), visionnage moyen, % regardé en entier,
 courbe de fidélisation (% restants à 1 s et 8 s), abonnés gagnés, commentaires.
+
+### EN TEST (14/10) — retours stats + nouveau format
+- Mascotte ballon : SUPPRIMÉE de tous les formats (décision utilisateur). Priorité : hook, montage dynamique, jolis assets/animations.
+- Quiz PSG court (56 s) : 1,1K vues, 26 % regardés, 43 commentaires ; Bordeaux (56 s) : 760 vues en 2 h, 20 %, 2 commentaires.
+  -> 56 s trop long : viser 15-35 s. Voix + mouvement dès l'image 0 (jamais d'écran titre muet). Question de débat tôt dans les histoires.
+- « DEVINE LE JOUEUR » court (~17 s, episodes/devine_court_henry) : silhouette noire + « 95 % NE LE TROUVENT PAS », un écusson
+  qui claque toutes les 1,9 s (année + club, frise en bas), fin « C'EST QUI ? DIS-LE EN COMMENTAIRE ». PAS de réponse dans la vidéo :
+  réponse épinglée le lendemain + 0,5 s « Réponse d'hier : X » au début de l'épisode suivant.
+- Écussons -> autocollants : python3 scripts/make_sticker.py in.png assets/logos/<club>_sticker.png
