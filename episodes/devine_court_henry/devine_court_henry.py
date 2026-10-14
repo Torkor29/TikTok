@@ -23,15 +23,17 @@ PORTRAIT = os.path.join(ROOT, "assets", "tu_gardes_qui1", "d2A.png")
 CAR = [("MONACO", 1994, "monaco", (170, 24, 36)), ("JUVENTUS", 1999, "juventus", (34, 34, 38)),
        ("ARSENAL", 1999, "arsenal", (190, 20, 34)), ("BARCELONE", 2007, "barca", (110, 28, 72)),
        ("NEW YORK", 2010, None, (20, 44, 96))]
-T_HOOK = 0.0; T_CLUB = [1.7 + 1.9*k for k in range(5)]; T_Q = T_CLUB[-1] + 2.0; T_CTA = T_Q + .6; T_END = T_Q + 4.2
+T_HOOK = 0.0; T_CLUB = [3.0 + 1.9*k for k in range(5)]; T_Q = T_CLUB[-1] + 2.0; T_CTA = T_Q + .6; T_END = T_Q + 4.2
 
 # ---------------------------------------------------------------- voix : morceaux (début, fin dans brut.mp3) -> instants
-CUTS = [((0.0, 1.62), T_HOOK), ((1.95, 2.52), T_CLUB[0]), ((2.68, 3.44), T_CLUB[1]), ((3.64, 4.29), T_CLUB[2]),
+CUTS = [((0.0, 2.85), T_HOOK, "consigne"), ((1.95, 2.52), T_CLUB[0]), ((2.68, 3.44), T_CLUB[1]), ((3.64, 4.29), T_CLUB[2]),
         ((4.40, 5.37), T_CLUB[3]), ((5.48, 6.02), T_CLUB[4]), ((6.43, 8.27), T_Q)]
+CUTS = [c if len(c) == 3 else (*c, "brut") for c in CUTS]
 VOIX = f"/tmp/{SLUG}_voix.wav"
 def build_voice():
-    a = load_audio(os.path.join(HERE, "voix", "brut.mp3")); out = np.zeros(int((T_END + 1)*SR), np.float32)
-    for (s, e), t in CUTS:
+    src = {n: load_audio(os.path.join(HERE, "voix", n + ".mp3")) for n in ("brut", "consigne")}; out = np.zeros(int((T_END + 1)*SR), np.float32)
+    for (s, e), t, n in CUTS:
+        a = src[n]
         seg = a[int(s*SR):int(e*SR)].copy(); f = min(len(seg), int(.02*SR))
         seg[:f] *= np.linspace(0, 1, f); seg[-f:] *= np.linspace(1, 0, f)
         i = int((t + PAD_IN)*SR); out[i:i + len(seg)] += seg
@@ -83,13 +85,16 @@ def draw(cv, fr, t, T):
     if q: bg = mix(bg, (14, 14, 18), (t - T_Q)/.3)
     stage_fill(cv, fr, bg, "dch"); rays(cv, (CX, 860), t, .9, 16, 1600, mix(bg, BLANC, .18), .1, .35)
     # bandeau titre (toujours visible) : gros au début, puis réduit en haut
-    u = clamp((t - 1.2)/.35); sz = int(lerp(1.0, .62, u)*100)
-    if not q:
-        LBL("95 % NE LE TROUVENT PAS", f"dcht{sz}", font("title", sz), NOIR, GOLD, padx=24, pady=6, rough=3).draw(cv, fr, CX, lerp(330, 170, u), slam(t, 0, .16), -3)
+    u = clamp((t - 2.7)/.35); sz = int(lerp(1.0, .62, u)*100)
+    if not q and k >= 0:
+        LBL("95 % NE LE TROUVENT PAS", "dcht", font("title", 62), NOIR, GOLD, padx=24, pady=6, rough=3).draw(cv, fr, CX, 170, slam(t, T_CLUB[0], .16), -3)
     # hook : silhouette mystère + « ??? » avant le 1er club
     if k < 0:
-        mystery(cv, CX, 1000, 900, 1.0, 3*math.sin(t*3))
-        STAMP("QUI EST-CE ?", "dchq", ROUGE, 110).draw(cv, fr, CX, 1560, slam(t, .35, .2), -6)
+        mystery(cv, CX, 1120, 820, 1.0, 3*math.sin(t*3))
+        big("JE TE DONNE", "dchh1", 120, NOIR, GOLD).draw(cv, fr, CX, 250, 1.0, -3)
+        big("SES CLUBS", "dchh2", 120, BLANC, NOIR).draw(cv, fr, CX, 420, slam(t, .25, .16), 3)
+        STAMP("TROUVE LE JOUEUR", "dchq", ROUGE, 104).draw(cv, fr, CX, 1640, slam(t, 1.65, .2), -5)
+        shake(cv, t, 1.67)
     # club courant : gros autocollant qui claque + année
     if 0 <= k and not q:
         tc = T_CLUB[k]; club, yr, logo, _ = CAR[k]; s = slam(t, tc, .2); wob = 2*math.sin(t*5)
@@ -115,7 +120,8 @@ def draw(cv, fr, t, T):
     if 0 <= k: punch(cv, t, T_CLUB[k], 1.05, .25)
     drift(cv, t + PAD_IN, T, .015)
 
-SFX = [(0.0, "boom", .9), (0.0, "riser", .35), (.4, "stamp", .7)]
+SFX = [(0.0, "boom", .9), (0.0, "braam", .55), (.05, "stamp", .7), (PAD_IN + 1.65, "stamp", .8), (PAD_IN + 1.0, "riser", .4)]
+SFX += [(PAD_IN + T_CLUB[0] + 2*k, "tictac", .35) for k in range(5)] + [(PAD_IN + T_Q - 1.0, "drumroll", .5)]
 SFX += [(PAD_IN + tc - .12, "whoosh", .5) for tc in T_CLUB] + [(PAD_IN + tc, "stamp", .65) for tc in T_CLUB]
 SFX += [(PAD_IN + T_Q, "boom", .8), (PAD_IN + T_Q + .35, "stamp", .8), (PAD_IN + T_CTA + .9, "notif", .6)]
 SCENES = [Scene("henry", "devine le joueur", draw, SFX, pad_in=PAD_IN, pad_out=.2, min_dur=T_END + PAD_IN)]
