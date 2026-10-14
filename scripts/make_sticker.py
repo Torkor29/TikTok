@@ -2,7 +2,7 @@
   python3 scripts/make_sticker.py in.png out_sticker.png"""
 import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageChops
-im = Image.open(sys.argv[1]).convert("RGBA")
+im = Image.open(sys.argv[1]).convert("RGBA"); im.thumbnail((900, 900), Image.LANCZOS)
 if im.getchannel("A").getextrema()[0] < 250: a = im.getchannel("A")
 else:
     rgb = im.convert("RGB"); W, H = rgb.size; mark = (255, 0, 255)
