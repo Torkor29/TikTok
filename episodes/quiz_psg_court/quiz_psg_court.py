@@ -100,17 +100,18 @@ def i3(cv, fr, t, u, tm):
 def i4(cv, fr, t, u, tm):
     reveal_player(cv, fr, t, u, ANC, "coach", "anc4")
     name_tag(cv, fr, u, "ANCELOTTI", "qzpcn4", "champion 2013", size=72)
+MAY = Player("qzpcmay", hair=(24, 20, 18), skin=(126, 86, 62))
 def i5(cv, fr, t, u, tm):
-    club(cv, "psg", CX - 230, ILLU_Y - 40, 250, 1, -8); club(cv, "om", CX + 230, ILLU_Y - 40, 250, 1, 8)
-    STAMP("VS", "qzpcvs", ROUGE, 90).draw(cv, fr, CX, ILLU_Y - 40, 1, -6)
-    if u > .1: STAMP("LE CLASSIQUE", "qzpcs5", ROUGE, 60).draw(cv, fr, CX, ILLU_Y + 105, slam(u, .1, .3), 4)
+    board(cv, fr, "PSG", "INTER", 5, 0, "finale 2025, Munich", s=.6, y=ILLU_Y - 60)
+    reveal_player(cv, fr, t, u, MAY, "psg", "may5", x=CX - 230, y=ILLU_Y + 200, s=.42)
+    name_tag(cv, fr, u, "MAYULU", "qzpcn5", "le 5e but, à 19 ans", size=72)
 
 QUESTIONS_PSG = [
     Q("Le capitaine du PSG en finale de C1 2025 ?", ["Achraf Hakimi", "Gianluigi Donnarumma", "Marquinhos", "Vitinha"], 2, "MOYEN", i1, [(.1, "crowd", .7)]),
     Q("De quel club le PSG a recruté Dembélé en 2023 ?", ["Dortmund", "FC Barcelone", "Rennes", "Arsenal"], 1, "MOYEN", i2, [(.1, "cash", .6)]),
     Q("Dans quelle ville le PSG a gagné sa 1re C1 ?", ["Munich", "Londres", "Paris", "Madrid"], 0, "MOYEN", i3, [(.1, "crowd", .8), (.1, "stamp", .6)]),
     Q("Quel coach italien a rendu le PSG champion en 2013 ?", ["Antonio Conte", "Claudio Ranieri", "Fabio Capello", "Carlo Ancelotti"], 3, "MOYEN", i4, [(.1, "crowd", .6)]),
-    Q("Comment on appelle le match PSG – OM ?", ["Le Derby de France", "Le Classique", "Le Choc des titans", "L'Olympico"], 1, "LA PLUS DURE", i5, [(.1, "stamp", .7), (.1, "crowd", .6)]),
+    Q("Finale 2025 : qui marque le 5e but contre l'Inter ?", ["Gonçalo Ramos", "Senny Mayulu", "Bradley Barcola", "Lee Kang-in"], 1, "LA PLUS DURE", i5, [(.1, "crowd", .8), (.1, "stamp", .6)]),
 ]
 
 LOGO = Image.open(os.path.join(ROOT, "assets", "logos", "psg_sticker.png")).convert("RGBA")
