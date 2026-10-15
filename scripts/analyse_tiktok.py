@@ -30,22 +30,22 @@ def main(xlsx, out):
         vid = r["Video link"].rstrip("/").split("/")[-1]; m = meta.get(vid, {})
         v = int(r["Total views"]); L, C, S = int(r["Total likes"]), int(r["Total comments"]), int(r["Total shares"])
         vids.append(dict(id=vid, date=day(r["Post time"]), datestr=r["Post time"], titre=r["Video title"][:70], vues=v, likes=L, coms=C, partages=S,
-                         eng=(L + C + S)/max(v, 1)*100, com=C/max(v, 1)*100, format=m.get("format", "?"), sujet=m.get("sujet", "?"), mascotte=m.get("mascotte", "?")))
+                         eng=(L + C + S)/max(v, 1)*100, promo=int(float(m.get("promo_vues") or 0)), org=v - int(float(m.get("promo_vues") or 0)), com=C/max(v, 1)*100, format=m.get("format", "?"), sujet=m.get("sujet", "?"), mascotte=m.get("mascotte", "?")))
     vids.sort(key=lambda x: (x["date"], x["id"]))
     L = ["# Analyse TikTok @papierfc", "", f"Source : {os.path.basename(xlsx)} — {len(vids)} vidéos", "",
-         "| Date | Format | Sujet | Vues | Likes | Coms | % com | % engagement | Titre |", "|---|---|---|---:|---:|---:|---:|---:|---|"]
+         "| Date | Format | Sujet | Vues | dont payées | Organiques | Likes | Coms | % com | % engagement | Titre |", "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|"]
     for v in vids:
-        L.append(f"| {v['datestr']} | {v['format']} | {v['sujet']} | {v['vues']:,} | {v['likes']:,} | {v['coms']:,} | {v['com']:.1f} | {v['eng']:.1f} | {v['titre']} |".replace(",", " "))
+        L.append(f"| {v['datestr']} | {v['format']} | {v['sujet']} | {v['vues']:,} | {v['promo']:,} | {v['org']:,} | {v['likes']:,} | {v['coms']:,} | {v['com']:.1f} | {v['eng']:.1f} | {v['titre']} |".replace(",", " "))
     def group(key):
         g = {}
-        for v in vids: g.setdefault(v[key], []).append(v["vues"])
+        for v in vids: g.setdefault(v[key], []).append(v["org"])
         return sorted(g.items(), key=lambda kv: -statistics.median(kv[1]))
     for key, lab in (("format", "format"), ("sujet", "sujet"), ("mascotte", "mascotte")):
-        L += ["", f"## Vues médianes par {lab}", "", f"| {lab} | nb | médiane | max |", "|---|---:|---:|---:|"]
+        L += ["", f"## Vues ORGANIQUES médianes par {lab}", "", f"| {lab} | nb | médiane | max |", "|---|---:|---:|---:|"]
         L += [f"| {k} | {len(x)} | {int(statistics.median(x)):,} | {max(x):,} |".replace(",", " ") for k, x in group(key)]
     # tendance : médiane des 5 premières vs 5 dernières
-    a, b = [v["vues"] for v in vids[:5]], [v["vues"] for v in vids[-5:]]
-    L += ["", "## Tendance", "", f"Médiane des 5 premières vidéos : {int(statistics.median(a)):,} vues — des 5 dernières : {int(statistics.median(b)):,} vues.".replace(",", " ")]
+    a, b = [v["org"] for v in vids[:5]], [v["org"] for v in vids[-5:]]
+    L += ["", "## Tendance", "", f"(vues organiques = total - vues payées) Médiane des 5 premières vidéos : {int(statistics.median(a)):,} vues — des 5 dernières : {int(statistics.median(b)):,} vues.".replace(",", " ")]
     open(os.path.join(out, "rapport.md"), "w").write("\n".join(L) + "\n")
     # graphique (échelle log) : une barre par vidéo, couleur = format
     W, H, P = 1600, 800, 90; im = Image.new("RGB", (W, H), (250, 250, 246)); d = ImageDraw.Draw(im)
@@ -64,6 +64,8 @@ def main(xlsx, out):
         d.text((x0, H - P + 30), v["sujet"][:10], fill=(60, 60, 60), font=f)
     for k, (lab, c) in enumerate(col.items()):
         if lab != "?": d.rectangle([P + k*150, 20, P + k*150 + 20, 40], fill=c); d.text((P + k*150 + 28, 22), lab, fill=(30, 30, 30), font=f)
+    for i, v in enumerate(vids):                                      # part payée hachurée en noir
+        if v["promo"]: x0 = P + i*bw + 6; d.rectangle([x0, y(v["vues"]), x0 + bw - 12, y(max(v["org"], 1))], outline=(0, 0, 0), width=3)
     im.save(os.path.join(out, "vues.png")); print(os.path.join(out, "rapport.md"))
 
 if __name__ == "__main__":

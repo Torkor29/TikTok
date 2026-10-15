@@ -1,16 +1,16 @@
-id,format,sujet,mascotte,note
-7691230812628454689,histoire,OM,?,
-7691783741022194977,histoire,Le Mans,?,
-7692872571779370272,histoire,PSG,?,
-7693086495518854432,quiz,PSG,?,quiz niveau 1 (8 q)
-7693201322371239200,histoire,Liverpool,?,
-7693434395063110945,quiz,PSG,?,quiz niveau 2
-7693587006852517152,histoire,Toulouse,?,
-7693970407346441504,quiz,OM,?,quiz niveau 1
-7694313170306944289,quiz,PSG,?,quiz niveau 3 ?
-7694546811993787680,histoire,Saint-Etienne,?,
-7694683373087804705,quiz,Ballon d'or,?,
-7694987676499397921,vote,PSG,?,meilleur joueur de l'histoire
-7695351545164025120,autre,OL,?,
-7695793557667417377,quiz,PSG,?,quiz court
-7696191249971219745,quiz,Equipe de France,?,quiz Bleus
+id,format,sujet,mascotte,promo_vues,promo_eur,note
+7691230812628454689,histoire,OM,?,0,0,
+7691783741022194977,histoire,Le Mans,?,0,0,
+7692872571779370272,histoire,PSG,?,0,0,
+7693086495518854432,quiz,PSG,?,49240,11.88,"quiz niveau 1 (8 q) | promo 05/10 4€ 12,16K + 06/10 7,88€ 37,08K (likes/coms) ; 2 s 42-46 %, 6 s 28 %"
+7693201322371239200,histoire,Liverpool,?,0,0,
+7693434395063110945,quiz,PSG,?,0,0,quiz niveau 2
+7693587006852517152,histoire,Toulouse,?,0,0,
+7693970407346441504,quiz,OM,?,0,0,quiz niveau 1
+7694313170306944289,quiz,PSG,?,4440,20,"quiz niveau 3 ? | promo 08/10 10€ 2,08K + 11/10 10€ 2,36K (à confirmer : même vidéo niveau 3 ?) ; 2 s 14 %, 6 s 5,8 %"
+7694546811993787680,histoire,Saint-Etienne,?,0,0,
+7694683373087804705,quiz,Ballon d'or,?,0,0,
+7694987676499397921,vote,PSG,?,0,0,meilleur joueur de l'histoire
+7695351545164025120,autre,OL,?,0,0,
+7695793557667417377,quiz,PSG,?,0,0,quiz court
+7696191249971219745,quiz,Equipe de France,?,352,10,"quiz Bleus | promo 13/10 10€ (followers) 352 vues ; 2 s 17,4 %, 6 s 6,1 %"
