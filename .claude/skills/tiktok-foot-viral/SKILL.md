@@ -248,3 +248,21 @@ Checklist OBLIGATOIRE avant chaque rendu (vérifier l'image 0 réduite à 270 px
   gauche (avatar). Pas de points de pagination dessinés (TikTok affiche les siens).
 - Publication : galerie (vignette en bas à gauche de l'écran caméra) > onglet Photos > cocher dans l'ordre > Suivant >
   vérifier qu'on est en « Photo » (pas collage/grille, pas diaporama vidéo) > son tendance > Suivant.
+
+### COUVERTURES : ZONE VISIBLE 3:4 OBLIGATOIRE (15/10)
+- TikTok recadre la couverture (éditeur de couverture + grille du profil) : seule la bande centrale y ≈ 240..1680 d'une image
+  1080x1920 est sûre. Tout le texte et les visuels importants de la couverture vont dans y 260..1660 (rien au-dessus, rien en dessous).
+- Vérifier systématiquement : python3 scripts/check_cover.py <couverture.jpg> /tmp/apercu.jpg (zones coupées assombries).
+
+### DESCRIPTIONS ET HASHTAGS : MÉTHODE (remplace le modèle précédent) — EN TEST
+Je n'ai PAS accès aux statistiques réelles des hashtags (Creative Center demande une connexion, les sites tiers ne sont pas
+fiables). Donc on ne « devine » plus : on s'appuie sur ce que TikTok montre et sur nos propres stats.
+1. Mots-clés = ce que les gens TAPENT : l'utilisateur tape le sujet dans la recherche TikTok (« quiz foot », « vrai ou faux foot »,
+   « psg city »…) et envoie la capture de l'autocomplétion + le nombre de vues des hashtags candidats. On choisit à partir de ça.
+2. Le mot-clé principal est DIT par la voix et ÉCRIT à l'écran dans les 3 premières secondes (c'est ce que TikTok indexe le plus),
+   et il ouvre la description (dans les 100 premiers caractères), phrase naturelle, pas de bourrage.
+3. Description = 1 phrase mots-clés + 1 question très facile à répondre en commentaire. Court.
+4. 3 à 5 hashtags : 1 large (#football ou #foot), 1-2 du format (#quizfoot, #vraioufaux…), 1-2 du sujet (#psg, #om…).
+   Jamais #fyp / #pourtoi / #viral.
+5. Mesure : dans les stats de chaque vidéo, noter la part « Recherche » des sources de trafic (aujourd'hui ≈ 0-2 %, « Pour toi »
+   ≈ 97 %). Tenir un tableau vidéo -> hashtags -> % Recherche -> vues, et garder ce qui fait monter la part Recherche.

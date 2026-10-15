@@ -128,13 +128,13 @@ SFX += [(PAD_IN + T_Q, "boom", .8), (PAD_IN + T_Q + .35, "stamp", .8), (PAD_IN +
 SCENES = [Scene("henry", "devine le joueur", draw, SFX, pad_in=PAD_IN, pad_out=.2, min_dur=T_END + PAD_IN)]
 
 def cover(path):
-    cv = background(0, TITLE); stage_fill(cv, 0, (16, 30, 66), "dchcv"); rays(cv, (CX, 1000), 0, .9, 16, 1600, (60, 80, 130), .1)
-    ransom_line(cv, "DEVINE", 230, 170, seed=3); ransom_line(cv, "LE JOUEUR", 420, 150, seed=9)
-    LBL("95 % NE LE TROUVENT PAS", "dchcv1", font("title", 70), NOIR, GOLD, padx=24, pady=6, rough=3).draw(cv, 0, CX, 590, 1, -3)
-    mystery(cv, CX, 1150, 900, 1, 2); STAMP("???", "dchcv2", ROUGE, 170).draw(cv, 0, CX, 1150, 1, 8)
-    sticker(cv, "monaco", 170, 900, 260, 1, -8)                     # 1 seul indice : le reste reste caché
-    for j, (x, y, r) in enumerate([(910, 880, 7), (170, 1500, 6), (910, 1520, -6)]):
-        big("?", f"dchcvq{j}", 170, NOIR, GOLD).draw(cv, 0, x, y, 1, r)
+    """Couverture : tout le contenu dans la bande 3:4 centrale (y 260..1660), car TikTok recadre les couvertures."""
+    cv = background(0, TITLE); stage_fill(cv, 0, (196, 28, 40), "dchcv"); rays(cv, (CX, 960), 0, .9, 16, 1600, (226, 60, 66), .1)
+    ransom_line(cv, "DEVINE", 360, 160, seed=3); ransom_line(cv, "LE JOUEUR", 530, 140, seed=9)
+    mystery(cv, CX, 1080, 720, 1, 2); STAMP("???", "dchcv2", NOIR, 150).draw(cv, 0, CX, 1060, 1, 8)
+    sticker(cv, "monaco", 190, 900, 240, 1, -8)
+    big("?", "dchcvq0", 150, NOIR, GOLD).draw(cv, 0, 890, 900, 1, 7)
+    LBL("95 % NE LE TROUVENT PAS", "dchcv1", font("title", 66), NOIR, BLANC, padx=24, pady=6, rough=3).draw(cv, 0, CX, 1560, 1, -3)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 def stills(out):

@@ -136,11 +136,12 @@ SFX += [(P + T_OUT, "whoosh", .5), (P + T_OUT + 1.0, "notif", .6)]
 SCENES = [Scene("vraifaux", "vrai ou faux", draw, SFX, pad_in=P, pad_out=.2, min_dur=T_END + P)]
 
 def cover(path):
-    cv = background(0, TITLE); stage_fill(cv, 0, (0, 150, 214), "vfcv"); rays(cv, (CX, 1000), 0, .9, 18, 1700, (40, 180, 240), .1)
-    ransom_line(cv, "VRAI OU", 250, 190, seed=4); ransom_line(cv, "FAUX ?", 460, 200, seed=8)
-    put(cv, "logo", "om", 300, 900, 520, 1, -8); put(cv, "pt", "d1A", 800, 980, 600, 1, 5)
-    big("95 % FONT MOINS DE 4/5", "vfcv1", 70, NOIR, JAUNE).draw(cv, 0, CX, 1450, 1, -2)
-    big("VRAI", "vfcvv", 110, BLANC, VERT).draw(cv, 0, 290, 1700, 1, -4); big("FAUX", "vfcvf", 110, BLANC, ROUGE).draw(cv, 0, 790, 1700, 1, 4)
+    """Couverture : tout le contenu dans la bande 3:4 centrale (y 260..1660), car TikTok recadre les couvertures."""
+    cv = background(0, TITLE); stage_fill(cv, 0, (0, 150, 214), "vfcv"); rays(cv, (CX, 960), 0, .9, 18, 1700, (40, 180, 240), .1)
+    ransom_line(cv, "VRAI OU", 370, 160, seed=4); ransom_line(cv, "FAUX ?", 550, 170, seed=8)
+    put(cv, "logo", "om", 300, 980, 440, 1, -8); put(cv, "pt", "d1A", 790, 1000, 500, 1, 5)
+    big("95 % FONT MOINS DE 4/5", "vfcv1", 62, NOIR, JAUNE).draw(cv, 0, CX, 1380, 1, -2)
+    big("VRAI", "vfcvv", 90, BLANC, VERT).draw(cv, 0, 310, 1560, 1, -4); big("FAUX", "vfcvf", 90, BLANC, ROUGE).draw(cv, 0, 770, 1560, 1, 4)
     finish(cv, TITLE); cv.convert("RGB").save(path, quality=94); return path
 
 def stills(out):
