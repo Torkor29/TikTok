@@ -231,3 +231,12 @@ Checklist OBLIGATOIRE avant chaque rendu (vérifier l'image 0 réduite à 270 px
 4. Mouvement dès l'image 0 (zoom, tremblement) + un impact sonore (boom/braam) + la voix démarre à 0,0 s.
 5. La 1re phrase de la voix = la promesse (« Ce club a fait faillite… et a fini en Ligue des champions »), pas le contexte.
 6. Le style collage N&B / documentaire ne commence qu'APRÈS 3 s.
+
+### FORMAT « VRAI OU FAUX » (EN TEST, 15/10) — episodes/vrai_faux1 (1er épisode fait avec la checklist image 0)
+- ≈ 30 s : 5 affirmations surprenantes (mélange 2-3 VRAI / 2-3 FAUX, faits vérifiés), la voix lit l'affirmation,
+  barre de chrono 1,5 s (tic-tac), boutons VRAI vert / FAUX rouge qui pulsent, révélation = tampon géant + preuve en 1 ligne
+  (+ flash couleur, secousse, son correct/buzzer), 1 s puis affirmation suivante. Fin : « COMBIEN SUR 5 ? DIS-LE EN COMMENTAIRE ».
+- Image 0 : « VRAI OU / FAUX ? » en lettres découpées géantes + 1re affirmation déjà écrite + écusson énorme en couleur,
+  fond saturé de la couleur du club, voix dès 0 s (« Vrai ou faux ? L'OM est le seul club… »). Fond = couleur du club à chaque item.
+- 1re affirmation = la plus clivante (fait réagir les fans d'un gros club). Jamais une affirmation déjà posée dans un autre épisode.
+- Voix : un seul fichier, morceaux séparés par « ... », coupés au silencedetect et replacés sur une grille (≈ 380 crédits).

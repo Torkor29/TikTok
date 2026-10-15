@@ -1,0 +1,11 @@
+VRAI FAUX1 — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+vrai ou faux
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+vrai ou faux
