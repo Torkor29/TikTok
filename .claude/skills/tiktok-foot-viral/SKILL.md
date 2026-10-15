@@ -219,3 +219,15 @@ courbe de fidélisation (% restants à 1 s et 8 s), abonnés gagnés, commentair
   qui claque toutes les 1,9 s (année + club, frise en bas), fin « C'EST QUI ? DIS-LE EN COMMENTAIRE ». PAS de réponse dans la vidéo :
   réponse épinglée le lendemain + 0,5 s « Réponse d'hier : X » au début de l'épisode suivant.
 - Écussons -> autocollants : python3 scripts/make_sticker.py in.png assets/logos/<club>_sticker.png
+
+### PRIORITÉ N°1 (15/10) — LES 2 PREMIÈRES SECONDES / L'IMAGE 0
+Constat : hommage Brest = 59 % encore là à 0:02 (41 % partis), Bordeaux = 77 % à 0:01. L'image 0 de Brest était un fond
+beige, une petite coupure N&B et aucun texte : on ne comprenait ni le sujet ni l'enjeu -> swipe.
+Checklist OBLIGATOIRE avant chaque rendu (vérifier l'image 0 réduite à 270 px de large, comme dans le fil) :
+1. UN texte géant (3 à 6 mots, ≥ 120 px) dans le tiers haut, lisible en 0,5 s : le SUJET + la TENSION
+   (« 6 FOIS CHAMPION… EN 4e DIVISION ?! », « DE LA FAILLITE À LA LDC »). Jamais une liste de noms.
+2. UN visage ou UN écusson ÉNORME (≥ 60 % de la largeur), en COULEUR, expressif. Pas de petites vignettes, pas de N&B au début.
+3. Fond saturé et contrasté (rouge, bleu nuit, jaune) — jamais beige/gris à l'image 0.
+4. Mouvement dès l'image 0 (zoom, tremblement) + un impact sonore (boom/braam) + la voix démarre à 0,0 s.
+5. La 1re phrase de la voix = la promesse (« Ce club a fait faillite… et a fini en Ligue des champions »), pas le contexte.
+6. Le style collage N&B / documentaire ne commence qu'APRÈS 3 s.
