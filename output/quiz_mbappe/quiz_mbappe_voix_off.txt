@@ -1,0 +1,56 @@
+QUIZ MBAPPE — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+T'es un vrai fan de Mbappé ? Huit questions. Si t'as pas six sur huit… t'es pas un vrai fan.
+
+=== SCÈNE 2 ===
+Dans quel club Mbappé a-t-il commencé le football ?  [chrono]  Réponse B : l'AS Bondy !
+
+=== SCÈNE 3 ===
+Son premier but avec Monaco fait de lui le plus jeune buteur du club, devant qui ?  [chrono]  Réponse C : Thierry Henry !
+
+=== SCÈNE 4 ===
+Combien le PSG a payé Monaco pour Mbappé ?  [chrono]  Réponse A : cent quatre-vingts millions !
+
+=== SCÈNE 5 ===
+Contre quel pays Mbappé marque son premier but en Coupe du monde ?  [chrono]  Réponse D : le Pérou !
+
+=== SCÈNE 6 ===
+À quel âge Mbappé devient champion du monde ?  [chrono]  Réponse B : dix-neuf ans !
+
+=== SCÈNE 7 ===
+Quel est le score de la finale deux mille vingt-deux, avant les tirs au but ?  [chrono]  Réponse C : trois partout !
+
+=== SCÈNE 8 ===
+Combien de buts Mbappé a marqué au total avec le PSG ?  [chrono]  Réponse A : deux cent cinquante-six !
+
+=== SCÈNE 9 ===
+La plus dure : quel numéro portait Mbappé lors de sa première saison au Real Madrid ?  [chrono]  Réponse B : le neuf !
+
+=== SCÈNE 10 ===
+Alors, combien sur huit ? Plus de six, t'es un vrai fan de Mbappé. Dis ton score en commentaire !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+T'es un vrai fan de Mbappé ? Huit questions. Si t'as pas six sur huit… t'es pas un vrai fan.
+
+Dans quel club Mbappé a-t-il commencé le football ?  [chrono]  Réponse B : l'AS Bondy !
+
+Son premier but avec Monaco fait de lui le plus jeune buteur du club, devant qui ?  [chrono]  Réponse C : Thierry Henry !
+
+Combien le PSG a payé Monaco pour Mbappé ?  [chrono]  Réponse A : cent quatre-vingts millions !
+
+Contre quel pays Mbappé marque son premier but en Coupe du monde ?  [chrono]  Réponse D : le Pérou !
+
+À quel âge Mbappé devient champion du monde ?  [chrono]  Réponse B : dix-neuf ans !
+
+Quel est le score de la finale deux mille vingt-deux, avant les tirs au but ?  [chrono]  Réponse C : trois partout !
+
+Combien de buts Mbappé a marqué au total avec le PSG ?  [chrono]  Réponse A : deux cent cinquante-six !
+
+La plus dure : quel numéro portait Mbappé lors de sa première saison au Real Madrid ?  [chrono]  Réponse B : le neuf !
+
+Alors, combien sur huit ? Plus de six, t'es un vrai fan de Mbappé. Dis ton score en commentaire !
