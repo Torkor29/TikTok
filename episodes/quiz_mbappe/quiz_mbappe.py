@@ -1,4 +1,4 @@
-"""QUIZ « T'ES UN VRAI FAN DE MBAPPÉ ? » — 8 questions, chrono 5 s (format du quiz PSG à 164K), sujet jamais traité en quiz.
+"""QUIZ « T'ES UN VRAI FAN DE MBAPPÉ ? » — 8 questions, chrono 4 s (format du quiz PSG à 164K), sujet jamais traité en quiz.
 Test (15/10) : écran d'ouverture NOUVEAU (fond jaune, gros portrait papier, pas le fond bleu à rayons habituel), voix dès 0 s.
 Voix : voix/brut.mp3 coupée (transcription ElevenLabs) en intro, q1..q8, r1..r8, outro.
 
@@ -9,6 +9,8 @@ import sys, os, json, math
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "engine"))
 from quiz import *
+import quiz
+quiz.CHRONO = CHRONO = 4.0
 import engine
 from story import align_episode
 from PIL import ImageFilter
@@ -31,7 +33,7 @@ def Wd(k):
 
 NOIR = (28, 26, 30); BLANC = (250, 250, 246); ROUGE = (210, 36, 42); JAUNE = (255, 200, 40); NUIT = (20, 22, 30)
 THEME = dict(du="DE MBAPPÉ", accent=ROUGE, badge=NOIR, bgs=[NUIT, (34, 30, 40), (24, 34, 74), (40, 26, 30)], ray=(255, 255, 255), ray2=(60, 60, 76),
-             seuil=6, nq=8, mot_nq=("Huit", 1), mot_chrono=("cinq", 1), tampon="QUIZ MBAPPÉ")
+             seuil=6, nq=8, mot_nq=("Huit", 1), mot_chrono=("quatre", 1), tampon="QUIZ MBAPPÉ")
 A = lambda *p: os.path.join(ROOT, "assets", *p)
 
 _c = {}
@@ -99,7 +101,7 @@ def intro_draw(cv, fr, t, T):
     LBL("DE MBAPPÉ ?", "qmbt2", font("title", 150), BLANC, NOIR, padx=30, pady=4, rough=3).draw(cv, fr, CX, 440, 1, -3)
     put(KM, cv, CX, 1080, 860, 1 + .03*t, -2 + 1.5*math.sin(t*3))
     STRIP.draw(cv, fr, CX, 1600, slam(t, 2.0, .2) if fr else 1, 2)
-    LBL("8 QUESTIONS · 5 SECONDES", "qmbt3", font("title", 60), NOIR, BLANC, padx=24, pady=6, rough=3).draw(cv, fr, CX, 1760, slam(t, 1.3, .2) if fr else 1, -2)
+    LBL("8 QUESTIONS · 4 SECONDES", "qmbt3", font("title", 60), NOIR, BLANC, padx=24, pady=6, rough=3).draw(cv, fr, CX, 1760, slam(t, 1.3, .2) if fr else 1, -2)
     drift(cv, t, T, .015)
 intro_sfx = [(0.0, "boom", .8), (0.0, "crowd", .6), (1.3, "stamp", .6), (2.0, "stamp", .7)]
 
