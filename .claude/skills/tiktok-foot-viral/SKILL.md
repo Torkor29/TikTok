@@ -266,3 +266,15 @@ fiables). Donc on ne « devine » plus : on s'appuie sur ce que TikTok montre et
    Jamais #fyp / #pourtoi / #viral.
 5. Mesure : dans les stats de chaque vidéo, noter la part « Recherche » des sources de trafic (aujourd'hui ≈ 0-2 %, « Pour toi »
    ≈ 97 %). Tenir un tableau vidéo -> hashtags -> % Recherche -> vues, et garder ce qui fait monter la part Recherche.
+
+### ANALYSE DU SEUL SUCCÈS (quiz PSG, 164K, 05/10) — RÉFÉRENCE N°1 (15/10)
+- Courbe : ~50 % partent dans la 1re seconde (comme toutes nos vidéos), MAIS 28 % sont encore là à 0:18 et la courbe reste
+  presque plate jusqu'à 1:52 -> moyenne 35 s. Ce n'est pas l'image 0 qui a fait la différence, c'est ce qui RETIENT après.
+- Ce qui retient : le DÉFI D'IDENTITÉ envers une grosse communauté (« T'ES UN VRAI FAN DU PSG ? SI T'AS PLUS DE 5/8 ») +
+  le JEU qui continue (« compte tes points », chrono, score final promis). Tant qu'on joue, on reste.
+- Les « j'aime » arrivent à 0:01 : normal (les gens likent en décidant de rester), ce n'est pas un problème.
+- Public : 89 % France, 94 % nouveaux spectateurs, 100 % non abonnés, 98 % « Pour toi » -> priorité aux clubs français à grosse
+  communauté (PSG, OM, OL, Équipe de France) avant les clubs étrangers.
+- Contre-exemples : « Vrai ou faux » (réponse à chaque question = fin de suspense, pas d'identité) 5,4 s ; histoires 11-15 s.
+- RÈGLE : tout nouveau contenu doit (1) interpeller une communauté (« vrai fan de… »), (2) promettre un score/résultat à la FIN,
+  (3) garder le spectateur en train de JOUER. Sinon on ne le publie pas.
