@@ -240,3 +240,11 @@ Checklist OBLIGATOIRE avant chaque rendu (vérifier l'image 0 réduite à 270 px
   fond saturé de la couleur du club, voix dès 0 s (« Vrai ou faux ? L'OM est le seul club… »). Fond = couleur du club à chaque item.
 - 1re affirmation = la plus clivante (fait réagir les fans d'un gros club). Jamais une affirmation déjà posée dans un autre épisode.
 - Voix : un seul fichier, morceaux séparés par « ... », coupés au silencedetect et replacés sur une grille (≈ 380 crédits).
+
+### CARROUSELS : FORMAT 3:4 OBLIGATOIRE (15/10)
+- En mode photo, TikTok affiche les images en 3:4 et COUPE le haut et le bas d'une image 9:16 (vu sur City 2-4 PSG : titres et
+  « ton vote » coupés). Toujours exporter les slides en **1080x1440** (composer dans la bande y 240..1680 puis recadrer).
+- Marges de sécurité : rien d'important à droite au-delà de x 900 sous la moitié (boutons j'aime/commentaire), ni en bas à
+  gauche (avatar). Pas de points de pagination dessinés (TikTok affiche les siens).
+- Publication : galerie (vignette en bas à gauche de l'écran caméra) > onglet Photos > cocher dans l'ordre > Suivant >
+  vérifier qu'on est en « Photo » (pas collage/grille, pas diaporama vidéo) > son tendance > Suivant.

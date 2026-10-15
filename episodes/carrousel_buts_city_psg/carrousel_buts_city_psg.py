@@ -70,47 +70,48 @@ def schema(cv, shot, kind, key):
     sh = Image.new("RGBA", card.size, (0, 0, 0, 0)); sh.putalpha(card.getchannel("A").point(lambda v: v*90//255)); sh = sh.filter(ImageFilter.GaussianBlur(12))
     return card, sh
 
+# Mode photo TikTok = affichage 3:4 : on compose dans la bande centrale y 240..1680 puis on recadre en 1080x1440.
+Y0 = 240
 def slides():
-    out = []; N = 8
+    out = []
     # 1) hook / règle du vote
     cv = base(PSG_BG, 0)
-    ransom_line(cv, "LE PLUS BEAU", 260, 150, seed=3)
-    ransom_line(cv, "BUT ?", 430, 190, seed=8)
-    sticker(cv, crest("city"), 170, 830, 280, -8); sticker(cv, crest("psg"), 910, 830, 280, 8)
-    big("2 - 4", "cbs", 180, NOIR, BLANC).draw(cv, 0, CX, 830, 1, 0)
-    big("6 BUTS. 1 SEUL GAGNANT.", "cb1a", 70, NOIR, JAUNE).draw(cv, 0, CX, 1150, 1, -2)
-    TAG("Swipe, puis vote en commentaire : 1, 2, 3, 4, 5 ou 6", "cb1b", PAL["paper"], NOIR, 52, maxw=900).draw(cv, 0, CX, 1350, 1, 2)
-    big("LDC • 14 OCT.", "cb1c", 54, BLANC, NOIR).draw(cv, 0, CX, 1560, 1, -2)
-    TAG("swipe >>", "cbsw", PAL["paper"], NOIR, 48).draw(cv, 0, 860, 1780, 1, -4)
-    page(cv, 0, N); out.append(cv)
+    ransom_line(cv, "LE PLUS BEAU", Y0 + 120, 140, seed=3)
+    ransom_line(cv, "BUT ?", Y0 + 290, 180, seed=8)
+    sticker(cv, crest("city"), 170, Y0 + 610, 260, -8); sticker(cv, crest("psg"), 910, Y0 + 610, 260, 8)
+    big("2 - 4", "cbs", 170, NOIR, BLANC).draw(cv, 0, CX, Y0 + 610, 1, 0)
+    big("6 BUTS. 1 SEUL GAGNANT.", "cb1a", 70, NOIR, JAUNE).draw(cv, 0, CX, Y0 + 880, 1, -2)
+    TAG("Swipe, puis vote en commentaire : 1, 2, 3, 4, 5 ou 6", "cb1b", PAL["paper"], NOIR, 50, maxw=820).draw(cv, 0, CX, Y0 + 1060, 1, 2)
+    big("LDC • 14 OCT.", "cb1c", 52, BLANC, NOIR).draw(cv, 0, CX, Y0 + 1240, 1, -2)
+    out.append(cv)
     # 2-7) un but par slide
     for i, (n, mn, who, club, sc, desc, shot, kind) in enumerate(BUTS):
         cv = base(PSG_BG if club == "psg" else CITY_BG, i + 1)
-        big(f"BUT N°{n}", f"cbn{n}", 150, NOIR, JAUNE, rough=4).draw(cv, 0, CX, 190, 1, -4)
-        sticker(cv, crest(club), 170, 470, 230, -8)
-        big(who, f"cbw{n}", 120, BLANC, ROUGE if club == "psg" else NOIR).draw(cv, 0, 600, 430, 1, 3)
-        big(f"{mn}  •  {sc}", f"cbm{n}", 64, NOIR, BLANC).draw(cv, 0, 600, 570, 1, -2)
+        big(f"BUT N°{n}", f"cbn{n}", 110, NOIR, JAUNE, rough=4).draw(cv, 0, CX, Y0 + 95, 1, -4)
+        sticker(cv, crest(club), 170, Y0 + 280, 200, -8)
+        big(who, f"cbw{n}", 100, BLANC, ROUGE if club == "psg" else NOIR).draw(cv, 0, 600, Y0 + 245, 1, 3)
+        big(f"{mn}  •  {sc}", f"cbm{n}", 58, NOIR, BLANC).draw(cv, 0, 600, Y0 + 370, 1, -2)
         icon = {"DOUÉ": "doue", "DEMBÉLÉ": "dembele", "VITINHA": "vitinha", "HAALAND": "haaland", "AKLIOUCHE": "akliouche"}[who]
-        sticker(cv, A("psg_city", f"{icon}.png"), CX, 1060, 800, (-3, 2, -2, 3, -2, 2)[i])
-        TAG(desc, f"cbd{n}", PAL["paper"], NOIR, 54, maxw=920).draw(cv, 0, CX, 1530, 1, -2)
-        STAMP(f"TON VOTE : {n} ?", f"cbv{n}", ROUGE, 70).draw(cv, 0, CX, 1720, 1, 4)
-        page(cv, i + 1, N); out.append(cv)
+        sticker(cv, A("psg_city", f"{icon}.png"), 500, Y0 + 790, 660, (-3, 2, -2, 3, -2, 2)[i])
+        TAG(desc, f"cbd{n}", PAL["paper"], NOIR, 50, maxw=800).draw(cv, 0, 480, Y0 + 1200, 1, -2)
+        STAMP(f"TON VOTE : {n} ?", f"cbv{n}", ROUGE, 62).draw(cv, 0, 480, Y0 + 1345, 1, 4)
+        out.append(cv)
     # 8) vote final
     cv = base(PSG_BG, 9)
-    ransom_line(cv, "À TOI", 300, 190, seed=5)
-    ransom_line(cv, "DE VOTER", 480, 150, seed=12)
+    ransom_line(cv, "À TOI", Y0 + 110, 160, seed=5)
+    ransom_line(cv, "DE VOTER", Y0 + 260, 130, seed=12)
     for k, (n, mn, who, club, *_r) in enumerate(BUTS):
-        y = 720 + k*135
-        big(str(n), f"cbf{n}", 80, NOIR, JAUNE).draw(cv, 0, 220, y, 1, -3)
-        big(f"{who} {mn}", f"cbg{n}", 70, BLANC, ROUGE if club == "psg" else NOIR).draw(cv, 0, 600, y, 1, 2)
-    big("LE CHIFFRE EN COMMENTAIRE", "cb8a", 66, NOIR, JAUNE).draw(cv, 0, CX, 1580, 1, -2)
-    BTN_SUB.draw(cv, 0, CX, 1740, .8, -2)
-    page(cv, 7, N); out.append(cv)
+        y = Y0 + 430 + k*118
+        big(str(n), f"cbf{n}", 72, NOIR, JAUNE).draw(cv, 0, 200, y, 1, -3)
+        big(f"{who} {mn}", f"cbg{n}", 64, BLANC, ROUGE if club == "psg" else NOIR).draw(cv, 0, 560, y, 1, 2)
+    big("LE CHIFFRE EN COMMENTAIRE", "cb8a", 60, NOIR, JAUNE).draw(cv, 0, 500, Y0 + 1180, 1, -2)
+    BTN_SUB.draw(cv, 0, 500, Y0 + 1330, .7, -2)
+    out.append(cv)
     return out
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "output", "carrousel_buts_city_psg")
     os.makedirs(out, exist_ok=True); paths = []
     for k, cv in enumerate(slides()):
-        finish(cv, TITLE); p = os.path.join(out, f"slide_{k+1:02d}.png"); cv.convert("RGB").save(p); paths.append(p)
+        p = os.path.join(out, f"slide_{k+1:02d}.png"); cv.convert("RGB").crop((0, Y0, W, Y0 + 1440)).save(p); paths.append(p)
     print(paths)
