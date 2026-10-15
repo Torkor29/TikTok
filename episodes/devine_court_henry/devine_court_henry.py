@@ -68,7 +68,7 @@ def shake(cv, t, t0, amp=22, dur=.35):
 def flash(cv, t, t0, dur=.12):
     if t0 <= t < t0 + dur:
         u = 1 - (t - t0)/dur; cv.paste(Image.blend(cv.convert("RGB"), Image.new("RGB", (W, H), BLANC), .55*u).convert(cv.mode), (0, 0))
-def big(txt, key, size=110, fg=BLANC, bg=NOIR, rough=3): return LBL(txt, key, font("title", size), fg, bg, padx=26, pady=6, rough=rough, maxw=1000)
+def big(txt, key, size=110, fg=BLANC, bg=NOIR, rough=3, maxw=1000): return LBL(txt, key, font("title", size), fg, bg, padx=26, pady=6, rough=rough, maxw=maxw)
 def mix(a, b, u): return tuple(int(x + (y - x)*clamp(u)) for x, y in zip(a, b))
 
 def club_k(t):
@@ -80,7 +80,7 @@ def club_k(t):
 def draw(cv, fr, t, T):
     t = t - PAD_IN; k = club_k(t); q = t >= T_Q
     # fond : couleur du club courant (fondu rapide), rayons qui tournent
-    bg = (16, 30, 66) if k < 0 else CAR[k][3]
+    bg = (196, 28, 40) if k < 0 else CAR[k][3]
     if k >= 1 and t < T_CLUB[k] + .25: bg = mix(CAR[k - 1][3], bg, (t - T_CLUB[k] + .05)/.3)
     if q: bg = mix(bg, (14, 14, 18), (t - T_Q)/.3)
     stage_fill(cv, fr, bg, "dch"); rays(cv, (CX, 860), t, .9, 16, 1600, mix(bg, BLANC, .18), .1, .35)
@@ -90,10 +90,11 @@ def draw(cv, fr, t, T):
         LBL("95 % NE LE TROUVENT PAS", "dcht", font("title", 62), NOIR, GOLD, padx=24, pady=6, rough=3).draw(cv, fr, CX, 170, slam(t, T_CLUB[0], .16), -3)
     # hook : silhouette mystère + « ??? » avant le 1er club
     if k < 0:
-        mystery(cv, CX, 1120, 820, 1.0, 3*math.sin(t*3))
-        big("JE TE DONNE", "dchh1", 120, NOIR, GOLD).draw(cv, fr, CX, 250, 1.0, -3)
-        big("SES CLUBS", "dchh2", 120, BLANC, NOIR).draw(cv, fr, CX, 420, slam(t, .25, .16), 3)
-        STAMP("TROUVE LE JOUEUR", "dchq", ROUGE, 104).draw(cv, fr, CX, 1640, slam(t, 1.65, .2), -5)
+        mystery(cv, CX, 1150, 1000, 1.0 + .03*t, 3*math.sin(t*3))
+        STAMP("???", "dchq0", NOIR, 150).draw(cv, fr, CX, 1100, 1.0, 6)
+        big("JE TE DONNE SES CLUBS", "dchh1", 78, NOIR, GOLD, maxw=1040).draw(cv, fr, CX, 230, 1.0, -3)
+        big("TROUVE LE JOUEUR", "dchh2", 104, BLANC, NOIR, maxw=1040).draw(cv, fr, CX, 420, 1.0 + .06*math.sin(min(t, 1.65)*9), 3)
+        LBL("95 % NE LE TROUVENT PAS", "dchq", font("title", 66), NOIR, BLANC, padx=24, pady=6, rough=3).draw(cv, fr, CX, 1720, slam(t, 1.65, .2), -3)
         shake(cv, t, 1.67)
     # club courant : gros autocollant qui claque + année
     if 0 <= k and not q:
