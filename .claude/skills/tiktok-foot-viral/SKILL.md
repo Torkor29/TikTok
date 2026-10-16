@@ -285,3 +285,8 @@ fiables). Donc on ne « devine » plus : on s'appuie sur ce que TikTok montre et
   papier en couleur, défi en 2 lignes, voix dès 0 s) + chrono 4 s.
 - Échantillon encore petit (194 vues à +2h30) : à confirmer sur 2-3 vidéos du même modèle (autre joueur star, autre couleur
   d'écran à chaque fois pour ne pas lasser).
+- MAJ 16/10 17h (quiz Mbappé) : promo « j'aime » 2,7 € -> 160 likes payés, 0 commentaire, likes tous à 0:00. Public PAYÉ :
+  17 % à 2 s / 6,6 % à 6 s / 0,1 % complet (= quiz Bleus), alors que le quiz PSG 164K sous promo faisait 42-46 % / 28 %.
+  -> Les 63 % du début venaient d'un public « chaud » ; à froid, le sujet PSG accroche bien mieux que Mbappé.
+  Règle : promo « j'aime »/« abonnés » = INTERDITE (pollue les stats, ne crée aucun engagement). Le taux 2 s/6 s sous promo
+  sert de TEST À FROID : ≥ 40 % à 2 s = sujet/accroche qui marche auprès d'inconnus.
