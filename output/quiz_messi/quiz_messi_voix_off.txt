@@ -1,0 +1,56 @@
+QUIZ MESSI — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+T'es un vrai fan de Messi ? Huit questions. Si t'as pas six sur huit… t'es pas un vrai fan.
+
+=== SCÈNE 2 ===
+Dans quelle ville Messi est-il né ?  [chrono]  Réponse B : Rosario !
+
+=== SCÈNE 3 ===
+Dans quel club argentin a-t-il joué enfant ?  [chrono]  Réponse C : Newell's Old Boys !
+
+=== SCÈNE 4 ===
+À quel âge Messi arrive au FC Barcelone ?  [chrono]  Réponse A : treize ans !
+
+=== SCÈNE 5 ===
+Contre quel club marque-t-il son premier but avec le Barça ?  [chrono]  Réponse D : Albacete !
+
+=== SCÈNE 6 ===
+Combien de buts Messi a marqué sur l'année deux mille douze ?  [chrono]  Réponse B : quatre-vingt-onze !
+
+=== SCÈNE 7 ===
+Combien de Ballons d'or Messi a gagné au total ?  [chrono]  Réponse C : huit !
+
+=== SCÈNE 8 ===
+Combien de buts Messi marque en finale de la Coupe du monde deux mille vingt-deux ?  [chrono]  Réponse A : deux !
+
+=== SCÈNE 9 ===
+La plus dure : quel numéro portait Messi lors de ses débuts en équipe première du Barça ?  [chrono]  Réponse D : le trente !
+
+=== SCÈNE 10 ===
+Alors, combien sur huit ? Plus de six, t'es un vrai fan de Messi. Dis ton score en commentaire !
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+T'es un vrai fan de Messi ? Huit questions. Si t'as pas six sur huit… t'es pas un vrai fan.
+
+Dans quelle ville Messi est-il né ?  [chrono]  Réponse B : Rosario !
+
+Dans quel club argentin a-t-il joué enfant ?  [chrono]  Réponse C : Newell's Old Boys !
+
+À quel âge Messi arrive au FC Barcelone ?  [chrono]  Réponse A : treize ans !
+
+Contre quel club marque-t-il son premier but avec le Barça ?  [chrono]  Réponse D : Albacete !
+
+Combien de buts Messi a marqué sur l'année deux mille douze ?  [chrono]  Réponse B : quatre-vingt-onze !
+
+Combien de Ballons d'or Messi a gagné au total ?  [chrono]  Réponse C : huit !
+
+Combien de buts Messi marque en finale de la Coupe du monde deux mille vingt-deux ?  [chrono]  Réponse A : deux !
+
+La plus dure : quel numéro portait Messi lors de ses débuts en équipe première du Barça ?  [chrono]  Réponse D : le trente !
+
+Alors, combien sur huit ? Plus de six, t'es un vrai fan de Messi. Dis ton score en commentaire !
