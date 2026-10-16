@@ -278,3 +278,10 @@ fiables). Donc on ne « devine » plus : on s'appuie sur ce que TikTok montre et
 - Contre-exemples : « Vrai ou faux » (réponse à chaque question = fin de suspense, pas d'identité) 5,4 s ; histoires 11-15 s.
 - RÈGLE : tout nouveau contenu doit (1) interpeller une communauté (« vrai fan de… »), (2) promettre un score/résultat à la FIN,
   (3) garder le spectateur en train de JOUER. Sinon on ne le publie pas.
+
+### RÉSULTAT TEST QUIZ MBAPPÉ (16/10, publié 11h50, sans promo) — MEILLEURE ACCROCHE À CE JOUR
+- 63 % encore là à 0:02, 43 % à 0:06 (quiz PSG 164K : 46 % / 28 % ; quiz Bleus : 17 % / 6 %). Moyenne 18,9 s, 4,6 % de commentaires.
+- Ce qui a changé : sujet JOUEUR star jamais traité en quiz + écran d'ouverture NOUVEAU (fond jaune vif, très gros portrait
+  papier en couleur, défi en 2 lignes, voix dès 0 s) + chrono 4 s.
+- Échantillon encore petit (194 vues à +2h30) : à confirmer sur 2-3 vidéos du même modèle (autre joueur star, autre couleur
+  d'écran à chaque fois pour ne pas lasser).
