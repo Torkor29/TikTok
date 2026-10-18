@@ -9,6 +9,9 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 sys.path.insert(0, os.path.join(ROOT, "engine")); sys.path.insert(0, os.path.join(ROOT, "episodes", "brest_ldc"))
 from quiz import *
 from brest_ldc import _img, shake, big, marker, typed, CREME, NOIR, BLANC, JAUNE
+sys.path.insert(0, os.path.join(ROOT, "episodes", "lille_scrapbook"))
+from lille_scrapbook import polaroid, clipping, ticket, postit, fiche, facture, medal, billet, tape, ROSE
+A_ = lambda *p: os.path.join(ROOT, "assets", *p)
 
 TITLE = "~/histoires $ ./losc"
 SLUG = "lille_fresque"
@@ -80,88 +83,113 @@ def moving(fn, path):   # path(t) -> (dx, dy, extra scale)
         dx, dy, e = path(t); fn(cv, fr, t, X + dx*z, Y + dy*z, z, s*e, r)
     return f
 
-# H : déc. 2020
-add("H", 0, -660, 0, B("RUINÉ…", 170, BLANC, ROUGE, "lfh0", 4), rot=-4)
-add("H", 0, -120, 0, put("lille", 560), rot=-3)
-add("H", 0, 640, .2, M("PUIS CHAMPION ?!", 84, "lfh1"), t1=w("vendre") - .1, rot=3)
-add("H", 0, -100, w("dettes") - .1, S("RUINÉ", 160, ROUGE, "lfh2"), rot=-12)
-add("H", 0, 420, w("vendre") - .1, B("À VENDRE EN URGENCE", 76, BLANC, ROUGE, "lfh3"), rot=3)
-add("H", 0, 600, max(w("explosent"), 36.2), B("DETTES XXL", 96, NOIR, JAUNE, "lfh4", 4), rot=-3)
-add("H", 0, 760, w("fin") + .2, B("FIN 2020 : VENDU EN CATASTROPHE", 50, BLANC, NOIR, "lfh5"), rot=2)
-add("H", 40, -80, w("vendu") - .05, S("VENDU", 190, ROUGE, "lfh6"), rot=10)
-# C : 2021
-add("C", 0, -760, w("six") - .05, B("6 MOIS PLUS TARD", 84, BLANC, NOIR, "lfc0"), rot=-3)
-add("C", 0, -280, w("lille", 2) - .05, put("lille", 600), rot=3)
-add("C", 0, 160, w("champion") - .05, B("CHAMPION DE FRANCE", 92, NOIR, JAUNE, "lfc1", 4), rot=-3)
-add("C", -260, 560, w("psg") - .05, put("psg", 300), rot=-10)
-add("C", 200, 490, w("neymar") - .05, B("NEYMAR", 66, BLANC, NAVY, "lfc2"), rot=4)
-add("C", 200, 620, w("mbappé") - .05, B("MBAPPÉ", 66, BLANC, NAVY, "lfc3"), rot=-3)
-add("C", 0, 770, w("mbappé") + .3, S("BATTUS", 100, NOIR, "lfc4"), rot=-8)
-add("C", 300, -560, w("champions", 2), S("2021 !", 120, NOIR, "lfc5"), rot=14)
-# S1 : 1944
-add("S1", 0, -680, w("tout") - .05, B("1944", 190, NOIR, BLANC, "lf10", 4), rot=-4)
-add("S1", -60, -420, w("deux") if False else w("quarante-quatre") + .3, B("OLYMPIQUE LILLOIS", 70, BLANC, ROUGE, "lf11"), rot=-4)
-add("S1", 150, -260, w("quarante-quatre") + .5, B("SC FIVES", 80, BLANC, NAVY, "lf12"), rot=5)
-add("S1", 300, -90, w("rivaux") - .05, S("RIVAUX", 70, NOIR, "lf13"), rot=14)
-add("S1", -150, 40, w("fusionnent") + .2, B("= FUSION", 80, NOIR, JAUNE, "lf14"), rot=-2)
-add("S1", 0, 340, w("dogues") - .1, put("lille", 420), rot=-3)
-add("S1", 0, 680, w("dogues"), M("LES DOGUES SONT NÉS", 76, "lf15"), rot=2)
-# S2 : 1946
-add("S2", 0, -640, w("doublé") - 1.0, B("1946", 190, NOIR, BLANC, "lf20", 4), rot=4)
-add("S2", 0, -260, w("doublé") - .05, B("DOUBLÉ !", 160, NOIR, JAUNE, "lf21", 4), rot=-6)
-add("S2", -170, 120, w("coupe") - .05, B("COUPE", 90, BLANC, NOIR, "lf22"), rot=-4)
-add("S2", 80, 290, w("championnat") - .1, B("+ CHAMPIONNAT", 84, BLANC, NOIR, "lf23"), rot=3)
-add("S2", 0, 620, w("doublé"), put("lille", 280), rot=6)
-# S3 : la chute
-add("S3", 0, -660, w("sombre") - .1, B("LE CLUB SOMBRE…", 84, BLANC, NOIR, "lf30"), rot=-2)
-fall = lambda t: (0, 330*ease_out_back(clamp((t - w("sombre") + .1)/.6)), 1)
-add("S3", 0, -330, w("puis") - .05, moving(put("lille", 400), fall), rot=-8)
-add("S3", 0, 380, w("deuxième") - .05, put("ligue2", 300), rot=-6)
-add("S3", 0, 660, w("division") - .05, S("DEUXIÈME DIVISION", 72, ROUGE, "lf31"), rot=4)
-# S4 : 2000
-add("S4", 0, -680, w("en", 3) - .05, B("2000", 170, NOIR, BLANC, "lf40", 4), rot=-3)
-add("S4", 0, -400, w("vahid") - .05, M("VAHID HALILHODZIC", 80, "lf41"), rot=-3)
-add("S4", 0, -260, w("vahid") + .3, B("NOUVEAU COACH", 56, BLANC, NOIR, "lf42"), rot=2)
-rise = lambda t: (0, -380*ease_out_back(clamp((t - w("remonter") + .1)/.6)), 1)
-add("S4", 0, 420, w("remonter") - .1, moving(put("lille", 380), rise), rot=-4)
-add("S4", 0, 660, w("remonter"), B("REMONTÉE !", 86, BLANC, ROUGE, "lf43"), rot=3)
-# S5 : 2001 LDC
-add("S5", 0, -720, w("et", 4) - .05, B("UN AN APRÈS", 90, NOIR, JAUNE, "lf50"), rot=-3)
-add("S5", -280, -420, w("lille", 3) - .05, put("lille", 280), rot=-8)
-add("S5", 60, 20, w("ligue") - .05, put("ucl", 560), rot=3)
-add("S5", 0, 520, w("champions") - .05, M("LIGUE DES CHAMPIONS !", 70, "lf51"), rot=-2)
-# S6 : Hazard
-add("S6", 0, -760, w("au") - .05, B("CENTRE DE FORMATION", 64, BLANC, NOIR, "lf60"), rot=-2)
-add("S6", 0, -590, w("gamin") - .05, B("UN GAMIN BELGE…", 80, NOIR, JAUNE, "lf61"), rot=3)
-add("S6", 0, -420, w("quatorze") - .05, B("14 ANS", 120, BLANC, ROUGE, "lf62", 4), rot=-5)
-add("S6", 0, 160, w("eden") - .1, put("hazard_card", 700), rot=-3)
-add("S6", 0, 640, w("hazard") - .05, M("EDEN HAZARD", 100, "lf63"), rot=2)
-# S7 : 2011
-add("S7", 0, -720, w("en", 4) - .05, B("2011", 170, NOIR, BLANC, "lf70", 4), rot=3)
-add("S7", 240, -380, w("en", 4) + .2, put("hazard_card", 380), rot=8)
-add("S7", -200, -440, w("rudi") - .05, B("RUDI GARCIA", 64, BLANC, NOIR, "lf71"), rot=-5)
-add("S7", 0, 20, w("doublé", 2) - .05, B("DOUBLÉ", 170, NOIR, JAUNE, "lf72", 4), rot=-4)
+# objets du scrapbook posés sur la fresque (tombent avec un rebond + ombre, à l'échelle de la caméra)
+def O(sp, t0, d=.22):
+    def f(cv, fr, t, X, Y, z, s, r):
+        lift = 1 - ease_out_cubic(clamp((t - t0)/d)); im, sh = sp; k = z*(1 + .35*lift); off = (12 + 60*lift)*z
+        blit_sxy(cv, sh, X + off*.6, Y + off, k*1.03, k*1.03, r); blit_sxy(cv, im, X, Y, k, k, r)
+    return f
+def addO(st, dx, dy, t0, sp, rot=0, t1=99, d=.22): add(st, dx, dy, t0, O(sp, t0, d), t1, rot)
+def addT(st, dx, dy, t0, rot, wd=170): addO(st, dx, dy, t0 + .12, tape(wd), rot, d=.1)
+def addR(st, t0, pts, wd=12, d=.35):          # trait de feutre rouge (coordonnées locales)
+    def f(cv, fr, t, X, Y, z, s, r):
+        u = clamp((t - t0)/d); n = len(pts) - 1; m = u*n; dr = ImageDraw.Draw(cv)
+        P_ = [(X + px*z, Y + py*z) for px, py in pts]
+        for k in range(int(math.ceil(m))):
+            a_, b_ = P_[k], P_[k + 1]; v = min(1, m - k); dr.line([a_, (lerp(a_[0], b_[0], v), lerp(a_[1], b_[1], v))], fill=ROUGE, width=max(2, int(wd*z)))
+    add(st, 0, 0, t0, f)
+def pile(n_fn, logo, t0):
+    def f(cv, fr, t, X, Y, z, s, r):
+        n = n_fn(t); im = billet(220)[0]
+        for k in range(n): blit_sxy(cv, im, X + (k % 2)*6*z, Y - k*26*z, z, z, (k % 3) - 1)
+        L_ = _img(os.path.join(ROOT, "assets", "logos", f"{logo}_sticker.png"), 190)[0]; blit_sxy(cv, L_, X, Y - (n*26 + 100)*z, z*s, z*s, 0)
+    return f
+LOSC = A_("logos", "lille_sticker.png"); HZ = A_("lille", "hazard_card.png")
+
+# H : déc. 2020 (papier noir)
+add("H", 0, -690, 0, B("RUINÉ…", 160, BLANC, ROUGE, "lfh0", 4), rot=-4)
+addO("H", 110, 80, 0, facture(560), -6, d=.01); addT("H", 110, -290, -1, 4)
+addO("H", -210, -160, 0, polaroid(LOSC, "LOSC", 380), -9, d=.01); addT("H", -210, -390, -1, -12)
+addO("H", 230, 610, .25, postit("PUIS CHAMPION ?!", JAUNE, 360, 70), 7, t1=w("vendre") - .1)
+add("H", 140, 300, w("dettes") - .1, S("IMPAYÉ", 110, ROUGE, "lfh2"), rot=-14)
+addO("H", -230, 600, w("vendre") - .1, postit("À VENDRE EN URGENCE", ROSE, 340, 62), -6)
+add("H", 0, -480, max(w("explosent"), 36.2), B("DETTES ++", 110, NOIR, JAUNE, "lfh4", 4), rot=-3)
+addO("H", 240, 610, w("fin") + .1, postit("FIN 2020", JAUNE, 300, 80), 7)
+add("H", 40, 60, w("vendu") - .05, S("VENDU", 190, ROUGE, "lfh6"), rot=10)
+add("H", 0, 800, w("catastrophe") - .05, B("EN CATASTROPHE", 56, BLANC, NOIR, "lfh5"), rot=2)
+# C : 2021 (papier rouge)
+add("C", 0, -770, w("six") - .05, B("6 MOIS PLUS TARD…", 80, BLANC, NOIR, "lfc0"), rot=-3)
+addO("C", 0, -380, w("champion") - .1, clipping("LILLE CHAMPION DE FRANCE !", 820, 100, "— MAI 2021 —"), 2)
+addO("C", -250, 120, w("lille", 2) - .05, polaroid(LOSC, "les Dogues", 340), -7)
+addO("C", 280, 60, w("champion") + .25, medal(120), 12)
+addO("C", -10, 470, w("psg") - .1, ticket("PSG", "NEYMAR • MBAPPÉ", NAVY, 680), -4)
+addR("C", w("mbappé") + .1, [(-300, 360), (180, 590)], 16, .2); addR("C", w("mbappé") + .25, [(180, 360), (-300, 590)], 16, .2)
+add("C", 270, 700, w("mbappé") + .4, S("BATTUS", 100, NOIR, "lfc4"), rot=10)
+add("C", 0, 130, w("champions", 2), S("CHAMPIONS 2021 !", 110, NOIR, "lfc5"), rot=-10)
+# S1 : 1944 (crème)
+addO("S1", 0, -640, w("tout") + .2, clipping("1944", 520, 150, "— LILLE —"), -3)
+addO("S1", -150, -300, w("clubs") - .2, ticket("OLYMPIQUE LILLOIS", "CLUB N°1", ROUGE, 520), -7)
+addO("S1", 130, -150, w("rivaux") - .2, ticket("SC FIVES", "CLUB N°2", NAVY, 520), 6)
+add("S1", 300, -430, w("rivaux"), S("RIVAUX", 70, NOIR, "lf13"), rot=14)
+addT("S1", -10, -230, w("fusionnent") - .1, -30, 220); addT("S1", 10, -190, w("fusionnent"), 35, 220)
+addO("S1", -280, 80, w("fusionnent") + .2, postit("= FUSION", JAUNE, 280, 70), -8)
+addO("S1", 170, 300, w("dogues") - .15, polaroid(LOSC, "les Dogues", 400), 5); addT("S1", 170, 60, w("dogues") - .15, 8)
+addO("S1", -250, 580, w("dogues") + .35, postit("LES DOGUES SONT NÉS", ROSE, 320, 62), -6)
+# S2 : 1946 (rouge)
+addO("S2", 0, -560, w("doublé") - .1, clipping("1946 : DOUBLÉ !", 860, 100, "— ÉDITION SPÉCIALE —"), -2)
+addO("S2", -60, -60, w("coupe") - .1, ticket("COUPE DE FRANCE", "FINALE 1946", NAVY, 640), -5)
+addO("S2", 220, 320, w("championnat") - .15, postit("+ CHAMPIONNAT", JAUNE, 340, 66), 6)
+add("S2", -240, 520, w("doublé") + .4, put("lille", 260), rot=-8)
+# S3 : la chute (gris)
+addO("S3", 90, -600, w("sombre") - .1, clipping("LILLE SOMBRE…", 600, 92, "— CHUTE —"), 3)
+fall = lambda t: (40*clamp((t - w("sombre") + .1)/.7), 380*ease_out_back(clamp((t - w("sombre") + .1)/.7)), 1)
+add("S3", -170, -250, w("puis") - .05, moving(O(polaroid(LOSC, "LOSC", 380), w("puis") - .05), fall), rot=-14)
+addR("S3", w("sombre") + .1, [(330, -330), (330, 160), (270, 80), (330, 160), (390, 80)], 14, .4)
+add("S3", 230, 400, w("deuxième") - .05, put("ligue2", 280), rot=8)
+add("S3", 0, 720, w("division") - .05, S("DEUXIÈME DIVISION", 70, ROUGE, "lf31"), rot=-4)
+# S4 : 2000 (crème)
+addO("S4", 0, -660, w("en", 3) + .05, clipping("2000", 480, 150, "— LE RETOUR —"), 3)
+addO("S4", 0, -300, w("vahid") - .1, fiche("VAHID HALILHODZIC", "nouveau coach", 720), -3)
+addR("S4", w("remonter") - .1, [(-300, 720), (-300, 200), (-370, 290), (-300, 200), (-230, 290)], 14, .35)
+rise = lambda t: (0, -300*ease_out_back(clamp((t - w("remonter") + .1)/.6)), 1)
+add("S4", -80, 640, w("remonter") - .1, moving(put("lille", 260), rise), rot=-4)
+addO("S4", 230, 330, w("remonter") + .1, postit("REMONTÉE !", JAUNE, 320, 76), 6)
+# S5 : 2001 (bleu nuit)
+addO("S5", -240, -640, w("et", 4) - .05, postit("UN AN APRÈS…", JAUNE, 320, 70), -6)
+add("S5", 280, -640, w("lille", 3) - .05, put("lille", 220), rot=8)
+addO("S5", 0, -200, w("ligue") - .15, ticket("LIGUE DES CHAMPIONS", "SAISON 2001-02", ROUGE, 820), 3)
+add("S5", 0, 360, w("champions") - .05, put("ucl", 440), rot=-4)
+# S6 : Hazard (kraft clair)
+addO("S6", 0, -670, w("au") - .05, clipping("CENTRE DE FORMATION", 720, 70, "— DOMAINE DE LUCHIN —"), -2)
+addO("S6", -230, -340, w("gamin") - .1, postit("UN GAMIN BELGE…", JAUNE, 320, 62), -6)
+addO("S6", 240, -330, w("quatorze") - .1, postit("14 ANS", ROSE, 270, 100), 7)
+addR("S6", w("quatorze") + .15, [(240 + 175*math.cos(-1.4 + 2.2*math.pi*k/30), -320 + 165*math.sin(-1.4 + 2.2*math.pi*k/30)) for k in range(31)], 10, .35)
+addO("S6", 0, 380, w("eden") - .15, polaroid(HZ, "EDEN HAZARD", 600), -3); addT("S6", 0, 40, w("eden") - .15, 3, 220)
+# S7 : 2011 (rouge)
+addO("S7", -200, -640, w("en", 4) + .05, clipping("2011", 460, 150, "— LILLE —"), -4)
+addO("S7", 250, -600, w("en", 4) + .5, polaroid(HZ, "Eden", 300), 8)
+addO("S7", 0, -290, w("rudi") - .1, fiche("RUDI GARCIA", "l'entraîneur", 560), -2)
+add("S7", 0, 60, w("doublé", 2) - .05, B("DOUBLÉ !", 150, NOIR, JAUNE, "lf72", 4), rot=-4)
 def cnt(cv, fr, t, X, Y, z, s, r):
     n = min(65, int(65*clamp((t - w("soixante-cinq") + .05)/.5)))
     big(f"1er DEPUIS {n} ANS", f"lf73{n}", 72, BLANC, NOIR).draw(cv, fr, X, Y, s*z, r)
-add("S7", 0, 250, w("soixante-cinq") - .05, cnt, rot=3)
-add("S7", 0, 580, w("doublé", 2), put("ligue1", 260), rot=-8)
-# S8 : 2020-21
+add("S7", 0, 260, w("soixante-cinq") - .05, cnt, rot=3)
+addO("S7", -230, 570, w("doublé", 2) + .3, medal(110), -10)
+add("S7", 230, 600, w("doublé", 2) + .45, put("ligue1", 230), rot=8)
+# S8 : 2020-21 (crème)
 add("S8", 0, -720, w("l'impossible") - .05, B("L'IMPOSSIBLE", 110, BLANC, ROUGE, "lf80", 4), rot=-3)
-add("S8", 0, -570, w("l'impossible") + .5, B("ARRIVE", 80, NOIR, JAUNE, "lf81"), rot=3)
-for k, (nm, sub, word, x, y, r) in enumerate([("MAIGNAN", "DANS LES CAGES", "maignan", -150, -280, -5), ("BURAK YILMAZ", "DEVANT", "burak", 120, 80, 4),
-                                               ("GALTIER", "SUR LE BANC", "galtier", -150, 440, -3)]):
-    add("S8", x, y, w(word) - .05, B(nm, 92, BLANC, NAVY, f"lf8n{k}"), rot=r)
-    add("S8", x + 60, y + 110, w(word) + .3, M(sub, 54, f"lf8s{k}"), rot=-r)
-add("S8", 300, 720, w("maignan"), put("lille", 260), rot=8)
-# S9 : budget
-add("S9", 0, -720, w("budget") - .1, B("BUDGET", 90, BLANC, NOIR, "lf90"), rot=-2)
-grow = lambda t: (0, 0, 1 + 1.0*clamp((t - w("quatre") + .1)/.5))
-add("S9", 200, -260, w("psg", 2) - .05, moving(put("psg", 260), grow), rot=6)
-add("S9", -270, -470, w("quatre") - .05, B("×4", 200, NOIR, JAUNE, "lf91", 4), rot=-8)
-add("S9", -270, 120, w("face") - .05, put("lille", 220), rot=-6)
-add("S9", 0, 440, w("dogues", 2) - .05, M("LES DOGUES TIENNENT", 76, "lf92"), rot=2)
-add("S9", 0, 580, w("dogues", 2) + .5, B("JUSQU'AU BOUT", 76, BLANC, ROUGE, "lf93"), rot=-2)
+add("S8", 0, -580, w("l'impossible") + .45, M("ARRIVE", 76, "lf81"), rot=3)
+for k, (nm, role, word, x, y, r) in enumerate([("MAIGNAN", "dans les cages", "maignan", -110, -300, -5),
+                                               ("BURAK YILMAZ", "devant", "burak", 120, 40, 4), ("GALTIER", "sur le banc", "galtier", -110, 380, -3)]):
+    addO("S8", x, y, w(word) - .1, fiche(nm, role, 560), r); addT("S8", x - 210, y - 130, w(word) - .1, -30, 140)
+add("S8", 300, 680, w("maignan") + .2, put("lille", 220), rot=8)
+# S9 : budget (bleu nuit)
+addO("S9", -250, -660, w("budget") - .15, postit("BUDGET", JAUNE, 300, 80), -6)
+addO("S9", 250, -620, w("quatre") - .05, postit("×4", ROSE, 250, 150), 8)
+add("S9", -230, 420, w("face"), pile(lambda t: 4, "lille", 0))
+add("S9", 230, 420, w("psg", 2) - .05, pile(lambda t: 4 + int(12*clamp((t - w("quatre") + .1)/.5)) if t > w("quatre") - .1 else 4, "psg", 0))
+add("S9", 0, 640, w("dogues", 2) - .05, M("LES DOGUES TIENNENT", 70, "lf92"), rot=2)
+add("S9", 0, 780, w("dogues", 2) + .5, B("JUSQU'AU BOUT", 66, BLANC, ROUGE, "lf93"), rot=-2)
 
 PUNCH += [0, w("dettes"), w("champion"), w("mbappé") + .3, w("dogues"), w("doublé"), w("deuxième"), w("remonter"), w("ligue"), w("quatorze"),
           w("eden"), w("doublé", 2), w("vendu"), w("maignan"), w("burak"), w("galtier"), w("quatre"), w("champions", 2)]
@@ -207,7 +235,7 @@ def draw_world(cv, fr, t, cx, cy, z):
     for st, dx, dy, t0, t1, fn, rot in ITEMS:
         if t < t0 or t > t1: continue
         x, y = ST[st][:2]; X, Y = S_(x + dx, y + dy)
-        if X < -600 or X > W + 600 or Y < -600 or Y > H + 600: continue
+        if X < -700 or X > W + 700 or Y < -700 or Y > H + 700: continue
         fn(cv, fr, t, X, Y, z, slam(t, t0, .18), rot)
 
 def bills(cv, fr, t, t0, n=10):
