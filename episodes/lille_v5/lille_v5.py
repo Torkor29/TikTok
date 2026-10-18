@@ -122,7 +122,7 @@ def fil_rouge(cv, fr, t):
     a = math.pi + math.pi*clamp(gauge_val(t), 0, 1); rot = -math.degrees(a) - 90
     put(cv, gauge_needle(), 150, 280, .62, rot)
     txt, rolling = date_txt(t)
-    mono(txt, 46, ROUGE if rolling else NOIR).draw(cv, fr, 400 + 6*rolling*math.sin(t*60), 262, 1.0, -3)
+    if t > 1.3: mono(txt, 46, ROUGE if rolling else NOIR).draw(cv, fr, 400 + 6*rolling*math.sin(t*60), 262, 1.0, -3)
 
 # ------------------------------------------------------------------ caméra par scène
 def camk(keys, t):
