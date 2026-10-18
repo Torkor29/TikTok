@@ -41,14 +41,14 @@ PATCH = {k: torn(v[0], v[1], 1000, 1760, i*7 + 3) for i, (k, v) in enumerate(ST.
 ROT = {"H": -1.2, "C": 1.5, "S1": 1, "S2": -1.5, "S3": 1.2, "S4": -1, "S5": 1.4, "S6": -1.2, "S7": 1, "S8": -1, "S9": 1.2}
 
 # ------------------------------------------------------------------ caméra
-def K(t, st, z=1.0, dx=0, dy=0):
+def K(t, st, z=.9, dx=0, dy=0):
     x, y = ST[st][:2] if isinstance(st, str) else st; return (t, x + dx, y + dy, z)
 OV = (650, 3300)
-CAM = [K(0, "H", 1.15, 0, -40), K(3.95, "H", 1.05), K(4.4, "C", 1.0), K(9.45, "C", 1.04), K(10.15, OV, .16), K(10.7, OV, .17),
-       K(11.3, "S1", 1.0), K(15.55, "S1", 1.04), K(15.95, "S2"), K(17.85, "S2", 1.04), K(18.25, "S3"), K(20.35, "S3", 1.04), K(20.75, "S4"),
-       K(23.25, "S4", 1.04), K(23.65, "S5"), K(25.95, "S5", 1.04), K(26.35, "S6"), K(30.35, "S6", 1.04), K(30.75, "S7"), K(35.05, "S7", 1.03),
-       K(35.7, (-500, 4300), .2), K(36.35, "H", 1.0), K(39.65, "H", 1.05), K(40.1, "S8"), K(44.45, "S8", 1.04), K(44.85, "S9"),
-       K(48.55, "S9", 1.05), K(48.95, "C", 1.0), K(50.0, "C", 1.05), K(50.9, OV, .16), K(60, OV, .18)]
+CAM = [K(0, "H", 1.0, 0, -40), K(3.95, "H", .94), K(4.4, "C", .9), K(9.45, "C", .93), K(10.15, OV, .16), K(10.7, OV, .17),
+       K(11.3, "S1", .9), K(15.55, "S1", .93), K(15.95, "S2"), K(17.85, "S2", .93), K(18.25, "S3"), K(20.35, "S3", .93), K(20.75, "S4"),
+       K(23.25, "S4", .93), K(23.65, "S5"), K(25.95, "S5", .93), K(26.35, "S6"), K(30.35, "S6", .93), K(30.75, "S7"), K(35.05, "S7", .92),
+       K(35.7, (-500, 4300), .2), K(36.35, "H", .9), K(39.65, "H", .94), K(40.1, "S8"), K(44.45, "S8", .93), K(44.85, "S9"),
+       K(48.55, "S9", .94), K(48.95, "C", .9), K(50.0, "C", .94), K(50.9, OV, .16), K(60, OV, .18)]
 def ease(u): return u*u*(3 - 2*u)
 def cam(t):
     for a, b in zip(CAM, CAM[1:]):
@@ -100,10 +100,10 @@ add("C", 0, 770, w("mbappé") + .3, S("BATTUS", 100, NOIR, "lfc4"), rot=-8)
 add("C", 300, -560, w("champions", 2), S("2021 !", 120, NOIR, "lfc5"), rot=14)
 # S1 : 1944
 add("S1", 0, -680, w("tout") - .05, B("1944", 190, NOIR, BLANC, "lf10", 4), rot=-4)
-add("S1", -90, -380, w("deux") if False else w("quarante-quatre") + .3, B("OLYMPIQUE LILLOIS", 70, BLANC, ROUGE, "lf11"), rot=-4)
-add("S1", 150, -220, w("quarante-quatre") + .5, B("SC FIVES", 80, BLANC, NAVY, "lf12"), rot=5)
-add("S1", 300, -360, w("rivaux") - .05, S("RIVAUX", 70, NOIR, "lf13"), rot=14)
-add("S1", 0, -50, w("fusionnent") + .2, B("= FUSION", 80, NOIR, JAUNE, "lf14"), rot=-2)
+add("S1", -60, -420, w("deux") if False else w("quarante-quatre") + .3, B("OLYMPIQUE LILLOIS", 70, BLANC, ROUGE, "lf11"), rot=-4)
+add("S1", 150, -260, w("quarante-quatre") + .5, B("SC FIVES", 80, BLANC, NAVY, "lf12"), rot=5)
+add("S1", 300, -90, w("rivaux") - .05, S("RIVAUX", 70, NOIR, "lf13"), rot=14)
+add("S1", -150, 40, w("fusionnent") + .2, B("= FUSION", 80, NOIR, JAUNE, "lf14"), rot=-2)
 add("S1", 0, 340, w("dogues") - .1, put("lille", 420), rot=-3)
 add("S1", 0, 680, w("dogues"), M("LES DOGUES SONT NÉS", 76, "lf15"), rot=2)
 # S2 : 1946
@@ -200,8 +200,9 @@ def draw_world(cv, fr, t, cx, cy, z):
         for sx_ in (-1, 1):
             tx, ty = S_(x + sx_*440, y - 880)
             d.polygon([(tx - 80*z, ty - 26*z), (tx + 80*z, ty - 14*z), (tx + 76*z, ty + 30*z), (tx - 84*z, ty + 18*z)], fill=(236, 226, 190))
-    for k, (x, y, col, lab) in ST.items():
-        X, Y = S_(x - 380, y - 800); flag(cv, fr, lab, X, Y, z, k)
+    if z < .5 and t < 12:                                # dates : seulement au 1er dézoom (frise encore vide)
+        for k, (x, y, col, lab) in ST.items():
+            X, Y = S_(x, y); flag(cv, fr, lab, X, Y, z*4.5, k)
     # éléments
     for st, dx, dy, t0, t1, fn, rot in ITEMS:
         if t < t0 or t > t1: continue
@@ -222,8 +223,8 @@ def draw(cv, fr, t, T):
     draw_world(cv, fr, tv, cx, cy, z)
     if moving_:                                          # traits de vitesse
         d = ImageDraw.Draw(cv); r = random.Random(fr)
-        for _ in range(10):
-            y = r.uniform(0, H); x = r.uniform(0, W); d.line([(x, y), (x + r.uniform(200, 500), y)], fill=(250, 246, 230), width=6)
+        for _ in range(6):
+            y = r.uniform(0, H); x = r.uniform(0, W); d.line([(x, y), (x + r.uniform(200, 500), y)], fill=(250, 246, 230), width=4)
     if tv < 6: bills(cv, fr, tv, w("dettes"))
     if 36 < tv < 38.5: bills(cv, fr, tv, w("explosent"), 14)
     if w("comment") - .1 < tv < w("tout") - .1:
