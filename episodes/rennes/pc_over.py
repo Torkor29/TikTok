@@ -20,7 +20,7 @@ def fit(sp, w=None, h=None, anchor="center", keep_anchor=False):
 
 def rim(sp, col=(150, 140, 165), wd=4):
     """Liseré clair autour d'un objet sombre (lisible sur fond sombre)."""
-    a = sp.getchannel("A").filter(ImageFilter.MaxFilter(wd*2 + 1))
+    a = sp.getchannel("A").point(lambda v: 255 if v > 200 else 0).filter(ImageFilter.MaxFilter(wd*2 + 1))
     out = Image.new("RGBA", sp.size, col + (0,)); out.putalpha(a.point(lambda v: int(v*.85)))
     out.alpha_composite(sp); out.info["anchor"] = sp.info["anchor"]; return out
 
