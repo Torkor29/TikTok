@@ -21,10 +21,13 @@ OUT = os.path.join(ROOT, "output", "supporters")
 NAVY, NAVY2 = (20, 26, 58), (34, 44, 92)
 JAUNE, ROUGE, BLANC, NOIR, CREME = (250, 206, 40), (226, 36, 54), (250, 248, 240), (24, 22, 26), (245, 235, 214)
 
-# clubs dont on a l'écusson officiel (les autres arrivent quand on aura les logos)
+# les 18 clubs de Ligue 1 (écussons officiels fournis)
 CLUBS = [("rennes", (214, 26, 34), (26, 24, 28)), ("psg", (20, 36, 82), (214, 30, 40)), ("om", (240, 244, 248), (40, 160, 220)),
          ("ol", (246, 246, 250), (30, 50, 140)), ("lille", (214, 30, 40), (20, 36, 82)), ("monaco", (214, 26, 34), (246, 246, 246)),
-         ("brest", (214, 26, 34), (250, 250, 250))]
+         ("brest", (214, 26, 34), (250, 250, 250)), ("lens", (250, 214, 30), (214, 30, 40)), ("lorient", (240, 110, 30), (24, 22, 26)),
+         ("nice", (214, 26, 34), (24, 22, 26)), ("toulouse", (90, 50, 140), (250, 250, 250)), ("strasbourg", (40, 150, 220), (250, 250, 250)),
+         ("auxerre", (250, 250, 250), (30, 70, 160)), ("angers", (250, 250, 250), (24, 22, 26)), ("lehavre", (140, 196, 236), (30, 44, 90)),
+         ("parisfc", (24, 34, 80), (60, 150, 220)), ("troyes", (30, 110, 190), (250, 250, 250)), ("lemans", (214, 26, 34), (250, 196, 40))]
 for n, c1, c2 in CLUBS:
     PC.KITS[n] = dict(c1=c1, sleeve=c1, shorts=c2, socks=c1, trim=c2, kind="plain")
 
@@ -154,13 +157,13 @@ def header(L, fr, t):
 def s_intro(L, fr, t):
     rays(L, W/2, 1220, t, .07)
     cx, cy = W/2, 1230
-    for i, (n, *_ ) in enumerate(CLUBS + [(None,)]*5):
-        a = t*.55 + 2*math.pi*i/12; r = 360
+    for i, (n, *_ ) in enumerate(CLUBS):
+        a = t*.55 + 2*math.pi*i/18; r = 390
         x, y = cx + r*math.cos(a), cy + r*math.sin(a)*.9
         if t > T["s2"]:                                            # les écussons se rangent en grille
-            u = M.ease_io((t - T["s2"] - i*.03)/.6); gx = 200 + (i % 4)*227; gy = 900 + (i//4)*230 + 240
+            u = M.ease_io((t - T["s2"] - i*.03)/.6); gx = 140 + (i % 6)*160; gy = 960 + (i//6)*200 + 120
             x, y = x + (gx - x)*u, y + (gy - y)*u
-        if n: blit(L, logo(n, 150), x, y, 1, 4*math.sin(t*2 + i))
+        if n: blit(L, logo(n, 125), x, y, 1, 4*math.sin(t*2 + i))
         else:
             b = L_("?", 90, CREME, NOIR); b.draw(L, fr, x, y, 1, 6*math.sin(t*2 + i))
     if t < T["s2"] + .4:
@@ -170,9 +173,9 @@ def s_intro(L, fr, t):
 def s_stade(L, fr, t):
     sel = SEAT_SEL if t > T["s4"] else None
     club = None
-    if t > T["s5"]: club = CLUBS[int((t - T["s5"])/.45) % len(CLUBS)] if t < T["s6"] else CLUBS[0]
+    if t > T["s5"]: club = CLUBS[int((t - T["s5"])/.2) % len(CLUBS)] if t < T["s6"] else CLUBS[0]
     col = club[1] if club else (120, 124, 136)
-    if club and club[0] in ("om", "ol"): col = club[2]
+    if club and club[0] in ("om", "ol", "auxerre", "angers"): col = club[2]
     pan = 0 if t > T["s4"] else 60*math.sin((t - T["s3"])*.8)
     st = stand_sprite(col, sel)
     sx, sy = W/2 + pan, 1600
@@ -249,7 +252,7 @@ SFX_DIRS = [os.path.join(ROOT, "episodes", "lille_v5", "sfx"), os.path.join(ROOT
 SFX = [(0, "braam", .8), (0, "crowd", .35), (.05, "stamp", .6), (T["s2"], "whoosh1", .5)] + [(T["s2"] + .05 + i*.04, "tok", .25) for i in range(6)] + [
        (T["decide"], "stamp", .6), (T["s3"] - .05, "page_tear", .5), (T["s3"], "wind", .6), (T["s3"] + .3, "stamp", .5),
        (T["s4"], "pop", .5), (T["s4"] + .55, "thud", .7), (T["s4"] + .6, "crowd", .35), (T["nom"], "typewriter", .4), (T["nom"] + .05, "pin", .5)] + [
-       (T["s5"] + k*.45, "pop", .45) for k in range(7)] + [
+       (T["s5"] + k*.2, "tok", .35) for k in range(16)] + [
        (T["s6"], "zap", .5), (T["s6"] + .3, "suck", .6), (T["s6"] + .55, "pop", .5), (T["click"] - .02, "tok", .7), (T["click"], "ding", .6),
        (T["click"] + .08, "thud", .6), (T["s7"] - .05, "page_tear", .5), (T["s7"] + .2, "drumroll", .45), (T["s8"], "stamp", .7),
        (T["s8"] + .3, "riser", .4), (T["s8"] + .75, "bang", .6), (T["s8"] + .8, "shimmer", .5), (T["s8"] + .85, "crowd", .5), (T["s8"] + 1.4, "notif", .5)]
