@@ -1,0 +1,69 @@
+RENNES V2 — VOIX OFF
+
+Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
+
+=== SCÈNE 1 ===
+# Rennes — texte voix off (v1, à valider)
+
+Durée estimée : ~70 s. Ton : Léo, rythmé. CTA quiz au milieu (~32 s), réponse jamais donnée dans la vidéo.
+
+> Rennes a perdu son tout premier match six-zéro… et a attendu quarante-huit ans pour soulever un trophée.
+> Voici l'histoire du club le plus maudit de France.
+> Mille neuf cent un : des étudiants fondent le Stade Rennais. Premier match… six-zéro pour l'adversaire.
+> En mille neuf cent vingt-neuf, le club claque la porte de sa ligue : pendant trois ans, il ne joue plus que des matchs amicaux, une centaine !
+> Dans les années soixante-dix, un attaquant ivoirien, Laurent Pokou, est encensé par Pelé en personne.
+> Rennes gagne deux Coupes de France, en soixante-cinq et soixante et onze… puis plus rien. Pendant quarante-huit ans.
+> **Petite question pour les vrais : quel futur gardien légendaire de Chelsea a joué à Rennes ? Réponds en commentaire… et abonne-toi, like : ça aide énormément la chaîne !**
+> Deux mille neuf : Rennes perd la finale de la Coupe… contre Guingamp, un club de Ligue 2 !
+> Deux mille quatorze : re-finale… re-Guingamp, une ville de sept mille habitants.
+> Pendant ce temps, au centre de formation, un gamin né dans un camp de réfugiés, dont la maison a brûlé quand il était enfant, devient pro à seize ans : Eduardo Camavinga.
+> Avril deux mille dix-neuf : finale contre le PSG de Neymar et Mbappé. Paris mène deux-zéro… Rennes revient : deux-deux ! Mbappé est expulsé.
+> Tirs au but : Hatem Ben Arfa, mis au placard par le PSG un an plus tôt, marque… et Nkunku rate !
+> Quarante-huit ans de malédiction : terminés.
+> Et toi, tu étais devant ce match ? Dis-moi en commentaire quel club tu veux pour la prochaine histoire !
+
+## Faits vérifiés (sources)
+- Fondé en 1901 par d'anciens étudiants ; 1er match perdu 6-0 contre le FC Rennais — fr.wikipedia « Histoire du Stade rennais FC ».
+- 1929-1932 : sort du cadre fédéral, ~100 matchs amicaux dont 29 contre des équipes étrangères, retour avec le professionnalisme en 1932 — en.wikipedia « History of Stade Rennais FC », paperblog. (Motif exact du départ discuté → la voix dit seulement « claque la porte de sa ligue ».)
+- Laurent Pokou, arrivé fin 1973, encensé par Pelé — fr.wikipedia.
+- Coupes de France 1965, 1971, 2019 (48 ans d'attente) — en.wikipedia, theScore, Eurosport.
+- Petr Čech à Rennes 2002-2004 puis Chelsea (~10,3 M€) — en.wikipedia, UEFA. (Réponse du quiz : jamais montrée.)
+- 2009 : Guingamp (Ligue 2) bat Rennes 2-1 en finale ; 2014 : Guingamp bat Rennes 2-0 ; Guingamp ≈ 7 000 habitants — en.wikipedia, Bleacher Report.
+- Camavinga : né en 2002 dans un camp de réfugiés en Angola, maison familiale détruite par un incendie en 2013, pro à 16 ans (avril 2019) — FIFA, en.wikipedia.
+- Finale 27/04/2019 : 2-2 (Alves, Neymar / Kimpembe csc, Mexer), Mbappé expulsé en prolongation, 6-5 aux t.a.b., Nkunku rate — theScore, Goal.
+- Ben Arfa écarté par le PSG en 2017-18, recruté libre par Rennes, marque son tir au but en finale — Goal, Hespress.
+
+
+
+----- VERSION EN UN SEUL BLOC -----
+
+# Rennes — texte voix off (v1, à valider)
+
+Durée estimée : ~70 s. Ton : Léo, rythmé. CTA quiz au milieu (~32 s), réponse jamais donnée dans la vidéo.
+
+> Rennes a perdu son tout premier match six-zéro… et a attendu quarante-huit ans pour soulever un trophée.
+> Voici l'histoire du club le plus maudit de France.
+> Mille neuf cent un : des étudiants fondent le Stade Rennais. Premier match… six-zéro pour l'adversaire.
+> En mille neuf cent vingt-neuf, le club claque la porte de sa ligue : pendant trois ans, il ne joue plus que des matchs amicaux, une centaine !
+> Dans les années soixante-dix, un attaquant ivoirien, Laurent Pokou, est encensé par Pelé en personne.
+> Rennes gagne deux Coupes de France, en soixante-cinq et soixante et onze… puis plus rien. Pendant quarante-huit ans.
+> **Petite question pour les vrais : quel futur gardien légendaire de Chelsea a joué à Rennes ? Réponds en commentaire… et abonne-toi, like : ça aide énormément la chaîne !**
+> Deux mille neuf : Rennes perd la finale de la Coupe… contre Guingamp, un club de Ligue 2 !
+> Deux mille quatorze : re-finale… re-Guingamp, une ville de sept mille habitants.
+> Pendant ce temps, au centre de formation, un gamin né dans un camp de réfugiés, dont la maison a brûlé quand il était enfant, devient pro à seize ans : Eduardo Camavinga.
+> Avril deux mille dix-neuf : finale contre le PSG de Neymar et Mbappé. Paris mène deux-zéro… Rennes revient : deux-deux ! Mbappé est expulsé.
+> Tirs au but : Hatem Ben Arfa, mis au placard par le PSG un an plus tôt, marque… et Nkunku rate !
+> Quarante-huit ans de malédiction : terminés.
+> Et toi, tu étais devant ce match ? Dis-moi en commentaire quel club tu veux pour la prochaine histoire !
+
+## Faits vérifiés (sources)
+- Fondé en 1901 par d'anciens étudiants ; 1er match perdu 6-0 contre le FC Rennais — fr.wikipedia « Histoire du Stade rennais FC ».
+- 1929-1932 : sort du cadre fédéral, ~100 matchs amicaux dont 29 contre des équipes étrangères, retour avec le professionnalisme en 1932 — en.wikipedia « History of Stade Rennais FC », paperblog. (Motif exact du départ discuté → la voix dit seulement « claque la porte de sa ligue ».)
+- Laurent Pokou, arrivé fin 1973, encensé par Pelé — fr.wikipedia.
+- Coupes de France 1965, 1971, 2019 (48 ans d'attente) — en.wikipedia, theScore, Eurosport.
+- Petr Čech à Rennes 2002-2004 puis Chelsea (~10,3 M€) — en.wikipedia, UEFA. (Réponse du quiz : jamais montrée.)
+- 2009 : Guingamp (Ligue 2) bat Rennes 2-1 en finale ; 2014 : Guingamp bat Rennes 2-0 ; Guingamp ≈ 7 000 habitants — en.wikipedia, Bleacher Report.
+- Camavinga : né en 2002 dans un camp de réfugiés en Angola, maison familiale détruite par un incendie en 2013, pro à 16 ans (avril 2019) — FIFA, en.wikipedia.
+- Finale 27/04/2019 : 2-2 (Alves, Neymar / Kimpembe csc, Mexer), Mbappé expulsé en prolongation, 6-5 aux t.a.b., Nkunku rate — theScore, Goal.
+- Ben Arfa écarté par le PSG en 2017-18, recruté libre par Rennes, marque son tir au but en finale — Goal, Hespress.
+
