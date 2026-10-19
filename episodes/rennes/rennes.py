@@ -19,7 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 
 TITLE = "~/histoires $ ./rennes"
 SLUG = "rennes"
-VOIX = os.path.join(HERE, "voix", "voix.mp3")
+VOIX = os.path.join(HERE, "voix", "voix_hook.mp3")   # « Voici l'histoire du club le plus maudit de France » placé en tête
 TEXTE = open(os.path.join(HERE, "TEXTE.md")).read()
 # temps clés (s, voix) relevés dans mots.json
 K = dict(sixzero=1.5, attendu=2.6, ans48=3.0, trophee=4.1, voici=4.6, maudit=5.8, y1901=6.9, etudiants=7.7, stade=9.0, premier=9.7,
@@ -30,7 +30,13 @@ K = dict(sixzero=1.5, attendu=2.6, ans48=3.0, trophee=4.1, voici=4.6, maudit=5.8
          eduardo=46.3, cama=46.6, avril=47.6, y2019=47.9, finale19=48.7, psg=49.4, neymar=50.3, mbappe=50.9, paris=51.5, deuxzero=51.8,
          revient=52.6, deuxdeux=53.2, mbappe2=53.6, expulse=54.2, tab=54.6, benarfa=55.6, placard=56.7, psg2=57.3, marque=58.5,
          nkunku=59.0, rate=59.4, ans48b=59.9, maled=60.6, termine=61.4, auj=61.8, bretagne=62.4, trois=62.9, l1=63.5, rennesb=64.0,
-         brest=64.4, lorient=64.8, guinb=65.4, l2b=66.0, alors=66.3, meilleur=67.4, breton=67.8, dis=68.3, comm=68.6)
+         brest=64.4, lorient=64.8, guinb=65.4, l2b=66.0, alors=66.3, meilleur=67.4, breton=67.8, dis=68.3, comm=68.6, club0=5.3, plus0=5.7, france0=6.2)
+def m(t):
+    """Temps de voix.mp3 -> temps de voix_hook.mp3 (segment « Voici… maudit de France » [4,55-6,80] déplacé en tête)."""
+    if 4.5 <= t < 6.8: return t - 4.55
+    if t < 4.5: return t + 2.25
+    return t - 6.80 + 6.75
+K0 = dict(K); K = {k: m(v) for k, v in K.items()}
 # ------------------------------------------------------------------ outils communs
 def ease(u): u = clamp(u); return u*u*(3 - 2*u)
 def eob(u, s=1.9): return ease_out_back(clamp(u), s)
@@ -131,8 +137,8 @@ def drought(t):
     if t < K["p48"]: return max(1, int(48*ease((t - K["rien"])/.7)))
     if t < K["termine"]: return 48
     return 0
-DATES = [(0, "RENNES"), (6.9, "1901"), (11.9, "1929"), (17.2, "1974"), (22.3, "1965"), (24.5, "1971"), (26.8, "QUIZ"), (34.5, "2009"),
-         (37.8, "2014"), (40.1, "2005"), (47.6, "2019"), (61.8, "2026")]
+DATES = [(0, "RENNES")] + [(m(a), b) for a, b in ((6.9, "1901"), (11.9, "1929"), (17.2, "1974"), (22.3, "1965"), (24.5, "1971"), (26.8, "QUIZ"), (34.5, "2009"),
+         (37.8, "2014"), (40.1, "2005"), (47.6, "2019"), (61.8, "2026"))]
 def fil_rouge(cv, fr, t):
     if t < 1.5: return
     lab = [d for d in DATES if t >= d[0]][-1][1]
@@ -150,7 +156,7 @@ def stripes_bg(L, a=(196, 22, 32), b=(26, 24, 28), w_=140, key="rs"):
     for x in range(-H, L.width, 2*w_): d.polygon([(x, 0), (x + w_, 0), (x + w_ + H*.35, L.height), (x + H*.35, L.height)], fill=b)
 
 # 0. HOOK : 6-0 et 48 ans
-@scene(0.0)
+@scene(m(0.0), trans="whip", td=.25)
 def s_hook(L, fr, t):
     stripes_bg(L, key="hook"); dark(L, .25)
     fx.kinetic(L, fr, t, [("RENNES", -.5)], CX, 620, lambda x, i: kword(x, NOIR, BLANC, 190))
@@ -169,16 +175,16 @@ def s_hook(L, fr, t):
 CAM_HOOK = [(0, CX, 960, 1.1), (1.4, CX, 1000, 1.0), (1.6, CX, 1080, 1.12), (2.5, CX, 1060, 1.0), (4.6, CX, 1100, 1.08)]
 
 # 1. LE CLUB LE PLUS MAUDIT : chat noir
-@scene(K["voici"], trans="whip", td=.25)
+@scene(0.0)
 def s_cat(L, fr, t):
-    paper_fill(L, (34, 30, 40), "night"); rays(L, (CX, 1000), t, .4, 12, 1600, (60, 50, 70), .08, .2)
+    paper_fill(L, (34, 30, 40), "night"); rays(L, (CX, 1000), t, .9, 14, 1700, (120, 20, 30), .1, .3)
     put(L, shadowed(badge(480), "bdg480"), CX, 900, 1.0, wob(t, K["maudit"], 3, 30, 3))
     if t > K["maudit"]:
         d = ImageDraw.Draw(L); u = clamp((t - K["maudit"])/.25)
         d.line([(CX - 60, 700), (CX, 860), (CX - 40, 980), (CX + 30, 1110)][:2 + int(2*u)], fill=(240, 240, 240), width=8)
-    xc = lerp(-300, W + 300, clamp((t - K["voici"])/2.2)); put(L, black_cat(), xc, 1500 + 10*abs(math.sin(t*10)), .9)
-    fx.kinetic(L, fr, t, [("LE CLUB", K["voici"] + .6), ("LE PLUS", K["voici"] + .9), ("MAUDIT", K["maudit"] - .02), ("DE FRANCE", 6.15)], CX, 600,
-               lambda x, i: kword(x, ROUGE if x == "MAUDIT" else NOIR, BLANC, 112), maxw=980)
+    xc = lerp(-100, W + 300, clamp((t + .1)/2.3)); put(L, black_cat(), xc, 1500 + 10*abs(math.sin(t*10)), .9)
+    fx.kinetic(L, fr, t, [("LE CLUB", -.5), ("LE PLUS", -.4), ("MAUDIT", -.3), ("DE FRANCE", K["france0"] - .05)], CX, 600,
+               lambda x, i: kword(x, ROUGE if x == "MAUDIT" else NOIR, BLANC, 140 if x == "MAUDIT" else 112), maxw=980)
 CAM_CAT = [(4.6, CX, 960, 1.0), (5.8, CX, 900, 1.12), (6.9, CX, 960, 1.0)]
 
 # 2. 1901 : étudiants + premier match 6-0
@@ -336,7 +342,7 @@ def s_final(L, fr, t):
     if t > K["expulse"] - .2:
         u = clamp((t - K["expulse"] + .2)/.2); put(L, red_card(), 780, lerp(2200, 1380, u), 1.0, lerp(40, 12, u))
         if t > K["expulse"]: slam_in(L, fr, stampl("EXPULSÉ", ROUGE, 90), t, K["expulse"], 780, 1640 - 120, -8)
-    camera_flashes(L, fr, "rfl", t - 48.0, 2.0, 12, (60, 1650, 1020, 1880))
+    camera_flashes(L, fr, "rfl", t - K["avril"] - .4, 2.0, 12, (60, 1650, 1020, 1880))
 CAM_FINAL = [(47.6, CX, 960, 1.0), (51.4, CX, 1000, 1.15), (53.4, CX, 1000, 1.18), (53.8, 760, 1350, 1.15), (54.6, CX, 1100, 1.0)]
 
 # 10. TIRS AU BUT : Ben Arfa, Nkunku
@@ -393,11 +399,14 @@ def s_bzh(L, fr, t):
         fx.wipe(L, fr, marker("DIS-LE EN COMMENTAIRE", "rcom", 76), CX, 1520, t, K["dis"] - .05, 2)
 CAM_BZH = [(61.8, CX, 1000, 1.0), (63.9, 800, 1050, 1.12), (64.4, 260, 1050, 1.12), (65.4, 520, 1000, 1.12), (66.3, CX, 1000, 1.0), (72, CX, 1000, 1.04)]
 
+SC.sort(key=lambda s: s["t0"])
 CAMS = {"s_hook": CAM_HOOK, "s_cat": CAM_CAT, "s_1901": CAM_1901, "s_1929": CAM_1929, "s_pokou": CAM_POKOU, "s_cups": CAM_CUPS,
         "s_quiz": CAM_QUIZ, "s_guingamp": CAM_GUIN, "s_cama": CAM_CAMA, "s_final": CAM_FINAL, "s_pens": CAM_PENS, "s_bzh": CAM_BZH}
 PUNCH += [K["sixzero"] + .5, K["ans48"], K["maudit"], K["sz2"] + .6, K["porte"], K["centaine"], K["pele"], K["y71"], K["abonne"] + .25, K["like"],
           K["guin1"] + .3, K["l2"], K["brule"], K["eduardo"], K["deuxdeux"], K["expulse"], K["marque"], K["rate"], K["termine"]]
 SHAKES = PUNCH
+CAMS = {k: [(m(a[0]),) + tuple(a[1:]) for a in v] for k, v in CAMS.items()}
+CAMS["s_cat"] = [(0, CX, 960, 1.08), (K["maudit"], CX, 900, 1.12), (2.25, CX, 960, 1.0)]
 # ------------------------------------------------------------------ rendu d'une scène + transitions
 def render_scene(i, fr, t):
     s = SC[i]; L = Image.new("RGBA", s["size"], (0, 0, 0, 255)); s["fn"](L, fr, t)
@@ -444,30 +453,31 @@ def draw(cv, fr, t, T):
 # ------------------------------------------------------------------ sons
 P = PAD_IN
 V5S = os.path.join(ROOT, "episodes", "lille_v5", "sfx"); RS = os.path.join(HERE, "sfx"); BANK = os.path.join(ROOT, "assets", "sfx")
-def X(t, name, g): return (P + t, name, g)
-SFX = [X(0, "braam", .75)] + [X(K["sixzero"] + i*.1, "flap", .5) for i in range(6)] + [X(K["sixzero"] + .65, "stamp", .65),
-       X(K["attendu"], "wind", .45), X(K["ans48"], "tictac", .35), X(4.58, "whoosh1", .5), X(K["voici"] + .1, "paws", .45), X(K["maudit"], "thunder", .5),
-       X(6.88, "page_tear", .5), X(6.92, "stamp", .55), X(K["etudiants"], "typewriter", .35), X(K["stade"], "pop", .5)] + \
-      [X(K["sz2"] - .1 + i*.12, "tok", .45) for i in range(6)] + [X(K["adv"], "groan", .4), X(11.88, "whoosh2", .5), X(11.92, "stamp", .55),
-       X(K["claque"], "doorslam", .85), X(K["pendant3"], "tictac", .4), X(15.2, "tictac", .35), X(K["centaine"], "stamp", .75),
-       X(K["an70"] - .05, "flashfx", .45), X(17.4, "crowd", .35)] + [X(17.6 + k*.9, "touch", .45) for k in range(5)] + [
-       X(K["ivoirien"], "pop", .45), X(K["pokou"], "pin", .5), X(K["pele"], "shimmer", .6), X(K["pele"] + .3, "sparkle", .45),
-       X(22.28, "whoosh3", .5), X(K["y65"] + .12, "tok", .65), X(K["y71"] + .12, "tok", .65), X(K["rien"], "wind", .5), X(K["p48"], "heart", .4),
-       X(26.8, "glitch", .45), X(26.85, "typewriter", .35), X(K["quel"], "riser", .4), X(K["rq"], "stamp", .45), X(K["reponds"], "marker", .45),
-       X(K["abonne"] + .25, "pop", .6), X(K["abonne"] + .3, "ding", .4), X(K["like"], "sparkle", .5), X(K["like"] + .05, "pop", .5), X(K["chaine"], "notif", .45),
-       X(34.48, "whoosh1", .5)] + [X(K["guin1"] + d_, "flap", .45) for d_ in (-.3, 0, .3)] + [X(K["l2"], "stamp", .65), X(K["y2014"] - .1, "page_tear", .45),
-       X(K["refinale"], "flap", .45), X(K["refinale"] + .4, "flap", .45), X(K["reguin"], "tractor", .45), X(K["reguin"] - .05, "stamp", .55),
-       X(40.08, "page_tear", .5), X(K["centre"], "typewriter", .35), X(K["camp"], "pop", .4), X(K["maison"], "pop", .4), X(K["brule"], "fire", .55),
-       X(K["pro"], "stamp", .7), X(K["eduardo"] - .1, "camera", .6), X(K["cama"], "marker", .4),
-       X(47.58, "whoosh3", .5), X(K["y2019"], "stamp", .5), X(48.0, "crowd", .4), X(K["neymar"], "pin", .45), X(K["mbappe"], "pin", .45),
-       X(K["deuxzero"] - .15, "flap", .5), X(K["deuxzero"] + .15, "flap", .5), X(K["revient"], "flap", .55), X(K["revient"] + .05, "crowd", .4),
-       X(K["deuxdeux"], "flap", .6), X(K["deuxdeux"] + .05, "goal_roar", .5), X(K["expulse"] - .2, "whistle", .5), X(K["expulse"], "stamp", .7),
-       X(K["tab"] - .02, "flashfx", .45)] + [X(t0, "kick", .4) for t0, _ in PEN_R + PEN_P[:5]] + [
-       X(K["placard"] - .3, "creak", .5), X(K["benarfa"], "camera", .5), X(K["marque"], "net", .55), X(K["marque"] + .05, "crowd", .4),
-       X(K["nkunku"], "kick", .7), X(K["rate"], "groan", .5), X(K["rate"] + .05, "stamp", .7), X(K["termine"] - .05, "page_tear", .7),
-       X(K["termine"], "boom", .8), X(K["termine"] + .05, "goal_roar", .6), X(K["termine"] + .3, "champagne", .45),
-       X(61.78, "page_tear", .5), X(K["trois"], "stamp", .45)] + [X(t0, "pin", .55) for _, _, t0, _ in CL] + [
-       X(K["alors"], "riser", .4), X(K["breton"], "stamp", .5), X(K["dis"], "notif", .55), X(K["comm"] + .6, "bell", .4)]
+def X(t, name, g): return (P + m(t), name, g)            # temps de voix.mp3 -> voix_hook.mp3
+def XN(t, name, g): return (P + t, name, g)
+SFX = [X(0, "braam", .75)] + [X(K0["sixzero"] + i*.1, "flap", .5) for i in range(6)] + [X(K0["sixzero"] + .65, "stamp", .65),
+       X(K0["attendu"], "wind", .45), X(K0["ans48"], "tictac", .35), XN(2.23, "whoosh1", .5), XN(.05, "paws", .45), X(K0["maudit"], "thunder", .5),
+       X(6.88, "page_tear", .5), X(6.92, "stamp", .55), X(K0["etudiants"], "typewriter", .35), X(K0["stade"], "pop", .5)] + \
+      [X(K0["sz2"] - .1 + i*.12, "tok", .45) for i in range(6)] + [X(K0["adv"], "groan", .4), X(11.88, "whoosh2", .5), X(11.92, "stamp", .55),
+       X(K0["claque"], "doorslam", .85), X(K0["pendant3"], "tictac", .4), X(15.2, "tictac", .35), X(K0["centaine"], "stamp", .75),
+       X(K0["an70"] - .05, "flashfx", .45), X(17.4, "crowd", .35)] + [X(17.6 + k*.9, "touch", .45) for k in range(5)] + [
+       X(K0["ivoirien"], "pop", .45), X(K0["pokou"], "pin", .5), X(K0["pele"], "shimmer", .6), X(K0["pele"] + .3, "sparkle", .45),
+       X(22.28, "whoosh3", .5), X(K0["y65"] + .12, "tok", .65), X(K0["y71"] + .12, "tok", .65), X(K0["rien"], "wind", .5), X(K0["p48"], "heart", .4),
+       X(26.8, "glitch", .45), X(26.85, "typewriter", .35), X(K0["quel"], "riser", .4), X(K0["rq"], "stamp", .45), X(K0["reponds"], "marker", .45),
+       X(K0["abonne"] + .25, "pop", .6), X(K0["abonne"] + .3, "ding", .4), X(K0["like"], "sparkle", .5), X(K0["like"] + .05, "pop", .5), X(K0["chaine"], "notif", .45),
+       X(34.48, "whoosh1", .5)] + [X(K0["guin1"] + d_, "flap", .45) for d_ in (-.3, 0, .3)] + [X(K0["l2"], "stamp", .65), X(K0["y2014"] - .1, "page_tear", .45),
+       X(K0["refinale"], "flap", .45), X(K0["refinale"] + .4, "flap", .45), X(K0["reguin"], "tractor", .45), X(K0["reguin"] - .05, "stamp", .55),
+       X(40.08, "page_tear", .5), X(K0["centre"], "typewriter", .35), X(K0["camp"], "pop", .4), X(K0["maison"], "pop", .4), X(K0["brule"], "fire", .55),
+       X(K0["pro"], "stamp", .7), X(K0["eduardo"] - .1, "camera", .6), X(K0["cama"], "marker", .4),
+       X(47.58, "whoosh3", .5), X(K0["y2019"], "stamp", .5), X(48.0, "crowd", .4), X(K0["neymar"], "pin", .45), X(K0["mbappe"], "pin", .45),
+       X(K0["deuxzero"] - .15, "flap", .5), X(K0["deuxzero"] + .15, "flap", .5), X(K0["revient"], "flap", .55), X(K0["revient"] + .05, "crowd", .4),
+       X(K0["deuxdeux"], "flap", .6), X(K0["deuxdeux"] + .05, "goal_roar", .5), X(K0["expulse"] - .2, "whistle", .5), X(K0["expulse"], "stamp", .7),
+       X(K0["tab"] - .02, "flashfx", .45)] + [XN(t0, "kick", .4) for t0, _ in PEN_R + PEN_P[:5]] + [
+       X(K0["placard"] - .3, "creak", .5), X(K0["benarfa"], "camera", .5), X(K0["marque"], "net", .55), X(K0["marque"] + .05, "crowd", .4),
+       X(K0["nkunku"], "kick", .7), X(K0["rate"], "groan", .5), X(K0["rate"] + .05, "stamp", .7), X(K0["termine"] - .05, "page_tear", .7),
+       X(K0["termine"], "boom", .8), X(K0["termine"] + .05, "goal_roar", .6), X(K0["termine"] + .3, "champagne", .45),
+       X(61.78, "page_tear", .5), X(K0["trois"], "stamp", .45)] + [XN(t0, "pin", .55) for _, _, t0, _ in CL] + [
+       X(K0["alors"], "riser", .4), X(K0["breton"], "stamp", .5), X(K0["dis"], "notif", .55), X(K0["comm"] + .6, "bell", .4)]
 SFX_DIR = "/tmp/claude-0/sfx_rennes"
 os.makedirs(SFX_DIR, exist_ok=True)
 for nm in set(n for _, n, _ in SFX):
