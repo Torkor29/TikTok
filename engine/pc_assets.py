@@ -3,7 +3,10 @@ Règle : volumes à facettes visibles (pas de cubes lisses), peinture en traits 
 blancs mouchetés, pièces animables nommées."""
 import math
 import numpy as np
-from engine.papercraft import Part, cbox, pyramid, rot, speckle, capsule
+try:
+    from engine.papercraft import Part, cbox, pyramid, rot, speckle, capsule
+except ImportError:
+    from papercraft import Part, cbox, pyramid, rot, speckle, capsule
 
 DARK = np.array((36, 30, 28))/255; WHITE = np.array((236, 230, 222))/255
 

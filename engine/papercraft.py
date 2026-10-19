@@ -49,7 +49,7 @@ def _noise(shape, seed, blur):
     return np.asarray(im, np.float32)/255
 
 def render(parts, size=600, yaw=-.6, pitch=.28, scale=180, center=(0, 1, 0), light=(-.55, .75, .55), ss=2, anim=None,
-           shadow=True, ground=0.0, seed=3):
+           shadow=True, ground=0.0, seed=3, anchor=(0, 0, 0), shadow_a=120):
     """anim = {nom_de_pièce: matrice de rotation (autour du pivot)}. Renvoie un sprite RGBA (size x size)."""
     S = size*ss; anim = anim or {}
     Cam = rot("x", pitch) @ rot("y", yaw)
@@ -102,11 +102,33 @@ def render(parts, size=600, yaw=-.6, pitch=.28, scale=180, center=(0, 1, 0), lig
         if len(xs_):
             from PIL import ImageDraw
             w = (xs_.max() - xs_.min())*.55
-            ImageDraw.Draw(sh).ellipse([xs_.mean() - w, gy - w*.16, xs_.mean() + w, gy + w*.16], fill=120)
+            ImageDraw.Draw(sh).ellipse([xs_.mean() - w, gy - w*.16, xs_.mean() + w, gy + w*.16], fill=shadow_a)
             sh = sh.filter(ImageFilter.GaussianBlur(14*ss))
             base = Image.new("RGBA", (S, S), (25, 18, 14, 0)); base.putalpha(sh)
             base.alpha_composite(im); im = base
-    return im.resize((size, size), Image.LANCZOS)
+    im = im.resize((size, size), Image.LANCZOS)
+    av = (np.array(anchor, float) - c0) @ Cam.T
+    im.info["anchor"] = (size/2 + av[0]*scale, size/2 - av[1]*scale)
+    return im
+
+def project(pt, yaw=-.6, pitch=.28, scale=180, center=(0, 1, 0), size=600):
+    v = (np.array(pt, float) - np.array(center, float)) @ (rot("x", pitch) @ rot("y", yaw)).T
+    return size/2 + v[0]*scale, size/2 - v[1]*scale
+
+def lathe(profile, n=8, phase=0.0):
+    """Solide de révolution à n pans : profile = [(rayon, y)] (enveloppe convexe -> profil convexe)."""
+    return np.array([[r*math.cos(2*math.pi*k/n + phase), y, r*math.sin(2*math.pi*k/n + phase)] for r, y in profile for k in range(n)], float)
+
+def icosphere(r=1.0, sub=1):
+    t = (1 + 5**.5)/2
+    V = [(-1, t, 0), (1, t, 0), (-1, -t, 0), (1, -t, 0), (0, -1, t), (0, 1, t), (0, -1, -t), (0, 1, -t), (t, 0, -1), (t, 0, 1), (-t, 0, -1), (-t, 0, 1)]
+    V = [np.array(v)/np.linalg.norm(v) for v in V]
+    pts = list(V)
+    if sub:
+        for i in range(12):
+            for j in range(i + 1, 12):
+                if np.dot(V[i], V[j]) > .4: m = V[i] + V[j]; pts.append(m/np.linalg.norm(m))
+    return np.array(pts)*r, np.array(V)
 
 # ------------------------------------------------------------------ outils de peinture
 def capsule(u, v, a, b, r):
