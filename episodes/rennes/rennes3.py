@@ -294,6 +294,7 @@ CAM_HOOK = [(H0, CX, 980, 1.0), (K["sixzero"] - .1, CX, 1060, 1.14), (K["attendu
 # --- 2. 1901 : étudiants, écusson, 6-0
 foot.KITS["rennes"] = dict(kind="plain", c1=(214, 26, 34), sleeve=(214, 26, 34), shorts=(24, 22, 26), socks=(24, 22, 26), trim=(250, 250, 246))
 STU = [foot.Player("etu0", hair=(70, 50, 30)), foot.Player("etu1", hair=(40, 30, 20))]
+for _p in STU: _p.hat = "boater"
 E_1901 = [El(stampl("1901", (110, 70, 40), 200), CX, 620, K["y1901"], K["premier"] - .2, "stamp", "fly", 1, -4),
           El(CREST(380), CX, 1060, K["stade"] - .08, K["premier"] - .2, "pop", "shrink", 1, 0),
           El(stampl("POUR L'ADVERSAIRE", ROUGE, 70), CX, 1420, K["adv"], None, "stamp", rot=-6),
@@ -309,7 +310,6 @@ def s_1901(L, fr, t):
             if t > K["premier"] - .2: xs += (-1 if i == 0 else 1)*900*M.ease_in((t - K["premier"] + .2)/.3)
             mv = 0 < u < 1; legs, arms, bob = walk(t, 9, 22) if mv else ((0, 0), (14, 14), 0)
             if t > t0: STU[i].draw(L, fr, xs, 1660 + bob, s=.78, kit="suit", legs=legs, arms=arms, mood="happy", t=t, look=(1 if i == 0 else -1, 0))
-            if t > t0: put(L, boater(), xs, 1660 + bob - 495, .8, 4*math.sin(t*3 + i))
     if t > K["premier"] - .1:
         v = board_in(t, K["premier"] - .1)
         foot.draw_goal(L, fr, CX, 1640, 640, 300, 0, 1, t)
@@ -364,9 +364,9 @@ def s_pokou(L, fr, t):
     if t > K["ivoirien"] - .1:
         u = M.spring(t - K["ivoirien"] + .1, .5, 10); flag_civ(L, 800, lerp(1300, 640, u), t, .9)
     if t > K["pele"] - .15:
-        u = (t - K["pele"] + .15)/.3; hy = 1660 - 1.2*590
-        if u < 1: put(L, crown(), CX, lerp(200, hy, u*u), .9, 10*(1 - u))
-        else: b = u - 1; q = .15*math.exp(-b*4)*math.cos(b*9); blit_sxy(L, crown(), CX, hy + 4*math.sin(t*3), .9*(1 + q), .9*(1 - q), 0)
+        u = (t - K["pele"] + .15)/.3; hy = 1660 - 1.2*560*.955
+        if u < 1: put(L, crown(), CX, lerp(200, hy, u*u), .55, 10*(1 - u))
+        else: b = u - 1; q = .15*math.exp(-b*4)*math.cos(b*9); blit_sxy(L, crown(), CX, hy + 4*math.sin(t*3), .55*(1 + q), .55*(1 - q), 0)
         fx.wipe(L, fr, marker("ENCENSÉ PAR PELÉ", "rpele", 84), CX, 540, t, K["pele"], -2)
         for k in range(8):
             a = k*math.pi/4 + t*1.5; put(L, spark(36), CX + 230*math.cos(a), hy + 40 + 120*math.sin(a), .7 + .3*math.sin(t*9 + k), t*90)

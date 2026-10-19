@@ -8,7 +8,7 @@ from engine import blit_sxy
 
 def fit(sp, w=None, h=None, anchor="center", keep_anchor=False):
     """Recadre au contenu et met à l'échelle (largeur ou hauteur cible). anchor : center | bottom | topleft | src."""
-    bb = sp.getchannel("A").point(lambda v: 255 if v > 40 else 0).getbbox()
+    bb = sp.getchannel("A").point(lambda v: 255 if v > 2 else 0).getbbox()
     ax0, ay0 = sp.info.get("anchor", (0, 0))
     im = sp.crop(bb); k = (w/im.width) if w else (h/im.height)
     im = im.resize((max(1, int(im.width*k)), max(1, int(im.height*k))), Image.LANCZOS)

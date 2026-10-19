@@ -27,7 +27,7 @@ KITS = {
     "suit": dict(c1=(52, 54, 62), sleeve=(52, 54, 62), shorts=(52, 54, 62), socks=(52, 54, 62), trim=(250, 248, 240), kind="suit"),
 }
 
-def player_parts(skin=(224, 178, 140), hair=(50, 36, 28), hair_style="short", kit="rennes", mood="happy", age=1.0, beard=None):
+def player_parts(skin=(224, 178, 140), hair=(50, 36, 28), hair_style="short", kit="rennes", mood="happy", age=1.0, beard=None, hat=None):
     k = KITS.get(kit, KITS["rennes"]); suit = k["kind"] == "suit"
     sk = C(skin); dk = C((30, 26, 26)); body = .62 + .38*age
     def p_leg(P, c):
@@ -90,6 +90,12 @@ def player_parts(skin=(224, 178, 140), hair=(50, 36, 28), hair_style="short", ki
         top = hs*_sym([[.42, .2, -.36], [.42, .3, .1], [.36, .52, .3], [.0, .62, .3], [.3, .62, -.1], [.0, .66, -.2], [.35, .1, -.4], [.0, .0, -.44],
                        [.43, .18, .22]] + ([[.4, -.25, -.3], [.0, -.3, -.42]] if hair_style == "long" else []))
         parts.append(Part(top, hair, None, (0, hy, 0), pivot=(0, -.45, 0), name="head_hair"))
+    if hat == "boater":                                              # canotier posé sur la tête : suit les mouvements de tête
+        def p_band(P, c):
+            c[(P[:, 1] > .02) & (P[:, 1] < .12)] = C((214, 26, 34)); return c
+        yb = .52*hs
+        parts.append(Part(lathe([(.72*hs, 0), (.72*hs, .035)], 12), (226, 196, 120), None, (0, hy + yb, 0), pivot=(0, -.45 - yb, 0), name="head_hatb"))
+        parts.append(Part(lathe([(.42*hs, 0), (.4*hs, .26)], 12), (226, 196, 120), p_band, (0, hy + yb + .03, 0), pivot=(0, -.48 - yb, 0), name="head_hatc"))
     return parts, hy
 
 def player_anim(arms=(8, 8), legs=(0, 0), look=(0, 0), lean=0.0, t=0.0):
@@ -98,12 +104,12 @@ def player_anim(arms=(8, 8), legs=(0, 0), look=(0, 0), lean=0.0, t=0.0):
     A["arm_r"] = rot("z", math.radians(arms[1])) @ rot("x", -.08)
     A["leg_l"] = rot("x", -math.radians(legs[0])); A["leg_r"] = rot("x", -math.radians(legs[1]))
     h = rot("y", .35*look[0]) @ rot("x", -.2*look[1]) @ rot("z", .03*math.sin(t*2))
-    for nm in ("head", "head_nose", "head_earl", "head_earr", "head_hair"): A[nm] = h
+    for nm in ("head", "head_nose", "head_earl", "head_earr", "head_hair", "head_hatb", "head_hatc"): A[nm] = h
     return A
 
 @lru_cache(maxsize=4000)
-def player_sprite(skin, hair, hair_style, kit, mood, age, arms, legs, look, yaw, tq, beard=None, size=700):
-    parts, hy = player_parts(skin, hair, hair_style, kit, mood, age, beard)
+def player_sprite(skin, hair, hair_style, kit, mood, age, arms, legs, look, yaw, tq, beard=None, hat=None, size=700):
+    parts, hy = player_parts(skin, hair, hair_style, kit, mood, age, beard, hat)
     A = player_anim(arms, legs, look, 0, tq)
     return render(parts, size, yaw=yaw, pitch=.12, scale=size/5.6, center=(0, 2.45, 0), anim=A, light=(-.5, .7, .6), anchor=(0, 0, 0),
                   shadow_a=90)
@@ -111,13 +117,13 @@ def player_sprite(skin, hair, hair_style, kit, mood, age, arms, legs, look, yaw,
 class PCPlayer:
     """Remplaçant papercraft de foot.Player (même signature draw). Hauteur à s=1 ≈ 470 px comme l'ancien."""
     H_REF = 560
-    def __init__(self, name="p", hair=(50, 36, 28), skin=(224, 178, 140), hair_style="short", beard_col=None, yaw=-.32):
-        self.hair, self.skin, self.hs, self.beard, self.yaw = tuple(hair), tuple(skin), hair_style, beard_col, yaw
+    def __init__(self, name="p", hair=(50, 36, 28), skin=(224, 178, 140), hair_style="short", beard_col=None, yaw=-.32, hat=None):
+        self.hair, self.skin, self.hs, self.beard, self.yaw, self.hat = tuple(hair), tuple(skin), hair_style, beard_col, yaw, hat
     def sprite(self, age=1.0, kit="rennes", arms=(8, 8), legs=(0, 0), mood="happy", look=(0, 0), t=0.0, yaw=None):
         q = lambda v: int(_q(v, 6))
         return player_sprite(self.skin, self.hair, self.hs, kit if kit in KITS else "rennes", mood, round(age, 1), (q(arms[0]), q(arms[1])),
                              (q(legs[0]), q(legs[1])), (round(look[0], 1), round(look[1], 1)), round(self.yaw if yaw is None else yaw, 2),
-                             round(t*4)/4 % 6.3, self.beard)
+                             round(t*4)/4 % 6.3, self.beard, self.hat)
     def draw(self, cv, fr, x, y, s=1.0, age=1.0, kit="rennes", beard=False, arms=(8, 8), legs=(0, 0), mood="happy", look=(0, 0), alpha=1.0,
              tears=0.0, t=0.0, lean=0.0, kid_hair=None, yaw=None, **kw):
         try:
