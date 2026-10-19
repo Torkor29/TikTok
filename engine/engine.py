@@ -641,7 +641,7 @@ def tear_transition(cv, prev, u, kind="tear_v", seed=0):
         _tear_cache.clear(); _tear_cache[key] = (A, B, shadows, line)
     A, B, shadows, line = _tear_cache[key]
     sx0, sy0 = STAGE[:2]; w, h = A.size
-    crack = clamp(u/.28); fly = ease_in_cubic(clamp((u-.22)/.78))
+    crack = clamp(u/.1); fly = ease_in_cubic(clamp((u-.06)/.94))
     if kind == "tear_h":
         dA, dB = (0, -1), (0, 1); rA, rB = 4, -3
     elif kind == "tear_v":

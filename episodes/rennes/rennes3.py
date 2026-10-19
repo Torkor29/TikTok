@@ -187,7 +187,7 @@ def draw_cat(L, x, y, t, s=1.0, moving=True, face=1):
     if face < 0: lay = lay.transpose(Image.FLIP_LEFT_RIGHT); lay.info["anchor"] = (520 - ox, oy)
     blit_sxy(L, lay, x, y, s, s, 0)
 
-pc_over.install(globals())
+pc_over.install(globals()); pc_over.install_v4(globals())
 _fc = {}
 def flip_card(v, size):
     k = (v, size)
@@ -375,7 +375,7 @@ CAM_POKOU = [(K["an70"], CX, 1000, 1.0), (K["ivoirien"], 650, 1000, 1.06), (K["p
 
 # --- 5. Coupes 65 / 71, puis plus rien
 E_CUP = [El(KW("COUPE DE FRANCE", JAUNE, NOIR, 100), CX, 640, K["gagne"] + .3, K["rien"] - .2, "stamp", "fly", rot=-2),
-         El(KW("PUIS… PLUS RIEN.", NOIR, BLANC, 110), CX, 640, K["rien"], None, "stamp", rot=-3),
+         El(KW("PUIS… PLUS RIEN.", NOIR, BLANC, 92), CX, 680, K["rien"], None, "stamp", rot=-3),
          El(shelf("TROPHÉES"), CX, 1250, K["gagne"], None, "slide_r", s=1.15, idle=.2),
          El(cup_gold(380), 330, 1222, K["y65"] - .1, None, "drop", idle=.4, dist=800), El(tag("1965", 50, CREME), 330, 1390, K["y65"] + .1, None, "pop", rot=-2),
          El(cup_gold(380), 740, 1222, K["y71"] - .1, None, "drop", idle=.4, dist=800), El(tag("1971", 50, CREME), 740, 1390, K["y71"] + .1, None, "pop", rot=2)]
@@ -457,8 +457,8 @@ E_C = [El(mono("CENTRE DE FORMATION", 56), CX, 620, K["centre"], K["camp"] - .1,
        El(house(), 760, 1180, K["maison"] - .1, K["pro"] - .1, "drop", "slide_r", dist=700, idle=.3),
        El(tag("SA MAISON BRÛLE", 54, ROUGE, BLANC), CX, 620, K["brule"] + .05, K["pro"] - .1, "stamp", "fly", rot=-2),
        El(stampl("PRO À 16 ANS", ROUGE, 120), CX, 1380, K["pro"] - .05, K["eduardo"] - .15, "stamp", "shrink", rot=-6),
-       El(shadowed(photo_card(*CAMA, 820), "camac"), CX, 1050, K["eduardo"] - .08, None, "rise", rot=-3, dist=1400),
-       El(marker("EDUARDO CAMAVINGA", "rcam", 88), CX, 1470, K["cama"], None, "slide_l", rot=2)]
+       El(lambda fr: CAMA_CUT(900), CX, 1500, K["eduardo"] - .08, None, "rise", rot=-2, dist=1400),
+       El(marker("EDUARDO CAMAVINGA", "rcam", 70), CX, 1470, K["cama"], None, "slide_l", rot=2)]
 CAMAK = foot.Player("rcamak", hair=(20, 16, 14), skin=(96, 62, 44))
 @scene(K["pendantce"], trans="tear", td=.3)
 def s_cama(L, fr, t):
@@ -468,14 +468,17 @@ def s_cama(L, fr, t):
     if K["brule"] < t < K["pro"] + .1:
         g = clamp((t - K["brule"])/.5); a_ = 1 - M.ease_in((t - K["pro"] + .1)/.2) if t > K["pro"] - .1 else 1
         if a_ > .05:
-            flames(L, 760, 1000, t, (.6 + .6*g)*a_)
+            for fx_, fy_, fs_ in ((-95, 1205, .55), (75, 1205, .55), (-10, 1300, .7), (60, 1045, .5)):
+                flames(L, 760 + fx_, fy_, t + fx_*.01, (.4 + .6*g)*a_*fs_*1.6, 3)
             for k in range(5):
                 pu = ((t*.8 + k*.2) % 1); r_ = 30 + 60*pu; ImageDraw.Draw(L).ellipse([760 - 80 + 40*k - r_, 900 - 300*pu - r_, 760 - 80 + 40*k + r_, 900 - 300*pu + r_], fill=(90, 90, 96))
     if t < K["eduardo"] - .1:
         age = .45 if t < K["pro"] - .05 else lerp(.45, .75, M.spring(t - K["pro"] + .05, .5, 10))
         ex = M.ease_in((t - K["eduardo"] + .3)/.2) if t > K["eduardo"] - .3 else 0
         kin = M.spring(t - K["gamin"] + .1, .5, 12)
-        CAMAK.draw(L, fr, CX, 1680 + 900*ex, s=.95*kin, age=age, kit="rennes", arms=(20, 20), mood="sad" if K["brule"] < t < K["pro"] else "happy", t=t)
+        kid = t < K["pro"] - .05
+        sp = CAMA_KID() if kid else CAMA_CUT(900); sc = (.42 if kid else lerp(.42, .62, M.spring(t - K["pro"] + .05, .5, 10)))*kin
+        blit_sxy(L, sp, CX, 1700 + 900*ex, sc, sc, 2*math.sin(t*2))
     M.draw_all(L, fr, t, E_C[4:])
 CAM_CAMA = [(K["pendantce"], CX, 980, 1.0), (K["camp"], 330, 1150, 1.12), (K["maison"], 740, 1100, 1.12), (K["pro"], CX, 1250, 1.05),
             (K["eduardo"], CX, 1050, 1.08), (K["avril"], CX, 1000, 1.0)]
@@ -527,7 +530,7 @@ def s_pens(L, fr, t):
     M.draw_all(L, fr, t, E_P[1:2])
     if K["placard"] - .3 < t < K["nkunku"]:                    # la carte sort du placard
         u = M.spring(t - K["placard"] + .15, .55, 9); ex = M.ease_in((t - K["nkunku"] + .25)/.25) if t > K["nkunku"] - .25 else 0
-        put(L, shadowed(photo_card(*BENARFA, 560), "bac"), lerp(CX + 230, CX - 150, u) - 1200*ex, 1300 - 40*math.sin(math.pi*clamp(u)), .35 + .65*clamp(u), lerp(8, -4, clamp(u)))
+        put(L, BA_CUT(600), lerp(CX + 230, CX - 150, u) - 1200*ex, 1300 - 40*math.sin(math.pi*clamp(u)), .35 + .65*clamp(u), lerp(8, -4, clamp(u)))
     if K["nkunku"] - .2 < t < TB + .3:
         a = M.spring(t - K["nkunku"] + .2, .5, 12)*(1 - (M.ease_in((t - TB)/.25) if t > TB else 0))
         if a > .05:
