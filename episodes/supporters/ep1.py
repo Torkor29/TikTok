@@ -249,12 +249,12 @@ def frame(fr, t):
 
 # ------------------------------------------------------------------ sons (maison)
 SFX_DIRS = [os.path.join(ROOT, "episodes", "lille_v5", "sfx"), os.path.join(ROOT, "episodes", "rennes", "sfx"), os.path.join(ROOT, "assets", "sfx")]
-SFX = [(0, "braam", .8), (0, "crowd", .35), (.05, "stamp", .6), (T["s2"], "whoosh1", .5)] + [(T["s2"] + .05 + i*.04, "tok", .25) for i in range(6)] + [
-       (T["decide"], "stamp", .6), (T["s3"] - .05, "page_tear", .5), (T["s3"], "wind", .6), (T["s3"] + .3, "stamp", .5),
-       (T["s4"], "pop", .5), (T["s4"] + .55, "thud", .7), (T["s4"] + .6, "crowd", .35), (T["nom"], "typewriter", .4), (T["nom"] + .05, "pin", .5)] + [
-       (T["s5"] + k*.2, "tok", .35) for k in range(16)] + [
-       (T["s6"], "zap", .5), (T["s6"] + .3, "suck", .6), (T["s6"] + .55, "pop", .5), (T["click"], "ding", .4),
-       (T["s7"] - .05, "page_tear", .5), (T["s7"] + .2, "drumroll", .45), (T["s8"], "stamp", .7),
+SFX = [(0, "braam", .8), (0, "crowd", .35), (.05, "stamp", .6), (T["s2"] - .17, "whoosh1", .5)] + [(T["s2"] + .05 + i*.04, "tok", .25) for i in range(6)] + [
+       (T["decide"], "stamp", .6), (T["s3"] - .05, "page_tear", .5), (T["s3"] + .3, "stamp", .5),
+       (T["s4"] - .07, "pop", .5), (T["s4"] + .55, "thud", .7), (T["s4"] + .6, "crowd", .35), (T["nom"], "typewriter", .4), (T["nom"] + .05, "pin", .5)] + [
+       (T["s5"] + k*.2, "tok", .35) for k in range(7)] + [
+       (T["s6"], "zap", .5), (T["s6"] + .55, "pop", .5), (T["click"], "ding", .4),
+       (T["s7"] - .05, "page_tear", .5), (T["s7"] + .2, "drumroll", .45), (T["s8"] - .15, "stamp", .7),
        (T["s8"] + .3, "riser", .4), (T["s8"] + .75, "bang", .6), (T["s8"] + .8, "shimmer", .5), (T["s8"] + .85, "crowd", .5), (T["s8"] + 1.4, "notif", .5)]
 
 def sfx_path(n):
@@ -264,12 +264,21 @@ def sfx_path(n):
     return None
 
 VOICE = os.path.join(HERE, "voix", "ep1.mp3")
+@functools.lru_cache(maxsize=128)
+def sfx_dur(n):
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", sfx_path(n)], capture_output=True, text=True).stdout or .5)
+@functools.lru_cache(maxsize=128)
+def sfx_norm(n):
+    """Gain qui ramène le bruitage à un niveau RMS commun (-24 dBFS) : plus de son qui sort du lot."""
+    out = subprocess.run(["ffmpeg", "-i", sfx_path(n), "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True).stderr
+    mv = float(out.split("mean_volume:")[1].split("dB")[0]) if "mean_volume:" in out else -24
+    return 10**((-24 - mv)/20)
 def voice_env():
     """Enveloppe de la voix (50 pts/s, 0..1) pour savoir quand Léo parle."""
     r = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", VOICE, "-ac", "1", "-ar", "8000", "-f", "s16le", "-"], capture_output=True).stdout
     a = np.abs(np.frombuffer(r, np.int16).astype(np.float32)); a = a[:len(a)//160*160].reshape(-1, 160).mean(1)
     return a/(np.percentile(a, 95) + 1e-9)
-BEDS = {"crowd", "wind", "braam", "drumroll", "riser", "shimmer"}      # sons longs : très bas sous la voix
+BEDS = {"crowd", "wind", "braam", "drumroll", "riser", "shimmer", "suck"}      # sons longs : très bas sous la voix
 def mix_audio(path, stems=None, sfx_k=1.0, norm=True):
     """Voix devant : bruitages à -12 dB environ, sons longs encore plus bas, coupés en grave/aigu (bande de la voix libérée)
     et écrasés par un ducking (sidechain) dès que Léo parle."""
@@ -277,14 +286,14 @@ def mix_audio(path, stems=None, sfx_k=1.0, norm=True):
     env = voice_env()
     def talk(t, d=.35):                                           # Léo parle-t-il dans [t, t+d] ?
         a, b = int(t*50), int((t + d)*50); return env[a:b].max() if b > a and a < len(env) else 0
-    items = [(t, sfx_path(n), g*sfx_k*(.05 if n in BEDS else .15)*(.25 if talk(t) > .5 else 1)) for t, n, g in SFX if sfx_path(n)]
+    items = [(t, sfx_path(n), g*sfx_k*sfx_norm(n)*(.3 if n in BEDS else 1.1)*(.2 if talk(t, min(.6, sfx_dur(n))) > .25 else 1)) for t, n, g in SFX if sfx_path(n)]
     for i, (t, p, g) in enumerate(items):
         ins += ["-i", p]; flt.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[a{i}]")
     n = len(items); ins += ["-i", VOICE]
     flt.append("".join(f"[a{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad,atrim=0:{DUR},"
                "equalizer=f=2500:t=q:w=1.2:g=-6,equalizer=f=250:t=q:w=1:g=-3[sfx]")
     flt.append(f"[{n}:a]aresample=44100,aformat=channel_layouts=stereo,volume=1.0,apad,atrim=0:{DUR},asplit=3[v1][v2][v3]")
-    flt.append("[sfx][v1]sidechaincompress=threshold=0.01:ratio=20:attack=5:release=350:makeup=1[duck]")
+    flt.append("[sfx][v1]sidechaincompress=threshold=0.02:ratio=6:attack=8:release=250:makeup=1[duck]")
     flt.append("[duck][v2]amix=inputs=2:normalize=0," + ("loudnorm=I=-14:TP=-1.5" if norm else "anull") + "[out]")
     if stems: flt.append(f"[v3]anull[vo]")
     cmd = ["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", ";".join(flt), "-map", "[out]", "-ac", "2", path]
