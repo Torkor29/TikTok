@@ -1,5 +1,5 @@
 """LE STADE DES SUPPORTERS — épisode 1 (concept : 1 commentaire = 1 siège à ton nom dans le stade de ton club).
-Sans voix : textes plein écran lisibles dès la 1re image + bruitages maison. Style papier + volumes papercraft 3D.
+Voix Léo (voix/ep1.mp3, 16 s) + textes plein écran lisibles dès la 1re image + bruitages maison. Style papier + volumes papercraft 3D.
 
   python3 episodes/supporters/ep1.py --stills      planche de contrôle
   python3 episodes/supporters/ep1.py               rendu -> output/supporters/ep1.mp4
@@ -16,7 +16,7 @@ from motion import El
 import pc_lib as PC
 from papercraft import Part, cbox, render, project, rot as R3
 
-W, H, FPS, DUR = 1080, 1920, 30, 24.6
+W, H, FPS, DUR = 1080, 1920, 30, 17.6
 OUT = os.path.join(ROOT, "output", "supporters")
 NAVY, NAVY2 = (20, 26, 58), (34, 44, 92)
 JAUNE, ROUGE, BLANC, NOIR, CREME = (250, 206, 40), (226, 36, 54), (250, 248, 240), (24, 22, 26), (245, 235, 214)
@@ -123,7 +123,7 @@ def puff(L, t, t0, x, y, n=12, col=(220, 220, 230), dur=.6):
         d.ellipse([x + r*math.cos(a) - s, y + r*math.sin(a)*.6 - s, x + r*math.cos(a) + s, y + r*math.sin(a)*.6 + s], fill=col + (int(255*(1 - u)),))
 
 # ------------------------------------------------------------------ timeline (s)
-T = dict(s2=2.8, decide=4.2, s3=5.6, s4=8.4, nom=9.9, s5=11.4, s6=14.6, click=16.4, s7=17.6, s8=20.4, end=DUR)
+T = dict(s2=2.15, decide=3.38, s3=4.62, s4=5.75, nom=7.08, s5=8.33, s6=9.82, click=11.15, s7=11.6, s8=12.94, end=17.6)  # calé sur voix/ep1.mp3
 def counter(t):
     n = 0 if t < T["s4"] + .4 else (1 if t < T["s6"] + .3 or t > T["click"] + .1 else 0)
     if t > T["s7"]: n = 0
@@ -142,7 +142,7 @@ TEXTS = [  # (texte, taille, fond, couleur, y, entrée, sortie)
     ("ABONNÉ = TU RESTES", 84, JAUNE, NOIR, 570, T["click"] + .1, T["s7"]),
     ("LE CLASSEMENT", 110, NOIR, BLANC, 430, T["s7"], T["s8"]), ("CHAQUE JOUR", 130, JAUNE, NOIR, 570, T["s7"] + .25, T["s8"]),
     ("QUEL CLUB", 120, NOIR, BLANC, 400, T["s8"], None), ("VA GAGNER ?", 140, JAUNE, NOIR, 545, T["s8"] + .2, None),
-    ("ÉCRIS TON CLUB EN COMMENTAIRE", 58, BLANC, NOIR, 1700, T["s8"] + .8, None),
+    ("ÉCRIS TON CLUB EN COMMENTAIRE", 58, BLANC, NOIR, 1700, T["s8"] + 1.35, None),
 ]
 ELS = [El(L_(tx, sz, bg, fg), W/2, y, t0, t1, "stamp" if i % 2 else "pop", "shrink", 1, (-2.5, 2, -1.5, 2.5)[i % 4], .6, seed=i)
        for i, (tx, sz, bg, fg, y, t0, t1) in enumerate(TEXTS)]
@@ -265,7 +265,7 @@ def sfx_path(n):
 
 def mix_audio(path):
     ins, flt = [], []
-    items = [(t, sfx_path(n), g) for t, n, g in SFX if sfx_path(n)]
+    items = [(t, sfx_path(n), g*.55) for t, n, g in SFX if sfx_path(n)] + [(0, os.path.join(HERE, "voix", "ep1.mp3"), 1.6)]
     for i, (t, p, g) in enumerate(items):
         ins += ["-i", p]; flt.append(f"[{i}:a]aresample=44100,volume={g},adelay={int(t*1000)}|{int(t*1000)}[a{i}]")
     flt.append("".join(f"[a{i}]" for i in range(len(items))) + f"amix=inputs={len(items)}:normalize=0,apad,atrim=0:{DUR},loudnorm=I=-15:TP=-1.5[out]")
@@ -284,7 +284,7 @@ def render_all():
     os.remove(vid); os.remove(aud); return out
 
 def stills():
-    ts = [0, 1.5, 3.3, 4.8, 6.5, 8.9, 10.5, 12.0, 13.5, 15.4, 16.9, 18.6, 21.5, 23.5]
+    ts = [0, 1.2, 2.6, 3.9, 5.0, 6.4, 7.6, 8.8, 9.5, 10.5, 11.4, 12.2, 13.6, 16.5]
     sh = Image.new("RGB", (270*7, 480*2))
     for i, t in enumerate(ts): sh.paste(frame(int(t*FPS), t).resize((270, 480)), ((i % 7)*270, (i//7)*480))
     p = "/tmp/claude-0/sup_sheet.jpg"; sh.save(p, quality=85); return p
