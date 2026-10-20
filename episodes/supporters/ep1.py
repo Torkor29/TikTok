@@ -123,7 +123,7 @@ def puff(L, t, t0, x, y, n=12, col=(220, 220, 230), dur=.6):
         d.ellipse([x + r*math.cos(a) - s, y + r*math.sin(a)*.6 - s, x + r*math.cos(a) + s, y + r*math.sin(a)*.6 + s], fill=col + (int(255*(1 - u)),))
 
 # ------------------------------------------------------------------ timeline (s)
-T = dict(s2=2.15, decide=3.38, s3=4.62, s4=5.75, nom=7.08, s5=8.33, s6=9.82, click=11.15, s7=11.6, s8=12.94, end=17.6)  # calé sur voix/ep1.mp3
+T = dict(s2=2.15, decide=3.38, s3=4.62, s4=5.75, nom=7.08, s5=8.33, s6=9.82, click=11.47, s7=11.6, s8=12.94, end=17.6)  # calé sur voix/ep1.mp3
 def counter(t):
     n = 0 if t < T["s4"] + .4 else (1 if t < T["s6"] + .3 or t > T["click"] + .1 else 0)
     if t > T["s7"]: n = 0
@@ -253,8 +253,8 @@ SFX = [(0, "braam", .8), (0, "crowd", .35), (.05, "stamp", .6), (T["s2"], "whoos
        (T["decide"], "stamp", .6), (T["s3"] - .05, "page_tear", .5), (T["s3"], "wind", .6), (T["s3"] + .3, "stamp", .5),
        (T["s4"], "pop", .5), (T["s4"] + .55, "thud", .7), (T["s4"] + .6, "crowd", .35), (T["nom"], "typewriter", .4), (T["nom"] + .05, "pin", .5)] + [
        (T["s5"] + k*.2, "tok", .35) for k in range(16)] + [
-       (T["s6"], "zap", .5), (T["s6"] + .3, "suck", .6), (T["s6"] + .55, "pop", .5), (T["click"] - .02, "tok", .7), (T["click"], "ding", .6),
-       (T["click"] + .08, "thud", .6), (T["s7"] - .05, "page_tear", .5), (T["s7"] + .2, "drumroll", .45), (T["s8"], "stamp", .7),
+       (T["s6"], "zap", .5), (T["s6"] + .3, "suck", .6), (T["s6"] + .55, "pop", .5), (T["click"], "ding", .4),
+       (T["s7"] - .05, "page_tear", .5), (T["s7"] + .2, "drumroll", .45), (T["s8"], "stamp", .7),
        (T["s8"] + .3, "riser", .4), (T["s8"] + .75, "bang", .6), (T["s8"] + .8, "shimmer", .5), (T["s8"] + .85, "crowd", .5), (T["s8"] + 1.4, "notif", .5)]
 
 def sfx_path(n):
@@ -263,13 +263,34 @@ def sfx_path(n):
         if os.path.exists(p): return p
     return None
 
-def mix_audio(path):
+VOICE = os.path.join(HERE, "voix", "ep1.mp3")
+def voice_env():
+    """Enveloppe de la voix (50 pts/s, 0..1) pour savoir quand Léo parle."""
+    r = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", VOICE, "-ac", "1", "-ar", "8000", "-f", "s16le", "-"], capture_output=True).stdout
+    a = np.abs(np.frombuffer(r, np.int16).astype(np.float32)); a = a[:len(a)//160*160].reshape(-1, 160).mean(1)
+    return a/(np.percentile(a, 95) + 1e-9)
+BEDS = {"crowd", "wind", "braam", "drumroll", "riser", "shimmer"}      # sons longs : très bas sous la voix
+def mix_audio(path, stems=None, sfx_k=1.0, norm=True):
+    """Voix devant : bruitages à -12 dB environ, sons longs encore plus bas, coupés en grave/aigu (bande de la voix libérée)
+    et écrasés par un ducking (sidechain) dès que Léo parle."""
     ins, flt = [], []
-    items = [(t, sfx_path(n), g*.55) for t, n, g in SFX if sfx_path(n)] + [(0, os.path.join(HERE, "voix", "ep1.mp3"), 1.6)]
+    env = voice_env()
+    def talk(t, d=.35):                                           # Léo parle-t-il dans [t, t+d] ?
+        a, b = int(t*50), int((t + d)*50); return env[a:b].max() if b > a and a < len(env) else 0
+    items = [(t, sfx_path(n), g*sfx_k*(.05 if n in BEDS else .15)*(.25 if talk(t) > .5 else 1)) for t, n, g in SFX if sfx_path(n)]
     for i, (t, p, g) in enumerate(items):
-        ins += ["-i", p]; flt.append(f"[{i}:a]aresample=44100,volume={g},adelay={int(t*1000)}|{int(t*1000)}[a{i}]")
-    flt.append("".join(f"[a{i}]" for i in range(len(items))) + f"amix=inputs={len(items)}:normalize=0,apad,atrim=0:{DUR},loudnorm=I=-15:TP=-1.5[out]")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", ";".join(flt), "-map", "[out]", "-ac", "2", path], check=True)
+        ins += ["-i", p]; flt.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[a{i}]")
+    n = len(items); ins += ["-i", VOICE]
+    flt.append("".join(f"[a{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad,atrim=0:{DUR},"
+               "equalizer=f=2500:t=q:w=1.2:g=-6,equalizer=f=250:t=q:w=1:g=-3[sfx]")
+    flt.append(f"[{n}:a]aresample=44100,aformat=channel_layouts=stereo,volume=1.0,apad,atrim=0:{DUR},asplit=3[v1][v2][v3]")
+    flt.append("[sfx][v1]sidechaincompress=threshold=0.01:ratio=20:attack=5:release=350:makeup=1[duck]")
+    flt.append("[duck][v2]amix=inputs=2:normalize=0," + ("loudnorm=I=-14:TP=-1.5" if norm else "anull") + "[out]")
+    if stems: flt.append(f"[v3]anull[vo]")
+    cmd = ["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", ";".join(flt), "-map", "[out]", "-ac", "2", path]
+    if stems: cmd += ["-map", "[vo]", stems]
+    else: cmd[cmd.index(";".join(flt))] = ";".join(flt).replace(",asplit=3[v1][v2][v3]", ",asplit=2[v1][v2]")
+    subprocess.run(cmd, check=True)
 
 def render_all():
     os.makedirs(OUT, exist_ok=True); vid = os.path.join(OUT, "_v.mp4"); aud = os.path.join(OUT, "_a.m4a")
