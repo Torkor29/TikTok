@@ -6,13 +6,13 @@ Conseil : 1 fichier audio par scène (scene_1.mp3 … scene_N.mp3).
 T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
 
 === SCÈNE 2 ===
-Quelles sont les couleurs du PSG ?  [chrono 5 s]  Réponse B : bleu et rouge !
+De quel club Neymar est-il arrivé au PSG ?  [chrono 5 s]  Réponse B : le FC Barcelone, pour deux cent vingt-deux millions !
 
 === SCÈNE 3 ===
-Quel monument de Paris est sur le logo du PSG ?  [chrono 5 s]  Réponse C : la tour Eiffel !
+En deux mille vingt-cinq, quel club le PSG élimine-t-il en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse C : Arsenal !
 
 === SCÈNE 4 ===
-Quel est le grand rival historique du PSG ?  [chrono 5 s]  Réponse D : l'Olympique de Marseille ! C'est le Classique.
+Qui entraînait le PSG de deux mille dix-huit à deux mille vingt ?  [chrono 5 s]  Réponse D : Thomas Tuchel ! Finaliste de la Ligue des champions en deux mille vingt.
 
 === SCÈNE 5 ===
 Qui est le président du PSG ?  [chrono 5 s]  Réponse A : Nasser Al-Khelaïfi, président depuis deux mille onze !
@@ -40,11 +40,11 @@ Alors, t'as eu combien ? Plus de cinq : t'es un vrai fan ! Dis ton score en comm
 
 T'es un vrai fan du PSG si t'as plus de cinq sur huit ! Huit questions, cinq secondes pour répondre. Compte tes points… c'est parti !
 
-Quelles sont les couleurs du PSG ?  [chrono 5 s]  Réponse B : bleu et rouge !
+De quel club Neymar est-il arrivé au PSG ?  [chrono 5 s]  Réponse B : le FC Barcelone, pour deux cent vingt-deux millions !
 
-Quel monument de Paris est sur le logo du PSG ?  [chrono 5 s]  Réponse C : la tour Eiffel !
+En deux mille vingt-cinq, quel club le PSG élimine-t-il en demi-finale de Ligue des champions ?  [chrono 5 s]  Réponse C : Arsenal !
 
-Quel est le grand rival historique du PSG ?  [chrono 5 s]  Réponse D : l'Olympique de Marseille ! C'est le Classique.
+Qui entraînait le PSG de deux mille dix-huit à deux mille vingt ?  [chrono 5 s]  Réponse D : Thomas Tuchel ! Finaliste de la Ligue des champions en deux mille vingt.
 
 Qui est le président du PSG ?  [chrono 5 s]  Réponse A : Nasser Al-Khelaïfi, président depuis deux mille onze !
 
