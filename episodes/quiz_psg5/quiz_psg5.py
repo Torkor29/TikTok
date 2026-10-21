@@ -21,7 +21,7 @@ def Wd(k):
     return lambda word, n=1, end=False: PAD_IN + WS[k](word, n, end)
 
 NAVY = (16, 40, 86); NAVY_D = (10, 24, 54); ROUGE = (210, 36, 42); BLANC = (250, 250, 246); NOIR = (30, 28, 28); MAROON = (138, 21, 56)
-THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140), niveau="NIVEAU FACILE", niveau_pos=(CX, 850), niveau_size=74, niveau_rot=-4, tampon="FACILE")
+THEME = dict(du="DU PSG", accent=ROUGE, badge=NAVY, bgs=[NAVY, (112, 22, 40), NAVY_D, (36, 66, 132)], ray=(255, 255, 255), ray2=(40, 70, 140), niveau="NIVEAU 1", niveau_pos=(CX, 850), niveau_size=74, niveau_rot=-4, tampon="NIVEAU 1")
 
 import pc_lib as PC
 from gfx_stickers import sticker
@@ -117,12 +117,31 @@ def i8(cv, fr, t, u, tm):
     if u <= .1: LBL("20??", "q5y8", font("title", 130), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y, 1, 6)
     else: name_tag(cv, fr, u, "2013", "q5n8", "sa dernière saison", size=130)
 
+NEY = PC.PCPlayer("q5ney", hair=(48, 34, 26), skin=(196, 146, 108), yaw=-.2)
+def n1(cv, fr, t, u, tm):
+    put_fig(cv, figure(NEY, t, "psg", "happy", (150, 150) if u > .1 else (25, 25)), CX - 200, FY)
+    if u <= .1: LBL("? → PSG", "q5n1q", font("title", 96), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y, 1, 4)
+    else: name_tag(cv, fr, u, "BARCELONE", "q5n1n", "222 M€, 2017", size=76)
+def n2(cv, fr, t, u, tm):
+    blit(cv, logo("psg", 220), CX - 230, ILLU_Y, 1, -4)
+    LBL("VS", "q5vs2", font("title", 100), BLANC, ROUGE, padx=20, pady=0, rough=2).draw(cv, fr, CX, ILLU_Y, 1, 0)
+    if u <= .1: LBL("?", "q5n2q", font("title", 150), BLANC, NOIR, padx=34, pady=0, rough=2).draw(cv, fr, CX + 230, ILLU_Y, 1, 5)
+    else:
+        LBL("ARSENAL", "q5n2n", font("title", 80), BLANC, ROUGE, padx=20, pady=6, rough=3).draw(cv, fr, CX + 230, ILLU_Y, slam(u, .05, .3), 5)
+        STAMP("QUALIFIÉS", "q5n2s", (40, 150, 70), 60).draw(cv, fr, CX, ILLU_Y + 150, slam(u, .2, .3), -5)
+TUCH = PC.PCPlayer("q5tuch", hair=(150, 140, 120), skin=(230, 190, 156), yaw=-.2)
+def n3(cv, fr, t, u, tm):
+    sp = figure(TUCH, t, "suit", "happy", (25, 25) if u <= .1 else (60, 120))
+    put_fig(cv, dark(sp) if u <= .1 else sp, CX - 200, FY)
+    if u <= .1: mystery(cv, fr, CX - 200, ILLU_Y - 150, u, .8); LBL("2018-2020", "q5n3q", font("title", 80), BLANC, NOIR, padx=20, pady=2, rough=2).draw(cv, fr, CX + 200, ILLU_Y, 1, 4)
+    else: name_tag(cv, fr, u, "TUCHEL", "q5n3n", "finale de C1 2020", size=90)
+
 # ------------------------------------------------------------------ les 8 questions (facile -> plus dur ; réponses B C D A B D C A)
 QUESTIONS = [
-    Q("Quelles sont les couleurs du PSG ?", ["Rouge et noir", "Bleu et rouge", "Bleu et blanc", "Jaune et bleu"], 1, "FACILE", i1, [(.1, "crowd", .6)]),
-    Q("Quel monument est sur le logo du PSG ?", ["Arc de triomphe", "Notre-Dame", "Tour Eiffel", "Sacré-Cœur"], 2, "FACILE", i2, [(.1, "sparkle", .6)]),
-    Q("Le grand rival historique du PSG ?", ["Lyon", "Lille", "Monaco", "Marseille"], 3, "FACILE", i3, [(.1, "stamp", .6)]),
-    Q("Qui est le président du PSG ?", ["Nasser Al-Khelaïfi", "Luis Campos", "Jean-Michel Aulas", "Florentino Pérez"], 0, "FACILE", i4, [(.1, "cash", .7)]),
+    Q("De quel club Neymar est arrivé au PSG ?", ["Santos", "FC Barcelone", "Real Madrid", "Chelsea"], 1, "MOYEN", n1, [(.1, "cash", .7)]),
+    Q("Demi-finale de C1 2025 : le PSG élimine… ?", ["Real Madrid", "Bayern Munich", "Arsenal", "FC Barcelone"], 2, "MOYEN", n2, [(.1, "stamp", .6)]),
+    Q("Qui entraînait le PSG de 2018 à 2020 ?", ["Unai Emery", "Laurent Blanc", "Mauricio Pochettino", "Thomas Tuchel"], 3, "MOYEN", n3, [(.1, "crowd", .6)]),
+    Q("Qui est le président du PSG ?", ["Nasser Al-Khelaïfi", "Luis Campos", "Jean-Michel Aulas", "Florentino Pérez"], 0, "MOYEN", i4, [(.1, "cash", .7)]),
     Q("De quel club Mbappé est arrivé au PSG ?", ["Lyon", "Monaco", "Real Madrid", "Lille"], 1, "MOYEN", i5, [(.1, "stamp", .6)]),
     Q("Zlatan arrive au PSG en 2012. Depuis… ?", ["Barcelone", "Inter Milan", "Juventus", "AC Milan"], 3, "MOYEN", i6, [(.1, "stamp", .6), (.4, "pop2")]),
     Q("Quel joueur du PSG a gagné le Ballon d'or 2025 ?", ["Vitinha", "Achraf Hakimi", "Ousmane Dembélé", "Désiré Doué"], 2, "DIFFICILE", i7, [(.1, "crowd_long", .7), (.1, "sparkle")]),
