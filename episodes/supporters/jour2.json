@@ -1,0 +1,16 @@
+{
+  "jour": 2,
+  "source": "screen-record des commentaires de l'épisode 1 (21/10/2026)",
+  "supporters": [
+    ["crane de feu", "lemans"], ["indian's tolosa31", "toulouse"], ["Nitax", "lehavre"], ["benoit mouquet", "psg"],
+    ["zozo_17", "om"], ["Nino", "rennes"], ["Maël_bgr", "rennes"], ["el1ana_aa", "psg"], ["ZKX_ESTEVAN_MTM", "om"],
+    ["Menzo", "psg"], ["Marie wolff", "strasbourg"], ["Nini the goal", "lens"], ["Jade VCT", "psg"],
+    ["L'homme mystérieux", "psg"], ["le mans", "om"], ["M_X", "psg"], ["Griezmann Fan", "om"], ["Antho", "om"],
+    ["lucas.rsn", "lens"], ["le j en", "psg"], ["Axel_dupe", "psg"], ["L", "lens"], ["Le parisien du_94", "psg"],
+    ["benjy7271", "psg"], ["Shadowwolf", "lens"], ["enzo le bg", "brest"], ["tartrx200908", "ol"],
+    ["Brandon.18ans", "psg"], ["Elfret", "psg"], ["th//59", "lille"], ["coco", "angers"], ["MateoPSG_", "psg"],
+    ["mathys.dth", "lille"], ["Hugo.grf49", "angers"], ["zak2.30", "auxerre"], ["Lucas", "lens"],
+    ["levraifand'anime", "psg"], ["corentin_jos", "rennes"], ["Vortex", "rennes"], ["T30", "psg"]
+  ],
+  "ignores": ["J-sourfcn (Nantes : pas en Ligue 1)", "commentaire OM sans pseudo lisible", "Le L (« ll »)", "★ (« ma photo de profil dit tout »)"]
+}
