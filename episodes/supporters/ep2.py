@@ -22,7 +22,7 @@ NAME = dict(psg="PSG", om="OM", lens="LENS", rennes="RENNES", lille="LILLE", ang
 
 VOICE = os.path.join(HERE, "voix", "ep2.mp3")
 # temps clés (s) — recalés sur la voix une fois générée (voir retime())
-T = dict(quarante=1.2, psg=3.6, egal=6.4, rennes=9.4, aussi=10.8, ton=15.4, comm=17.0, end=20.6)
+T = dict(quarante=.82, psg=2.48, egal=5.35, rennes=8.4, aussi=9.6, ton=15.4, comm=17.0, end=21.2)  # calé sur voix/ep2.mp3
 DUR = T["end"]
 
 def seat_order(n=7, rows=3):
@@ -95,10 +95,10 @@ def s_psg(L, fr, t):
 
 def s_egal(L, fr, t):
     L_("ÉGALITÉ PARFAITE", 92, JAUNE, NOIR).draw(L, fr, W/2, 330, M.spring(t - T["egal"], .45, 14), -2)
-    club_head(L, fr, t, "om", T["egal"] + .4, W/2, 520, COUNT["om"], 90)
-    draw_stand(L, fr, t, "om", T["egal"] + .55, W/2, 1060, .62, step=.11)
-    club_head(L, fr, t, "lens", T["egal"] + 1.0, W/2, 1220, COUNT["lens"], 90)
-    draw_stand(L, fr, t, "lens", T["egal"] + 1.15, W/2, 1760, .62, step=.11)
+    club_head(L, fr, t, "om", T["egal"] + 1.6, W/2, 520, COUNT["om"], 90)
+    draw_stand(L, fr, t, "om", T["egal"] + 1.7, W/2, 1060, .62, step=.11)
+    club_head(L, fr, t, "lens", T["egal"] + 2.1, W/2, 1220, COUNT["lens"], 90)
+    draw_stand(L, fr, t, "lens", T["egal"] + 2.2, W/2, 1760, .62, step=.11)
 
 def s_rennes(L, fr, t):
     club_head(L, fr, t, "rennes", T["rennes"], W/2, 400, COUNT["rennes"], 110)
@@ -111,7 +111,7 @@ def s_aussi(L, fr, t):
     span = T["ton"] - T["aussi"] - 1.2
     for k, (c, n) in enumerate(rest):
         x, y = 200 + (k % 3)*340, 640 + (k//3)*420
-        u = M.spring(t - T["aussi"] - .5 - k*span/len(rest), .45, 13)
+        u = M.spring(t - T["aussi"] - .98 - k*.52, .45, 13)
         if u <= 0: continue
         d = ImageDraw.Draw(L); w2 = 150*u
         d.rounded_rectangle([x - w2, y - 150*u, x + w2, y + 190*u], 22, fill=(250, 246, 234))
@@ -169,9 +169,9 @@ def sfx_list():
          (T["quarante"] + .65, "ding", .5), (T["psg"] - .05, "page_tear", .5), (T["psg"] + .1, "crowd", .5)] + [
          (T["psg"] + .15 + k*.13 + .22, "thud", .3) for k in range(COUNT["psg"])] + [
          (T["egal"] - .05, "page_tear", .5), (T["egal"] + .05, "stamp", .7)] + [
-         (T["egal"] + .55 + k*.11 + .22, "thud", .3) for k in range(5)] + [(T["egal"] + 1.15 + k*.11 + .22, "thud", .3) for k in range(5)] + [
+         (T["egal"] + 1.7 + k*.11 + .22, "thud", .3) for k in range(5)] + [(T["egal"] + 2.2 + k*.11 + .22, "thud", .3) for k in range(5)] + [
          (T["rennes"] - .05, "page_tear", .5)] + [(T["rennes"] + .15 + k*.12 + .22, "thud", .3) for k in range(4)] + [
-         (T["aussi"] + .5 + k*(T["ton"] - T["aussi"] - 1.2)/9, "pop", .35) for k in range(9)] + [(T["aussi"] - .05, "page_tear", .5)] + [
+         (T["aussi"] + .98 + k*.52, "pop", .35) for k in range(9)] + [(T["aussi"] - .05, "page_tear", .5)] + [
          (T["ton"] - .05, "page_tear", .5), (T["ton"] + .1, "drumroll", .45), (T["ton"] + .7, "bang", .6), (T["ton"] + .75, "shimmer", .5),
          (T["comm"] + .4, "notif", .5), (T["comm"] + .45, "pop", .5)]
     return S
