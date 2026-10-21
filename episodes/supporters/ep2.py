@@ -22,7 +22,7 @@ NAME = dict(psg="PSG", om="OM", lens="LENS", rennes="RENNES", lille="LILLE", ang
 
 VOICE = os.path.join(HERE, "voix", "ep2.mp3")
 # temps clés (s) — recalés sur la voix une fois générée (voir retime())
-T = dict(quarante=1.2, psg=3.6, egal=6.4, rennes=9.4, ton=11.0, comm=12.6, end=16.2)
+T = dict(quarante=1.2, psg=3.6, egal=6.4, rennes=9.4, aussi=10.8, ton=15.4, comm=17.0, end=20.6)
 DUR = T["end"]
 
 def seat_order(n=7, rows=3):
@@ -103,14 +103,22 @@ def s_egal(L, fr, t):
 def s_rennes(L, fr, t):
     club_head(L, fr, t, "rennes", T["rennes"], W/2, 400, COUNT["rennes"], 110)
     draw_stand(L, fr, t, "rennes", T["rennes"] + .15, W/2, 1230, .8, step=.12)
-    L_("ET AUSSI…", 60, BLANC, NOIR).draw(L, fr, W/2, 1390, M.spring(t - T["rennes"] - .8, .45, 14), -2)
+
+def s_aussi(L, fr, t):
+    """Tous les autres clubs participants : une carte par club (écusson, nombre, pseudos), qui arrivent une à une sur leur nom."""
+    L_("ILS SONT AUSSI LÀ", 96, JAUNE, NOIR).draw(L, fr, W/2, 380, M.spring(t - T["aussi"], .45, 14), -2)
     rest = [(c, n) for c, n in RANK if c not in ("psg", "om", "lens", "rennes")]
+    span = T["ton"] - T["aussi"] - 1.2
     for k, (c, n) in enumerate(rest):
-        x, y = 135 + (k % 5)*202, 1540 + (k//5)*190
-        u = M.spring(t - T["rennes"] - .9 - k*.07, .45, 14)
-        if u > 0:
-            blit(L, logo(c, 120), x, y, u, 3*math.sin(t*2 + k))
-            L_(str(n), 46, JAUNE, NOIR).draw(L, fr, x + 52, y + 46, u, 0)
+        x, y = 200 + (k % 3)*340, 640 + (k//3)*420
+        u = M.spring(t - T["aussi"] - .5 - k*span/len(rest), .45, 13)
+        if u <= 0: continue
+        d = ImageDraw.Draw(L); w2 = 150*u
+        d.rounded_rectangle([x - w2, y - 150*u, x + w2, y + 190*u], 22, fill=(250, 246, 234))
+        blit(L, logo(c, 150), x, y - 50*u, u, 3*math.sin(t*2 + k))
+        L_(f"{NAME[c]} · {n}", 40, NOIR, BLANC).draw(L, fr, x, y + 60*u, u, 0)
+        for j, ps in enumerate([p for p, cc in FANS if cc == c][:2]):
+            blit_sxy(L, tag(ps), x, y + (118 + j*40)*u, u, u, (-2, 2)[j])
 
 def s_podium(L, fr, t):
     rays(L, W/2, 1100, t, .08)
@@ -146,10 +154,11 @@ def frame(fr, t):
     if t < T["psg"]: s_intro(L, fr, t)
     elif t < T["egal"]: s_psg(L, fr, t)
     elif t < T["rennes"]: s_egal(L, fr, t)
-    elif t < T["ton"]: s_rennes(L, fr, t)
+    elif t < T["aussi"]: s_rennes(L, fr, t)
+    elif t < T["ton"]: s_aussi(L, fr, t)
     else: s_podium(L, fr, t)
     header(L, fr, t)
-    for tc in (T["psg"], T["egal"], T["rennes"], T["ton"]):           # coupe papier brève entre les tableaux
+    for tc in (T["psg"], T["egal"], T["rennes"], T["aussi"], T["ton"]):           # coupe papier brève entre les tableaux
         if tc - .05 < t < tc + .1:
             a = 1 - abs(t - tc)/.1; L.alpha_composite(Image.new("RGBA", (W, H), (250, 246, 234, int(190*max(0, a)))))
     return L.convert("RGB")
@@ -162,7 +171,7 @@ def sfx_list():
          (T["egal"] - .05, "page_tear", .5), (T["egal"] + .05, "stamp", .7)] + [
          (T["egal"] + .55 + k*.11 + .22, "thud", .3) for k in range(5)] + [(T["egal"] + 1.15 + k*.11 + .22, "thud", .3) for k in range(5)] + [
          (T["rennes"] - .05, "page_tear", .5)] + [(T["rennes"] + .15 + k*.12 + .22, "thud", .3) for k in range(4)] + [
-         (T["rennes"] + .9 + k*.07, "pop", .3) for k in range(9)] + [
+         (T["aussi"] + .5 + k*(T["ton"] - T["aussi"] - 1.2)/9, "pop", .35) for k in range(9)] + [(T["aussi"] - .05, "page_tear", .5)] + [
          (T["ton"] - .05, "page_tear", .5), (T["ton"] + .1, "drumroll", .45), (T["ton"] + .7, "bang", .6), (T["ton"] + .75, "shimmer", .5),
          (T["comm"] + .4, "notif", .5), (T["comm"] + .45, "pop", .5)]
     return S
@@ -184,7 +193,7 @@ def render_all():
     os.remove(vid); os.remove(aud); return out
 
 def stills():
-    ts = [0, .9, 2.2, 3.9, 4.8, 5.9, 6.6, 7.6, 8.6, 9.6, 10.5, 11.4, 12.4, 14.5]
+    ts = [0, 2.2, 4.8, 6.6, 8.6, 9.9, 11.2, 12.4, 13.6, 14.8, 15.8, 16.6, 17.8, 20.0]
     sh = Image.new("RGB", (270*7, 480*2))
     for i, t in enumerate(ts): sh.paste(frame(int(t*FPS), t).resize((270, 480)), ((i % 7)*270, (i//7)*480))
     p = "/tmp/claude-0/sup2_sheet.jpg"; sh.save(p, quality=85); return p

@@ -1,2 +1,2 @@
-# Voix ép.2 (à générer avec Léo, eleven_multilingual_v2, puis recaler T dans ep2.py sur les mots)
-Jour deux ! Vous êtes quarante à avoir pris votre siège. Le PSG écrase tout avec quinze supporters ! Derrière, égalité parfaite : Marseille et Lens, cinq chacun. Rennes suit avec quatre. Et ton club ? Pas encore de siège ? Commente ton club et abonne-toi, demain je t'installe !
+# Voix ép.2 (Léo jsScnYkNNda9Q1NES5nn, eleven_multilingual_v2) puis recaler T dans ep2.py sur les mots
+Jour deux ! Vous êtes quarante à avoir pris votre siège. Le PSG écrase tout avec quinze supporters ! Derrière, égalité parfaite : Marseille et Lens, cinq chacun. Rennes suit avec quatre. Et ils sont aussi là : Lille, Angers, Le Mans, Toulouse, Le Havre, Strasbourg, Brest, Lyon et Auxerre ! Et ton club ? Pas encore de siège ? Commente ton club et abonne-toi, demain je t'installe !
