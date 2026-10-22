@@ -19,8 +19,8 @@ for _, c in P.FANS: P.COUNT[c] = P.COUNT.get(c, 0) + 1
 COUNT = P.COUNT; TOTAL = len(P.FANS)
 P.NAME.update(troyes="TROYES", lorient="LORIENT", nice="NICE")
 VOICE = os.path.join(HERE, "voix", "ep3.mp3")
-T = dict(attends=2.6, fin=4.0, relance=5.9, semaine=7.8, comm=8.7, abo=9.6, res=11.7, n92=13.0, tou=14.7, brest=16.4, om=19.5,
-         fans=21.4, psg=23.2, ton=25.4, comm2=27.1, end=30.8)
+T = dict(attends=2.4, fin=4.4, relance=6.2, semaine=8.0, comm=8.8, abo=9.85, res=12.9, n92=13.7, tou=15.2, brest=16.8, om=20.4,
+         fans=22.4, psg=24.3, ton=26.4, comm2=27.9, end=32.2)
 DUR = T["end"]
 
 def heart(L, x, y, r, t):
@@ -63,7 +63,7 @@ def relance(L, fr, t):
     if t > T["abo"] - .2:
         pul = 1 + .05*math.sin(t*12)
         L_("2. + ABONNE-TOI", 80, ROUGE, BLANC).draw(L, fr, W/2, 1260, M.spring(t - T["abo"] + .2, .45, 14)*pul, 2)
-        L_("3. LIKE", 80, (235, 40, 90), BLANC).draw(L, fr, W/2 - 40, 1420, M.spring(t - T["abo"] - .35, .45, 14)*(1 + .05*math.sin(t*12 + 1)), -2)
+        L_("3. LIKE", 80, (235, 40, 90), BLANC).draw(L, fr, W/2 - 40, 1420, M.spring(t - T["abo"] - .65, .45, 14)*(1 + .05*math.sin(t*12 + 1)), -2)
         if t > T["abo"] + .1: heart(L, W/2 + 175, 1420, 46, t)
         L_("= TON SIÈGE COMPTE", 66, JAUNE, NOIR).draw(L, fr, W/2, 1580, M.spring(t - T["abo"] - .8, .45, 14), -1)
 
@@ -122,7 +122,7 @@ def final(L, fr, t):
     if t > T["comm2"] + 1.2: L_("7 JOURS : TOUT PEUT CHANGER", 56, BLANC, NOIR).draw(L, fr, W/2, 540, M.spring(t - T["comm2"] - 1.2, .45, 14), 1)
 
 SCENES = [(0, hook), (T["fin"] + .4, relance), (T["res"] - .1, total), (T["tou"] - .1, lambda L, fr, t: duo(L, fr, t, "toulouse", "angers", T["tou"], "6 CHACUN")),
-          (T["brest"] - .1, lambda L, fr, t: duo(L, fr, t, "brest", "lens", T["brest"] + .9, "3e : ÉGALITÉ")),
+          (T["brest"] - .1, lambda L, fr, t: duo(L, fr, t, "brest", "lens", T["brest"] + 1.6, "3e : ÉGALITÉ")),
           (T["om"] - .1, lambda L, fr, t: solo(L, fr, t, "om", T["om"] + .6, "2e")), (T["fans"] - .1, psg_scene), (T["ton"] - .1, final)]
 
 def frame(fr, t):
@@ -138,7 +138,7 @@ def sfx_list():
          (T["semaine"] + k*.08, "tok", .3) for k in range(7)] + [(T["comm"] - .2, "pop", .5), (T["abo"] - .2, "ding", .5),
          (T["res"] - .15, "page_tear", .5), (T["n92"] - .4, "drumroll", .4), (T["n92"] + .55, "ding", .5)] + [
          (T["tou"] - .1, "page_tear", .5)] + [(T["tou"] + .15 + k*.1 + .22, "thud", .3) for k in range(6)] + [
-         (T["brest"] - .1, "page_tear", .5), (T["brest"] + .8, "stamp", .6)] + [(T["brest"] + 1.05 + k*.1 + .22, "thud", .3) for k in range(8)] + [
+         (T["brest"] - .1, "page_tear", .5), (T["brest"] + 1.5, "stamp", .6)] + [(T["brest"] + 1.75 + k*.1 + .22, "thud", .3) for k in range(8)] + [
          (T["om"] - .1, "page_tear", .5), (T["om"] + .5, "stamp", .6), (T["om"] + .8, "crowd", .5), (T["fans"] - .1, "page_tear", .5),
          (T["fans"] + .1, "riser", .5), (T["psg"] - .1, "bang", .7), (T["psg"], "crowd", .7), (T["psg"] + .05, "shimmer", .5)] + [
          (T["psg"] + .15 + k*.09 + .22, "thud", .25) for k in range(20)] + [(T["ton"] - .1, "page_tear", .5), (T["comm2"] + .4, "notif", .5)]
