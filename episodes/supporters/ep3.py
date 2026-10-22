@@ -23,6 +23,13 @@ T = dict(attends=2.6, fin=4.0, relance=5.9, semaine=7.8, comm=8.7, abo=9.6, res=
          fans=21.4, psg=23.2, ton=25.4, comm2=27.1, end=30.8)
 DUR = T["end"]
 
+def heart(L, x, y, r, t):
+    """Cœur rose qui bat (le glyphe ♥ n'existe pas dans la police titre)."""
+    k = r*(1 + .08*math.sin(t*12)); pts = []
+    for i in range(48):
+        a = 2*math.pi*i/48; pts.append((x + k*16*math.sin(a)**3/16, y - k*(13*math.cos(a) - 5*math.cos(2*a) - 2*math.cos(3*a) - math.cos(4*a))/16))
+    d = ImageDraw.Draw(L); d.polygon([(px + 4, py + 5) for px, py in pts], fill=(20, 16, 24)); d.polygon(pts, fill=(240, 50, 100))
+
 def hook(L, fr, t):
     rays(L, W/2, 1250, t, .06)
     pd = podium_sprite(); px, py = W/2, 1560; ax, ay = pd.info["anchor"]; blit_sxy(L, pd, px, py, 1, 1, 0)
@@ -56,7 +63,9 @@ def relance(L, fr, t):
     if t > T["abo"] - .2:
         pul = 1 + .05*math.sin(t*12)
         L_("2. + ABONNE-TOI", 80, ROUGE, BLANC).draw(L, fr, W/2, 1260, M.spring(t - T["abo"] + .2, .45, 14)*pul, 2)
-        L_("= TON SIÈGE COMPTE", 66, JAUNE, NOIR).draw(L, fr, W/2, 1420, M.spring(t - T["abo"] - .6, .45, 14), -1)
+        L_("3. LIKE", 80, (235, 40, 90), BLANC).draw(L, fr, W/2 - 40, 1420, M.spring(t - T["abo"] - .35, .45, 14)*(1 + .05*math.sin(t*12 + 1)), -2)
+        if t > T["abo"] + .1: heart(L, W/2 + 175, 1420, 46, t)
+        L_("= TON SIÈGE COMPTE", 66, JAUNE, NOIR).draw(L, fr, W/2, 1580, M.spring(t - T["abo"] - .8, .45, 14), -1)
 
 def total(L, fr, t):
     L_("RÉSULTATS 24H", 110, JAUNE, NOIR).draw(L, fr, W/2, 400, 1, -2)
@@ -107,7 +116,9 @@ def final(L, fr, t):
     blit_sxy(L, cup(int(t*12) % 24), x, y - 250, .55, .55, 0)
     L_("TON CLUB N'EST PAS LÀ ?", 78, NOIR, BLANC).draw(L, fr, W/2, 400, M.spring(t - T["ton"], .45, 14), -2)
     L_("COMMENTE TON CLUB", 70, JAUNE, NOIR).draw(L, fr, W/2, 1660, M.spring(t - T["comm2"], .45, 14), -1.5)
-    L_("+ S'ABONNER", 72, ROUGE, BLANC).draw(L, fr, W/2, 1780, M.spring(t - T["comm2"] - .4, .45, 14)*(1 + .05*math.sin(t*12)), 2)
+    L_("+ S'ABONNER", 72, ROUGE, BLANC).draw(L, fr, W/2 - 190, 1780, M.spring(t - T["comm2"] - .4, .45, 14)*(1 + .05*math.sin(t*12)), 2)
+    if t > T["comm2"] + .9: heart(L, W/2 + 345, 1780, 40, t)
+    L_("LIKE", 72, (235, 40, 90), BLANC).draw(L, fr, W/2 + 230, 1780, M.spring(t - T["comm2"] - .7, .45, 14)*(1 + .05*math.sin(t*12 + 1)), -2)
     if t > T["comm2"] + 1.2: L_("7 JOURS : TOUT PEUT CHANGER", 56, BLANC, NOIR).draw(L, fr, W/2, 540, M.spring(t - T["comm2"] - 1.2, .45, 14), 1)
 
 SCENES = [(0, hook), (T["fin"] + .4, relance), (T["res"] - .1, total), (T["tou"] - .1, lambda L, fr, t: duo(L, fr, t, "toulouse", "angers", T["tou"], "6 CHACUN")),
