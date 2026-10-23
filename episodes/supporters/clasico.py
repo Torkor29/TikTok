@@ -11,7 +11,7 @@ from ep1 import (W, H, FPS, JAUNE, ROUGE, BLANC, NOIR, CREME, L_, logo, backgrou
 
 BARCA, REAL = (165, 0, 68), (0, 77, 152)
 VOICE = os.path.join(HERE, "voix", "clasico.mp3")
-T = dict(real=1.0, clasico=2.4, toi=3.6, vides=5.4, comm=7.2, b2=8.6, r2=9.4, camp=10.3, gagne=13.5, like=15.2, demain=17.0, end=19.2)
+T = dict(real=1.18, clasico=2.70, toi=4.16, vides=5.30, comm=6.82, b2=7.82, r2=8.76, camp=9.66, gagne=12.02, like=13.36, demain=15.16, end=17.3)
 DUR = T["end"]
 
 def side_bg(L, t, u):
@@ -97,7 +97,7 @@ def render_all():
     os.remove(vid); os.remove(aud); return out
 
 def stills():
-    ts = [0, .5, 1.2, 3.0, 4.5, 6.0, 8.0, 9.6, 11.5, 14.0, 15.6, 18.5]
+    ts = [0, .5, 1.4, 3.0, 4.5, 6.0, 7.5, 9.0, 11.0, 12.5, 14.0, 16.5]
     sh = Image.new("RGB", (270*6, 480*2))
     for i, t in enumerate(ts): sh.paste(frame(int(t*FPS), t).resize((270, 480)), ((i % 6)*270, (i//6)*480))
     p = "/tmp/claude-0/clasico_sheet.jpg"; sh.save(p, quality=85); return p
