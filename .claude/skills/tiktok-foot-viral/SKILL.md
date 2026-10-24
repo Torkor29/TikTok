@@ -298,3 +298,9 @@ Référence : `episodes/rennes/` (`TEXTE.md`, `SCRIPT.md`, `rennes3.py`, `rgfx.p
 3. Voix Léo générée par l'utilisateur ou ElevenLabs → `mots.json` (faster-whisper) → **`SCRIPT.md` seconde par seconde** (voix / micro-scène / caméra / sons) avec un **fil rouge** permanent (compteur papier en haut à gauche).
 4. **DA** : papercraft 3D (`engine/papercraft.py`, `pc_lib.py`, `pc_assets.py`, `pc_over.install`), photos réelles filtrées papier découpé, écusson officiel envoyé par l'utilisateur, déchirures propres, un changement visuel toutes les ~1,5 s.
 5. Sons synthétisés + banque, voix devant mais bruitages audibles. Planches de contrôle, rendu, couverture, `_voix_off.txt`, description + commentaire épinglé.
+
+### Hook + anecdotes « buzz » (validé par l'utilisateur sur ASSE v3)
+- **Hook = scandale / interdit / argent / prison / fuite**, dit à la 1re seconde, ≤ 15 mots : « Ce président payait ses joueurs en cachette… et il a fini condamné. » puis « Voici l'histoire du club le plus fou de France : <club>. » (nom du club avant 3 s).
+- L'histoire reste **chronologique** derrière, mais chaque étape = une anecdote choc : fuite secrète d'un joueur, taxi de 500 km payé par le club, remontada, record, scandale financier, envahissement / fumigènes / sanction, rachat par un milliardaire.
+- Classement des anecdotes : scandale/justice > chaos supporters > argent fou > histoire perso incroyable > record > folklore (couleurs, surnoms : 3 s max). Jamais une anecdote déjà sortie sur la chaîne (ex. poteaux carrés ASSE = claquée).
+- Vérifier chaque fait choc (prison, montants) ; si non confirmé, adoucir le mot (« condamné » au lieu de « prison ») plutôt que l'inventer.
