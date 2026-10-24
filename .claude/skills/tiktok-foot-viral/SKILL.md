@@ -290,3 +290,11 @@ fiables). Donc on ne « devine » plus : on s'appuie sur ce que TikTok montre et
   -> Les 63 % du début venaient d'un public « chaud » ; à froid, le sujet PSG accroche bien mieux que Mbappé.
   Règle : promo « j'aime »/« abonnés » = INTERDITE (pollue les stats, ne crée aucun engagement). Le taux 2 s/6 s sous promo
   sert de TEST À FROID : ≥ 40 % à 2 s = sujet/accroche qui marche auprès d'inconnus.
+
+## Process « histoire de club » (modèle Rennes, nouvelle DA) — à suivre à l'identique
+Référence : `episodes/rennes/` (`TEXTE.md`, `SCRIPT.md`, `rennes3.py`, `rgfx.py`, `rsfx.py`, `pc_over.py`, `mots.json`), sortie `output/rennes_v3/`.
+1. **Angle neuf** : jamais une anecdote déjà sortie sur la chaîne (vérifier `episodes/<club>*`). Hook = l'anecdote la plus folle, ≤ 18 mots, puis « Voici l'histoire du club le plus … de France ».
+2. **`TEXTE.md`** : ~65-70 s, une phrase = une micro-scène, faits vérifiés + sources en bas. **CTA quiz au milieu** (~30 s : « Petite question pour les vrais : … ? Réponds en commentaire… abonne-toi, like ») dont la **réponse n'est jamais donnée**. Fin = **question clivante régionale** (meilleur club breton, Sainté ou Lyon…).
+3. Voix Léo générée par l'utilisateur ou ElevenLabs → `mots.json` (faster-whisper) → **`SCRIPT.md` seconde par seconde** (voix / micro-scène / caméra / sons) avec un **fil rouge** permanent (compteur papier en haut à gauche).
+4. **DA** : papercraft 3D (`engine/papercraft.py`, `pc_lib.py`, `pc_assets.py`, `pc_over.install`), photos réelles filtrées papier découpé, écusson officiel envoyé par l'utilisateur, déchirures propres, un changement visuel toutes les ~1,5 s.
+5. Sons synthétisés + banque, voix devant mais bruitages audibles. Planches de contrôle, rendu, couverture, `_voix_off.txt`, description + commentaire épinglé.
