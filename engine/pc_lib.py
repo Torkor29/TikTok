@@ -296,3 +296,25 @@ def obj_sprite(kind, size=500, yaw=-.4, pitch=.25, phase=0.0):
 @lru_cache(maxsize=512)
 def cat_sprite(fur, stripe, tq, walk, yaw, size=520):
     return render(cat(fur, C(stripe)), size, yaw=yaw, pitch=.18, scale=size/3.6, center=(0, 1.35, -.4), anim=cat_anim(tq, walk), anchor=(0, 0, -.4))
+
+# ------------------------------------------------------------------ Ballon d'Or (trophée papier : ballon doré facetté sur socle de pyrite)
+def bdo_parts():
+    pts, V = icosphere(1.0, 1)
+    def p_ball(P, c):
+        n = P/np.linalg.norm(P, axis=1, keepdims=True); d = (n @ V.T).max(1)
+        c[d > .95] = C((150, 100, 18)); return speckle(P, c, .01, (120, 84, 20), 7)
+    parts = [Part(pts, (246, 200, 70), p_ball, (0, 2.05, 0), name="ball"),
+             Part(lathe([(.5, 0), (.3, .45)], 8), (210, 160, 44), None, (0, .7, 0), name="col"),
+             Part(lathe([(1.25, 0), (1.25, .12)], 12), (196, 150, 40), None, (0, 0, 0), name="plate")]
+    rng = np.random.default_rng(3)
+    for i in range(24):                                  # cristaux de pyrite
+        a = i*2.4; r_ = .2 + .75*rng.random(); s = .2 + .2*rng.random()
+        g = int(160 + 70*rng.random())
+        parts.append(Part(cbox(s, s*(.9 + .5*rng.random()), s, .15) @ rot("y", rng.random()*3).T @ rot("x", (rng.random() - .5)*.8).T + [r_*math.cos(a), .32 + .3*rng.random(), r_*math.sin(a)],
+                          (g, g - 12, g - 60), None, (0, 0, 0), name=f"py{i}"))
+    return parts
+
+@lru_cache(maxsize=32)
+def bdo_sprite(yq, size=600):
+    A = {"ball": rot("y", yq*.6)}
+    return render(bdo_parts(), size, yaw=-.35 + yq*.0, pitch=.18, scale=size/3.6, center=(0, 1.55, 0), anim=A, anchor=(0, 0, 0), shadow_a=70)

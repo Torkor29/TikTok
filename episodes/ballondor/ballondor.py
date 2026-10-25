@@ -251,18 +251,14 @@ def CUT(n, h=900):
     if k not in _cut:
         p = os.path.join(PH, n + ".png"); _cut[k] = paper_player(p, (0, 0) + Image.open(p).size, h)
     return _cut[k]
-def gold_ball(r=200):
-    k = ("gb", r)
+import pc_lib as _PL
+def gold_ball(r=200, yq=0):
+    """Trophée Ballon d'Or papier 3D (pc_lib.bdo_sprite), hauteur ≈ 3,2 r, ancré au centre."""
+    k = ("gb", r, yq)
     if k not in _fc:
-        im = Image.new("RGBA", (2*r + 40, 2*r + 40), (0, 0, 0, 0)); d = ImageDraw.Draw(im); c = r + 20
-        for i in range(r, 0, -4):
-            u = i/r; col = tuple(int(lerp(a, b, u)) for a, b in zip((255, 236, 150), GOLD2)); d.ellipse([c - i - r*.18*(1 - u), c - i - r*.25*(1 - u), c + i - r*.18*(1 - u), c + i - r*.25*(1 - u)], fill=col)
-        for k_ in range(5):
-            a = k_*2*math.pi/5 - math.pi/2; px, py = c + r*.55*math.cos(a), c + r*.55*math.sin(a)
-            pts = [(px + r*.2*math.cos(a + j*2*math.pi/5), py + r*.2*math.sin(a + j*2*math.pi/5)) for j in range(5)]; d.polygon(pts, outline=(150, 100, 20), width=6)
-        pts = [(c + r*.22*math.cos(-math.pi/2 + j*2*math.pi/5), c + r*.22*math.sin(-math.pi/2 + j*2*math.pi/5)) for j in range(5)]; d.polygon(pts, outline=(150, 100, 20), width=6)
-        d.ellipse([c - r, c - r, c + r, c + r], outline=(120, 80, 10), width=8); d.ellipse([c - r*.6, c - r*.75, c - r*.25, c - r*.45], fill=(255, 250, 220))
-        im.info["anchor"] = (c, c); _fc[k] = shadowed(im, k)
+        sp = _PL.bdo_sprite(yq, 700); bb = sp.getchannel("A").getbbox(); sp = sp.crop(bb)
+        h = int(3.2*r); sp = sp.resize((int(sp.width*h/sp.height), h), Image.LANCZOS); sp.info["anchor"] = (sp.width/2, sp.height/2)
+        _fc[k] = shadowed(sp, k)
     return _fc[k]
 def gala_bg(L, t, key="gala"):
     vgrad(L, 0, H, (10, 12, 34), (34, 26, 70)); rays(L, (CX, 1000), t, .5, 16, 1800, (60, 50, 110), .08, .25)
@@ -294,8 +290,7 @@ E_H = words(lambda w, i: KW(w, GOLD if w == "TOI" else NOIR, NOIR if w == "TOI" 
 def s_hook(L, fr, t):
     gala_bg(L, t)
     u = M.spring(t + .25, .5, 11); y = lerp(1700, 1080, u) + 14*math.sin(t*3)
-    d = ImageDraw.Draw(L); d.rectangle([CX - 70, y + 150, CX + 70, H], fill=(60, 60, 80)); d.ellipse([CX - 150, y + 90, CX + 150, y + 230], fill=(224, 178, 140), outline=NOIR, width=5)
-    put(L, gold_ball(230), CX, y, 1 + .03*math.sin(t*6), 4*math.sin(t*2))
+    put(L, gold_ball(230, round((t*.8) % 6.28 / .3)*.3 % 6.28), CX, y, 1 + .03*math.sin(t*6), 3*math.sin(t*2))
     sparks_burst(L, t, K["ballon"], CX, y, 16, (255, 230, 120), 420)
     M.draw_all(L, fr, t, E_H)
 CAM_HOOK = [(0, CX, 1000, 1.06), (K["merite"], CX, 1050, 1.1), (K["annee"], CX, 1000, 1.0)]
@@ -313,7 +308,6 @@ def s_jury(L, fr, t):
         x0 = CX + side*(60 + 520*op)
         for k in range(6): xx = x0 + side*k*80; d.rectangle([min(xx, xx + side*80), 760, max(xx, xx + side*80), 1500], fill=(170 - 12*(k % 2), 20, 36))
     put(L, gold_ball(120), CX, 1180, M.spring(t - K["remis"] + .2, .45, 12), 0)
-    d.rectangle([CX - 80, 1300, CX + 80, 1500], fill=(60, 50, 90), outline=GOLD, width=5)
     if t > K["elu"] - .2:
         for i, p in enumerate(JRN):
             v = M.spring(t - K["elu"] + .2 - i*.06, .45, 12); x = 130 + i*205
