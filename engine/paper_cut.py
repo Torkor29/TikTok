@@ -58,8 +58,9 @@ def _rough(mask, px, seed=3):
     return d.filter(ImageFilter.GaussianBlur(1))
 
 @lru_cache(maxsize=32)
-def paper_player(path, box=None, h=900, border=16, levels=10, shadow=True):
-    """Sprite papier découpé d'un joueur depuis une photo (box = recadrage). Ancre : bas-centre de la silhouette."""
+def paper_player(path, box=None, h=900, border=16, levels=10, shadow=True, real=False):
+    """Sprite papier découpé d'un joueur depuis une photo (box = recadrage). Ancre : bas-centre de la silhouette.
+    real=True : photo réaliste (pas d'aplats gouache), seulement le liseré papier déchiré + l'ombre."""
     os.makedirs(CACHE, exist_ok=True)
     key = f"{os.path.basename(path)}_{box}_{levels}".replace(" ", "").replace("(", "").replace(")", "").replace(",", "-")
     mp = os.path.join(CACHE, key + "_mask.png")
@@ -73,7 +74,7 @@ def paper_player(path, box=None, h=900, border=16, levels=10, shadow=True):
     k = h/src.height; size = (max(1, int(src.width*k)), h)
     src = src.resize(size, Image.LANCZOS); mask = mask.resize(size, Image.LANCZOS)
     W, H = size[0] + 2*pad, size[1] + 2*pad
-    body = Image.new("RGB", (W, H)); body.paste(_stylize(src, mask, levels), (pad, pad))
+    body = Image.new("RGB", (W, H)); body.paste(src if real else _stylize(src, mask, levels), (pad, pad))
     m = Image.new("L", (W, H), 0); m.paste(mask, (pad, pad))
     rim = _rough(m, border)
     out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
