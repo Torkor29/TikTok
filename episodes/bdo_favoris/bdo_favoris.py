@@ -291,7 +291,8 @@ _aur = {}
 def _sil(sp, grow, blur):
     k = (id(sp), grow, blur)
     if k not in _aur:
-        a = sp.getchannel("A").point(lambda v: 255 if v > 90 else 0)
+        a0 = sp.getchannel("A").point(lambda v: 255 if v > 90 else 0)
+        a = Image.new("L", (a0.width + 240, a0.height + 240), 0); a.paste(a0, (120, 120))   # marge : la lueur ne doit pas être coupée en rectangle
         if grow: a = a.filter(ImageFilter.MaxFilter(grow*2 + 1))
         _aur[k] = a.filter(ImageFilter.GaussianBlur(blur))
     return _aur[k]
@@ -320,7 +321,7 @@ def aura(L, sp, x, y, t, col, power=1.0, seed=0):
             out[yb:yb + 12] = _np.roll(arr[yb:yb + 12], d, axis=1)
         k = amp*power*(.85 + .15*math.sin(t*17 + li + seed))
         rgb = _np.clip(out[..., None]/255*_np.array(col, _np.float32)*k*1.4, 0, 255).astype(_np.uint8)
-        add_light(L, Image.fromarray(rgb, "RGB"), cx, cy - (sh.height - sp.height)/2 - 10*li)
+        add_light(L, Image.fromarray(rgb, "RGB"), cx, cy + m.height/2 - sh.height/2 - 60 - 10*li)
 def particles(L, x, y, w, h, t, col, n=40, seed=0, power=1.0):
     """Étincelles d'énergie qui montent (traînées lumineuses, additif)."""
     if power <= .02: return
