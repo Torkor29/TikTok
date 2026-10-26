@@ -378,6 +378,45 @@ def card(txt, ok, size=56):
     col = (30, 160, 80) if ok else (210, 30, 40)
     return LBL(("✔ " if ok else "✘ ") + txt, f"cd{txt}{ok}{size}", font("title", size), BLANC, col, padx=26, pady=12, rough=2)
 
+
+# ------------------------------------------------------------------ « HERE COMES A NEW CHALLENGER! » (façon Smash Bros)
+_chal = {}
+def metal_text(txt, size, top=(255, 255, 255), mid=(200, 200, 210), bot=(255, 190, 40)):
+    """Texte métallique : dégradé vertical chromé + contour noir épais + liseré clair (cache)."""
+    k = (txt, size)
+    if k not in _chal:
+        f = font("title", size); d0 = ImageDraw.Draw(Image.new("L", (1, 1))); bb = d0.textbbox((0, 0), txt, font=f)
+        w_, h_ = bb[2] - bb[0] + 60, bb[3] - bb[1] + 60
+        m = Image.new("L", (w_, h_), 0); ImageDraw.Draw(m).text((30 - bb[0], 30 - bb[1]), txt, font=f, fill=255)
+        grad = Image.new("RGB", (1, h_))
+        for y in range(h_):
+            u = y/h_; c = [lerp(a, b, u/.5) if u < .5 else lerp(b, c_, (u - .5)/.5) for a, b, c_ in zip(top, mid, bot)]
+            if .46 < u < .52: c = [v*.55 for v in c]                       # ligne d'horizon chromée
+            grad.putpixel((0, y), tuple(int(v) for v in c))
+        grad = grad.resize((w_, h_))
+        out = Image.new("RGBA", (w_, h_), (0, 0, 0, 0))
+        ol = m.filter(ImageFilter.MaxFilter(13)); out.paste((10, 8, 12, 255), (0, 0), ol)
+        out.paste((255, 250, 230, 255), (0, 0), m.filter(ImageFilter.MaxFilter(5)))
+        g = grad.convert("RGBA"); g.putalpha(m); out.alpha_composite(g)
+        out.info["anchor"] = (w_/2, h_/2); _chal[k] = out
+    return _chal[k]
+def challenger(L, fr, t, ti, n, col):
+    """Intro 0,9 s : flash blanc, fond noir + explosion de feu, silhouette du joueur, « HERE COMES A NEW CHALLENGER! » qui claque."""
+    u = t - ti
+    paper_fill(L, (8, 6, 10), "chal")
+    for k in range(3):                                            # explosion de flammes (additif)
+        r_ = int(260 + 420*M.ease_out(clamp((u - k*.06)/.5)))
+        glow_spot(L, CX + (k - 1)*160, 1150 - 60*k, max(20, r_), (255, 120 - 30*k, 20), .9 - .2*k)
+    rays(L, (CX, 1150), t*3, .9, 22, 1800, (120, 40, 10), .12, .4)
+    sp = CUT(n, 1180); a = sp.getchannel("A")
+    sil = Image.new("RGBA", sp.size, (6, 6, 8, 255)); sil.putalpha(a)
+    rim = Image.new("RGBA", sp.size, col + (255,)); rim.putalpha(a.filter(ImageFilter.MaxFilter(9))); rim.alpha_composite(sil); rim.info["anchor"] = sp.info["anchor"]
+    put(L, rim, CX, 1960, 1 + .06*(1 - M.ease_out(clamp(u/.3))), 0)
+    s1 = M.spring(u - .12, .3, 18); s2 = M.spring(u - .22, .3, 18)
+    put(L, metal_text("HERE COMES A", 62), CX, 1400, s1, -6)
+    put(L, metal_text("NEW CHALLENGER!", 92), CX, 1530, s2*(1 + .04*math.sin(t*30)), -6)
+    if u < .12: L.alpha_composite(Image.new("RGBA", L.size, (255, 255, 255, int(255*(1 - u/.12)))))
+
 def fil_rouge(cv, fr, t):
     LBL("BALLON D'OR 2026 · POUR / CONTRE", "fhdr", font("mono", 30), GOLD, NOIR, padx=14, pady=5, rough=1.5).draw(cv, fr, CX, 140, 1, 0)
 
@@ -416,12 +455,17 @@ def make_player_scene(i, f):
     E = [El(KW(NAMES[n], col if n != "yamal" else GOLD, NOIR, 150), CX, 420, t0 - .05, t1 - .15, "stamp", "fly", rot=(-3, 3)[i % 2])] + \
         [El(card(tx, True, 52), CX, 590 + 110*j, tp - .1, tm - .05, "stamp", "shrink", rot=(-2, 2)[j % 2]) for j, (tp, tx) in enumerate(pours)] + \
         [El(card(contre, False, 60), CX, 610, tm, t1 - .15, "stamp", "fly", rot=-3)]
+    TI = min(.85, pours[0][0] - t0 - .05)
     def fn(L, fr, t):
+        if t < t0 + TI:
+            challenger(L, fr, t, t0, n, col)
+            return
         lost = M.ease_io(clamp((t - tm)/.35)); power = (1.25 if t > pours[0][0] else .7)*(1 - .85*lost)
         dark_bg(L, t, col, n); rays(L, (CX, 1150), t, .7, 16, 1800, tuple(int(c*.25*(1 - .6*lost)) for c in col), .1, .3)
         glow_spot(L, CX, 1250, 520, tuple(int(c*.45*(1 - .7*lost)) for c in col))
         put(L, logo(club, 220), 900, 860, M.spring(t - t0, .45, 14)*(1 - .3*lost), 8)
-        sp = CUT(n, 1180); u = M.spring(t - t0 + .15, .45, 12)
+        sp = CUT(n, 1180); u = M.spring(t - t0 - TI + .3, .3, 12)
+        if t < t0 + TI + .12: L.alpha_composite(Image.new("RGBA", L.size, (255, 255, 255, int(255*(1 - (t - t0 - TI)/.12)))))
         x = lerp(-600 if i % 2 == 0 else W + 600, CX, u); y = 1960 + (12*math.sin(t*40)*math.exp(-(t - tm)*5) if t > tm else 0)
         for (tp, _) in pours: shock(L, t, tp, CX, 1900, col)
         aura(L, sp, x, y, t, col, power, i)
@@ -499,7 +543,7 @@ P = PAD_IN
 V5S = os.path.join(ROOT, "episodes", "lille_v5", "sfx"); RS = os.path.join(RENNES, "sfx"); BANK = os.path.join(ROOT, "assets", "sfx")
 def X(t, name, g): return (P + t, name, g)
 SFX = [X(0, "braam", .8), X(0, "riser", .35), X(K["impossible"], "stamp", .5), X(K["gagner"] - .2, "stamp", .6), X(K["perdre"] - .25, "thunder", .5), X(K["perdre"] - .2, "stamp", .6)] + \
-      sum([[X(f[3] - .1, "whoosh3", .5), X(f[3], "boom", .45)] + [X(tp - .1, "zap", .5) for tp, _ in f[4]] + [X(tp, "stamp", .55) for tp, _ in f[4]] +
+      sum([[X(f[3] - .1, "whoosh3", .5), X(f[3], "boom", .7), X(f[3] + .02, "flashfx", .5), X(f[3] + .2, "stamp", .6), X(f[3] + .25, "zap", .45)] + [X(tp - .1, "zap", .5) for tp, _ in f[4]] + [X(tp, "stamp", .55) for tp, _ in f[4]] +
            [X(f[4][0][0], "shimmer", .45), X(f[5], "buzzer", .45), X(f[5] + .02, "stamp", .65), X(f[5] + .1, "groan", .3)] for f in FAVS], []) + \
       [X(K["soir"] - .05, "flashfx", .5), X(K["soir"], "riser", .4), X(K["seul"], "boom", .55), X(K["seul"] + .05, "sparkle", .5), X(K["abonne"], "pop", .5),
        X(K["dis"], "notif", .55), X(K["qui"] + .3, "bell", .4)]
