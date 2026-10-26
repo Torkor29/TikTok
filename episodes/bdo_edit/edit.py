@@ -35,10 +35,17 @@ def pick_segments(path, n, seg_len, skip=1.0):
     while len(picks) < n: picks.append(random.uniform(skip, max(skip + .1, dur - seg_len - 1)))
     return sorted(max(0, p - seg_len*.75) for p in picks)
 
+def _aspect(path):
+    w, h = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", path],
+                          capture_output=True, text=True).stdout.strip().split(",")[:2]
+    return int(w)/int(h)
 def read_frames(path, t0, dur, speed=1.0):
     """Extrait [t0, t0+dur*speed] en 1080x1920 : vidéo en plein cadre recadrée au centre (zoom léger) sur fond flou."""
     src_d = dur*speed
-    cmd = ["ffmpeg", "-loglevel", "error", "-ss", f"{t0:.3f}", "-t", f"{src_d:.3f}", "-i", path, "-vf",
+    if _aspect(path) < .75:                                   # source déjà verticale : plein cadre, léger zoom (retire filigranes de bord)
+        vf = f"setpts={1/speed:.4f}*PTS,fps={FPS},scale=1080*1.12:1920*1.12:force_original_aspect_ratio=increase,crop=1080:1920"
+        cmd = ["ffmpeg", "-loglevel", "error", "-ss", f"{t0:.3f}", "-t", f"{src_d:.3f}", "-i", path, "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
+    else: cmd = ["ffmpeg", "-loglevel", "error", "-ss", f"{t0:.3f}", "-t", f"{src_d:.3f}", "-i", path, "-vf",
            f"setpts={1/speed:.4f}*PTS,fps={FPS},split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=30:3,eq=brightness=-0.15[bg];"
            f"[b]scale=1080*1.35:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
     raw = subprocess.run(cmd, capture_output=True).stdout; n = len(raw)//(W*H*3)
@@ -69,9 +76,14 @@ def main():
     NB = 48; total = NB*BEAT + 1.2                                # 48 temps ≈ 22,3 s + queue
     # plan de coupe : (début_temps, nb_temps, vitesse)
     plan = [(1 + 2*k, 2, 1.0) for k in range(7)] + [(15, 1, .5)] + [(16 + k, 1, (1.0, 1.6, .6, 1.0)[k % 4]) for k in range(20)]
-    segs = pick_segments(a.clips, len(plan), 2*BEAT*1.6)
+    paths = a.clips.split(",")                                    # plusieurs compiles possibles, extraits répartis selon leur durée
+    durs = [float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", q], capture_output=True, text=True).stdout) for q in paths]
+    share = [max(1, round(len(plan)*d/sum(durs))) for d in durs]; share[0] += len(plan) - sum(share)
+    segs = []
+    for q, k in zip(paths, share): segs += [(q, t0) for t0 in pick_segments(q, k, 2*BEAT*1.6)]
+    random.Random(7).shuffle(segs)
     clipfr = {}
-    for i, ((b0, nb, sp), t0) in enumerate(zip(plan, segs)): clipfr[b0] = read_frames(a.clips, t0, nb*BEAT, sp)
+    for (b0, nb, sp), (q, t0) in zip(plan, segs): clipfr[b0] = read_frames(q, t0, nb*BEAT, sp)
     stats = [s for s in a.stats.split("|") if s] or []
     sp_w = B.CUT(a.photo, 1250); name = a.name.upper()
     beats = [k*BEAT for k in range(NB + 4)]
@@ -89,7 +101,7 @@ def main():
             B.aura(L, sp_w, W//2, 1990, t, col, 1.3, 3); B.put(L, sp_w, W//2, 1990, 1 + .03*pulse, 0)
             B.particles(L, W//2, 1990, 900, 1600, t, col, 40, 2); B.bolt(L, 260, 900, t, col, 1, 500); B.bolt(L, 820, 1000, t + .3, col, 2, 450)
             B.KW(name, B.GOLD, B.NOIR, 170).draw(L, fr, W//2, 330 if not end else 300, (1 + .5*(1 - min(1, u/.15))) if u < .15 else 1 + .04*pulse, -3)
-            B.put(L, B.metal_text("BALLON D'OR 2026", 96), W//2, 500 if not end else 460, B.M.spring(u - .1, .3, 16), -3)
+            B.put(L, B.metal_text("BALLON D'OR 2026", 96), W//2, 500 if not end else 460, (1 if not end else B.M.spring(u - .1, .3, 16)), -3)
             if end and t > 40*BEAT: B.marker("ET TOI, T'AURAIS VOTÉ QUI ?", "ecta", 56).draw(L, fr, W//2, 1650, 1, -2)
             if end and u < .15: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(255*(1 - u/.15)))))   # pas de flash à l'image 0 : le visage doit se voir tout de suite
             B.shock(L, t, 0 if not end else 36*BEAT, W//2, 1900, col, 1000)
