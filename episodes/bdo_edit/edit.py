@@ -18,6 +18,43 @@ from PIL import Image, ImageDraw, ImageFilter, ImageChops
 W, H, FPS = 1080, 1920, 30
 BPM = 129.0; BEAT = 60/BPM
 MUSIC = os.path.join(ROOT, "assets", "music", "phonk_papierfc.mp3")
+CW, CH = 840, 1050                                            # extrait = carte papier 4:5
+_cm = {}
+def card_mask():
+    """Bord papier déchiré (cadre blanc 34 px) + masque de la photo, mis en cache."""
+    if "m" not in _cm:
+        bw = 34; w_, h_ = CW + 2*bw, CH + 2*bw; rng = np.random.default_rng(5)
+        m = Image.new("L", (w_ + 40, h_ + 40), 0); d = ImageDraw.Draw(m); pts = []
+        for x in range(0, w_ + 1, 14): pts.append((20 + x, 20 + rng.uniform(-6, 6)))
+        for y in range(0, h_ + 1, 14): pts.append((20 + w_ + rng.uniform(-6, 6), 20 + y))
+        for x in range(w_, -1, -14): pts.append((20 + x, 20 + h_ + rng.uniform(-6, 6)))
+        for y in range(h_, -1, -14): pts.append((20 + rng.uniform(-6, 6), 20 + y))
+        d.polygon(pts, fill=255); _cm["m"] = m.filter(ImageFilter.GaussianBlur(.8)); _cm["off"] = (20 + bw, 20 + bw)
+        sh = m.filter(ImageFilter.GaussianBlur(22)).point(lambda v: int(v*.6)); _cm["sh"] = sh
+        tape = Image.new("RGBA", (220, 70), (238, 226, 190, 200)); td = ImageDraw.Draw(tape)
+        for k in range(0, 220, 9): td.line([(k, 0), (k + 4, 70)], fill=(225, 210, 170, 200), width=2)
+        _cm["tape"] = tape
+    return _cm
+def paper_card(img, glow_col=None, gloss=0.0):
+    """Extrait -> carte papier : bord blanc déchiré, 2 morceaux de scotch, reflet brillant qui balaie (gloss 0..1)."""
+    c = card_mask(); m = c["m"]; out = Image.new("RGBA", m.size, (0, 0, 0, 0))
+    paper = Image.new("RGBA", m.size, (250, 247, 238, 255)); paper.putalpha(m); out.alpha_composite(paper)
+    out.paste(img, c["off"])
+    if 0 < gloss < 1:                                          # reflet diagonal
+        g = Image.new("L", (CW, CH), 0); gd = ImageDraw.Draw(g); x = -300 + (CW + 600)*gloss
+        gd.polygon([(x, 0), (x + 120, 0), (x - 260, CH), (x - 380, CH)], fill=90); g = g.filter(ImageFilter.GaussianBlur(18))
+        out.paste((255, 255, 255), (c["off"][0], c["off"][1], c["off"][0] + CW, c["off"][1] + CH), g)
+    t1 = c["tape"].rotate(-28, expand=True); t2 = c["tape"].rotate(24, expand=True)
+    out.alpha_composite(t1, (-20, -10)); out.alpha_composite(t2, (m.width - t2.width + 20, -10))
+    return out
+def put_card(L, card, x, y, rot, s, shadow=True):
+    c = card_mask()
+    if s != 1: card = card.resize((int(card.width*s), int(card.height*s)), Image.BILINEAR)
+    card = card.rotate(rot, resample=Image.BICUBIC, expand=True)
+    if shadow:
+        sh = c["sh"].resize((int(c["sh"].width*s), int(c["sh"].height*s))).rotate(rot, expand=True)
+        L.paste((0, 0, 0), (int(x - sh.width/2 + 18), int(y - sh.height/2 + 30)), sh)
+    L.alpha_composite(card, (int(x - card.width/2), int(y - card.height/2)))
 
 def pick_segments(path, n, seg_len, skip=1.0):
     """Repère les n pics de clameur (RMS par 0,1 s) espacés d'au moins 4 s ; renvoie les débuts d'extraits (avant le pic)."""
@@ -42,17 +79,17 @@ def _aspect(path):
 def read_frames(path, t0, dur, speed=1.0):
     """Extrait [t0, t0+dur*speed] en 1080x1920 : vidéo en plein cadre recadrée au centre (zoom léger) sur fond flou."""
     src_d = dur*speed
-    if _aspect(path) < .75:                                   # source déjà verticale : plein cadre, léger zoom (retire filigranes de bord)
-        vf = f"setpts={1/speed:.4f}*PTS,fps={FPS},scale=1080*1.12:1920*1.12:force_original_aspect_ratio=increase,crop=1080:1920"
+    if True:                                                  # extrait recadré en CARTE 4:5 (posée dans la DA, jamais plein écran)
+        vf = f"setpts={1/speed:.4f}*PTS,fps={FPS},scale={CW}*1.15:{CH}*1.15:force_original_aspect_ratio=increase,crop={CW}:{CH},eq=contrast=1.08:saturation=1.15"
         cmd = ["ffmpeg", "-loglevel", "error", "-ss", f"{t0:.3f}", "-t", f"{src_d:.3f}", "-i", path, "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
     else: cmd = ["ffmpeg", "-loglevel", "error", "-ss", f"{t0:.3f}", "-t", f"{src_d:.3f}", "-i", path, "-vf",
            f"setpts={1/speed:.4f}*PTS,fps={FPS},split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=30:3,eq=brightness=-0.15[bg];"
            f"[b]scale=1080*1.35:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
-    raw = subprocess.run(cmd, capture_output=True).stdout; n = len(raw)//(W*H*3)
-    fr = [Image.frombuffer("RGB", (W, H), raw[i*W*H*3:(i + 1)*W*H*3]) for i in range(n)]
+    raw = subprocess.run(cmd, capture_output=True).stdout; n = len(raw)//(CW*CH*3)
+    fr = [Image.frombuffer("RGB", (CW, CH), raw[i*CW*CH*3:(i + 1)*CW*CH*3]) for i in range(n)]
     need = int(round(dur*FPS))
     while fr and len(fr) < need: fr.append(fr[-1])
-    return fr[:need] if fr else [Image.new("RGB", (W, H), (10, 10, 14))]*need
+    return fr[:need] if fr else [Image.new("RGB", (CW, CH), (10, 10, 14))]*need
 
 def rgb_split(im, px):
     if px < 1: return im
@@ -106,22 +143,37 @@ def main():
             if end and u < .15: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(255*(1 - u/.15)))))   # pas de flash à l'image 0 : le visage doit se voir tout de suite
             B.shock(L, t, 0 if not end else 36*BEAT, W//2, 1900, col, 1000)
             im = L.convert("RGB")
-        else:                                                       # ---------- MONTAGE calé sur les temps
-            b0 = max(k for k in clipfr if k <= bt); frames = clipfr[b0]; i = min(len(frames) - 1, int((t - b0*BEAT)*FPS))
-            im = frames[i]; drop = bt >= 16; local = t - b0*BEAT
-            z = 1 + (.12 if drop else .07)*math.exp(-local*9) + .02*pulse
-            im = zoom(im, z, 12*math.sin(t*40)*pulse if drop else 0, 0)
-            im = rgb_split(im, (14 if drop else 7)*math.exp(-local*14))
-            L = im.convert("RGBA")
-            if local < .07: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(170*(1 - local/.07)))))
-            letterbox(L, 1 if not drop else .6)
-            B.glow_spot(L, W//2, H, 700, tuple(int(c*.35) for c in col))
-            if drop and stats:                                      # stats en surimpression sur le drop (une par 4 temps)
+        else:                                                       # ---------- MONTAGE : cartes papier sur décor DA
+            keys = sorted(k for k in clipfr if k <= bt); b0 = keys[-1]; frames = clipfr[b0]
+            i = min(len(frames) - 1, int((t - b0*BEAT)*FPS)); drop = bt >= 16; local = t - b0*BEAT
+            L = Image.new("RGBA", (W, H), (0, 0, 0, 255))
+            B.dark_bg(L, t, col, "ed"); B.rays(L, (W//2, 1000), t*(1.6 if drop else 1), .7, 18, 1900, tuple(int(c*.28) for c in col), .1, .3)
+            B.glow_spot(L, W//2, 1020, 640, tuple(int(c*(.55 + .25*pulse)) for c in col))
+            B.particles(L, W//2, 1950, W, 1800, t, col, 28 if drop else 16, 5)
+            # carte précédente en dessous (pile), légèrement tournée et assombrie
+            if len(keys) > 1:
+                pf = clipfr[keys[-2]][-1]; pc = paper_card(Image.eval(pf, lambda v: int(v*.55)))
+                put_card(L, pc, W//2 - 40, 1040, 7 if keys[-2] % 2 else -7, .9)
+            # carte courante : entrée en « whip » depuis le côté sur le temps, puis petite oscillation + punch sur chaque temps
+            side = 1 if b0 % 2 else -1; e = B.M.ease_out(min(1, local/.16))
+            x = W//2 + side*(1 - e)*900; rot = side*(1 - e)*25 + 2.2*math.sin(t*2.3 + b0) * (.4 if drop else 1)
+            sc = (1.06 if drop else 1.0)*(1 + .05*math.exp(-local*10)) + .025*pulse
+            img = frames[i]
+            if local < .1: img = rgb_split(img, 10*(1 - local/.1))
+            card = paper_card(img, col, gloss=(local/(2*BEAT)) if not drop else 0)
+            B.aura(L, card, x, 1040 + card.height/2, t, col, .55 + .5*pulse, b0) if False else None
+            B.glow_spot(L, x, 1040, 600, tuple(int(c*.35*(1 + pulse)) for c in col))
+            put_card(L, card, x, 1040, rot, sc)
+            if local < .06: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(150*(1 - local/.06)))))
+            # textes : nom chromé en haut, stats en tampon papier en bas (drop)
+            B.put(L, B.metal_text(name, 128), W//2, 300, 1 + .05*pulse, -3)
+            if not drop: B.KW("BALLON D'OR 2026", B.GOLD, B.NOIR, 64).draw(L, fr, W//2, 440, 1, 2)
+            if drop and stats:
                 k = int((bt - 16)//4) % len(stats); lu = (bt - 16) % 4
-                if lu < 3.2: B.put(L, B.metal_text(stats[k], 100), W//2, 1500, B.M.spring(lu*BEAT, .25, 18), -4)
-            if not drop: B.KW(name, B.GOLD, B.NOIR, 90).draw(L, fr, W//2, 260, 1, -3)
-            else: B.put(L, B.metal_text(name, 120), W//2, 300, 1 + .05*pulse, -3)
+                if lu < 3.3: B.card(stats[k], True, 70).draw(L, fr, W//2, 1720, B.M.spring(lu*BEAT, .25, 18), (-4, 3, -2)[k % 3])
+            if drop: B.bolt(L, 150, 700, t, col, b0, 520, .9); B.bolt(L, 930, 1300, t + .21, col, b0 + 3, 480, .9)
             im = L.convert("RGB")
+            if drop and pulse > .5: im = zoom(im, 1 + .03*pulse, 10*math.sin(t*50), 0)
         p.stdin.write(im.tobytes())
     p.stdin.close(); p.wait()
     out = os.path.join(a.out, slug + ".mp4")
