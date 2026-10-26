@@ -292,7 +292,7 @@ def _sil(sp, grow, blur):
     k = (id(sp), grow, blur)
     if k not in _aur:
         a0 = sp.getchannel("A").point(lambda v: 255 if v > 90 else 0)
-        a = Image.new("L", (a0.width + 240, a0.height + 240), 0); a.paste(a0, (120, 120))   # marge : la lueur ne doit pas être coupée en rectangle
+        a = Image.new("L", (a0.width + 520, a0.height + 520), 0); a.paste(a0, (260, 260))   # marge : la lueur ne doit pas être coupée en rectangle
         if grow: a = a.filter(ImageFilter.MaxFilter(grow*2 + 1))
         _aur[k] = a.filter(ImageFilter.GaussianBlur(blur))
     return _aur[k]
@@ -319,6 +319,8 @@ def aura(L, sp, x, y, t, col, power=1.0, seed=0):
         for yb in range(0, hgt, 12):
             d = int((10 + 8*li)*math.sin(yb*.035 - t*9 - li + seed)*(1 - yb/hgt))
             out[yb:yb + 12] = _np.roll(arr[yb:yb + 12], d, axis=1)
+        hh, ww = out.shape; ey = _np.minimum(_np.arange(hh), hh - 1 - _np.arange(hh))/60.0; ex = _np.minimum(_np.arange(ww), ww - 1 - _np.arange(ww))/60.0
+        out = out*_np.clip(ey, 0, 1)[:, None]*_np.clip(ex, 0, 1)[None, :]
         k = amp*power*(.85 + .15*math.sin(t*17 + li + seed))
         rgb = _np.clip(out[..., None]/255*_np.array(col, _np.float32)*k*1.4, 0, 255).astype(_np.uint8)
         add_light(L, Image.fromarray(rgb, "RGB"), cx, cy + m.height/2 - sh.height/2 - 60 - 10*li)
@@ -344,10 +346,12 @@ def bolt(L, x, y, t, col, seed, length=520, power=1.0):
     L.paste(ImageChops.add(L.convert("RGB"), lay).convert("RGBA"))
 _glow = {}
 def glow_spot(L, x, y, r, col, a=1.0):
+    """Halo radial doux (falloff gaussien, nul au bord du cadre : jamais de carré)."""
     k = (r, col)
     if k not in _glow:
-        g = Image.new("L", (2*r, 2*r), 0); ImageDraw.Draw(g).ellipse([r*.3, r*.3, r*1.7, r*1.7], fill=255); g = g.filter(ImageFilter.GaussianBlur(r*.35))
-        _glow[k] = Image.merge("RGB", [g.point(lambda v, c=c: v*c//255) for c in col])
+        yy, xx = _np.mgrid[-r:r, -r:r].astype(_np.float32); d = _np.sqrt(xx*xx + yy*yy)/r
+        f = _np.exp(-(d*2.2)**2)*_np.clip(1 - d, 0, 1)
+        _glow[k] = Image.fromarray(_np.clip(f[..., None]*_np.array(col, _np.float32), 0, 255).astype(_np.uint8), "RGB")
     im = _glow[k] if a >= .99 else Image.eval(_glow[k], lambda v: int(v*a))
     add_light(L, im, x, y)
 def flare(L, x, y, t, col, a=1.0):
@@ -440,9 +444,9 @@ def s_hook(L, fr, t):
     dark_bg(L, t, (200, 160, 60), "h"); rays(L, (CX, 900), t, .6, 16, 1800, (70, 56, 20), .08, .25)
     glow_spot(L, CX, 860, 420, (120, 90, 20))
     put(L, gold_ball(140, round((t*.8) % 6.28/.3)*.3 % 6.28), CX, 860 + 10*math.sin(t*3), 1, 0)
-    for i, (n, x, h, col) in enumerate(LINE):
-        sp = CUT(n, h); y = 1930 + 30*(1 - M.spring(t + .3 - i*.05, .45, 12))
-        aura(L, sp, x, y, t, col, .45, i); put(L, sp, x, y, 1, 0)
+    for i, (n, x, h, col) in enumerate(LINE): aura(L, CUT(n, h), x, 1930, t, col, .35, i)      # toutes les auras d'abord…
+    for i, (n, x, h, col) in enumerate(LINE):                                                  # …puis les joueurs (aucun voile sur un visage)
+        sp = CUT(n, h); y = 1930 + 30*(1 - M.spring(t + .3 - i*.05, .45, 12)); put(L, sp, x, y, 1, 0)
     particles(L, CX, 1900, W, 1400, t, (255, 220, 120), 40, 1)
     if t > K["perdre"] - .3: bolt(L, CX, 860, t, (255, 80, 60), 3)
     flare(L, CX - 60, 780, t, (255, 230, 160), .7)
