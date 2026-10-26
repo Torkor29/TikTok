@@ -107,20 +107,27 @@ def main():
     ap.add_argument("--name", required=True); ap.add_argument("--photo", required=True); ap.add_argument("--club", required=True)
     ap.add_argument("--col", default="255,200,60"); ap.add_argument("--clips", required=True)
     ap.add_argument("--stats", default="", help="3 stats séparées par | ex. « 35 BUTS|16 PASSES D|CHAMPION D'EUROPE »")
+    ap.add_argument("--plan", default="", help="JSON : [[n°_compile, début_s, nb_temps, stat_ou_vide], …] — séquences de buts ENTIÈRES choisies à la main")
     ap.add_argument("--out", default=os.path.join(ROOT, "output", "bdo_edit"))
     a = ap.parse_args(); col = tuple(int(v) for v in a.col.split(","))
     os.makedirs(a.out, exist_ok=True); slug = "bdo_edit_" + a.photo
-    NB = 48; total = NB*BEAT + 1.2                                # 48 temps ≈ 22,3 s + queue
-    # plan de coupe : (début_temps, nb_temps, vitesse)
-    plan = [(1 + 2*k, 2, 1.0) for k in range(7)] + [(15, 1, .5)] + [(16 + k, 1, (1.0, 1.6, .6, 1.0)[k % 4]) for k in range(20)]
-    paths = a.clips.split(",")                                    # plusieurs compiles possibles, extraits répartis selon leur durée
-    durs = [float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", q], capture_output=True, text=True).stdout) for q in paths]
-    share = [max(1, round(len(plan)*d/sum(durs))) for d in durs]; share[0] += len(plan) - sum(share)
-    segs = []
-    for q, k in zip(paths, share): segs += [(q, t0) for t0 in pick_segments(q, k, 2*BEAT*1.6)]
-    random.Random(7).shuffle(segs)
-    clipfr = {}
-    for (b0, nb, sp), (q, t0) in zip(plan, segs): clipfr[b0] = read_frames(q, t0, nb*BEAT, sp)
+    NB = 48
+    paths = a.clips.split(","); clipfr = {}; segstat = {}
+    if a.plan:                                                   # montage « vrai » : chaque but montré EN ENTIER, vitesse réelle
+        plan = json.load(open(a.plan)); b0 = 2
+        for (ci, t0, nb, st) in plan:
+            clipfr[b0] = read_frames(paths[ci], t0, nb*BEAT, 1.0); segstat[b0] = st; b0 += nb
+        END0 = b0
+    else:
+        plan = [(1 + 2*k, 2, 1.0) for k in range(7)] + [(15, 1, .5)] + [(16 + k, 1, (1.0, 1.6, .6, 1.0)[k % 4]) for k in range(20)]
+        durs = [float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", q], capture_output=True, text=True).stdout) for q in paths]
+        share = [max(1, round(len(plan)*d/sum(durs))) for d in durs]; share[0] += len(plan) - sum(share)
+        segs = []
+        for q, k in zip(paths, share): segs += [(q, t0) for t0 in pick_segments(q, k, 2*BEAT*1.6)]
+        random.Random(7).shuffle(segs)
+        for (b0, nb, sp), (q, t0) in zip(plan, segs): clipfr[b0] = read_frames(q, t0, nb*BEAT, sp)
+        END0 = 36
+    NB = END0 + 10; total = NB*BEAT + 1.2
     stats = [s for s in a.stats.split("|") if s] or []
     sp_w = B.CUT(a.photo, 1250); name = a.name.upper()
     beats = [k*BEAT for k in range(NB + 4)]
@@ -130,8 +137,8 @@ def main():
                           "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "19", "-preset", "medium", os.path.join(a.out, "_v.mp4")], stdin=subprocess.PIPE)
     for fr in range(int(total*FPS)):
         t = fr/FPS; bt = t/BEAT; pulse = on_beat(t)
-        if bt < 1 or bt >= 36:                                     # ---------- HOOK et FIN : gagnant + aura
-            L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); end = bt >= 36; u = (t - 36*BEAT) if end else t
+        if bt < (2 if a.plan else 1) or bt >= END0:                                     # ---------- HOOK et FIN : gagnant + aura
+            L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); end = bt >= END0; u = (t - END0*BEAT) if end else t
             B.dark_bg(L, t, col, "e"); B.rays(L, (W//2, 1000), t, .8, 18, 1900, tuple(int(c*.3) for c in col), .1, .3)
             B.glow_spot(L, W//2, 1150, 560, tuple(int(c*.5) for c in col))
             if end: B.put(L, B.gold_ball(150), W//2, 760 + 8*math.sin(t*3), B.M.spring(u, .45, 12), 0)
@@ -139,13 +146,13 @@ def main():
             B.particles(L, W//2, 1990, 900, 1600, t, col, 40, 2); B.bolt(L, 260, 900, t, col, 1, 500); B.bolt(L, 820, 1000, t + .3, col, 2, 450)
             B.KW(name, B.GOLD, B.NOIR, 170).draw(L, fr, W//2, 330 if not end else 300, (1 + .5*(1 - min(1, u/.15))) if u < .15 else 1 + .04*pulse, -3)
             B.put(L, B.metal_text("BALLON D'OR 2026", 96), W//2, 500 if not end else 460, (1 if not end else B.M.spring(u - .1, .3, 16)), -3)
-            if end and t > 40*BEAT: B.marker("ET TOI, T'AURAIS VOTÉ QUI ?", "ecta", 56).draw(L, fr, W//2, 1650, 1, -2)
+            if end and t > (END0 + 4)*BEAT: B.marker("ET TOI, T'AURAIS VOTÉ QUI ?", "ecta", 56).draw(L, fr, W//2, 1650, 1, -2)
             if end and u < .15: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(255*(1 - u/.15)))))   # pas de flash à l'image 0 : le visage doit se voir tout de suite
-            B.shock(L, t, 0 if not end else 36*BEAT, W//2, 1900, col, 1000)
+            B.shock(L, t, 0 if not end else END0*BEAT, W//2, 1900, col, 1000)
             im = L.convert("RGB")
         else:                                                       # ---------- MONTAGE : cartes papier sur décor DA
             keys = sorted(k for k in clipfr if k <= bt); b0 = keys[-1]; frames = clipfr[b0]
-            i = min(len(frames) - 1, int((t - b0*BEAT)*FPS)); drop = bt >= 16; local = t - b0*BEAT
+            i = min(len(frames) - 1, int((t - b0*BEAT)*FPS)); drop = (bt >= 16) and not a.plan; local = t - b0*BEAT
             L = Image.new("RGBA", (W, H), (0, 0, 0, 255))
             B.dark_bg(L, t, col, "ed"); B.rays(L, (W//2, 1000), t*(1.6 if drop else 1), .7, 18, 1900, tuple(int(c*.28) for c in col), .1, .3)
             B.glow_spot(L, W//2, 1020, 640, tuple(int(c*(.55 + .25*pulse)) for c in col))
@@ -155,19 +162,21 @@ def main():
                 pf = clipfr[keys[-2]][-1]; pc = paper_card(Image.eval(pf, lambda v: int(v*.55)))
                 put_card(L, pc, W//2 - 40, 1040, 7 if keys[-2] % 2 else -7, .9)
             # carte courante : entrée en « whip » depuis le côté sur le temps, puis petite oscillation + punch sur chaque temps
-            side = 1 if b0 % 2 else -1; e = B.M.ease_out(min(1, local/.16))
+            side = 1 if b0 % 2 else -1; e = B.M.ease_out(min(1, local/(.3 if a.plan else .16)))
             x = W//2 + side*(1 - e)*900; rot = side*(1 - e)*25 + 2.2*math.sin(t*2.3 + b0) * (.4 if drop else 1)
-            sc = (1.06 if drop else 1.0)*(1 + .05*math.exp(-local*10)) + .025*pulse
+            sc = (1.06 if drop else 1.0)*(1 + .05*math.exp(-local*10)) + (.012 if a.plan else .025)*pulse
             img = frames[i]
             if local < .1: img = rgb_split(img, 10*(1 - local/.1))
-            card = paper_card(img, col, gloss=(local/(2*BEAT)) if not drop else 0)
+            card = paper_card(img, col, gloss=(local/(3*BEAT)) if not drop else 0)
             B.aura(L, card, x, 1040 + card.height/2, t, col, .55 + .5*pulse, b0) if False else None
             B.glow_spot(L, x, 1040, 600, tuple(int(c*.35*(1 + pulse)) for c in col))
             put_card(L, card, x, 1040, rot, sc)
             if local < .06: L.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, int(150*(1 - local/.06)))))
             # textes : nom chromé en haut, stats en tampon papier en bas (drop)
             B.put(L, B.metal_text(name, 128), W//2, 300, 1 + .05*pulse, -3)
-            if not drop: B.KW("BALLON D'OR 2026", B.GOLD, B.NOIR, 64).draw(L, fr, W//2, 440, 1, 2)
+            if not drop and local > 0: B.KW("BALLON D'OR 2026", B.GOLD, B.NOIR, 64).draw(L, fr, W//2, 440, 1, 2)
+            st = segstat.get(b0, "")
+            if st and local > 2*BEAT: B.card(st, True, 66).draw(L, fr, W//2, 1720, B.M.spring(local - 2*BEAT, .3, 16), -3)
             if drop and stats:
                 k = int((bt - 16)//4) % len(stats); lu = (bt - 16) % 4
                 if lu < 3.3: B.card(stats[k], True, 70).draw(L, fr, W//2, 1720, B.M.spring(lu*BEAT, .25, 18), (-4, 3, -2)[k % 3])
