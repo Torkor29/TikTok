@@ -304,3 +304,39 @@ Référence : `episodes/rennes/` (`TEXTE.md`, `SCRIPT.md`, `rennes3.py`, `rgfx.p
 - L'histoire reste **chronologique** derrière, mais chaque étape = une anecdote choc : fuite secrète d'un joueur, taxi de 500 km payé par le club, remontada, record, scandale financier, envahissement / fumigènes / sanction, rachat par un milliardaire.
 - Classement des anecdotes : scandale/justice > chaos supporters > argent fou > histoire perso incroyable > record > folklore (couleurs, surnoms : 3 s max). Jamais une anecdote déjà sortie sur la chaîne (ex. poteaux carrés ASSE = claquée).
 - Vérifier chaque fait choc (prison, montants) ; si non confirmé, adoucir le mot (« condamné » au lieu de « prison ») plutôt que l'inventer.
+
+## 10) LEÇONS BALLON D'OR (25-26/10/2026) — RÈGLES OBLIGATOIRES
+Données réelles :
+- « Ballon d'Or des supporters » (vote, 36 s) : 390 vues, 15 % de commentaires (excellent), mais rétention 29 %, 6 % de complétion.
+  Chute à 0-5 s causée par un ÉCRAN VIDE (« DEMAIN SOIR » sur fond noir) ; les 5 joueurs n'arrivaient qu'à 12 s.
+- « Pour / contre » (41,8 s, photos réalistes + auras) : 776 vues en 6 h, likes 6-10 %, 4 partages, rétention 35 %, moy. 14,5 s.
+  Courbe : ~45 % partent dans les 2 premières secondes, PUIS PLATEAU presque plat jusqu'à la fin.
+  => le contenu retient ; c'est la 1re seconde qui tue la diffusion (TikTok coupe après 1-2 lots si la moitié zappe d'entrée).
+
+### Hook (1re seconde) — obligatoire
+1. Image 0 = UN VISAGE en gros plan (star reconnaissable) + UNE phrase choc qui crée un manque. Jamais un titre générique
+   (« BALLON D'OR 2026 » seul = identique aux centaines de vidéos du jour sur le même sujet).
+2. La voix commence PAR la phrase choc, sans intro (« Ce Ballon d'or est impossible à prédire » = phrase d'intro = zapping).
+   Bons exemples : « Le favori a un énorme problème… », « 4 de ces 5 vont perdre ce soir. Voici pourquoi. »
+3. Boucle ouverte : la réponse promise n'arrive qu'à la fin (« je te dis lequel à la fin »).
+4. Jamais d'écran vide ou sans visage entre 0 et 5 s.
+
+### Format et durée
+- Viser 20-25 s (3 favoris max plutôt que 5) ; au-delà de 30 s la complétion s'effondre.
+- Compte à rebours visible (5… 4… 3…) pour donner une raison d'aller au bout.
+- Alterner : pas que des vidéos « vote en commentaire » (beaucoup de commentaires mais faible rétention) ; mélanger avec
+  des formats « à regarder » (pour/contre, histoire, top) qui ont plus de partages.
+- Donner une raison de partager (« envoie ça à ton pote qui pense que c'est Mbappé »).
+
+### DA validée (à réutiliser)
+- Photos RÉALISTES juste découpées papier : paper_player(..., real=True) (engine/paper_cut.py).
+- Auras « super saiyan » en lumière ADDITIVE, halos radiaux à falloff (jamais de carré : marge + fondu des bords),
+  auras dessinées AVANT tous les joueurs (aucun visage voilé), perte de puissance (désaturation) au « mais ».
+- Intro « HERE COMES A NEW CHALLENGER! » (Smash Bros) par joueur : flash, explosion, silhouette, texte chromé — 0,5-0,85 s max.
+- Trophée Ballon d'Or papier 3D : pc_lib.bdo_sprite. Référence : episodes/bdo_favoris/bdo_favoris.py.
+- Musique signature originale : assets/music/phonk_papierfc.mp3 (engine/music_phonk.py, phonk 129 BPM, sans droits),
+  sous la voix avec ducking ; caler les impacts sur la grille BEAT = 60/129 s.
+
+### Jour d'événement (cérémonie, finale, transfert)
+- Le plus gros pic de recherche est JUSTE APRÈS l'annonce : préparer la vidéo résultat à l'avance (gagnant à brancher),
+  publier dans l'heure. Avant l'événement, la concurrence est maximale et les vidéos se ressemblent toutes.
