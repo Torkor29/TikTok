@@ -340,3 +340,14 @@ Données réelles :
 ### Jour d'événement (cérémonie, finale, transfert)
 - Le plus gros pic de recherche est JUSTE APRÈS l'annonce : préparer la vidéo résultat à l'avance (gagnant à brancher),
   publier dans l'heure. Avant l'événement, la concurrence est maximale et les vidéos se ressemblent toutes.
+
+## 11) IMAGES : WIKIMEDIA COMMONS AVANT DE DEMANDER (EN TEST depuis le 27/10/2026, demandé par l'utilisateur)
+- Avant de demander une photo à l'utilisateur, chercher sur Wikimedia Commons (API officielle, licences libres uniquement) :
+  `python3 scripts/commons_fetch.py "<Nom joueur> <club>" assets/photos/commons/<slug> --n 4`
+  -> images (CC0 / domaine public / CC BY / CC BY-SA) + `credits.json` (auteur, licence, lien).
+- Doucement : 1 requête/s (déjà dans le script), peu de fichiers, User-Agent identifié. Ne pas boucler sur des dizaines de joueurs.
+- TOUJOURS regarder les résultats (planche) avant d'utiliser : Commons renvoie parfois des fresques / dessins / mauvais joueur
+  (test Salif Keita = fresques murales de Valence, inutilisables). Joueurs actuels : très bonnes photos (test Kane = 4 photos nettes).
+- Puis mise en DA : paper_player(..., real=True) (photo réaliste découpée papier) ; si rien de bon -> seulement là, demander à l'utilisateur.
+- Licences CC BY / BY-SA : citer l'auteur en fin de description (« Photos : <auteur> / Wikimedia Commons, CC BY-SA 4.0 »).
+- Logos de clubs : PAS sur Commons sans vérifier (souvent non libres) ; continuer à les demander à l'utilisateur.
