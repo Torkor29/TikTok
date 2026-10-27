@@ -60,6 +60,12 @@ def hero(L, n, h, x, y, t, s=1.0, burst=True):
     sp = CUT(n, h)
     if burst: sunburst(L, x, y - h*.62, int(h*.42), t)
     B.put(L, rim(sp), x, y, s, 0); B.put(L, sp, x, y, s, 0)
+def team(L, t, pulse):
+    """L'ÉQUIPE : 3 légendes derrière (Zidane, Vinícius, Ronaldo) + écusson du Real en GROS devant."""
+    sunburst(L, W//2, 1150, 520, t)
+    for n, x, h in (("zidane", 230, 1250), ("ronaldo", 850, 1250), ("vinicius", W//2, 1400)):
+        sp = CUT(n, h); B.put(L, rim(sp), x, 1960, 1, 0); B.put(L, sp, x, 1960, 1, 0)
+    B.put(L, B.logo("real", 560), W//2, 1330, 1 + .03*pulse, 0)
 def bg(L, t, pulse):
     B.dark_bg(L, t, PURPLE, "rq"); B.rays(L, (W//2, 900), t, .7, 18, 1900, (50, 40, 90), .1, .3)
     B.glow_spot(L, W//2, 950, 640, tuple(int(c*(.45 + .25*pulse)) for c in GOLD)); B.particles(L, W//2, 1950, W, 1800, t, GOLD, 18, 2)
@@ -75,8 +81,7 @@ def frame(fr, t):
     pulse = KN.on_beat(t); L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); bg(L, t, pulse)
     e = [x for x in TL if x[1] <= t][-1]; kind = e[0]; u = t - e[1]
     if kind == "hook":                                           # IMAGE 0 : visage + défi d'identité
-        hero(L, "vinicius", 1900, W//2, 2400, t, 1 + .015*pulse)
-        B.put(L, B.logo("real", 200), 900, 560, 1, 8)
+        team(L, t, pulse)
         KN.put_strip(L, "T'ES UN VRAI FAN", 110, W//2, 320, -3, 1 + .02*pulse)
         KN.put_strip(L, "DU REAL ?", 170, W//2, 500, 2, 1 + .03*pulse, bg=GOLD)
         KN.put_strip(L, "SI T'AS PAS 5/5…", 100, W//2, 1640, -2, 1 + .03*pulse, bg=(220, 30, 40), fg=WHITE)
@@ -109,7 +114,7 @@ def frame(fr, t):
             KN.etext(L, "+1", 120, 170, 1760, GREEN, s=v)
         KN.etext(L, f"SCORE {score_at(t)}/5", 70, 940, 1740, GOLD, font="BebasNeue-Regular.ttf")
     else:
-        hero(L, "vinicius", 1700, W//2, 2300, t)
+        team(L, t, pulse)
         KN.put_strip(L, "TON SCORE ?", 150, W//2, 300, -3, KN.slam(u), bg=GOLD)
         KN.put_strip(L, "DIS-LE EN COMMENTAIRE", 80, W//2, 470, 2, KN.slam(u - .4) if u > .4 else 0, bg=(220, 30, 40), fg=WHITE)
         KN.etext(L, "5/5 ?", 90, 900, 1740, GOLD, font="BebasNeue-Regular.ttf")
