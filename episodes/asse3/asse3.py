@@ -20,20 +20,24 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 from paper_cut import paper_player
 
 TITLE = "~/histoires $ ./saint-etienne"
-SLUG = "asse_v3"
-VOIX = os.path.join(HERE, "voix", "voix.mp3")            # voix Léo, blancs coupés (scripts/trim_blancs.py)
+SLUG = "asse_v4"
+VOIX = os.path.join(HERE, "voix_clone", "voix.mp3")            # voix Léo, blancs coupés (scripts/trim_blancs.py)
 TEXTE = open(os.path.join(HERE, "TEXTE.md")).read()
 # temps clés (s) relevés dans mots.json
-K = dict(president=.22, joueurs=1.12, cachette=1.52, condamne=2.7, justice=3.56, voici=4.3, fou=5.78, france0=6.2, saint=6.88,
-         y1919=7.76, employes=8.84, casino=9.8, maillot=11.3, vert=11.84, magasin=12.84,
-         y1958=13.62, mekh=14.88, disparait=15.8, nuit=16.84, secret=17.96, fln=18.88, ans4=20.04, revient=21.02, titres=22.26,
-         y1967=23.62, keita=24.54, mali=25.72, personne=26.46, aeroport=27.26, taxi=28.46, km=29.62, club=31.6, paye=32.08,
-         question=32.9, quel=34.3, buteur=34.7, arsenal=35.32, barca=36.06, explose=36.62, reponds=38.26, abonne=39.5, like=40.16, chaine=41.88,
-         y1976=42.74, zd=43.56, kiev=44.24, retour=44.82, explose2=45.72, tz=46.68, devient=48.36, chaudron=48.9,
-         y1981=49.8, dixieme=50.88, platini=52.44, personne2=53.6,
-         y1982=55.12, scandale=56.18, caisse=57.06, m20=57.74, caches=59.02, payer=59.54, president2=60.92, rocher=61.26, tombe=61.92, club2=62.78,
-         y2022=64.08, descente=64.54, tab=65.72, supporters=66.58, envahissent=66.86, fumi=68.32, sanction=70.0,
-         y2024=70.9, milliard=71.86, canadien=72.36, rachete=72.9, toi=73.88, stet=74.42, lyon=75.18, vrai=76.1, region=76.84, dis=77.44, END=78.6)
+K = dict(president=.24, joueurs=1.2, cachette=1.58, condamne=2.92, justice=3.78, voici=4.48, fou=5.92, france0=6.3, saint=6.92,
+         y1919=8.24, employes=9.26, casino=10.2, maillot=11.76, vert=12.46, magasin=13.56,
+         y1958=14.24, mekh=15.9, disparait=16.86, nuit=17.68, secret=18.7, fln=19.56, ans4=20.7, revient=21.7, titres=22.98,
+         y1967=24.4, keita=25.52, mali=26.52, personne=27.0, aeroport=27.98, taxi=29.22, km=30.64, club=32.42, paye=32.86,
+         question=33.72, quel=35.06, buteur=35.48, arsenal=36.04, barca=36.68, explose=37.28, reponds=38.88, abonne=40.04, like=40.78, chaine=42.44,
+         y1976=43.4, zd=44.4, kiev=45.06, retour=45.68, explose2=46.58, tz=47.56, devient=49.28, chaudron=49.74,
+         y1981=50.72, dixieme=51.82, platini=53.3, personne2=54.54,
+         y1982=56.12, scandale=57.14, caisse=58.0, m20=58.88, caches=59.96, payer=60.5, president2=61.82, rocher=62.16, tombe=62.86, club2=63.76,
+         y2022=64.72, descente=65.82, tab=66.8, supporters=67.7, envahissent=68.0, fumi=69.48, sanction=71.34,
+         y2024=72.28, milliard=73.34, canadien=73.82, rachete=74.32, toi=75.4, stet=76.0, lyon=76.66, vrai=77.6, region=78.36, dis=78.92, END=80.8)
+# v4 : voix clonée de l'utilisateur + musique 129 BPM (premier temps à 0,07 s) -> on cale les CHANGEMENTS DE SCÈNE sur le temps le plus proche
+MUS_BPM, MUS_T0 = 129.2, .07
+def snap(t): b = 60/MUS_BPM; return MUS_T0 + round((t - MUS_T0)/b)*b
+for _k in ("voici", "y1919", "y1958", "y1967", "question", "y1976", "y1981", "y1982", "y2022", "y2024", "toi"): K[_k] = snap(K[_k] - .1)
 def m(t): return t
 K0 = dict(K)
 # ------------------------------------------------------------------ outils communs
@@ -121,7 +125,8 @@ def apply_cam(L, cx, cy, z, rot=0.0):
     if abs(rot) > .05: im = im.rotate(rot, resample=Image.BICUBIC, fillcolor=im.getpixel((2, 2)))
     return im
 PUNCH = []
-def punch(t): return 1 + sum(.06*math.exp(-((t - p)/.11)**2) for p in PUNCH if p - .4 < t < p + .5)
+def punch(t): return 1 + sum((.06 if p in IMPACT_SET else .03)*math.exp(-((t - p)/.09)**2) for p in PUNCH if p - .4 < t < p + .5)
+IMPACT_SET = set()
 
 # ================================================================== SCÈNES (t = temps voix)
 SC = []
@@ -642,6 +647,9 @@ CAMS = {"s_hook": CAM_HOOK, "s_titre": CAM_TITRE, "s_1919": CAM_1919, "s_mekh": 
 IMPACTS = [K["condamne"], K["fou"], K["vert"], K["nuit"], K["secret"], K["revient"], K["km"], K["club"], K["abonne"] + .18, K["like"],
            K["zd"] + .4, K["tz"], K["chaudron"], K["dixieme"], K["caisse"], K["tombe"], K["descente"], K["envahissent"], K["sanction"], K["rachete"], K["lyon"] + .1]
 PUNCH += IMPACTS
+IMPACT_SET.update(IMPACTS)
+BEATS = [MUS_T0 + k*60/MUS_BPM for k in range(int(K['END']*MUS_BPM/60) + 2)]
+PUNCH += BEATS
 # ------------------------------------------------------------------ rendu + transitions
 def render_scene(i, fr, t):
     s = SC[i]; L = Image.new("RGBA", s["size"], (0, 0, 0, 255)); s["fn"](L, fr, t)
@@ -670,6 +678,10 @@ def frame(fr, t):
         elif tr == "glitch":
             cur = (cur if u > .5 else prev).copy(); rgb_split(cur, 22*(1 - abs(u - .5)*2), fr, 9)
     fx.dust(cur, t, 22)
+    bp = ((t - MUS_T0)*MUS_BPM/60); ph = bp - math.floor(bp)              # phase dans le temps (0 = sur le temps)
+    if int(math.floor(bp)) % 4 == 0 and ph < .12:                         # temps fort (1 par mesure) : flash + aberration chromatique
+        a_ = 1 - ph/.12; cur = Image.blend(cur, Image.new("RGB", (W, H), (255, 248, 230)), .18*a_)
+        r_, g_, b_ = cur.split(); o = int(10*a_); cur = Image.merge("RGB", (ImageChops.offset(r_, o, 0), g_, ImageChops.offset(b_, -o, 0)))
     cur = cur.convert("RGBA"); fx.vignette(cur, 90); fil_rouge(cur, fr, t)
     return cur.convert("RGB")
 def draw(cv, fr, t, T):
