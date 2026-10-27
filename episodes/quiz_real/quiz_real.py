@@ -136,10 +136,10 @@ def build_audio(wav):
         if e[0] == "q":
             for j in range(5): ev.append((tick, e[4] + j*BEAT, .6))
             ev.append((ding, e[2] - BEAT, .8))
-    ins = ["-i", vo, "-i", E.MUSIC] + sum([["-i", p] for p, _, _ in ev], [])
-    fc = f"[1:a]atrim={8*BEAT:.4f}:{8*BEAT + TOTAL:.2f},asetpts=PTS-STARTPTS,volume=0.35[m];[0:a]asplit[v][sc];[m][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=250[md];"
-    for i, (_, ts, g) in enumerate(ev): fc += f"[{i + 2}:a]adelay={int(ts*1000)}|{int(ts*1000)},volume={g}[e{i}];"
-    fc += "[v][md]" + "".join(f"[e{i}]" for i in range(len(ev))) + f"amix=inputs={2 + len(ev)}:normalize=0:duration=longest,atrim=0:{TOTAL:.2f},loudnorm=I=-14:TP=-1[a]"
+    ins = ["-i", vo] + sum([["-i", p] for p, _, _ in ev], [])          # SANS musique (demande utilisateur) : voix + tics + ding
+    fc = ""
+    for i, (_, ts, g) in enumerate(ev): fc += f"[{i + 1}:a]adelay={int(ts*1000)}|{int(ts*1000)},volume={g}[e{i}];"
+    fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(ev))) + f"amix=inputs={1 + len(ev)}:normalize=0:duration=longest,atrim=0:{TOTAL:.2f},loudnorm=I=-14:TP=-1[a]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", wav], check=True)
 def main():
     os.makedirs(OUT, exist_ok=True); v = OUT + "/_v.mp4"; a = OUT + "/_a.wav"; build_audio(a)
