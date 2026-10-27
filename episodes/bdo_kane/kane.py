@@ -87,10 +87,11 @@ def etext_img(txt, size, col=(255, 255, 255), font="Anton-Regular.ttf", glow=Non
     """Texte d'édit propre : typo condensée grasse, ombre portée nette + lueur colorée douce (cache)."""
     k = (txt, size, col, font, glow, track)
     if k not in _tx:
-        f = _font(font, size); widths = [f.getlength(c) for c in txt]; w_ = int(sum(widths) + track*(len(txt) - 1)) + 120
-        asc, desc = f.getmetrics(); h_ = asc + desc + 120
-        m = Image.new("L", (w_, h_), 0); d = ImageDraw.Draw(m); x = 60
-        for c, cw in zip(txt, widths): d.text((x, 60), c, font=f, fill=255); x += cw + track
+        pad = int(60 + size*.7)                                   # marge large : la lueur ne doit jamais être coupée en carré
+        f = _font(font, size); widths = [f.getlength(c) for c in txt]; w_ = int(sum(widths) + track*(len(txt) - 1)) + 2*pad
+        asc, desc = f.getmetrics(); h_ = asc + desc + 2*pad
+        m = Image.new("L", (w_, h_), 0); d = ImageDraw.Draw(m); x = pad
+        for c, cw in zip(txt, widths): d.text((x, pad), c, font=f, fill=255); x += cw + track
         out = Image.new("RGBA", (w_, h_), (0, 0, 0, 0))
         if glow: g = Image.new("RGBA", (w_, h_), glow + (0,)); g.putalpha(m.filter(ImageFilter.GaussianBlur(size*.18)).point(lambda v: min(255, v*2))); out.alpha_composite(g)
         sh = Image.new("RGBA", (w_, h_), (0, 0, 0, 0)); sh.putalpha(m.point(lambda v: v*200//255)); out.alpha_composite(sh, (0, int(size*.05)))

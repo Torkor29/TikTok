@@ -10,7 +10,7 @@ import kane as KN                                                # typo d'édit 
 sys.argv = _argv
 B, E = KN.B, KN.E
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 W, H, FPS, BEAT = KN.W, KN.H, KN.FPS, KN.BEAT
 GOLD = (255, 205, 80); PURPLE = (60, 40, 120); WHITE = (255, 255, 255); GREEN = (40, 170, 80)
 OUT = os.path.join(ROOT, "output", "quiz_real")
@@ -36,6 +36,30 @@ def CUT(n, h):
     if k not in _cut:
         p = os.path.join(PH, n + ".png"); _cut[k] = B.paper_player(p, (0, 0) + Image.open(p).size, h, real=True)
     return _cut[k]
+_sb = {}
+def sunburst(L, x, y, r, t, col=GOLD, n=18):
+    """Médaillon « éclat » en papier (étoile à rayons, 2 tons, ombre) qui tourne lentement derrière le joueur — remplace l'aura."""
+    k = (r, col, n)
+    if k not in _sb:
+        im = Image.new("RGBA", (2*r + 80, 2*r + 80), (0, 0, 0, 0)); d = ImageDraw.Draw(im); c = r + 40
+        pts = [(c + (r if j % 2 == 0 else r*.78)*math.cos(math.pi*j/n), c + (r if j % 2 == 0 else r*.78)*math.sin(math.pi*j/n)) for j in range(2*n)]
+        sh = Image.new("L", im.size, 0); ImageDraw.Draw(sh).polygon([(px + 14, py + 18) for px, py in pts], fill=120); im.putalpha(sh.filter(ImageFilter.GaussianBlur(10)))
+        d = ImageDraw.Draw(im); d.polygon(pts, fill=col)
+        for j in range(n): a0, a1 = math.pi*2*j/n, math.pi*(2*j + 1)/n; d.polygon([(c, c), (c + r*math.cos(a0), c + r*math.sin(a0)), (c + r*.78*math.cos(a1), c + r*.78*math.sin(a1))], fill=tuple(int(v*.85) for v in col))
+        d.ellipse([c - r*.55, c - r*.55, c + r*.55, c + r*.55], fill=(250, 246, 236)); d.ellipse([c - r*.5, c - r*.5, c + r*.5, c + r*.5], outline=col, width=8)
+        im.info["anchor"] = (c, c); _sb[k] = im
+    B.put(L, _sb[k], x, y, 1, t*12)
+def rim(sp, col=GOLD, wd=10):
+    """Liseré lumineux net autour du joueur (rim light)."""
+    k = ("rim", id(sp), col)
+    if k not in _sb:
+        a = sp.getchannel("A").point(lambda v: 255 if v > 90 else 0); g = Image.new("RGBA", sp.size, col + (0,)); g.putalpha(a.filter(ImageFilter.MaxFilter(2*wd + 1)).filter(ImageFilter.GaussianBlur(3)))
+        g.info["anchor"] = sp.info["anchor"]; _sb[k] = g
+    return _sb[k]
+def hero(L, n, h, x, y, t, s=1.0, burst=True):
+    sp = CUT(n, h)
+    if burst: sunburst(L, x, y - h*.62, int(h*.42), t)
+    B.put(L, rim(sp), x, y, s, 0); B.put(L, sp, x, y, s, 0)
 def bg(L, t, pulse):
     B.dark_bg(L, t, PURPLE, "rq"); B.rays(L, (W//2, 900), t, .7, 18, 1900, (50, 40, 90), .1, .3)
     B.glow_spot(L, W//2, 950, 640, tuple(int(c*(.45 + .25*pulse)) for c in GOLD)); B.particles(L, W//2, 1950, W, 1800, t, GOLD, 18, 2)
@@ -51,17 +75,17 @@ def frame(fr, t):
     pulse = KN.on_beat(t); L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); bg(L, t, pulse)
     e = [x for x in TL if x[1] <= t][-1]; kind = e[0]; u = t - e[1]
     if kind == "hook":                                           # IMAGE 0 : visage + défi d'identité
-        sp = CUT("vinicius", 1900); B.aura(L, sp, W//2, 2400, t, GOLD, 1.1, 1); B.put(L, sp, W//2, 2400, 1 + .015*pulse, 0)
+        hero(L, "vinicius", 1900, W//2, 2400, t, 1 + .015*pulse)
         B.put(L, B.logo("real", 200), 900, 560, 1, 8)
         KN.put_strip(L, "T'ES UN VRAI FAN", 110, W//2, 320, -3, 1 + .02*pulse)
-        KN.put_strip(L, "DU REAL ?", 170, W//2, 500, 2, KN.slam(u), bg=GOLD)
-        KN.put_strip(L, "SI T'AS PAS 5/5…", 90, W//2, 1650, -2, KN.slam(u - 1.4) if u > 1.4 else 0, bg=(220, 30, 40), fg=WHITE)
-        B.bolt(L, 150, 900, t, GOLD, 1, 500)
+        KN.put_strip(L, "DU REAL ?", 170, W//2, 500, 2, 1 + .03*pulse, bg=GOLD)
+        KN.put_strip(L, "SI T'AS PAS 5/5…", 100, W//2, 1640, -2, 1 + .03*pulse, bg=(220, 30, 40), fg=WHITE)
     elif kind == "q":
         k, tq = e[3], e[4]; qtxt, ans, good, illu = Q[k]
         reveal = t >= e[2] - .05 - 0 and False
         rv = t >= e[2] - 1.0*BEAT                                # révélation sur le dernier temps du chrono
         KN.put_strip(L, f"QUESTION {k + 1}/5", 70, 260, 230, -4, KN.slam(u), bg=GOLD)
+        if k == 0: KN.put_strip(L, "VRAI FAN DU REAL ?", 50, 760, 160, 3, 1, tape=False)
         for j, line in enumerate(wrap(qtxt)):
             KN.etext(L, line, 96, W//2, 420 + j*110, s=B.M.spring(u - .05*j, .3, 16))
         y0 = 420 + len(wrap(qtxt))*110 + 110
@@ -75,17 +99,17 @@ def frame(fr, t):
             KN.put_strip(L, f"{'ABCD'[j]}   {a}", 100, x, y, (-1.5, 1.2, -1, 1.5)[j], s*(1 + .08*KN.slam(t - (e[2] - BEAT)) - .08 if (rv and ok) else s), bg=bgc, fg=fgc)
         if t >= tq and not rv:                                   # chrono 3-2-1 (un chiffre tous les 2 temps)
             n = 3 - int((t - tq)/(2*BEAT)); n = max(1, n); uu = ((t - tq) % (2*BEAT))
-            KN.etext(L, str(n), 260, 900, 250, GOLD, s=KN.slam(uu, .15), glow=(255, 150, 40))
+            KN.etext(L, str(n), 260, 900, 250, GOLD, s=KN.slam(uu, .15))
             frac = 1 - (t - tq)/(GAP - BEAT); ImageDraw.Draw(L).rectangle([90, 1840, 90 + int(900*max(0, frac)), 1860], fill=GOLD)
         if rv:                                                   # illustration de la réponse
             v = B.M.spring(t - (e[2] - BEAT), .35, 14)
             if illu in ("ronaldo", "zidane"):
-                sp = CUT(illu, 900); B.aura(L, sp, W//2, 2050, t, GOLD, .9, 3); B.put(L, sp, W//2, 2050, v, 0)
-            elif illu == "15": KN.etext(L, "15", 300, 900, 250, GOLD, s=v, glow=(255, 150, 40))
+                hero(L, illu, 950, W//2, 2010, t, v)
+            elif illu == "15": sunburst(L, W//2, 1450, 330, t); KN.etext(L, "15", 320, W//2, 1450, (30, 24, 40), s=v)
             KN.etext(L, "+1", 120, 170, 1760, GREEN, s=v)
         KN.etext(L, f"SCORE {score_at(t)}/5", 70, 940, 1740, GOLD, font="BebasNeue-Regular.ttf")
     else:
-        sp = CUT("vinicius", 1700); B.aura(L, sp, W//2, 2300, t, GOLD, 1.0, 5); B.put(L, sp, W//2, 2300, 1, 0)
+        hero(L, "vinicius", 1700, W//2, 2300, t)
         KN.put_strip(L, "TON SCORE ?", 150, W//2, 300, -3, KN.slam(u), bg=GOLD)
         KN.put_strip(L, "DIS-LE EN COMMENTAIRE", 80, W//2, 470, 2, KN.slam(u - .4) if u > .4 else 0, bg=(220, 30, 40), fg=WHITE)
         KN.etext(L, "5/5 ?", 90, 900, 1740, GOLD, font="BebasNeue-Regular.ttf")
