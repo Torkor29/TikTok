@@ -232,7 +232,7 @@ B.metal_text = _metal
 def main():
     os.makedirs(OUT, exist_ok=True); v = os.path.join(OUT, "_v.mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-                           "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "19", "-preset", "medium", v], stdin=subprocess.PIPE)
+                           "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "23", "-preset", "medium", "-maxrate", "6M", "-bufsize", "12M", v], stdin=subprocess.PIPE)
     for fr in range(int(TOTAL*FPS)): pr.stdin.write(frame(fr, fr/FPS).tobytes())
     pr.stdin.close(); pr.wait(); out = os.path.join(OUT, "bdo_kane.mp4")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", v, "-i", E.MUSIC, "-filter_complex",
