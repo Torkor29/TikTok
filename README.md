@@ -50,6 +50,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | 6 | Ballon d'or VERSION 6 QUESTIONS (test A/B : plus court, sans pause au milieu, CTA à la fin) | 1:08 | [`output/quiz_ballondor6/`](output/quiz_ballondor6) |
 | 7 | Top 8 PSG « le meilleur de l'histoire ? toi, tu choisis ! » (format débat, bulles photo, vote en commentaire, résultat promis) | 0:45 | [`output/psg_top8/`](output/psg_top8) |
 | 8 | OM ou PSG ? Le onze de légende (format duels / débat : 11 postes, bulle OM vs bulle PSG, vote 2 s, mini-terrain qui se remplit, « ton onze en commentaire » ; photos libres Wikimedia créditées en fin) | 0:57 | [`output/om_psg_xi/`](output/om_psg_xi) |
+| 9 | Quizz football express (mot-clé « Quizz football » suggéré par TikTok) : 5 questions culture foot générale, de facile à la plus dure (Angleterre 1863, Uruguay 1930, main de Dieu, Brésil 22/22, Rogério Ceni 131 buts), chrono 3-2-1, score à l'écran ; **voix à brancher** (ElevenLabs bloqué le 28/10) | 0:40 | [`output/quiz_football/`](output/quiz_football) |
 
 ## Structure
 
