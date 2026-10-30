@@ -200,7 +200,7 @@ def build_audio(wav):
     ins = ["-i", vo] + sum([["-i", p] for p, _, _ in ev], []); fc = ""
     for i, (_, ts, g) in enumerate(ev): fc += f"[{i + 1}:a]adelay={int(ts*1000)}|{int(ts*1000)},volume={g}[e{i}];"
     fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(ev))) + f"amix=inputs={1 + len(ev)}:normalize=0:duration=longest,atrim=0:{TOTAL:.2f},loudnorm=I=-14:TP=-1[a]"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", wav], check=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", "-ar", "48000", wav], check=True)
 def main():
     os.makedirs(OUT, exist_ok=True); v = OUT + "/_v.mp4"; a = OUT + "/_a.wav"; build_audio(a)
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
