@@ -120,6 +120,12 @@ Donc :
 - [ ] CTA au milieu (juste après un moment fort) et à la fin.
 - [ ] Description courte + commentaire à épingler donnés dans la réponse.
 
+## 🔇 MUSIQUE : JAMAIS INTÉGRÉE À LA VIDÉO (préférence utilisateur, 30/10/2026)
+- L'utilisateur trouve que les vidéos avec musique intégrée marchent moins bien sur TikTok : livrer voix + bruitages seuls ;
+  la musique (son tendance) s'ajoute dans l'appli au moment de publier. On peut caler le rythme du montage sur un BPM sans mettre la musique.
+- Effets « édit » (étalonnage, RGB split, flash, zoom-punch sur les temps) : rejetés par l'utilisateur. Préférer la DA papier douce
+  (micro-animations, cartes qui tombent / respirent, feutre, tampons, déchirures) : modèle `episodes/devine_psg15/devine_psg15.py`.
+
 ## 🎨 STYLE : TOUT EN MOTION DESIGN (préférence utilisateur, 13/10/2026)
 - La base de chaque vidéo = motion design en code (papier découpé / gouache / stop-motion) : animations, effets, transitions,
   compteurs, chutes physiques, secousses, glitchs… faits par le moteur, pas par des clips vidéo IA.

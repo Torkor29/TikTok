@@ -6,7 +6,7 @@
   pastille compte à rebours 2… 1 (anneau crayon qui se remplit), puis le nom s'écrit sous la photo, tampon ✓, petits confettis ;
   la carte s'envole pour laisser la place à la suivante. Déchirures papier entre les grandes parties (accroche, CTA, fin).
 - Voix : voix/voix.mp3 + voix/segments.json (début, fin, début du 1er mot) ; chaque nom est posé pour tomber pile sur sa révélation.
-- Musique : UROBOROS (Hardtekk, slowed) très basse sous la voix ; le rythme des cartes suit ses temps (126,5 BPM).
+- Sans musique intégrée (demande utilisateur) ; le rythme des cartes reste calé sur 126,5 BPM.
   python3 episodes/devine_psg15/devine_psg15.py [--stills | --cover]"""
 import sys, os, math, json, subprocess
 from multiprocessing import Pool
@@ -227,10 +227,8 @@ def build_audio(wav):
     for i, (_, ts, g) in enumerate(evs): fc += f"[{i + 1}:a]aresample=48000,adelay={int(max(0, ts)*1000)}|{int(max(0, ts)*1000)},volume={g}[e{i}];"
     fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(evs))) + f"amix=inputs={1 + len(evs)}:normalize=0:duration=first[a]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", f"{S}/vo.wav"], check=True)
-    fc = ("[0:a]loudnorm=I=-14:TP=-1.5,aresample=48000,asplit=2[v][key];"            # voix + bruitages normalisés, musique ajoutée très bas
-          f"[1:a]atrim=0:{TOTAL:.2f},asetpts=PTS-STARTPTS,aresample=48000,volume=0.03,afade=t=out:st={TOTAL - 1.5:.2f}:d=1.5[mus];"
-          "[mus][key]sidechaincompress=threshold=0.02:ratio=6:attack=8:release=300[md];[v][md]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.89[a]")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{S}/vo.wav", "-ss", f"{M:.3f}", "-i", MUSIC, "-filter_complex", fc, "-map", "[a]", "-ar", "48000", wav], check=True)
+    # SANS musique (demande utilisateur : la musique intégrée ne marche pas sur TikTok ; on ajoute un son dans l'appli si besoin)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{S}/vo.wav", "-af", "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.89", "-ar", "48000", wav], check=True)
 def warm():
     for i in range(15): card(i)                                  # détourages calculés une fois, avant le fork
 def main():
