@@ -51,6 +51,7 @@ version installable `dist/tiktok-foot-quiz.skill` (`bash scripts/build_quiz_skil
 | 7 | Top 8 PSG « le meilleur de l'histoire ? toi, tu choisis ! » (format débat, bulles photo, vote en commentaire, résultat promis) | 0:45 | [`output/psg_top8/`](output/psg_top8) |
 | 8 | OM ou PSG ? Le onze de légende (format duels / débat : 11 postes, bulle OM vs bulle PSG, vote 2 s, mini-terrain qui se remplit, « ton onze en commentaire » ; photos libres Wikimedia créditées en fin) | 0:57 | [`output/om_psg_xi/`](output/om_psg_xi) |
 | 9 | Quizz football express (mot-clé « Quizz football » suggéré par TikTok) : 5 questions culture foot générale, de facile à la plus dure (Angleterre 1863, Uruguay 1930, main de Dieu, Brésil 22/22, Rogério Ceni 131 buts), chrono 3-2-1, score à l'écran, la voix donne chaque réponse | 0:52 | [`output/quiz_football/`](output/quiz_football) |
+| 9 bis | Quizz football v2 « édit » : même quiz calé sur « UROBOROS (Hardtekk, slowed) » (126,5 BPM) ; chrono et révélations sur les temps, Q5 révélée sur le 2e drop, zoom-punch, flash et RGB-split, déchirures, onde de choc, confettis, alerte rouge sur le « 1 » (`episodes/quiz_football/quiz_football_v2.py`) | 0:56 | [`output/quiz_football/`](output/quiz_football) |
 
 ## Structure
 
