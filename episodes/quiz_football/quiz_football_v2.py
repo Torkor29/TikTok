@@ -31,18 +31,17 @@ for k in range(5):
 TL.append(("end", t, t + dur(11) + 1.6)); TOTAL = TL[-1][2]
 M = DROP2 - TL[5][5]                                             # décalage musique : la révélation de la Q5 tombe sur le 2e drop
 CUTS = [e[1] for e in TL]; REVEALS = [e[5] for e in TL if e[0] == "q"]
-HITS = REVEALS + [DROP1 - M]                                     # flash / RGB-split : révélations + 1er drop (le « SI T'AS PAS 5/5 » claque dessus)
+HITS = REVEALS                                                   # flash / RGB-split : seulement aux révélations (plus de flash au début, demande utilisateur)
 def in_break(t): return BREAK <= t + M < DROP2
 def on_beat(t, w=.12):
     k = round(t/BEAT); p = max(0.0, 1 - abs(t - k*BEAT)/w) if k >= 1 else 0.0   # rien à 0 s : l'image 0 reste nette
-    return p*.3 if in_break(t) else p
+    return (p*.3 if in_break(t) else p)*.4                       # effets de temps atténués (demande utilisateur)
 def scene(fr, t):
     """L'image du quiz (sans post-traitement) : reprise de quiz_football.frame + effets de révélation."""
     pulse = on_beat(t); L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); V1.bg(L, t, pulse)
     e = [x for x in TL if x[1] <= t][-1]; kind = e[0]; u = t - e[1]
     if kind == "hook":
         V1.stars(L, t, pulse)
-        fx.shockwave(L, t, DROP1 - M, W//2, 1640, .6, 1100, GOLD)
         KN.put_strip(L, "QUIZZ", 190, W//2, 330, -3, 1 + .04*pulse)   # titre lisible dès l'image 0
         KN.put_strip(L, "FOOTBALL", 170, W//2, 540, 2, 1 + .04*pulse, bg=GOLD)
         KN.put_strip(L, "SI T'AS PAS 5/5…", 100, W//2, 1640, -2, (KN.slam(u - (DROP1 - M)) if u > DROP1 - M else 0) + .04*pulse, bg=RED, fg=WHITE)
@@ -120,7 +119,7 @@ def build_audio(wav):
         fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(evs))) + f"amix=inputs={1 + len(evs)}:normalize=0:duration=first[a]"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", out], check=True)
     mix(vo_ev, f"{S}/vo.wav"); mix(fx_ev, f"{S}/fx.wav")
-    fc = (f"[1:a]atrim=0:{TOTAL:.2f},asetpts=PTS-STARTPTS,volume=0.2,afade=t=out:st={TOTAL - 1.2:.2f}:d=1.2[mus];"
+    fc = (f"[1:a]atrim=0:{TOTAL:.2f},asetpts=PTS-STARTPTS,volume=0.11,afade=t=out:st={TOTAL - 1.2:.2f}:d=1.2[mus];"
           "[0:a]asplit=2[v][key];[mus][key]sidechaincompress=threshold=0.015:ratio=8:attack=8:release=300[md];"
           f"[v][md][2:a]amix=inputs=3:normalize=0:duration=first,loudnorm=I=-14:TP=-1,aresample=48000[a]")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{S}/vo.wav", "-ss", f"{M:.3f}", "-i", MUSIC, "-i", f"{S}/fx.wav",
