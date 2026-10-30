@@ -2,7 +2,7 @@
 
 **Objectif** : visibilité et SEO. TikTok suggère la recherche « Quizz football » (capture de l'utilisateur, 28/10/2026), donc le mot-clé est dit à 0 s, écrit en géant sur l'image 0, présent en petit sur toutes les questions, et il ouvre la description.
 **Sujet** : 7/10 (+2 grosse base de fans, puisque tout le monde est visé, +2 défi d'identité, +2 « je savais pas » sur la Q5, +1 recherche suggérée par TikTok).
-**Format** : quiz court, modèle du quiz Real (`episodes/quiz_real`). 5 QCM, chrono 3-2-1 de 6 temps à 129 BPM, score à l'écran, durée d'environ 40 s.
+**Format** : quiz court, modèle du quiz Real (`episodes/quiz_real`). 5 QCM, chrono 3-2-1 de 6 temps à 129 BPM, score à l'écran, durée d'environ 50 s avec les réponses dites.
 
 ## Hooks (A/B)
 1. **Retenu** : « Quizz football ! Si t'as pas cinq sur cinq, t'es pas un vrai fan de foot. »
@@ -40,6 +40,6 @@ Au moment de publier, ajouter dans l'appli le son tendance « FOOTBALL – Nevoa
 - Rogério Ceni : https://en.wikipedia.org/wiki/List_of_goals_scored_by_Rog%C3%A9rio_Ceni, https://www.guinnessworldrecords.com/world-records/most-goals-scored-by-a-goalkeeper
 
 ## Pour finir la vidéo (voix)
-Texte exact dans `episodes/quiz_football/TEXTE_VOIX.txt` (une phrase par ligne, voix Léo `jsScnYkNNda9Q1NES5nn`, `eleven_multilingual_v2`, environ 445 crédits).
+Texte exact dans `episodes/quiz_football/TEXTE_VOIX.txt` (12 phrases, une par ligne, réponses dites après le ding ; voix Léo `jsScnYkNNda9Q1NES5nn`, `eleven_multilingual_v2`, environ 600 crédits).
 Déposer le mp3 en `episodes/quiz_football/voix/voix.mp3` (blancs coupés : `scripts/trim_blancs.py`), puis lancer `python3 episodes/quiz_football/quiz_football.py`.
 Les segments sont trouvés automatiquement (`voix/segments.json`, à vérifier) et la sortie est `output/quiz_football/quiz_football.mp4`.

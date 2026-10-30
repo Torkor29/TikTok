@@ -1,6 +1,6 @@
 """QUIZZ FOOTBALL express « Si t'as pas 5/5 t'es pas un vrai fan de foot » (~36 s). Format court du quiz Real (episodes/quiz_real),
 culture foot générale, mot-clé « QUIZZ FOOTBALL » (recherche suggérée par TikTok) dit à 0 s et écrit sur toutes les images.
-Voix : voix/voix.mp3 (une seule prise, Léo) ; les 7 segments (hook, Q1..Q5, fin) sont trouvés par silencedetect et gardés dans
+Voix : voix/voix.mp3 (une seule prise, Léo) ; les 12 segments (hook, Q1, R1 … Q5, R5, fin) sont trouvés par silencedetect et gardés dans
 voix/segments.json. Sans voix : minutage provisoire (silences de durée estimée), rendu marqué _provisoire.
   python3 episodes/quiz_football/quiz_football.py [--stills]"""
 import sys, os, math, subprocess, json, re
@@ -18,22 +18,28 @@ PH = os.path.join(ROOT, "assets", "photos")
 VO = os.path.join(HERE, "voix", "voix.mp3"); SEGF = os.path.join(HERE, "voix", "segments.json")
 TEXTE = ["Quizz football ! Si t'as pas cinq sur cinq, t'es pas un vrai fan de foot.",
          "Question une. Quel pays a inventé le football moderne ?",
+         "Réponse B : l'Angleterre !",
          "Question deux. Où s'est jouée la toute première Coupe du monde ?",
+         "Réponse C : l'Uruguay, en mille neuf cent trente !",
          "Question trois. Qui a marqué le but de la main de Dieu ?",
+         "Réponse A : Maradona !",
          "Question quatre. Quel pays a joué toutes les Coupes du monde ?",
+         "Réponse D : le Brésil !",
          "Dernière question, la plus dure. Quel gardien a marqué plus de cent buts ?",
+         "Réponse B : Rogério Ceni, cent trente et un buts !",
          "Alors, t'as eu combien ? Dis ton score en commentaire !"]
+NSEG = len(TEXTE)                                                # hook, (question, réponse) x 5, fin
 PROVISOIRE = not os.path.exists(VO)
 
 def segments():
-    """(début, fin) de chaque phrase dans voix.mp3 : on coupe au milieu des 6 plus longs silences."""
+    """(début, fin) de chaque phrase dans voix.mp3 : on coupe au milieu des NSEG-1 plus longs silences."""
     if os.path.exists(SEGF): return json.load(open(SEGF))
     r = subprocess.run(["ffmpeg", "-i", VO, "-af", "silencedetect=noise=-35dB:d=0.15", "-f", "null", "-"], capture_output=True, text=True).stderr
     st = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", r)]; en = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", r)]
     dur = float(re.findall(r"Duration: (\d+):(\d+):([\d.]+)", r)[0][2]) + 60*float(re.findall(r"Duration: (\d+):(\d+)", r)[0][1])
-    sil = sorted([(e - s, s, e) for s, e in zip(st, en) if s > .3 and e < dur - .1], reverse=True)[:6]
+    sil = sorted([(e - s, s, e) for s, e in zip(st, en) if s > .3 and e < dur - .1], reverse=True)[:NSEG - 1]
     cuts = sorted((s + e)/2 for _, s, e in sil); bounds = [0.0] + cuts + [dur]
-    seg = [(round(bounds[i], 3), round(bounds[i + 1], 3)) for i in range(7)]
+    seg = [(round(bounds[i], 3), round(bounds[i + 1], 3)) for i in range(NSEG)]
     json.dump(seg, open(SEGF, "w")); return seg
 if PROVISOIRE:                                                   # ~19 caractères / s pour Léo (blancs coupés, mesuré sur le quiz Real)
     SEG, t = [], 0.0
@@ -49,8 +55,10 @@ NIV = ["FACILE", "FACILE", "MOYEN", "DIFFICILE", "LA PLUS DURE"]
 TL = []; t = 0.0
 TL.append(("hook", t, t + SEG[0][1] - SEG[0][0])); t = TL[-1][2]
 for k in range(5):
-    d = SEG[k + 1][1] - SEG[k + 1][0]; TL.append(("q", t, t + d + GAP, k, t + d)); t += d + GAP
-TL.append(("end", t, t + SEG[6][1] - SEG[6][0] + 1.2)); TOTAL = TL[-1][2]
+    d = SEG[2*k + 1][1] - SEG[2*k + 1][0]; dr = SEG[2*k + 2][1] - SEG[2*k + 2][0]
+    rvt = t + d + GAP - BEAT                                     # révélation sur le dernier temps du chrono, puis la voix donne la réponse
+    TL.append(("q", t, rvt + .3 + dr + .3, k, t + d, rvt)); t = TL[-1][2]
+TL.append(("end", t, t + SEG[-1][1] - SEG[-1][0] + 1.2)); TOTAL = TL[-1][2]
 
 _cut = {}
 def CUT(n, h):
@@ -116,7 +124,7 @@ def wrap(txt, n=20):
         if len(cur) + len(w) + 1 > n and cur: lines.append(cur); cur = w
         else: cur = (cur + " " + w).strip()
     return lines + [cur]
-def score_at(t): return sum(1 for e in TL if e[0] == "q" and t >= e[2] - BEAT)
+def score_at(t): return sum(1 for e in TL if e[0] == "q" and t >= e[5])
 def reveal_illu(L, illu, t, v):
     if illu in ("angleterre", "uruguay", "bresil"):
         B.put(L, flag(illu), W//2, 1400, v, (-4, 3, -2)[("angleterre", "uruguay", "bresil").index(illu)])
@@ -139,7 +147,7 @@ def frame(fr, t):
         KN.put_strip(L, "SI T'AS PAS 5/5…", 100, W//2, 1640, -2, 1 + .03*pulse, bg=RED, fg=WHITE)
     elif kind == "q":
         k, tq = e[3], e[4]; qtxt, ans, good, illu = Q[k]
-        rv = t >= e[2] - BEAT                                    # révélation sur le dernier temps du chrono
+        rv = t >= e[5]                                    # révélation sur le dernier temps du chrono
         KN.put_strip(L, f"QUESTION {k + 1}/5", 70, 260, 230, -4, KN.slam(u), bg=GOLD)
         KN.put_strip(L, NIV[k], 46, 270, 320, 3, KN.slam(u - .15) if u > .15 else 0, bg=RED if k >= 3 else WHITE, fg=WHITE if k >= 3 else (18, 16, 20), tape=False)
         KN.put_strip(L, "QUIZZ FOOTBALL", 50, 610, 232, 3, 1, tape=False)
@@ -148,17 +156,17 @@ def frame(fr, t):
         y0 = 440 + len(lines)*110 + 110
         for j, a in enumerate(ans):
             ok = j == good; y = y0 + j*215; s = B.M.spring(u - .25 - .07*j, .3, 16)
-            if rv and not ok: s *= max(0, 1 - (t - (e[2] - BEAT))/.15)
-            if rv and ok: y = y + (y0 - y)*B.M.ease_out(min(1, (t - (e[2] - BEAT))/.2))   # la bonne réponse remonte en 1re position
+            if rv and not ok: s *= max(0, 1 - (t - (e[5]))/.15)
+            if rv and ok: y = y + (y0 - y)*B.M.ease_out(min(1, (t - (e[5]))/.2))   # la bonne réponse remonte en 1re position
             if s <= .02: continue
             bgc = GREEN if (rv and ok) else (235, 230, 220); fgc = WHITE if (rv and ok) else (18, 16, 20)
-            KN.put_strip(L, f"{'ABCD'[j]}   {a}", 100, W//2, y, (-1.5, 1.2, -1, 1.5)[j], s*(1 + .08*KN.slam(t - (e[2] - BEAT)) - .08) if (rv and ok) else s, bg=bgc, fg=fgc)
+            KN.put_strip(L, f"{'ABCD'[j]}   {a}", 100, W//2, y, (-1.5, 1.2, -1, 1.5)[j], s*(1 + .08*KN.slam(t - (e[5])) - .08) if (rv and ok) else s, bg=bgc, fg=fgc)
         if t >= tq and not rv:                                   # chrono 3-2-1 (un chiffre tous les 2 temps) + barre qui se vide
             n = max(1, 3 - int((t - tq)/(2*BEAT))); uu = (t - tq) % (2*BEAT)
             KN.etext(L, str(n), 260, 900, 270, RED if n == 1 else GOLD, s=KN.slam(uu, .15))
             frac = 1 - (t - tq)/(GAP - BEAT); ImageDraw.Draw(L).rectangle([90, 1840, 90 + int(900*max(0, frac)), 1860], fill=GOLD)
         if rv:
-            v = B.M.spring(t - (e[2] - BEAT), .35, 14); reveal_illu(L, illu, t, v)
+            v = B.M.spring(t - (e[5]), .35, 14); reveal_illu(L, illu, t, v)
             KN.etext(L, "+1", 120, 150, 1790, GREEN, s=v)
         KN.etext(L, f"SCORE {score_at(t)}/5", 70, 900, 1790, GOLD, font="BebasNeue-Regular.ttf")
     else:
@@ -171,25 +179,24 @@ def frame(fr, t):
     return L.convert("RGB")
 
 def build_audio(wav):
-    """Voix découpée + silences de chrono, son de hook à 0 s, whoosh à chaque question, tics du chrono, ding de bonne réponse."""
-    S = OUT + "/_a"; os.makedirs(S, exist_ok=True); parts = []
+    """Voix découpée (chaque phrase à sa place), son de hook à 0 s, whoosh à chaque question, tics du chrono, ding de bonne réponse."""
+    S = OUT + "/_a"; os.makedirs(S, exist_ok=True); qs = [e for e in TL if e[0] == "q"]
+    pos = [0.0] + sum([[e[1], e[5] + .3] for e in qs], []) + [TL[-1][1]]   # début de chaque phrase sur la timeline
+    vo_ev = []
     for k, (a, b) in enumerate(SEG):
         p = f"{S}/s{k}.wav"
         if PROVISOIRE: cmd = ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{b - a:.4f}"]
         else: cmd = ["-ss", str(a), "-t", str(b - a), "-i", VO, "-ar", "44100", "-ac", "2"]
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + cmd + [p], check=True); parts.append(p)
-        if 1 <= k <= 5:
-            g = f"{S}/g{k}.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{GAP:.4f}", g], check=True); parts.append(g)
-    with open(f"{S}/l.txt", "w") as f: f.write("".join(f"file '{p}'\n" for p in parts))
-    vo = f"{S}/vo.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", f"{S}/l.txt", vo], check=True)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + cmd + [p], check=True); vo_ev.append((p, pos[k], 1.0))
+    vo = f"{S}/vo.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{TOTAL:.2f}", vo], check=True)
     sfx = os.path.join(ROOT, "episodes", "lille_v5", "sfx"); tick = f"{sfx}/tick.mp3"; whoosh = f"{sfx}/whoosh2.mp3"
     ding = os.path.join(ROOT, "assets", "sfx", "correct.mp3"); hook = os.path.join(ROOT, "assets", "sfx", "hook.mp3")
-    ev = [(hook, 0.0, .55)]
+    ev = vo_ev + [(hook, 0.0, .55)]
     for e in TL:
         if e[0] == "q":
             ev.append((whoosh, e[1], .5))
             for j in range(5): ev.append((tick, e[4] + j*BEAT, .6))
-            ev.append((ding, e[2] - BEAT, .8))
+            ev.append((ding, e[5], .8))
     ins = ["-i", vo] + sum([["-i", p] for p, _, _ in ev], []); fc = ""
     for i, (_, ts, g) in enumerate(ev): fc += f"[{i + 1}:a]adelay={int(ts*1000)}|{int(ts*1000)},volume={g}[e{i}];"
     fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(ev))) + f"amix=inputs={1 + len(ev)}:normalize=0:duration=longest,atrim=0:{TOTAL:.2f},loudnorm=I=-14:TP=-1[a]"
@@ -208,7 +215,7 @@ def cover():
     p0, PROVISOIRE = PROVISOIRE, False; im = frame(0, .4); PROVISOIRE = p0
     p = OUT + "/quiz_football_couverture.jpg"; os.makedirs(OUT, exist_ok=True); im.save(p, quality=92); print(p)
 def stills():
-    ts = [0, 1.5] + sum([[e[1] + .8, e[4] + .5, e[2] - .3] for e in TL if e[0] == "q"], []) + [TL[-1][1] + 1]
+    ts = [0, 1.5] + sum([[e[1] + .8, e[4] + .5, e[5] + .4] for e in TL if e[0] == "q"], []) + [TL[-1][1] + 1]
     sh = Image.new("RGB", (216*9, 384*2))
     for k, t in enumerate(ts[:18]): sh.paste(frame(int(t*FPS), t).resize((216, 384)), ((k % 9)*216, (k//9)*384))
     p = os.path.join(os.environ.get("STILLS_DIR", OUT), "quiz_football_planche.jpg"); os.makedirs(os.path.dirname(p), exist_ok=True); sh.save(p, quality=85); print(p, round(TOTAL, 2))
