@@ -35,7 +35,7 @@ HITS = REVEALS                                                   # flash / RGB-s
 def in_break(t): return BREAK <= t + M < DROP2
 def on_beat(t, w=.12):
     k = round(t/BEAT); p = max(0.0, 1 - abs(t - k*BEAT)/w) if k >= 1 else 0.0   # rien à 0 s : l'image 0 reste nette
-    return (p*.3 if in_break(t) else p)*.4                       # effets de temps atténués (demande utilisateur)
+    return (p*.3 if in_break(t) else p)*.08                      # pulsations sur les temps quasi supprimées (demande utilisateur)
 def scene(fr, t):
     """L'image du quiz (sans post-traitement) : reprise de quiz_football.frame + effets de révélation."""
     pulse = on_beat(t); L = Image.new("RGBA", (W, H), (0, 0, 0, 255)); V1.bg(L, t, pulse)
@@ -119,9 +119,11 @@ def build_audio(wav):
         fc += "[0:a]" + "".join(f"[e{i}]" for i in range(len(evs))) + f"amix=inputs={1 + len(evs)}:normalize=0:duration=first[a]"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "[a]", out], check=True)
     mix(vo_ev, f"{S}/vo.wav"); mix(fx_ev, f"{S}/fx.wav")
-    fc = (f"[1:a]atrim=0:{TOTAL:.2f},asetpts=PTS-STARTPTS,volume=0.11,afade=t=out:st={TOTAL - 1.2:.2f}:d=1.2[mus];"
-          "[0:a]asplit=2[v][key];[mus][key]sidechaincompress=threshold=0.015:ratio=8:attack=8:release=300[md];"
-          f"[v][md][2:a]amix=inputs=3:normalize=0:duration=first,loudnorm=I=-14:TP=-1,aresample=48000[a]")
+    # voix + bruitages normalisés seuls (-14 LUFS), PUIS la musique ajoutée très bas (≈ -30 LUFS, -40 sous la voix) : la normalisation ne la remonte plus
+    fc = ("[0:a][2:a]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5,aresample=48000,asplit=2[v][key];"
+          f"[1:a]atrim=0:{TOTAL:.2f},asetpts=PTS-STARTPTS,aresample=48000,volume=0.035,afade=t=out:st={TOTAL - 1.2:.2f}:d=1.2[mus];"
+          "[mus][key]sidechaincompress=threshold=0.02:ratio=6:attack=8:release=300[md];"
+          "[v][md]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.89[a]")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{S}/vo.wav", "-ss", f"{M:.3f}", "-i", MUSIC, "-i", f"{S}/fx.wav",
                     "-filter_complex", fc, "-map", "[a]", "-ar", "48000", wav], check=True)
 def main():
