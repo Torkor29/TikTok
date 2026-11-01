@@ -41,6 +41,6 @@
 - Maintien 2008 à Sochaux (1-2, doublé d'Amara Diané) : https://www.psg.fr/content/la-photo-du-jour-17-mai-2008-paris-saint-germain-histoire-2025-2026 , https://www.livefoot.fr/actualite/qu-est-devenu-amara-diane-le-joueur-qui-a-sauve-le-psg-de-la-relegation.html
 - Précaution : « Paris ne le réclame même pas » (formulation prudente ; le refus de Canal+ n'est rapporté que par un livre).
 
-## Voix
+## Voix (Léo v4, reçue le 01/11, blancs coupés, 60 s ; vidéo 1:07)
 Texte : `episodes/psg_avant_qatar/TEXTE_VOIX.txt` (Léo ou ta voix, une seule prise, retours à la ligne gardés).
 Déposer le mp3 en `episodes/psg_avant_qatar/voix/voix.mp3`, puis `--seg` et le rendu.
