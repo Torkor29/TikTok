@@ -1,4 +1,4 @@
-# « T'es un footix si tu connais pas le PSG d'avant le Qatar » — v2 style Rennes (1:01)
+# « T'es un footix si tu connais pas le PSG d'avant le Qatar » — v2 style Rennes (0:54, voix ×1,15, bruitages allégés)
 
 **Objectif** : visibilité (PSG = plus grosse communauté FR) et commentaires (question piège sans réponse + débat final).
 **Sujet** : 9/10 (+2 grosse base de fans, +2 anecdotes « je savais pas » : radié à vie, titre laissé vacant, +2 clivant avant/après le Qatar, +2 défi d'identité « footix », +1 nostalgie).

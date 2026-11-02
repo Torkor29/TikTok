@@ -40,6 +40,11 @@ K = dict(footix=.32, connais=1.14, psg=1.70, avant0=2.44, qatar=2.70, milliards=
          trois=54.10, qatar2=55.20, toi=55.84, vrai=56.66, avant=57.64, apres=58.28, dis=58.86, comm2=59.26, fin=59.98)
 SC_T = dict(hook=0.0, bill=3.09, y78=7.03, motif=11.38, y82=15.51, bor=19.9, y93=24.47, quiz=30.55, om=34.8, vide=39.68, stars=42.0,
             y08=47.23, diane=51.21, fin=53.98)
+SPEED = 1.15                                                     # voix accélérée (demande utilisateur : « trop lent ») -> tout le minutage suit
+K = {k: v/SPEED for k, v in K.items()}; SC_T = {k: v/SPEED for k, v in SC_T.items()}
+VOIX_SRC = VOIX; VOIX = os.path.join(HERE, "voix", "voix_rapide.mp3")
+if not os.path.exists(VOIX) or os.path.getmtime(VOIX) < os.path.getmtime(VOIX_SRC):
+    import subprocess; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", VOIX_SRC, "-af", f"atempo={SPEED}", VOIX], check=True)
 # ------------------------------------------------------------------ outils (repris de rennes3.py)
 def ease(u): u = clamp(u); return u*u*(3 - 2*u)
 def eob(u, s=1.9): return ease_out_back(clamp(u), s)
@@ -181,7 +186,7 @@ CAMS["s_hook"] = [(0, CX, 960, 1.04), (K["psg"], CX, 1000, 1.08), (K["avant0"], 
 E_B = [El(KW("AVANT LES MILLIARDS", NOIR, BLANC, 90), CX, 520, K["milliards"] - .3, K["chaos"] - .1, "stamp", "fly", rot=-2),
        El(stampl("LE CHAOS", ROUGE, 170), CX, 1100, K["chaos"] - .02, K["magique"] - .1, "stamp", "shrink", rot=-6),
        El(KW("ET C'ÉTAIT MAGIQUE", JAUNE, NOIR, 100), CX, 1420, K["magique"] - .05, None, "stamp", rot=3)]
-@scene(SC_T["bill"], trans="whip", td=.25)
+@scene(SC_T["bill"], trans="whip", td=.18)
 def s_bill(L, fr, t):
     paper_fill(L, (40, 30, 34), "bill"); d = ImageDraw.Draw(L)
     for k in range(7):                                           # sacs de billets qui tombent
@@ -207,7 +212,7 @@ E_78 = [El(stampl("1978", (110, 70, 40), 200), CX, 560, K["y1978"], K["styliste"
         El(marker("DANIEL HECHTER", "pqhech", 74), CX, 700, K["hechter"] - .05, None, "slide_l", rot=-2),
         El(tag("STYLISTE", 58, JAUNE), 820, 880, K["styliste"], None, "pop", rot=6),
         El(stampl("RADIÉ À VIE", ROUGE, 140), CX, 1260, K["radie"] - .03, None, "stamp", rot=-8)]
-@scene(SC_T["y78"], trans="tear", td=.3)
+@scene(SC_T["y78"], trans="tear", td=.22)
 def s_78(L, fr, t):
     paper_fill(L, (214, 190, 146), "sep")
     for k in range(10):
@@ -226,7 +231,7 @@ CAMS["s_78"] = [(SC_T["y78"], CX, 900, 1.0), (K["president"], CX, 1100, 1.06), (
 E_MO = words(lambda w, i: KW(w, NOIR, BLANC, 110), [("LE MOTIF", K["motif"] - .05), ("?", K["motif"] + .25)], CX, 470, out=K["double"] - .1) + \
        [El(KW("DOUBLE BILLETTERIE", ROUGE, BLANC, 80), CX, 470, K["double"] - .05, None, "stamp", rot=-2),
         El(stampl("HORS DES COMPTES", ROUGE, 96), CX, 1580, K["comptes"] - .05, None, "stamp", rot=-6)]
-@scene(SC_T["motif"], trans="whip", td=.25)
+@scene(SC_T["motif"], trans="whip", td=.18)
 def s_motif(L, fr, t):
     paper_fill(L, (238, 230, 212), "tk")
     k = M.spring(t - K["double"], .5, 11) if t > K["double"] else 0
@@ -247,7 +252,7 @@ E_82 = [El(tag("4 ANS PLUS TARD…", 64, BLANC), CX, 430, K["quatre"] - .05, K["
         El(lambda fr: ticket("FINALE 1982", "COUPE DE FRANCE", (30, 110, 70), 640), CX, 640, K["finale"] - .1, K["rocheteau"] - .2, "drop", "fly", rot=-3, dist=900),
         El(marker("ROCHETEAU", "pqroch", 80), 300, 640, K["rocheteau"] - .02, None, "slide_l", rot=-3),
         El(stampl("DERNIÈRE MINUTE !", ROUGE, 96), CX, 1520, K["derniere"] - .03, None, "stamp", rot=-6)]
-@scene(SC_T["y82"], trans="tear", td=.3)
+@scene(SC_T["y82"], trans="tear", td=.22)
 def s_82(L, fr, t):
     paper_fill(L, (58, 140, 76), "pitch"); d = ImageDraw.Draw(L)
     for k in range(0, H, 220): d.rectangle([0, k, W, k + 110], fill=(70, 156, 88))
@@ -267,7 +272,7 @@ E_BO = [El(marker("FRANCIS BORELLI", "pqbor", 74), CX, 480, K["borelli"] - .05, 
         El(tag("LE PRÉSIDENT", 56, CREME), CX, 360, K["borelli"] - .25, K["premier"] - .2, "pop", "fly", rot=2),
         El(KW("1er TROPHÉE", JAUNE, NOIR, 130), CX, 460, K["premier"] - .05, None, "stamp", rot=-3),
         El(tag("DE L'HISTOIRE", 64, BLANC), CX, 600, K["trophee"] + .2, None, "pop", rot=3)]
-@scene(SC_T["bor"], trans="whip", td=.25)
+@scene(SC_T["bor"], trans="whip", td=.18)
 def s_bor(L, fr, t):
     paper_fill(L, (58, 140, 76), "pitch2"); d = ImageDraw.Draw(L)
     for k in range(0, H, 220): d.rectangle([0, k, W, k + 110], fill=(70, 156, 88))
@@ -292,7 +297,7 @@ E_93 = [El(stampl("1993", NOIR, 170), CX, 470, K["y1993"], K["perd"] - .2, "stam
         El(tag("À MADRID", 60, BLANC), CX, 560, K["madrid"] - .05, K["retour"] - .1, "pop", "fly", rot=2),
         El(KW("AU PARC", NOIR, BLANC, 100), CX, 520, K["retour"] - .05, None, "stamp", rot=-2),
         El(stampl("90+6'", ROUGE, 130), 800, 1420, K["additionnel"] - .05, None, "stamp", rot=8)]
-@scene(SC_T["y93"], trans="tear", td=.3)
+@scene(SC_T["y93"], trans="tear", td=.22)
 def s_93(L, fr, t):
     paper_fill(L, (20, 30, 76), "n93"); rays(L, (CX, 1000), t, .5, 16, 1700, (34, 48, 110), .1, .3)
     for k in range(30): ImageDraw.Draw(L).ellipse([(k*137) % W, (k*89) % 700 + 150, (k*137) % W + 6, (k*89) % 700 + 156], fill=(240, 240, 255))
@@ -318,7 +323,7 @@ E_Q = words(lambda w, i: KW(w, NOIR if w != "TÊTE ?" else ROUGE, BLANC, 104), [
       [El(tag("QUESTION POUR LES VRAIS", 54, ROUGE, BLANC), CX, 330, K["question"] + .05, QOUT, "pop", "fly", rot=-2),
        El(marker("RÉPONDS EN COMMENTAIRE", "pqrep", 66), CX, 1440, K["reponds"] - .05, QOUT, "slide_l", "fly", rot=2),
        El(KW("MERCI !", JAUNE, NOIR, 130), CX, 560, K["abonne"] + .45, None, "stamp", rot=-3)]
-@scene(SC_T["quiz"], trans="whip", td=.25)
+@scene(SC_T["quiz"], trans="whip", td=.18)
 def s_quiz(L, fr, t):
     paper_fill(L, (20, 30, 76), "quiz"); rays(L, (CX, 1050), t, .6, 16, 1700, (34, 48, 110), .1, .3)
     if t < QOUT + .25:
@@ -354,7 +359,7 @@ E_OM = [El(tag("LA MÊME ANNÉE", 58, CREME), CX, 360, K["annee"] - .1, None, "p
         El(lambda fr: logo("psg", 380), 780, 1350, K["paris2"] - .1, None, "slide_r", rot=4, dist=700),
         El(tag("2e", 70, JAUNE), 950, 1180, K["deuxieme"] - .05, None, "pop", rot=8),
         El(marker("« NON MERCI. »", "pqnon", 80), CX, 1660, K["reclame"] - .05, None, "slide_l", rot=-2)]
-@scene(SC_T["om"], trans="tear", td=.3)
+@scene(SC_T["om"], trans="tear", td=.22)
 def s_om(L, fr, t):
     paper_fill(L, (238, 230, 212), "om")
     if t > K["titre"] - .1:                                      # le titre (coupe) s'envole de l'OM
@@ -367,7 +372,7 @@ CAMS["s_om"] = [(SC_T["om"], CX, 900, 1.0), (K["om"], 420, 950, 1.12), (K["corru
 # --- 9. Un championnat sans champion : socle vide, toiles d'araignée
 E_V = words(lambda w, i: KW(w, NOIR if w != "SANS CHAMPION" else ROUGE, BLANC, 110), [("RÉSULTAT :", K["resultat"] - .05), ("UN CHAMPIONNAT", K["championnat"] - .1), ("SANS CHAMPION", K["sans"])],
             CX, 560, maxw=900)
-@scene(SC_T["vide"], trans="whip", td=.25)
+@scene(SC_T["vide"], trans="whip", td=.18)
 def s_vide(L, fr, t):
     paper_fill(L, (40, 30, 34), "vide"); rays(L, (CX, 1100), t, .4, 12, 1500, (90, 60, 50), .1, .2)
     u = M.spring(t - SC_T["vide"] - .05, .55, 11); put(L, shadowed(scale_stand(), "stand"), CX, lerp(2300, 1350, u), 1.1)
@@ -388,7 +393,7 @@ E_ST = [El(lambda fr: CUT("weah", 820), 300, 1500, K["weah"] - .1, K["ginola"] -
         El(tag("UN JEUNE BRÉSILIEN…", 60, BLANC), CX, 560, K["bresilien"] - .25, None, "pop", rot=2),
         El(lambda fr: CUT("ronaldinho", 1100), CX, 1700, K["ronaldinho"] - .25, None, "rise", rot=-2, dist=1500),
         El(KW("RONALDINHO", JAUNE, NOIR, 110), CX, 1560, K["ronaldinho"] - .02, None, "stamp", rot=-4)]
-@scene(SC_T["stars"], trans="tear", td=.3)
+@scene(SC_T["stars"], trans="tear", td=.22)
 def s_stars(L, fr, t):
     stripes_bg(L, key="stars", t=t); dark(L, .3)
     if t > K["ronaldinho"]: sparks_burst(L, t, K["ronaldinho"], CX, 1000, 16, (255, 230, 120), 420)
@@ -400,7 +405,7 @@ E_08 = [El(mono("2008", 70), CX, 420, K["y2008"], None, "pop", rot=-3),
         El(KW("SA SURVIE", ROUGE, BLANC, 120), CX, 600, K["survie"] - .05, None, "stamp", rot=-3),
         El(tag("DERNIÈRE JOURNÉE", 62, JAUNE), CX, 770, K["derniere2"] - .05, None, "pop", rot=2),
         El(lambda fr: sign("SOCHAUX", 440), 800, 1560, K["sochaux"] - .1, None, "drop", rot=4, dist=900)]
-@scene(SC_T["y08"], trans="tear", td=.3)
+@scene(SC_T["y08"], trans="tear", td=.22)
 def s_08(L, fr, t):
     paper_fill(L, (52, 50, 58), "s08"); d = ImageDraw.Draw(L)
     d.rectangle([0, 1180, W, 1360], fill=(170, 40, 46)); text_c(d, CX, 1270, "ZONE DE RELÉGATION", font("title", 62), BLANC)
@@ -417,7 +422,7 @@ DIANE = foot.Player("diane", hair=(20, 16, 14), skin=(96, 62, 44))
 E_DI = [El(marker("AMARA DIANÉ", "pqdia", 84), CX, 440, K["diane"] - .05, None, "slide_l", rot=-2),
         El(KW("×2", JAUNE, NOIR, 150), 860, 640, K["deux"] - .03, None, "stamp", rot=6),
         El(stampl("SAUVÉ !", (40, 150, 70), 190), CX, 1060, K["sauve"] - .05, None, "stamp", rot=-6)]
-@scene(SC_T["diane"], trans="whip", td=.25)
+@scene(SC_T["diane"], trans="whip", td=.18)
 def s_diane(L, fr, t):
     paper_fill(L, (58, 140, 76), "pitch3"); d = ImageDraw.Draw(L)
     for k in range(0, H, 220): d.rectangle([0, k, W, k + 110], fill=(70, 156, 88))
@@ -439,7 +444,7 @@ E_FIN = [El(tag("TROIS ANS PLUS TARD…", 60, BLANC), CX, 330, K["trois"], K["to
          El(KW("APRÈS", PRED, BLANC, 120), 800, 1080, K["apres"] - .03, None, "stamp", rot=5),
          El(tag("OU", 60, BLANC), CX, 1240, K["avant"] + .3, None, "pop", rot=0),
          El(marker("DIS-LE EN COMMENTAIRE", "pqdis", 76), CX, 1480, K["dis"] - .05, None, "slide_l", rot=2)]
-@scene(SC_T["fin"], trans="tear", td=.3)
+@scene(SC_T["fin"], trans="tear", td=.22)
 def s_fin(L, fr, t):
     paper_fill(L, (110, 26, 44), "fin"); rays(L, (CX, 1000), t, .5, 14, 1600, (140, 40, 60), .1, .3)
     if t < K["toi"] + .1:
@@ -493,38 +498,24 @@ def draw(cv, fr, t, T):
 # ------------------------------------------------------------------ sons (pas de musique)
 V5S = os.path.join(ROOT, "episodes", "lille_v5", "sfx"); RS = os.path.join(RENNES, "sfx"); BANK = os.path.join(ROOT, "assets", "sfx")
 def X(t, name, g): return (P + t, name, g)
-SFX = [X(0, "braam", .7), X(K["footix"], "stamp", .5), X(K["psg"], "pop", .5), X(K["avant0"], "stamp", .45), X(K["qatar"] + .15, "marker", .5),
-       X(SC_T["bill"], "whoosh1", .5)] + [X(K["milliards"] - .2 + k*.07, "tok", .35) for k in range(7)] + [X(K["paris1"], "marker", .5), X(K["chaos"], "stamp", .7),
-       X(K["chaos"] + .05, "crash", .35), X(K["magique"], "shimmer", .55), X(K["magique"] + .2, "sparkle", .45),
-       X(SC_T["y78"], "page_tear", .5), X(K["y1978"], "stamp", .55), X(K["president"], "typewriter", .3), X(K["hechter"], "marker", .45), X(K["styliste"], "pop", .45),
-       X(K["radie"], "gavel", .75), X(K["radie"] + .05, "stamp", .6),
-       X(SC_T["motif"], "whoosh2", .5), X(K["motif"], "pop", .4), X(K["double"], "flap", .55), X(K["double"] + .1, "stamp", .5), X(K["liquide"], "cash", .6),
-       X(K["comptes"], "stamp", .7),
-       X(SC_T["y82"], "page_tear", .5), X(K["quatre"], "pop", .4), X(K["finale"], "whistle", .45), X(K["coupe"], "flap", .5), X(K["rocheteau"] - .2, "kick", .7),
-       X(K["egalise"], "flap", .6), X(K["egalise"] + .05, "goal_roar", .55), X(K["derniere"], "stamp", .6),
-       X(SC_T["bor"], "whoosh3", .5), X(K["borelli"], "marker", .4), X(K["saute"], "whoosh1", .45), X(K["embrasse"], "heart", .5), X(K["embrasse"] + .1, "crowd", .45),
-       X(K["premier"], "shimmer", .6), X(K["premier"] + .1, "boom", .5), X(K["trophee"], "sparkle", .4),
-       X(SC_T["y93"], "page_tear", .5), X(K["y1993"], "stamp", .55), X(K["troisun"], "flap", .55), X(K["madrid"], "groan", .35), X(K["retour"], "crowd", .4)] + \
-      [X(K["quatreun"] - .25 + d_, "flap", .5) for d_ in (0, .15, .3)] + [X(K["tete"] - .1, "kick", .55), X(K["tete"] + .25, "flap", .6), X(K["tete"] + .3, "goal_roar", .6),
-       X(K["additionnel"], "stamp", .6),
-       X(SC_T["quiz"], "whoosh2", .5), X(K["question"], "typewriter", .3), X(K["qui"], "riser", .4), X(K["tete2"], "stamp", .45), X(K["reponds"], "marker", .45),
-       X(K["abonne"] + .25, "pop", .6), X(K["abonne"] + .3, "ding", .4), X(K["like"], "sparkle", .5), X(K["like"] + .05, "pop", .5), X(K["abonne"] + .45, "notif", .45),
-       X(SC_T["om"], "page_tear", .5), X(K["om"], "pop", .45), X(K["titre"], "shimmer", .35), X(K["corruption"], "gavel", .7), X(K["corruption"] + .05, "stamp", .55),
-       X(K["paris2"], "whoosh1", .45), X(K["deuxieme"], "pop", .4), X(K["reclame"], "marker", .5),
-       X(SC_T["vide"], "whoosh3", .5), X(K["resultat"], "stamp", .4), X(K["championnat"], "wind", .45), X(K["sans"], "stamp", .55),
-       X(SC_T["stars"], "page_tear", .5), X(K["weah"], "camera", .5), X(K["ginola"], "camera", .5), X(K["rai"], "camera", .5), X(K["coupe2"], "tok", .6),
-       X(K["coupe2"] + .1, "fanfare", .35), X(K["bresilien"], "pop", .4), X(K["ronaldinho"] - .2, "camera", .55), X(K["ronaldinho"], "samba", .45),
-       X(SC_T["y08"], "page_tear", .5), X(K["y2008"], "pop", .4), X(K["survie"], "heart", .55), X(K["survie"] + .05, "stamp", .5), X(K["derniere2"], "tictac", .45),
-       X(K["sochaux"] - .1, "tok", .55),
-       X(SC_T["diane"], "whoosh2", .5), X(K["diane"] + .05, "kick", .6), X(K["diane"] + .5, "net", .5), X(K["deux"] - .3, "kick", .6), X(K["deux"] + .1, "net", .5),
-       X(K["deux"], "stamp", .5), X(K["sauve"], "stamp", .7), X(K["sauve"] + .05, "goal_roar", .6), X(K["sauve"] + .3, "champagne", .45),
-       X(SC_T["fin"], "page_tear", .5), X(K["qatar2"], "whoosh1", .45), X(K["toi"], "stamp", .5), X(K["vrai"], "stamp", .45), X(K["avant"], "stamp", .55),
-       X(K["apres"], "stamp", .55), X(K["dis"], "notif", .55), X(K["comm2"] + .6, "bell", .4)]
-SFX_DIR = "/tmp/claude-0/sfx_psgv2"
+SFX = [X(K["footix"], "stamp", .35), X(K["psg"], "whoosh", .3), X(K["qatar"] + .15, "scratch", .3),
+       X(SC_T["bill"], "whoosh", .3), X(K["paris1"], "scratch", .3), X(K["chaos"], "stamp", .4), X(K["magique"], "sparkle", .35),
+       X(SC_T["y78"], "rip", .35), X(K["radie"], "gavel", .45),
+       X(SC_T["motif"], "whoosh", .3), X(K["liquide"], "cash", .4), X(K["comptes"], "stamp", .4),
+       X(SC_T["y82"], "rip", .35), X(K["finale"], "whistle", .3), X(K["rocheteau"] - .2, "kick", .45), X(K["egalise"] + .05, "goal_roar", .4),
+       X(SC_T["bor"], "whoosh", .3), X(K["embrasse"], "crowd", .35), X(K["premier"], "sparkle", .4),
+       X(SC_T["y93"], "rip", .35), X(K["tete"] - .1, "kick", .4), X(K["tete"] + .3, "goal_roar", .45),
+       X(SC_T["quiz"], "whoosh", .3), X(K["qui"], "riser", .25), X(K["abonne"] + .25, "notif", .4), X(K["like"], "heart", .35),
+       X(SC_T["om"], "rip", .35), X(K["corruption"], "gavel", .45), X(K["reclame"], "scratch", .3),
+       X(SC_T["vide"], "whoosh", .3), X(K["sans"], "stamp", .35),
+       X(SC_T["stars"], "rip", .35), X(K["weah"], "camera", .3), X(K["ginola"], "camera", .3), X(K["rai"], "camera", .3), X(K["ronaldinho"], "samba", .3),
+       X(SC_T["y08"], "rip", .35), X(K["survie"], "heart", .4),
+       X(SC_T["diane"], "whoosh", .3), X(K["diane"] + .05, "kick", .4), X(K["deux"] - .3, "kick", .4), X(K["sauve"] + .05, "goal_roar", .45),
+       X(SC_T["fin"], "rip", .35), X(K["avant"], "stamp", .35), X(K["apres"], "stamp", .35), X(K["dis"], "notif", .4)]
+SFX_DIR = "/tmp/claude-0/sfx_psgv3"
 os.makedirs(SFX_DIR, exist_ok=True)
 for nm in set(n for _, n, _ in SFX):
-    src = next((p for p in (os.path.join(RS, nm + ".mp3"), os.path.join(V5S, nm + ".mp3"), os.path.join(BANK, nm + ".mp3")) if os.path.exists(p)), None)
-    if nm in ("crowd", "whistle", "crash", "samba", "gavel", "cash", "goal_roar", "fanfare", "champagne", "camera"): src = os.path.join(BANK, nm + ".mp3") if os.path.exists(os.path.join(BANK, nm + ".mp3")) else src
+    src = os.path.join(BANK, nm + ".mp3") if os.path.exists(os.path.join(BANK, nm + ".mp3")) else None
     dst = os.path.join(SFX_DIR, nm + ".mp3")
     if src and not os.path.lexists(dst): os.symlink(src, dst)
 SFX = [s for s in SFX if os.path.exists(os.path.join(SFX_DIR, s[1] + ".mp3"))]
@@ -555,4 +546,4 @@ if __name__ == "__main__":
         print(stills(os.environ.get("STILLS_DIR", "/tmp/claude-0/aud"), only)); sys.exit()
     out = os.path.join(ROOT, "output", SLUG); os.makedirs(out, exist_ok=True)
     if "--cover" in args: print(cover(os.path.join(out, f"{SLUG}_couverture.jpg"))); sys.exit()
-    print(render_episode(SCENES, out, SLUG, TITLE, voice_files=[VOIX], sfx_dir=SFX_DIR + "_v", sfx_db=6.0, lufs=-14.0, crf=22, limit=True))
+    print(render_episode(SCENES, out, SLUG, TITLE, voice_files=[VOIX], sfx_dir=SFX_DIR + "_v", sfx_db=13.0, duck=.55, lufs=-14.0, crf=22, limit=True))
