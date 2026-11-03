@@ -20,8 +20,10 @@ PC.KITS["asse"] = dict(c1=(0, 132, 72), sleeve=(0, 132, 72), shorts=(250, 250, 2
 
 NAVY = (20, 34, 82); PRED = (206, 36, 44)
 import pixel as PX
+import aquarelle as AQ
 def px_out(out, slug):
     """Dossier / nom de sortie : suffixe _pixel en mode pixel.fc."""
+    if AQ.ON: return out + "_aquarelle", slug + "_aquarelle"
     return (out + "_pixel", slug + "_pixel") if PX.ON else (out, slug)
 # ------------------------------------------------------------------ outils (repris de rennes3.py)
 def ease(u): u = clamp(u); return u*u*(3 - 2*u)
@@ -171,6 +173,9 @@ def frame(fr, t):
             off = int(W*e); out = Image.new("RGB", (W, H)); out.paste(prev, (-off, 0)); out.paste(cur, (W - off, 0))
             fx.whip_blur(out, -110*math.sin(math.pi*u), 0, 7); cur = out
         elif tr == "tear": tear_transition(cur, prev, u, "tear_v", k)
+    if AQ.ON:                                                    # aquarelle : la scène + le fil rouge sont repeints, sous-titres au pinceau ensuite
+        cur = AQ.paint(cur, fr).convert("RGBA"); (FIL[0] or (lambda *a: None))(cur, fr, t)
+        (POST[0] or (lambda *a: None))(cur, fr, t); return cur.convert("RGB")
     if PX.ON:                                                    # pixel.fc : pixelisation de la scène + fil rouge, puis sous-titres nets en police pixel
         cur = PX.pixelate(cur).convert("RGBA"); (FIL[0] or (lambda *a: None))(cur, fr, t)
         (POST[0] or (lambda *a: None))(cur, fr, t); PX.scanlines(cur); return cur.convert("RGB")

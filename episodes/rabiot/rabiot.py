@@ -205,6 +205,7 @@ def fil(cv, fr, t):
     if PX.ON: PX.put(cv, PX.plabel(yr, 8, PX.WHITE, PX.BLACK, PX.WHITE, s=5), 150, 262); PX.put(cv, PX.plabel(f"CLUB : {club}", 8, PX.WHITE, PX.RED, PX.WHITE, s=5), 560, 262); return
     mono(yr, 46, NOIR).draw(cv, fr, 150, 262, s, -3); LBL(f"CLUB : {club}", f"rbcl{club}", font("title", 38), BLANC, ROUGE, padx=14, pady=5, rough=2).draw(cv, fr, 520, 262, s, 2)
 def post(cv, fr, t):
+    if R.AQ.ON: R.AQ.caption(cv, WD, t, 1660); return
     KA.caption(cv, WD, t, 1720, 74)
     if PROV: ImageDraw.Draw(cv).text((W/2, 90), "VOIX PROVISOIRE", font=font("title", 36), fill=(255, 90, 90), anchor="mm")
 FIL[0] = fil; POST[0] = post
