@@ -357,3 +357,10 @@ Données réelles :
 - Puis mise en DA : paper_player(..., real=True) (photo réaliste découpée papier) ; si rien de bon -> seulement là, demander à l'utilisateur.
 - Licences CC BY / BY-SA : citer l'auteur en fin de description (« Photos : <auteur> / Wikimedia Commons, CC BY-SA 4.0 »).
 - Logos de clubs : PAS sur Commons sans vérifier (souvent non libres) ; continuer à les demander à l'utilisateur.
+
+### RÉSULTAT « PSG avant le Qatar » v2 style Rennes (publié 02/11 8h04, 53,5 s, sans promo) — relevé le 03/11
+- 910 vues, 106 likes (11,6 % : excellent), 14 commentaires, 2 partages, 13 enregistrements, 1 abonné.
+- Visionnage moyen 18,2 s (34 %), 7,8 % jusqu'au bout, 41 % encore là à 0:08 ; la plus grosse chute est à 0:01 (~40 % partent).
+  => le contenu plaît à ceux qui restent (likes, enregistrements) ; la 1re seconde reste le goulot (image 0 = titre + écusson, rien qui bouge).
+- Pistes : image 0 avec un VISAGE + mouvement dès 0 s (cartes Weah / Ronaldinho / Raí qui défilent derrière le titre) ; garder le style Rennes.
+- Promo : pas de promo « j'aime » / « abonnés » (règle) ; une promo « vues » ne sert qu'à tester une accroche à froid, pas à lancer la vidéo.
