@@ -169,7 +169,7 @@ class Tac:
             if t < t0 or t > t1 + .2: continue
             a = 1 - clamp((t - t1)/.2) if t > t1 else 1; d = ImageDraw.Draw(L)
             base = min(200, int(200*940/max(1, font(200).getlength(txt)))); s = eob((t - t0)/.35); f = font(int(base*s) if s > .05 else 10)
-            ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); od = ImageDraw.Draw(ov); od.rectangle([0, 760, W, 1160], fill=(5, 10, 22, int(200*a)))
+            ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); od = ImageDraw.Draw(ov); od.rectangle([0, 790, W, 1140], fill=(20, 36, 82, int(225*a)))
             L.alpha_composite(ov)
             g = glow_layer(lambda dd: dd.text((W/2, 930), txt, font=f, fill=col + (int(255*a),), anchor="mm"), 14, 1.5); L.alpha_composite(g)
             if sub: put(L, tag_img(sub, 48, WHITE), W/2, 1080, eob((t - t0 - .15)/.3), a)
@@ -200,3 +200,87 @@ class Tac:
         sh.save(path, quality=85); return path
 _CUR = None
 def _frame(fr): return _CUR.frame(fr)
+
+# ================================================================== THÈME « PAPIER » (notre DA, demande utilisateur 03/11)
+# Terrain en papier vert déchiré + lignes à la craie (stop-motion), pastilles en papier découpé, flèches au feutre, étiquettes en bandes
+# de papier (typo d'édit), gros numéros en tampon, fond kraft. Les couleurs « néon » des épisodes sont traduites ici (pcol).
+import random, sys as _sys
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import engine as _E
+KRAFT = (236, 226, 204); GRASS = (66, 134, 80); GRASS2 = (74, 146, 88); CHALK = (248, 246, 236); NAVY_ = (20, 36, 82); RED_ = (206, 36, 44)
+MUST = (250, 202, 60); INK_ = (24, 22, 28)
+def pcol(c):
+    return {YEL: MUST, RED: RED_, LINE: CHALK, WHITE: CHALK}.get(tuple(c), tuple(c))
+_pc = {}
+def p_pitch(fr):
+    b = (fr//3) % 3; k = ("ppitch", b)
+    if k in _pc: return _pc[k]
+    rng = np.random.default_rng(1); a = np.zeros((H, W, 3), np.float32); a[:] = KRAFT
+    a *= (.95 + .08*_E._lowfreq(W, H, 3, 60))[..., None]; sp = rng.random((H, W)); a += ((sp > .985)*-22 + (sp < .01)*14)[..., None]
+    bg = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGBA")
+    pw, ph = PX1 - PX0, PY1 - PY0
+    def stripes(d, ox, oy):
+        for j in range(0, 10, 2): d.rectangle([ox - pw/2, oy - ph/2 + ph*j/10, ox + pw/2, oy - ph/2 + ph*(j + 1)/10], fill=GRASS2)
+    spr = _E.paper_sprite(_E.rect_pts(pw + 60, ph + 60), GRASS, seed=11 + b, rough=4, pattern=stripes)
+    ax, ay = spr.info["anchor"]; bg.alpha_composite(spr, (int((PX0 + PX1)/2 - ax), int((PY0 + PY1)/2 - ay)))
+    d = ImageDraw.Draw(bg); rnd = random.Random(b)
+    def chalk(pts, w=6):
+        q = [(x + rnd.uniform(-1.5, 1.5), y + rnd.uniform(-1.5, 1.5)) for x, y in pts]; d.line(q, fill=CHALK, width=w, joint="curve")
+    def seg(x0, y0, x1, y1): chalk([(x0 + (x1 - x0)*u, y0 + (y1 - y0)*u) for u in np.linspace(0, 1, 12)])
+    def rect(x0, y0, x1, y1): seg(x0, y0, x1, y0); seg(x1, y0, x1, y1); seg(x1, y1, x0, y1); seg(x0, y1, x0, y0)
+    rect(PX0, PY0, PX1, PY1); my = (PY0 + PY1)/2; seg(PX0, my, PX1, my); cx = (PX0 + PX1)/2; r = pw*.13
+    chalk([(cx + r*math.cos(u), my + r*math.sin(u)) for u in np.linspace(0, 2*math.pi, 40)]); d.ellipse([cx - 7, my - 7, cx + 7, my + 7], fill=CHALK)
+    for top in (True, False):
+        bw, bh, sw, sh = pw*.6, ph*.16, pw*.28, ph*.06
+        y0 = PY0 if top else PY1 - bh; rect(cx - bw/2, y0, cx + bw/2, y0 + bh); y1 = PY0 if top else PY1 - sh; rect(cx - sw/2, y1, cx + sw/2, y1 + sh)
+        ay_ = PY0 + bh if top else PY1 - bh; a0, a1 = (.35, 2.8) if top else (3.5, 5.95)
+        chalk([(cx + r*.75*math.cos(u), ay_ + r*.75*math.sin(u)) for u in np.linspace(a0, a1, 16)])
+    _pc[k] = bg; return bg
+def p_dot(num, col, r=34):
+    k = ("pdot", num, col)
+    if k in _pc: return _pc[k]
+    ours = tuple(col) == YEL; fill = NAVY_ if ours else (RED_ if tuple(col) == RED else pcol(col))
+    spr = _E.paper_sprite(_E.ellipse_pts(2*r + 8, 2*r + 8, 30), fill, seed=(num or 0) + (7 if ours else 3), rough=1.4)
+    ax, ay = spr.info["anchor"]; d = ImageDraw.Draw(spr)
+    if ours: d.ellipse([ax - r + 6, ay - r + 6, ax + r - 6, ay + r - 6], outline=RED_, width=5)
+    if num: d.text((ax, ay + 2), str(num), font=font(int(r*.95), "BebasNeue-Regular.ttf"), fill=(250, 248, 240), anchor="mm")
+    out = Image.new("RGBA", (spr.width + 20, spr.height + 20), (0, 0, 0, 0)); out.alpha_composite(spr, (int(out.width/2 - ax), int(out.height/2 - ay)))
+    _pc[k] = out; return out
+def p_tag(txt, size=46, col=YEL, fill=None):
+    k = ("ptag", txt, size, col)
+    if k in _pc: return _pc[k]
+    c = pcol(col); fg = INK_ if c in (MUST, CHALK) else (250, 248, 240)
+    lab = _E.Label(txt, f"tq{txt}{size}{c}", font(size), fg, c, padx=22, pady=6, rough=2.5).v[0]
+    out = Image.new("RGBA", (lab.width + 20, lab.height + 20), (0, 0, 0, 0)); ax, ay = lab.info["anchor"]; out.alpha_composite(lab, (int(out.width/2 - ax), int(out.height/2 - ay)))
+    _pc[k] = out; return out
+def p_layer(draw_fn, blur=0, k=0):
+    """Trait au feutre : pas de halo, juste le dessin (les couleurs néon sont traduites)."""
+    L = Image.new("RGBA", (W, H), (0, 0, 0, 0)); draw_fn(_PD(ImageDraw.Draw(L))); return L
+class _PD:
+    """ImageDraw qui traduit les couleurs néon -> palette papier."""
+    def __init__(self, d): self.d = d
+    def _c(self, kw):
+        for key in ("fill", "outline"):
+            v = kw.get(key)
+            if isinstance(v, tuple) and len(v) in (3, 4): kw[key] = pcol(v[:3]) + tuple(v[3:])
+        return kw
+    def __getattr__(self, n):
+        f = getattr(self.d, n)
+        return lambda *a, **kw: f(*a, **self._c(kw))
+def p_hud(cv, title):
+    _E.Label("TACTIQUE", "tqhud0", font(40, "BebasNeue-Regular.ttf"), (250, 248, 240), INK_, padx=16, pady=4, rough=2).draw(cv, 0, 150, 215, 1, -3)
+    _E.Label(title.split("·")[-1].strip(), "tqhud1", font(40), (250, 248, 240), RED_, padx=16, pady=4, rough=2).draw(cv, 0, 470, 215, 1, 2)
+def use_paper():
+    g = globals(); g["pitch_img"] = lambda: p_pitch(_FR[0]); g["dot_img"] = p_dot; g["tag_img"] = p_tag; g["glow_layer"] = p_layer; g["hud"] = p_hud
+    g["BG"] = KRAFT
+_FR = [0]
+_frame_neon = Tac.frame
+def _frame_paper(self, fr):
+    _FR[0] = fr
+    if not getattr(self, "_paper_zones", False):                   # zones : teintes papier
+        self.zones = [(t0, r, pcol(c), t1, lab) for (t0, r, c, t1, lab) in self.zones]
+        self.rings = [(t0, n, t1, pcol(c), lab) for (t0, n, t1, c, lab) in self.rings]
+        self.bigs = [(t0, txt, t1, MUST if tuple(c) == YEL else pcol(c), sub) for (t0, txt, t1, c, sub) in self.bigs]; self._paper_zones = True
+    return _frame_neon(self, fr)
+Tac.frame = _frame_paper
+use_paper()
