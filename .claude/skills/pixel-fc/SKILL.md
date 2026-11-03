@@ -1,61 +1,41 @@
 ---
 name: pixel-fc
-description: Crée les vidéos TikTok foot de la chaîne dans la DA « pixel.fc » (pixel-art rétro façon jeu vidéo 16 bits : gros pixels 4×4, palette fixe de 32 couleurs PICO-8 étendue, police pixel Silkscreen nette, boîtes de dialogue, lignes de balayage) — EXACTEMENT les mêmes formats que la série papier : tactique (« le 4-3-3 expliqué », « le joueur le plus important… »), storytime style Rennes (histoire d'un joueur / d'un club), quiz, « devine les stars », vrai ou faux, top. Utilise ce skill dès que l'utilisateur parle de pixel, pixel.fc, pixel art, rétro, 8-bit / 16-bit, « version pixel », « en pixel », ou veut refaire une vidéo déjà faite en pixel, même s'il ne dit pas « skill ».
+description: Crée les vidéos TikTok foot de la chaîne en VRAI pixel-art « pixel.fc » (style des vidéos « De zéro à champion du monde » : personnages pixel dessinés avec contour, tribunes pleines, pelouse, rue de nuit, chambre, cartes FIFA, gros sous-titres en haut avec mots-clés en couleur, en-tête d’épisode) — mêmes formats que la série papier (storytime, tactique, quiz, devine…) et refaire en pixel une vidéo déjà faite. Moteur engine/pixelart.py, modèle episodes/rabiot_px. Utilise ce skill dès que l’utilisateur parle de pixel, pixel.fc, pixel art, rétro, 8-bit / 16-bit, « version pixel », même s’il ne dit pas « skill ».
 ---
 
-# pixel.fc — la même chaîne, en pixel-art
+# pixel.fc — VRAI pixel-art (v2, validé par l'utilisateur sur ses vidéos de référence)
 
-**Même méthode, mêmes règles, autre DA.** Tout ce qui marche dans la série papier s'applique tel quel :
-- sujet / hook / rythme / description / commentaire épinglé : `.claude/skills/tiktok-foot-viral/SKILL.md` (à relire avant chaque vidéo) ;
-- storytime : `SKILL.md` racine + modèle Rennes (`episodes/rennes/rennes3.py`, boîte à outils `episodes/rennes/rstyle.py`) ;
-- quiz : `.claude/skills/tiktok-foot-quiz/SKILL.md` ; tactique : `engine/tactique.py` (+ `engine/karaoke.py`).
-- Préférences utilisateur toujours valables : **pas de musique intégrée** (son tendance ajouté dans l'appli), **pas d'effets « édit »**
-  (flash, RGB split, zoom sur les temps), image 0 lisible avec un visage ou un écusson énorme, 15-20 s pour une idée tactique,
-  boucle (la fin renvoie à l'image 0), appel au partage, sous-titres mot à mot.
+⚠️ La v1 (pixeliser nos vidéos papier : `engine/pixel.py`, `PIXEL=1`, `scripts/pixelize_video.py`) a été REJETÉE (« t'as pas bien bossé »).
+Le style voulu = celui des vidéos « De zéro à champion du monde » (@remi_sport) : décors et personnages DESSINÉS en pixel-art, pas filtrés.
 
-## Le moteur : `engine/pixel.py`
-- `PIXEL=1` (variable d'environnement) active la DA pixel dans `engine/tactique.py`, `engine/karaoke.py` et `episodes/rennes/rstyle.py`.
-- `PIXEL_SCALE=4` (défaut) : un gros pixel = 4×4 px → image de travail 270×480 agrandie sans flou.
-- `pixelate(img)` : réduction en moyenne → palette 32 couleurs (sans tramage) → filtre « mode » 3×3 qui efface le grain → agrandissement net.
-- `ptext_img(txt, 8, couleur, s=8)` : texte en Silkscreen 8 px agrandi ×8, contour + ombre de 1 gros pixel (Silkscreen a les accents ;
-  Press Start 2P n'a PAS « É », ne pas l'utiliser pour du français accentué).
-- `plabel(txt, 8, fg, bg, cadre, s=5)` : étiquette « boîte de dialogue » (aplat, cadre clair, coins coupés, ombre portée).
-- `put(cv, sprite, x, y)` : colle calé sur la grille de gros pixels (jamais de demi-pixel) ; `scanlines(cv)` : lignes de balayage discrètes.
-- Palette : `PX.NAVY, RED, YELLOW, WHITE, GREEN, SKY, ORANGE, PINK…` ; `PX.near(rgb)` ramène une couleur dans la palette.
+## Le style de référence
+- Petits personnages pixel avec **contour sombre 1 px** et ombrage 2 tons, cheveux / peau / maillot du club, numéro dans le dos, poses
+  (debout, marche 2 images, frappe, bras levés, triste, en colère), vus de face ou de dos ; gros plans = même sprite ×2.
+- Décors détaillés : tribune pleine de supporters qui sautent, pelouse rayée, cages en filet, rue de nuit aux fenêtres allumées,
+  chambre / bureau, vestiaire, documents (contrat, liste), cartes « FIFA » (note + poste, fond coloré), coupe, tableau d'affichage.
+- Interface en haute définition PAR-DESSUS le pixel-art : en-tête d'épisode en petite police pixel (« LES HISTOIRES · RABIOT »,
+  2e partie en jaune) et **gros sous-titres en haut de l'écran** (Lilita One, blanc avec ombre, mots-clés en couleur : rouge = drame,
+  jaune = chiffre / nom, vert = positif, bleu = club), qui apparaissent au fil de la voix (2 lignes max).
+- Étiquettes dans la scène en police pixel (Silkscreen) sur boîte sombre ; **jamais d'étiquette au-dessus de y≈70 (canevas)** :
+  la zone haute est réservée aux sous-titres.
+- Transitions : la nouvelle scène pousse l'ancienne (glissé de gros pixels, 0,2 s). Pas de musique, peu de bruitages.
+- Concept fort du compte de référence : série interactive (« Ép. 1 », vote des abonnés : « écris PASSE ou TIR en commentaire,
+  seuls les votes décident de l'épisode 2 »). À proposer pour une série pixel.fc (ex. « De zéro à champion », carrière d'un joueur fictif).
 
-## Règles de DA (apprises en faisant les premières vidéos)
-1. **Couleurs prises DANS la palette avant de dessiner.** Une couleur « entre deux » est mal quantifiée (le vert papier devenait gris-brun).
-   Le thème pixel du tactique remplace kraft / herbe / craie par `DNAVY`, `GREEN` + `PAL[27]`, `WHITE`.
-2. **Pas de texture papier en pixel** : `paper_fill` devient un aplat (`rstyle`), sinon le grain se transforme en camouflage.
-3. **Tout texte d'interface est redessiné APRÈS la pixelisation** en police pixel (sous-titres, bandeau du haut, étiquettes, gros numéros,
-   fil rouge) : un texte pixelisé après coup bave. Les gros mots-clés des scènes (≥ 90 px) peuvent rester dans la scène.
-4. **Étiquettes du terrain plus grosses** (×1,45) ou directement en `plabel`, sinon illisibles à 270 px de large.
-5. Photos de joueurs : détourées (`paper_player(..., real=True)`) puis pixelisées avec le reste → rendu « sprite » ressemblant.
-6. Mouvements : par pas de gros pixel (le défilement des rayures avance par multiples de 4×S) pour garder l'effet rétro.
+## Le moteur : `engine/pixelart.py`
+- Canevas logique `LW×LH = 135×240`, agrandi ×8 (`upscale`) → 1080×1920 sans flou. Tout se dessine en coordonnées de gros pixels.
+- `person(kit, skin, hair, hstyle, pose, back, num, frame, mood, gender)` → sprite 18×30 (ancre bas-centre) ; kits dans `KITS`
+  (psg, om, juve, milan, france, real, rennes, suit, training… en ajouter au besoin : shirt / band / stripes / shorts / socks / num).
+- Décors : `stadium`, `crowd`, `pitch`, `goal`, `night_city`, `room`, `lockers`, `bench`. Objets : `paper_doc`, `envelope`, `laptop`,
+  `cup`, `card`, `scoreboard`, `heart`, `sparkle`, `dust_cloud`, `ball_spr`, `plabel` / `ptext` (police pixel).
+- Interface HD : `header(im, "LES HISTOIRES ·", "SUJET")`, `caption_top(im, WD, t, y, EMPH)` avec `WD = karaoke.Words(lignes, voix)`
+  (minutage au mot près par faster-whisper) et `EMPH = {karaoke.norm(mot): couleur}`.
+- Modèle complet : `episodes/rabiot_px/rabiot_px.py` (11 scènes, une par phrase, rendu en < 1 min). Réutilise la voix d'un épisode existant
+  (0 crédit) ou une nouvelle voix Léo (ElevenLabs, `eleven_v4`, une prise, une phrase par ligne).
 
-## Refaire une vidéo existante en pixel
-- **Formats déjà branchés (rendu propre, textes nets)** : il suffit de relancer avec `PIXEL=1`, la sortie part dans `output/<slug>_pixel/`.
-  ```bash
-  PIXEL=1 python3 episodes/tactique_vitinha/tactique_vitinha.py     # -> output/tactique_vitinha_pixel/
-  PIXEL=1 python3 episodes/tactique_433/tactique_433.py
-  PIXEL=1 python3 episodes/tactique_lateral/tactique_lateral.py
-  PIXEL=1 python3 episodes/rabiot/rabiot.py                         # storytime (rstyle)
-  ```
-  La voix déjà générée (`voix/voix.mp3` + `.mots.json`) est réutilisée : **0 crédit**.
-- **N'importe quelle autre vidéo déjà rendue** (quiz, devine, PSG avant le Qatar…) : conversion directe du mp4, son copié.
-  ```bash
-  python3 scripts/pixelize_video.py output/devine_psg15/devine_psg15.mp4      # -> ..._pixel.mp4
-  ```
-  Plus rapide mais les petits textes de la vidéo sont pixelisés avec le reste (moins nets) : pour une vidéo importante, brancher son
-  script sur `PIXEL=1` (voir ci-dessous).
-
-## Brancher un nouveau script sur pixel.fc
-- Tactique : `from tactique import *` suffit (le thème est choisi à l'import selon `PIXEL`). Les étiquettes dessinées dans les `extras`
-  passent par `TQ.PLabel(txt, taille, fg, bg)` quand `TQ.PX.ON` (voir `episodes/tactique_vitinha/tactique_vitinha.py`, fonction `lab`).
-- Storytime : `from rstyle import *` ; sortie via `out, SLUG = px_out(out, SLUG)` ; le fil rouge doit tester `PX.ON` et utiliser
-  `PX.plabel` (voir `fil()` dans `episodes/rabiot/rabiot.py`) ; les sous-titres `KA.caption(...)` passent seuls en police pixel.
-- Toujours vérifier une image en taille réelle (pas seulement la planche) : netteté des textes, couleurs dans la palette, rien de baveux.
-
-## Livraison (comme la série papier)
-mp4 avec voix + couverture 3:4 (1080×1440) et 4:3 (1440×1080) (`output/couvertures/make_covers.py`, relancer sur l'image pixel) +
-description 2 lignes + 5 hashtags (dont `#pixelart`) + commentaire à épingler. Commit + push.
+## Refaire une vidéo déjà faite en pixel.fc
+1. Reprendre son `TEXTE_VOIX.txt` et sa voix (`voix/voix.mp3` + `.mots.json`).
+2. Copier `episodes/rabiot_px/rabiot_px.py`, écrire une fonction de scène par phrase avec les éléments de `pixelart`, mots-clés dans `EMPH`.
+3. Planche (`--stills`) → vérifier : sous-titres jamais recouverts, personnages assez grands (×2 en plan principal), image 0 forte.
+4. Rendu, couvertures 3:4 et 4:3 (image pixel + titre), description + commentaire épinglé, commit + push.
+Règles de fond (hook, rythme, boucle, partage, pas de musique) : `.claude/skills/tiktok-foot-viral/SKILL.md`.
