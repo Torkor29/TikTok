@@ -56,8 +56,8 @@ def main(src, out):
               f"[v][1:v]overlay=0:{int(H*0.66)}[o]")
         dst = os.path.join(out, f"getsaas_clip_{n}_hook{i % len(HOOKS) + 1}.mp4")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f, "-i", cap, "-filter_complex", vf,
-                        "-map", "[o]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
-                        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", dst], check=True)
+                        "-map", "[o]", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
+                        "-pix_fmt", "yuv420p", "-an", "-movflags", "+faststart", dst], check=True)
         os.remove(cap); print("ok", dst, flush=True)
 
 if __name__ == "__main__":
