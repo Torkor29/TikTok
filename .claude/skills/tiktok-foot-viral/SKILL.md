@@ -364,3 +364,10 @@ Données réelles :
   => le contenu plaît à ceux qui restent (likes, enregistrements) ; la 1re seconde reste le goulot (image 0 = titre + écusson, rien qui bouge).
 - Pistes : image 0 avec un VISAGE + mouvement dès 0 s (cartes Weah / Ronaldinho / Raí qui défilent derrière le titre) ; garder le style Rennes.
 - Promo : pas de promo « j'aime » / « abonnés » (règle) ; une promo « vues » ne sert qu'à tester une accroche à froid, pas à lancer la vidéo.
+
+### RÉSULTAT « Le 4-3-3 du PSG expliqué » (tableau tactique papier, 27 s, publié 03/11 12h02) — relevé le 03/11 21h
+- 481 vues en 9 h, 64 likes (13,3 %), 6 commentaires, 0 partage, 8 enregistrements, 4 abonnés ; visionnage moyen 12,4 s (46 %), 9 % jusqu'au bout.
+- Même schéma que « PSG avant le Qatar » : ceux qui restent aiment (likes / enregistrements très hauts) mais la diffusion s'arrête
+  après le 1er lot -> en cause : les 1-2 premières secondes, la complétion (9 % sur 27 s, c'est bas) et 0 partage.
+- À tester : hook « opinion / contre-intuitif » (« Le joueur le plus important du PSG n'est pas Dembélé »), 15-20 s max pour la tactique,
+  boucle (la fin renvoie au début -> revisionnages), appel au partage (« envoie ça à ton pote qui joue latéral »), même format 3-5 fois d'affilée.
