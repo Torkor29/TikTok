@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.join(ROOT, "episodes", "rennes")); sys.path.insert(0,
 from rstyle import *
 import rstyle as R
 import karaoke as KA
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))   # (rstyle écrase HERE)
 PC.KITS["om"] = dict(c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(250, 250, 246), socks=(250, 250, 246), trim=(40, 170, 225), kind="band")
 PC.KITS["juve"] = dict(c1=(250, 250, 246), sleeve=(250, 250, 246), shorts=(24, 22, 26), socks=(24, 22, 26), trim=(24, 22, 26), kind="band")
 PC.KITS["milan"] = dict(c1=(206, 24, 36), sleeve=(206, 24, 36), shorts=(250, 250, 246), socks=(24, 22, 26), trim=(24, 22, 26), kind="band")
@@ -151,7 +152,7 @@ CAMS["s7"] = [(L0[7], CX, 960, 1.0), (k(7, "traître"), 420, 1000, 1.04), (k(7, 
 E8 = [El(mono("AOÛT 2025", 60), CX, 380, L0[8] + .05, None, "pop", rot=-3),
       El(tag("À RENNES", 60, BLANC), CX, 540, k(8, "Rennes") - .1, None, "pop", rot=2),
       El(stampl("BAGARRE", ROUGE, 150), CX, 900, k(8, "bagarre") - .05, None, "stamp", rot=-8),
-      El(KW("DANS LE VESTIAIRE", NOIR, BLANC, 90), CX, 1550, k(8, "vestiaire") - .1, None, "stamp", rot=3)]
+      El(KW("DANS LE VESTIAIRE", NOIR, BLANC, 74), CX, 1550, k(8, "vestiaire") - .1, None, "stamp", rot=3)]
 @scene(L0[8], trans="tear", td=.22)
 def s8(L, fr, t):
     paper_fill(L, (46, 42, 50), "s8"); d = ImageDraw.Draw(L)

@@ -12,3 +12,11 @@ Moteurs : `engine/tactique.py` (terrain néon, pastilles, zones, flèches, camé
 Sources Rabiot : débuts 26/08/2012 contre Bordeaux à 17 ans (https://en.wikipedia.org/wiki/Adrien_Rabiot) ; réserviste refusé par mail en 2018
 (https://uk.sports.yahoo.com/news/world-cup-2018-paris-saint-113600713.html) ; six mois sans jouer après son refus de prolonger (https://www.maxifoot.fr/football/article-44711.htm) ;
 bagarre avec Rowe dans le vestiaire après Rennes-OM, 15/08/2025, puis vente au Milan AC (https://www.europe1.fr/sport/olympique-de-marseille-roberto-de-zerbi-justifie-la-mise-a-lecart-de-rabiot-et-rowe-apres-une-violente-altercation-769842).
+
+## Rendus finaux (03/11, voix Léo v4 générée via ElevenLabs, ≈ 1 730 crédits)
+- `output/tactique_433/tactique_433.mp4` (27 s) · `output/tactique_lateral/tactique_lateral.mp4` (29 s) · `output/rabiot/rabiot.mp4` (39 s)
+
+## Descriptions
+1. « Le 4-3-3 du PSG expliqué simplement ⚽🔵🔴 / Tu veux quel système ensuite ? 👇 » #psg #tactique #football #foot #luisenrique — épingle : « 4-3-3 ou 3-5-2 ? 👀 »
+2. « Le latéral moderne expliqué en 30 secondes ⚽ / Meilleur latéral du monde ? Un nom 👇 » #hakimi #tactique #football #foot #psg — épingle : « Hakimi ou Trent ? 👀 »
+3. « Rabiot : formé au PSG… fini à l'OM 😳 / Traître ou incompris ? 👇 » #rabiot #psg #om #football #foot — épingle : « Et sa mère dans tout ça ? 👀 »
