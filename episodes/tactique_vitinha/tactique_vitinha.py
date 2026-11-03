@@ -20,7 +20,7 @@ _D = {}
 def dembele():
     if "d" not in _D: _D["d"] = paper_player(os.path.join(ROOT, "assets", "photos", "psg", "dembele.png"), None, 900, real=True)
     return _D["d"]
-def lab(txt, size, fg, bg, key): return TQ._E.Label(txt, key, font(size), fg, bg, padx=26, pady=8, rough=2.5)
+def lab(txt, size, fg, bg, key): return TQ.PLabel(txt, size, fg, bg) if TQ.PX.ON else TQ._E.Label(txt, key, font(size), fg, bg, padx=26, pady=8, rough=2.5)
 tv = t(1, "C'est"); tend = t(5, "Envoie")
 def hook(L, tt, fr):
     """Image 0 (et image de fin, pour la boucle) : Dembélé en grand + la question ; « PAS » le barre."""
@@ -28,17 +28,18 @@ def hook(L, tt, fr):
     if not show: return
     u = tt if tt < tv else tt - tend
     ov = Image.new("RGBA", (W, H), (236, 226, 204, 255)); TQ.p_pitch(fr)
-    ov.alpha_composite(TQ.p_pitch(fr)); ov.alpha_composite(Image.new("RGBA", (W, H), (20, 36, 82, 120)))
+    ov.alpha_composite(TQ.p_pitch(fr))
+    if not TQ.PX.ON: ov.alpha_composite(Image.new("RGBA", (W, H), (20, 36, 82, 120)))
     sp = dembele(); ax, ay = sp.info["anchor"]; ov.alpha_composite(sp, (int(W/2 - ax), int(1830 - ay)))
     lab("LE JOUEUR LE PLUS", 78, (250, 248, 240), TQ.INK_, "vh1").draw(ov, fr, W/2, 380, 1, -3)
     lab("IMPORTANT DU PSG ?", 96, TQ.INK_, TQ.MUST, "vh2").draw(ov, fr, W/2, 520, 1, 2)
     if tt < tv:
         if tt > t(0, "pas") - .05:                               # gros « NON » tamponné + croix au feutre sur Dembélé
             k = clamp((tt - t(0, "pas") + .05)/.18); s = 1.6 - .6*k
-            lab("PAS DEMBÉLÉ", 120, (250, 248, 240), TQ.RED_, "vh3").draw(ov, fr, W/2, 1180, s, -8)
             d = ImageDraw.Draw(ov); q = clamp((tt - t(0, "Dembélé"))/.25)
             if q > 0:
                 d.line([(250, 900), (250 + 580*q, 900 + 820*q)], fill=TQ.RED_, width=26); d.line([(830, 900), (830 - 580*q, 900 + 820*q)], fill=TQ.RED_, width=26)
+            lab("PAS DEMBÉLÉ", 120, (250, 248, 240), TQ.RED_, "vh3").draw(ov, fr, W/2, 1180, s, -8)
     else:                                                        # fin : appel au partage, puis on retombe sur l'image 0
         lab("ENVOIE ÇA À TON POTE", 74, (250, 248, 240), TQ.RED_, "vh4").draw(ov, fr, W/2, 700, eob(u/.3), -4)
         if tt > t(5, "croit"): lab("QUI CROIT QUE C'EST DEMBÉLÉ", 56, TQ.INK_, TQ.MUST, "vh5").draw(ov, fr, W/2, 830, eob((tt - t(5, "croit"))/.3), 3)

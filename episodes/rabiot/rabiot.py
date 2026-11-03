@@ -202,6 +202,7 @@ CLUB = [(L0[1], "2012", "PSG"), (L0[2], "2018", "PSG"), (L0[5], "2019", "JUVENTU
 def fil(cv, fr, t):
     if t < L0[1]: return
     t0, yr, club = [c for c in CLUB if t >= c[0]][-1]; s = .6 + .4*M.spring(t - t0, .45, 16)
+    if PX.ON: PX.put(cv, PX.plabel(yr, 8, PX.WHITE, PX.BLACK, PX.WHITE, s=5), 150, 262); PX.put(cv, PX.plabel(f"CLUB : {club}", 8, PX.WHITE, PX.RED, PX.WHITE, s=5), 560, 262); return
     mono(yr, 46, NOIR).draw(cv, fr, 150, 262, s, -3); LBL(f"CLUB : {club}", f"rbcl{club}", font("title", 38), BLANC, ROUGE, padx=14, pady=5, rough=2).draw(cv, fr, 520, 262, s, 2)
 def post(cv, fr, t):
     KA.caption(cv, WD, t, 1720, 74)
@@ -223,7 +224,7 @@ for nm in set(n for _, n, _ in SFX):
     if not os.path.lexists(dst): os.symlink(os.path.join(BANK, nm + ".mp3"), dst)
 SFX = fx.sfx_variants(SFX, SFX_DIR, SFX_DIR + "_v")
 if __name__ == "__main__":
-    out = os.path.join(ROOT, "output", SLUG); os.makedirs(out, exist_ok=True)
+    out, SLUG = px_out(os.path.join(ROOT, "output", SLUG), SLUG); os.makedirs(out, exist_ok=True)
     open(os.path.join(HERE, "TEXTE_VOIX.txt"), "w").write("\n".join(TEXTE) + "\n")
     if "--stills" in sys.argv:
         ts = [0.0] + [L0[i] + (L0[i + 1] - L0[i])*f if i + 1 < len(L0) else L0[i] + 1.5*f for i in range(len(L0)) for f in (.35, .85)]

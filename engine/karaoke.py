@@ -78,7 +78,11 @@ _f = {}
 def _font(size):
     if size not in _f: _f[size] = ImageFont.truetype(FONT, size)
     return _f[size]
-def caption(cv, W, t, y, size=92, col=(255, 255, 255), hi=(255, 214, 64), stroke=(10, 10, 16), maxw=980):
+def caption(cv, W, t, y, size=92, *a, **k):
+    import pixel as PX
+    if PX.ON: return caption_px(cv, W, t, y)
+    return caption_std(cv, W, t, y, size, *a, **k)
+def caption_std(cv, W, t, y, size=92, col=(255, 255, 255), hi=(255, 214, 64), stroke=(10, 10, 16), maxw=980):
     """Sous-titre centré : le groupe de mots en cours, le mot dit en jaune qui grossit un peu (pop)."""
     if not hasattr(W, "_ch"): W._ch = W.chunks()
     cur = [c for c in W._ch if c[0] <= t < c[1]]
@@ -92,3 +96,21 @@ def caption(cv, W, t, y, size=92, col=(255, 255, 255), hi=(255, 214, 64), stroke
             s = sc*(1 + .12*math.exp(-(t - tk[3])*14)); fs = _font(max(8, int(size*s)))
             d.text((x + wd*sc/2, y), w, font=fs, fill=hi if now else col, anchor="mm", stroke_width=max(3, int(size*.07)), stroke_fill=stroke)
         x += (wd + gap)*sc
+
+def caption_px(cv, W, t, y, sc=8, font="Silkscreen-Bold.ttf"):
+    """Sous-titre pixel : police Silkscreen 8 px agrandie ×8 (×6 si trop long), mot dit en jaune, petit saut de 1 gros pixel."""
+    import pixel as PX
+    if not hasattr(W, "_ch"): W._ch = W.chunks()
+    cur = [c for c in W._ch if c[0] <= t < c[1]]
+    if not cur: return
+    t0, t1, toks = cur[-1]; words = [tk[1].upper() for tk in toks]
+    for s in (sc, 6, 5, 4):
+        ims = [PX.ptext_img(w, 8, PX.YELLOW if (tk[3] <= t < tk[4] + .05) else PX.WHITE, s=s, font=font) for w, tk in zip(words, toks)]
+        gap = 3*s; tot = sum(i.width for i in ims) + gap*(len(ims) - 1)
+        if tot <= cv.width - 60: break
+    x = cv.width/2 - tot/2
+    for im, tk in zip(ims, toks):
+        if tk[3] <= t:
+            hop = -PX.S if (t - tk[3]) < .08 else 0
+            PX.put(cv, im, x + im.width/2, y + hop)
+        x += im.width + gap

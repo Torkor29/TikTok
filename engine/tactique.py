@@ -284,3 +284,80 @@ def _frame_paper(self, fr):
     return _frame_neon(self, fr)
 Tac.frame = _frame_paper
 use_paper()
+
+# ================================================================== THÈME « PIXEL » (pixel.fc) : PIXEL=1
+# Le terrain (thème papier) est pixelisé en gros pixels + palette 32 couleurs ; l'interface (bandeau, étiquettes, gros numéros,
+# sous-titres) est redessinée nette en police pixel par-dessus.
+import pixel as PX
+def _ptag_col(c):
+    c = tuple(c[:3]); return {YEL: (PX.YELLOW, PX.BLACK), RED: (PX.RED, PX.WHITE), LINE: (PX.WHITE, PX.BLACK), WHITE: (PX.WHITE, PX.BLACK)}.get(c, (PX.near(c), PX.WHITE))
+def _frame_pixel(self, fr):
+    _FR[0] = fr; t = fr/FPS
+    if not getattr(self, "_paper_zones", False):
+        self.zones = [(t0, r, pcol(c), t1, lab) for (t0, r, c, t1, lab) in self.zones]
+        self.rings = [(t0, n, t1, pcol(c), lab) for (t0, n, t1, c, lab) in self.rings]; self._paper_zones = True
+    L = Image.new("RGBA", (W, H), BG + (255,)); self.draw_field(L, t, fr)
+    cx, cy, z = self.cam_at(t)
+    if abs(z - 1) > .005 or abs(cx - W/2) > 1 or abs(cy - H/2) > 1:
+        bw, bh = W/z, H/z; x0 = min(max(cx - bw/2, 0), W - bw); y0 = min(max(cy - bh/2, 0), H - bh)
+        L = L.crop((int(x0), int(y0), int(x0 + bw), int(y0 + bh))).resize((W, H), Image.BICUBIC)
+    for e in self.extras: e(L, t, fr)
+    L = PX.pixelate(L).convert("RGBA")
+    PX.put(L, PX.plabel("TACTIQUE", 8, PX.WHITE, PX.BLACK, PX.WHITE, s=4), 170, 212)
+    PX.put(L, PX.plabel(self.title.split("·")[-1].strip(), 8, PX.WHITE, PX.RED, PX.WHITE, s=4), 470, 212)
+    for (t0, txt, x, y, col, t1, size) in self.tags:
+        if t < t0 or (t1 and t > t1 + .15): continue
+        bg, fg = _ptag_col(col); sc = 5 if size >= 44 else 4
+        im = PX.plabel(txt, 8, fg, bg, PX.WHITE, s=sc)
+        if im.width > W - 40: im = PX.plabel(txt, 8, fg, bg, PX.WHITE, s=3)
+        PX.put(L, im, x, y - (PX.S if t - t0 < .08 else 0))
+    for (t0, txt, t1, col, sub) in self.bigs:
+        if t < t0 or t > t1 + .15: continue
+        d = ImageDraw.Draw(L); d.rectangle([0, 800, W, 1132], fill=PX.NAVY); d.rectangle([0, 800, W, 807], fill=PX.WHITE); d.rectangle([0, 1125, W, 1132], fill=PX.WHITE)
+        c = PX.YELLOW if tuple(col[:3]) in (YEL, MUST) else PX.WHITE
+        for sc in (20, 16, 12, 10, 8, 6):
+            im = PX.ptext_img(txt, 8, c, s=sc)
+            if im.width <= W - 60: break
+        PX.put(L, im, W/2, 930 - (PX.S*2 if t - t0 < .1 else 0))
+        if sub:
+            for sc in (5, 4, 3):
+                im2 = PX.plabel(sub, 8, PX.BLACK, PX.YELLOW, PX.BLACK, s=sc)
+                if im2.width <= W - 40: break
+            PX.put(L, im2, W/2, 1065)
+    KA.caption(L, self.W, t, 1745)
+    PX.scanlines(L)
+    return np.asarray(L.convert("RGB")).tobytes()
+if PX.ON:
+    Tac.frame = _frame_pixel
+    _render0 = Tac.render
+    def _render_px(self, out_dir):
+        self.slug = self.slug + "_pixel"; return _render0(self, out_dir + "_pixel")
+    Tac.render = _render_px
+    _p_tag0 = p_tag
+    def p_tag_big(txt, size=46, col=YEL, fill=None): return _p_tag0(txt, int(size*1.45), col, fill)   # étiquettes du terrain plus grosses (lisibles après pixelisation)
+    tag_img = p_tag_big
+if PX.ON:                                                         # couleurs du thème prises DANS la palette (sinon la quantification les salit)
+    KRAFT, GRASS, GRASS2, CHALK = PX.DNAVY, PX.GREEN, PX.PAL[27], PX.WHITE
+    NAVY_, RED_, MUST, INK_ = PX.NAVY, PX.RED, PX.YELLOW, PX.BLACK
+    _p_pitch0 = p_pitch
+    def p_pitch(fr):
+        im = _p_pitch0(fr); k = ("pxstars", (fr//3) % 3)
+        if k not in _pc:                                           # quelques étoiles pixel sur le fond nuit
+            im = im.copy(); d = ImageDraw.Draw(im); rnd = random.Random(k[1])
+            for _ in range(60):
+                x, y = rnd.randrange(0, W, 4), rnd.randrange(0, H, 4)
+                if not (PX0 - 30 < x < PX1 + 30 and PY0 - 30 < y < PY1 + 30): d.rectangle([x, y, x + 3, y + 3], fill=rnd.choice([PX.WHITE, PX.LIGHT, PX.SKY]))
+            _pc[k] = im
+        return _pc[k]
+    use_paper(); tag_img = p_tag_big
+if PX.ON:
+    def p_tag_px(txt, size=46, col=YEL, fill=None):
+        bg, fg = _ptag_col(col); return PX.plabel(txt, 8, fg, bg, PX.WHITE, s=4 if size < 44 else 5)
+    tag_img = p_tag_px
+    class PLabel:
+        """Remplaçant pixel des étiquettes papier (même méthode draw)."""
+        def __init__(self, txt, size, fg, bg):
+            for sc in range(max(3, min(9, round(size/11))), 2, -1):
+                self.im = PX.plabel(txt, 8, PX.near(fg), PX.near(bg), PX.WHITE, s=sc)
+                if self.im.width <= W - 70: break
+        def draw(self, cv, fr, x, y, s=1.0, rot=0.0, a=1.0): PX.put(cv, self.im, x, y, s, a)

@@ -19,6 +19,10 @@ PC.KITS["real"] = dict(c1=(246, 246, 242), sleeve=(246, 246, 242), shorts=(246, 
 PC.KITS["asse"] = dict(c1=(0, 132, 72), sleeve=(0, 132, 72), shorts=(250, 250, 246), socks=(0, 132, 72), trim=(250, 250, 246), kind="plain")
 
 NAVY = (20, 34, 82); PRED = (206, 36, 44)
+import pixel as PX
+def px_out(out, slug):
+    """Dossier / nom de sortie : suffixe _pixel en mode pixel.fc."""
+    return (out + "_pixel", slug + "_pixel") if PX.ON else (out, slug)
 # ------------------------------------------------------------------ outils (repris de rennes3.py)
 def ease(u): u = clamp(u); return u*u*(3 - 2*u)
 def eob(u, s=1.9): return ease_out_back(clamp(u), s)
@@ -43,6 +47,7 @@ def tag(txt, size=60, bg=BLANC, fg=NOIR): return LBL(txt, f"pqt{txt}{size}{bg}",
 def mono(txt, size=64, bg=NOIR, fg=BLANC): return LBL(txt, f"pqm{txt}{size}{bg}", font("mono", size), fg, bg, padx=18, pady=6, rough=2)
 _tex = {}
 def paper_fill(L, col, key):
+    if PX.ON: L.paste(PX.near(col) + (255,), (0, 0, L.width, L.height)); return      # pixel.fc : aplat de la palette, pas de grain
     k = (key, L.size, col)
     if k not in _tex:
         w_, h_ = L.size; rng = np.random.default_rng(abs(hash(key)) % 999)
@@ -55,6 +60,7 @@ def dark(L, a):
     if a > .01: L.alpha_composite(Image.new("RGBA", L.size, (8, 6, 14, int(255*clamp(a)))))
 def stripes_bg(L, a=NAVY, b=PRED, w_=140, key="ps", t=0):
     paper_fill(L, a, key); d = ImageDraw.Draw(L); off = (t*40) % (2*w_)
+    if PX.ON: a, b = PX.near(a), PX.near(b); off = int(off//(4*PX.S))*4*PX.S                       # défilement par pas de pixel
     for x in range(-H - 2*w_, L.width + 2*w_, 3*w_): d.polygon([(x + off, 0), (x + w_ + off, 0), (x + w_ + H*.35 + off, L.height), (x + H*.35 + off, L.height)], fill=b)
 def apply_cam(L, cx, cy, z, rot=0.0):
     z = max(z, max(W/L.width, H/L.height)); bw, bh = W/z, H/z
@@ -165,6 +171,9 @@ def frame(fr, t):
             off = int(W*e); out = Image.new("RGB", (W, H)); out.paste(prev, (-off, 0)); out.paste(cur, (W - off, 0))
             fx.whip_blur(out, -110*math.sin(math.pi*u), 0, 7); cur = out
         elif tr == "tear": tear_transition(cur, prev, u, "tear_v", k)
+    if PX.ON:                                                    # pixel.fc : pixelisation de la scène + fil rouge, puis sous-titres nets en police pixel
+        cur = PX.pixelate(cur).convert("RGBA"); (FIL[0] or (lambda *a: None))(cur, fr, t)
+        (POST[0] or (lambda *a: None))(cur, fr, t); PX.scanlines(cur); return cur.convert("RGB")
     fx.dust(cur, t, 22)
     cur = cur.convert("RGBA"); fx.vignette(cur, 90); (FIL[0] or (lambda *a: None))(cur, fr, t); (POST[0] or (lambda *a: None))(cur, fr, t)
     return cur.convert("RGB")
