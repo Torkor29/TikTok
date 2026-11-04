@@ -126,6 +126,11 @@ Donc :
 - Effets « édit » (étalonnage, RGB split, flash, zoom-punch sur les temps) : rejetés par l'utilisateur. Préférer la DA papier douce
   (micro-animations, cartes qui tombent / respirent, feutre, tampons, déchirures) : modèle `episodes/devine_psg15/devine_psg15.py`.
 
+## ❌ DA REJETÉES (04/11/2026) : NE PLUS LES PROPOSER
+- Pixel-art (filtre pixel ET pixel-art dessiné, « pixel.fc ») et aquarelle : testés, jugés « horribles » par l'utilisateur.
+  Le code reste dans le dépôt (engine/pixel.py, engine/pixelart.py, engine/aquarelle.py) mais ne pas s'en servir sans demande explicite.
+- DA validées : papier douce (devine_psg15, tactique papier) et style Rennes (rennes3, psg_v2, rabiot).
+
 ## 🎨 STYLE : TOUT EN MOTION DESIGN (préférence utilisateur, 13/10/2026)
 - La base de chaque vidéo = motion design en code (papier découpé / gouache / stop-motion) : animations, effets, transitions,
   compteurs, chutes physiques, secousses, glitchs… faits par le moteur, pas par des clips vidéo IA.

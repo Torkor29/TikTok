@@ -107,8 +107,3 @@ python3 episodes/quiz_psg3/quiz_psg3.py output/quiz_psg3  # quiz 4 (PSG niveau 3
 python3 episodes/psg/psg.py output/psg                    # épisode 8 (format court, CTA like)
 ```
 
-## pixel.fc (DA pixel-art, même formats)
-Skill : [`.claude/skills/pixel-fc/SKILL.md`](.claude/skills/pixel-fc/SKILL.md) (paquet `dist/pixel-fc.skill`, `bash scripts/build_pixel_skill.sh`).
-Moteur `engine/pixel.py` ; `PIXEL=1 python3 episodes/<x>/<x>.py` refait une vidéo branchée en pixel (sortie `output/<slug>_pixel/`),
-`python3 scripts/pixelize_video.py <video.mp4>` convertit n'importe quelle vidéo déjà rendue.
-Premiers rendus : `output/tactique_vitinha_pixel/`, `output/rabiot_pixel/`, `output/devine_psg15/devine_psg15_pixel.mp4`.
