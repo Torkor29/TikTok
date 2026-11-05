@@ -27,7 +27,7 @@ def game(t):
     if t <= MARK[0][0]: return 0.0
     for (ta, ga), (tb, gb) in zip(MARK, MARK[1:]):
         if t < tb:
-            hold = .9 if ga >= 1 else 0                              # la cagnotte marque une pause sur chaque palier (le temps de le dire)
+            hold = 1.4 if ga >= 1 else 0                              # la cagnotte marque une pause sur chaque palier (le temps de le dire)
             u = max(0.0, (t - ta - hold)/(tb - ta - hold)); u = u*u*(3 - 2*u)
             return ga + (gb - ga)*u if ga < 1 else math.exp(math.log(ga) + (math.log(gb) - math.log(ga))*u)
     return MARK[-1][1]
