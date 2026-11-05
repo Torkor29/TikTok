@@ -136,33 +136,34 @@ def frame(fr):
     if not end:
         E.blit(cv, cut("bdo/mbappe", 820), W/2, 1930 + 10*math.sin(t*2), 1.0 + .01*math.sin(t*3))
         if sleep:                                                 # nuit : lune + « Zzz » au-dessus de lui
-            dd = ImageDraw.Draw(cv); dd.ellipse([70, 980, 230, 1140], fill=(250, 240, 200)); dd.ellipse([110, 960, 270, 1120], fill=(10, 16, 44))
-            for k in range(3): dd.text((660 + k*50, 1180 - k*60 - 20*math.sin(t*3 + k)), "Z", font=font(70 - k*12), fill=CREAM)
+            dd = ImageDraw.Draw(cv); dd.ellipse([70, 1260, 230, 1420], fill=(250, 240, 200)); dd.ellipse([110, 1240, 270, 1400], fill=(10, 16, 44))
+            for k in range(3): dd.text((740 + k*50, 1250 - k*60 - 20*math.sin(t*3 + k)), "Z", font=font(70 - k*12), fill=CREAM)
     else:
         u = min(1, (t - L0[7] + .05)/.3); E.blit(cv, cut("real/ronaldo", 860), W/2, 1930 + 600*(1 - u), 1.0)
-        LB("× 3", 220, INK, GOLD).draw(cv, fr, W/2 + 250, 1150, E.ease_out_back(u, 2.2), -6)
+        LB("× 3", 170, INK, GOLD).draw(cv, fr, 925, 1150, E.ease_out_back(u, 2.2), -6)
     if t < L0[1]:                                                 # image 0
-        LB("LE VRAI SALAIRE DE", 70, CREAM, INK).draw(cv, fr, W/2, 360, 1, -2); LB("MBAPPÉ", 180, INK, GOLD).draw(cv, fr, W/2, 540, 1, 2)
-        LB("SECONDE PAR SECONDE", 64, CREAM, RED).draw(cv, fr, W/2, 720, 1, -2); odometer(cv, 0, W/2, 900, 220)
+        LB("LE VRAI SALAIRE DE", 70, CREAM, INK).draw(cv, fr, W/2, 330, 1, -2); LB("MBAPPÉ", 180, INK, GOLD).draw(cv, fr, W/2, 500, 1, 2)
+        LB("SECONDE PAR SECONDE", 64, CREAM, RED).draw(cv, fr, W/2, 660, 1, -2); odometer(cv, 0, W/2, 830, 200)
     elif not end:
+        for (tm, lab, bgc, fgc) in MILESTONE:                     # paillettes d'abord : jamais par-dessus les chiffres
+            if tm - .05 <= t < tm + 1.6: E.particles(cv, fr, int(tm*10), (W//2, 640), min(1, (t - tm)/1.0), 26, 520, [GOLD, (255, 236, 140), CREAM], 22, 600)
         clock_face(cv, fr, g, t); LB(clock(g), 56, CREAM, INK, "mono").draw(cv, fr, W/2, 470, 1, -2)
-        odometer(cv, money, W/2, 640, 220, slam)
+        odometer(cv, money, W/2, 640, 196, slam)
         for (tm, lab, bgc, fgc) in MILESTONE:
-            if tm - .05 <= t < tm + 1.6:
-                LB(lab, 84, fgc, bgc).draw(cv, fr, W/2, 820, E.ease_out_back(min(1, (t - tm + .05)/.3), 2.2), -3)
-                E.particles(cv, fr, int(tm*10), (W//2, 640), min(1, (t - tm)/1.0), 26, 520, [GOLD, (255, 236, 140), CREAM], 22, 600)
+            if tm - .05 <= t < tm + 1.6: LB(lab, 80, fgc, bgc).draw(cv, fr, W/2, 862, E.ease_out_back(min(1, (t - tm + .05)/.3), 2.2), -3)
         tsm = MILESTONE[1][0]
-        if tsm - .1 <= t < tsm + 1.8: payslip(cv, fr, 190, 1050, E.ease_out_back(min(1, (t - tsm + .1)/.35), 2))
+        if tsm - .1 <= t < tsm + 1.8: payslip(cv, fr, 150, 1225, E.ease_out_back(min(1, (t - tsm + .1)/.35), 2))
         tj = MILESTONE[4][0]
         if t >= tj - .1:                                          # page de calendrier qui tombe
-            u = min(1, (t - tj + .1)/.35); dd = ImageDraw.Draw(cv); x0, y0 = 800, 940 - int(300*(1 - E.ease_out_back(u, 1.6)))
+            u = min(1, (t - tj + .1)/.35); dd = ImageDraw.Draw(cv); x0, y0 = 810, 1250 - int(300*(1 - E.ease_out_back(u, 1.6)))
             dd.rectangle([x0, y0, x0 + 200, y0 + 220], fill=CREAM, outline=INK, width=5); dd.rectangle([x0, y0, x0 + 200, y0 + 60], fill=RED)
             dd.text((x0 + 100, y0 + 30), "1 JOUR", font=font(38), fill=CREAM, anchor="mm"); dd.text((x0 + 100, y0 + 140), "24 H", font=font(80), fill=INK, anchor="mm")
     else:
         if t > L0[8]: LB("ET TOI ?", 120, INK, GOLD).draw(cv, fr, W/2, 560, E.ease_out_back(min(1, (t - L0[8])/.3), 2), -3); LB("DIS-LE EN COMMENTAIRE", 64, CREAM, RED).draw(cv, fr, W/2, 720, min(1, max(0, (t - L0[8] - .6)/.3)), 2)
         else: LB("RONALDO", 150, CREAM, RED).draw(cv, fr, W/2, 560, 1, -2)
-    d = ImageDraw.Draw(cv); d.text((W - 40, 205), "Source : Forbes 2025 (salaire + primes + sponsors)", font=font(26, "BebasNeue-Regular.ttf"), fill=(150, 156, 180), anchor="rm")
-    KA.caption(cv, WD, t, 1500, 78)
+    d = ImageDraw.Draw(cv); f26 = font(26, "BebasNeue-Regular.ttf")                    # source : 2 petites lignes en haut à droite, loin de l'horloge
+    d.text((W - 36, 176), "Source : Forbes 2025", font=f26, fill=(150, 156, 180), anchor="rm"); d.text((W - 36, 204), "salaire + primes + sponsors", font=f26, fill=(150, 156, 180), anchor="rm")
+    KA.caption(cv, WD, t, 930 if end else 1030, 78)                                 # sous-titres entre l'étiquette et la tête du joueur
     return np.asarray(cv.convert("RGB")).tobytes()
 SR = 48000
 def synth():
