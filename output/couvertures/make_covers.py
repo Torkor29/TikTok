@@ -20,6 +20,7 @@ COV = [("tactique_433", [("LE 4-3-3", 150, MUST, INK), ("DU PSG", 130, WHITE, NA
        ("tactique_lateral", [("LE LATÉRAL", 140, MUST, INK), ("MODERNE", 130, WHITE, NAVY), ("EN 4 POINTS", 70, WHITE, RED)]),
        ("tactique_vitinha", [("LE PLUS IMPORTANT", 96, MUST, INK), ("DU PSG ?", 130, WHITE, NAVY), ("PAS DEMBÉLÉ", 80, WHITE, RED)]),
        ("quiz_psg_vrai", [("QUIZ PSG", 150, MUST, INK), ("5/5 OU FOOTIX ?", 96, WHITE, RED)]),
+       ("salaire_mbappe", [("LE VRAI SALAIRE", 110, WHITE, INK), ("DE MBAPPÉ", 140, INK, MUST), ("SECONDE PAR SECONDE", 64, WHITE, RED)]),
        ("rabiot", [("RABIOT", 170, WHITE, RED), ("FORMÉ AU PSG…", 80, WHITE, NAVY), ("FINI À L'OM", 80, INK, (130, 200, 235)), ("TRAÎTRE OU INCOMPRIS ?", 58, INK, MUST)])]
 ONLY = sys.argv[1:]
 for slug, lines in COV:
