@@ -10,7 +10,7 @@ N = 30000
 CX, CY = 540, 1060
 INKBG = np.array([7, 9, 22], np.float32)
 COL = {"cream": (243, 236, 220), "gold": (232, 182, 90), "blue": (63, 143, 255), "pink": (255, 70, 190), "green": (70, 170, 110),
-       "red": (235, 70, 70), "yellow": (250, 215, 60), "dim": (120, 130, 160)}
+       "red": (235, 70, 70), "yellow": (250, 215, 60), "dim": (120, 130, 160), "violet": (150, 90, 255), "teal": (40, 220, 200), "orange": (255, 130, 50)}
 CNAMES = list(COL); CARR = np.array([COL[c] for c in CNAMES], np.float32)/255.0
 def ci(name): return CNAMES.index(name)
 RNG = np.random.default_rng(7); R1, R2, R3, R4 = (RNG.random(N) for _ in range(4))
@@ -143,7 +143,7 @@ def render(shots, t, beat=0.0):
         splat(buf, x, y, col, al*.62*(.55 + .9*R3)*(1 + .2*beat))
         wv = warp(tt, starts); zz = (SZ0 - wv*SV) % 1.0 + .03; rr = 60/zz            # étoiles qui foncent vers nous
         sx, sy = CX + np.cos(SA)*rr, CY + np.sin(SA)*rr*1.1; si = np.clip((1 - zz)**2, 0, 1)*.5
-        splat(buf, sx, sy, np.ones((420, 3), np.float32)*.85, si)
+        splat(buf, sx, sy, CARR[np.array([0, 1, 2, 7, 9] * 84)], si)
     img = buf.reshape(3, H, W).transpose(1, 2, 0)
     img = cv2.GaussianBlur(img, (0, 0), .6)*2.2
     small = cv2.resize(img, (W//4, H//4), interpolation=cv2.INTER_AREA); small = cv2.GaussianBlur(small, (0, 0), 5)
@@ -151,7 +151,12 @@ def render(shots, t, beat=0.0):
     img = 1 - np.exp(-img*1.6)
     if _vig is None:
         yy, xx = np.mgrid[0:H, 0:W]; d = ((xx - W/2)/(W*.7))**2 + ((yy - H/2)/(H*.62))**2; _vig = np.clip(1 - .55*d, .25, 1).astype(np.float32)[..., None]
-        gy = np.linspace(0, 1, H, dtype=np.float32)[:, None, None]; _vig = (_vig, (INKBG/255.0)*(1.1 - .5*gy))
+        def lf(seed, sc):
+            g = np.random.default_rng(seed).random((H//sc + 2, W//sc + 2)).astype(np.float32); return cv2.GaussianBlur(cv2.resize(g, (W, H), interpolation=cv2.INTER_CUBIC), (0, 0), 140)
+        n1, n2, n3 = lf(1, 420), lf(2, 520), lf(3, 360); gy = np.linspace(0, 1, H, dtype=np.float32)[:, None]
+        neb = (np.array([.06, .05, .22])*np.clip(n1*2.2 - .6, 0, 1)[..., None] + np.array([.22, .05, .30])*np.clip(n2*2.4 - 1.0, 0, 1)[..., None]
+               + np.array([.02, .16, .20])*np.clip(n3*2.4 - 1.1, 0, 1)[..., None])
+        _vig = (_vig, (INKBG/255.0)*(1.1 - .4*gy[..., None]) + neb.astype(np.float32))
     vg, bgc = _vig
     out = (bgc + img*(1 - bgc))*vg
     g = cv2.resize(_grain[int(t*FPS) % 4], (W, H), interpolation=cv2.INTER_NEAREST)[..., None]*.035
