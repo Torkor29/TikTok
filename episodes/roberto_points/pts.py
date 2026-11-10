@@ -157,6 +157,10 @@ def render(shots, t, beat=0.0):
         neb = np.array([.03, .06, .16])*np.clip(n1*2.0 - .5, 0, 1)[..., None] + np.array([.02, .04, .10])*np.clip(n2*2.2 - .9, 0, 1)[..., None]
         _vig = (_vig, (INKBG/255.0)*(1.1 - .4*gy[..., None]) + neb.astype(np.float32))
     vg, bgc = _vig
+    if not hasattr(render, "gz"):
+        g = np.asarray(Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "assets", "statues", "gazon_nuit.png")).convert("RGB").resize((W, H), Image.LANCZOS), np.float32)/255.0
+        render.gz = (g*.55)**1.1
+    bgc = render.gz
     out = (bgc + img*(1 - bgc))*vg
     g = cv2.resize(_grain[int(t*FPS) % 4], (W, H), interpolation=cv2.INTER_NEAREST)[..., None]*.035
     out = np.clip(out + g*.6, 0, 1)
