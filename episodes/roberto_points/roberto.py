@@ -60,8 +60,8 @@ def ball_sphere(cx, cy, R, spin=.8, horns=False):
 ST = os.path.join(ROOT, "assets", "statues")
 def statue(name, cx, cy, h, horns=False):
     def gen(k, lt):
-        x, y, lum = P.img_pts(os.path.join(ST, name + ".png"), k, cx, cy, h); x = x + (lum - .45)*h*.045*math.sin(lt*.8 + 1)
-        col = np.where(lum > .72, G, np.where(lum > .3, CR, BL)); return x, y, col, .4 + .9*lum
+        x, y, lum, rgb = P.img_pts(os.path.join(ST, name + ".png"), k, cx, cy, h, gamma=1.3); x = x + (lum - .45)*h*.03*math.sin(lt*.8 + 1)
+        return x, y, rgb, .35 + .85*np.sqrt(lum)
     parts = [(1.0, gen)]
     if horns: parts.append(ball_sphere(cx, cy - h*.258, h*.23, horns=True)[1])
     return parts
@@ -123,7 +123,7 @@ def pitch3d(kick_pose, kick_x, kick_z, flight=None):
         for j, ((po, X, Z), h) in enumerate(zip(figs, hs)):
             kk = int(k*h*h/wsum) if j < len(figs) - 1 else k - used; used += kk
             sx, sy, d = proj(X, 0, Z); x, y = P.figure(po, kk, float(sx), float(sy), float(h), seed=30 + j); xs.append(x); ys.append(y)
-        cs = np.concatenate([np.full(len(a), BL if j < 4 else (CR if j == 4 else G)) for j, a in enumerate(xs)]); return np.concatenate(xs), np.concatenate(ys), cs, .95
+        cs = np.concatenate([np.full(len(a), BL if j < 4 else (CR if j == 4 else YE)) for j, a in enumerate(xs)]); return np.concatenate(xs), np.concatenate(ys), cs, .95
     def ballp(k, lt):
         s = flight(lt) if flight else 0.0
         if s is None: s = 0.0
@@ -148,7 +148,7 @@ def toppitch(s_fn, boy_pose="stand", dashed=False, extra=None, show_kicker=True)
     def people(k, lt):
         kk = k//7; xs, ys, cs = [], [], []
         figs = [("wall", X, 25.85, BL) for X in (1.0, 1.65, 2.3, 2.95)] + [("keeper", -.4, .8, CR), (boy_pose if isinstance(boy_pose, str) else boy_pose(lt), 12.5, -2.0, RD)]
-        if show_kicker: figs.append(("kick", 3.2, 36.2, G))
+        if show_kicker: figs.append(("kick", 3.2, 36.2, YE))
         for j, (po, X, Z, c) in enumerate(figs):
             sx, sy = top_xy(X, Z); x, y = P.figure(po, kk, float(sx), float(sy) + 24, 96, seed=70 + j); xs.append(x); ys.append(y); cs.append(np.full(kk, c))
         x, y, c = np.concatenate(xs), np.concatenate(ys), np.concatenate(cs); m = k - len(x)
@@ -277,8 +277,8 @@ def run_kicker():
 def build():
     S = []
     def add(t0, parts, **kw): S.append(Shot(t0, parts, **kw))
-    add(0.0, statue("rc_buste", 540, 1180, 1250, horns=True), glitch=.6)
-    add(tw(0, "roberto"), statue("rc_frappe", 540, 1130, 1350))
+    add(0.0, statue("rc_buste_c", 540, 1180, 1250, horns=True), glitch=.6)
+    add(tw(0, "roberto"), statue("rc_frappe_c", 540, 1130, 1350))
     add(tw(1, "trente"), [(1.0, lambda k, lt: (*P.text_pts("35", 560, k, 500, 1020, seed=9), G, 1.0)), (.25, lambda k, lt: (*P.text_pts("m", 300, k, 870, 1130, fnt=P.SERIF, seed=10), CR, 1.0))])
     add(tw(1, "plus"), counter(0) if False else [(1.0, lambda k, lt: counter(lt)[0][1](k, lt)), (.35, lambda k, lt: counter(lt)[1][1](k, lt))])
     add(tw(2, "mais"), [(1.0, galaxy)], glitch=.8)
@@ -290,7 +290,7 @@ def build():
     add(t5, toppitch(s5, dashed=True))
     tb = tw(5, "baisse") - t5
     S[-1].parts = toppitch(s5, boy_pose=lambda lt: P.lerp_pose("stand", "duck", min(1, max(0, (lt - tb)/.3))), dashed=True)
-    add(tw(6, "barthez"), [(1.0, lambda k, lt: statue("gardien", 540, 1240, 1120)[0][1](k, lt)),
+    add(tw(6, "barthez"), [(1.0, lambda k, lt: statue("gardien_c", 540, 1240, 1120)[0][1](k, lt)),
                            (.2, lambda k, lt: (*P.text_pts("BARTHEZ", 130, k, 540, 560, seed=12), BL, 1.0))])
     t7 = tw(7, "et"); tp = tw(7, "poteau")
     add(t7, toppitch(lambda lt: min(1.0, .55 + .45*P.ease(min(1, lt/max(.4, tp - t7)))), boy_pose="duck"))
@@ -306,7 +306,7 @@ def build():
     add(tw(12, "vent"), wind())
     add(tw(13, "génie"), words2("GÉNIE", G))
     add(tw(13, "chance"), words2("GÉNIE", DM, "OU CHANCE ?", BL), cont=True)
-    add(tw(13, "dis"), statue("rc_buste", 540, 1180, 1250, horns=True), glitch=.5)
+    add(tw(13, "dis"), statue("rc_buste_c", 540, 1180, 1250, horns=True), glitch=.5)
     for a, b in zip(S, S[1:]): a.t1 = b.t0
     S[-1].t1 = TOTAL
     return S

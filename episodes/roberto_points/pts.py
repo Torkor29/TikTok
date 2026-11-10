@@ -99,7 +99,7 @@ class Shot:
             if k <= 0: continue
             x, y, c, a = gen(int(k), lt)
             X.append(np.asarray(x, np.float32)[:k]); Y.append(np.asarray(y, np.float32)[:k])
-            C.append(np.broadcast_to(np.asarray(c, np.int32), (k,))); A.append(np.broadcast_to(np.asarray(a, np.float32), (k,)))
+            c = np.asarray(c); C.append(c[:k].astype(np.float32) if c.ndim == 2 else CARR[np.broadcast_to(c.astype(np.int32), (k,))]); A.append(np.broadcast_to(np.asarray(a, np.float32), (k,)))
         return np.concatenate(X), np.concatenate(Y), np.concatenate(C), np.concatenate(A)
 def ease(u): return u*u*(3 - 2*u)
 def state(shots, t):
@@ -113,9 +113,9 @@ def state(shots, t):
         dx, dy = x - px, y - py; L = np.hypot(dx, dy) + 1e-3
         sw = np.sin(math.pi*e)*(R2 - .5)*.35*np.minimum(L, 900)
         x2 = px + dx*e - dy/L*sw; y2 = py + dy*e + dx/L*sw
-        col = CARR[pc]*(1 - e)[:, None] + CARR[c]*e[:, None]; al = pa*(1 - e) + a*e
+        col = pc*(1 - e)[:, None] + c*e[:, None]; al = pa*(1 - e) + a*e
         return x2, y2, col, al, s, lt, dur, i
-    return x, y, CARR[c], a, s, lt, dur, i
+    return x, y, c, a, s, lt, dur, i
 def camera(x, y, s, lt, dur, t):
     if s.cont or not s.zoom: cam = 1.05
     else: cam = (1 + .11*math.exp(-4.2*lt))*(1 + .07*lt/max(.3, dur))
@@ -179,6 +179,8 @@ def img_pts(path, k, cx, cy, h, gamma=2.0, seed=4):
         fade = np.clip((a.shape[0] - np.arange(a.shape[0]))/(a.shape[0]*.08), 0, 1)[:, None]; a = a*fade
         p = a.ravel()/a.sum(); g = np.random.default_rng(seed); idx = g.choice(len(p), k, p=p)
         yy, xx = np.divmod(idx, a.shape[1]); j = g.random((2, k)) - .5
-        _ic[key] = ((xx + j[0])/a.shape[0], (yy + j[1])/a.shape[0], a.ravel()[idx], a.shape[1]/a.shape[0])
-    nx, ny, lum, asp = _ic[key]
-    return cx + (nx - asp/2)*h, cy + (ny - .5)*h, lum
+        rgb = np.asarray(Image.open(path).convert("RGB"), np.float32)/255.0; rgb = rgb[ys.min():ys.max() + 1, xs.min():xs.max() + 1].reshape(-1, 3)[idx]
+        mx = rgb.max(1, keepdims=True); rgb = np.clip(rgb/np.maximum(mx, .35)*1.0, 0, 1)
+        _ic[key] = ((xx + j[0])/a.shape[0], (yy + j[1])/a.shape[0], a.ravel()[idx], a.shape[1]/a.shape[0], rgb)
+    nx, ny, lum, asp, rgb = _ic[key]
+    return cx + (nx - asp/2)*h, cy + (ny - .5)*h, lum, rgb
