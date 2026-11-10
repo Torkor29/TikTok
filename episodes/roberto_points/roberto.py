@@ -61,13 +61,13 @@ ST = os.path.join(ROOT, "assets", "statues")
 def statue(name, cx, cy, h, horns=False):
     def gen(k, lt):
         x, y, lum = P.img_pts(os.path.join(ST, name + ".png"), k, cx, cy, h); x = x + (lum - .45)*h*.045*math.sin(lt*.8 + 1)
-        col = np.where(lum > .72, G, np.where(lum > .42, CR, np.where(P.R4[:k] > .5, BL, VI))); return x, y, col, .4 + .9*lum
+        col = np.where(lum > .72, G, np.where(lum > .3, CR, BL)); return x, y, col, .4 + .9*lum
     parts = [(1.0, gen)]
     if horns: parts.append(ball_sphere(cx, cy - h*.258, h*.23, horns=True)[1])
     return parts
 def galaxy(k, lt):
     g = np.random.default_rng(9); u = g.random(k); arm = g.integers(0, 3, k); r = 520*np.sqrt(u)
-    a = arm*2*math.pi/3 + r*.012 + lt*.9 + g.normal(0, .25, k); return 540 + r*np.cos(a), 1060 + r*np.sin(a)*.8, np.where(u < .15, G, np.where(arm == 0, VI, np.where(arm == 1, BL, PK))), .45 + .6*(1 - u)
+    a = arm*2*math.pi/3 + r*.012 + lt*.9 + g.normal(0, .25, k); return 540 + r*np.cos(a), 1060 + r*np.sin(a)*.8, np.where(u < .15, G, np.where(arm == 1, BL, CR)), .45 + .6*(1 - u)
 def counter(lt):
     v = int(round(130*P.ease(min(1.0, max(0.0, (lt - .1)/1.1)))))
     def gen(k, _lt): x, y = P.text_pts(f"{v}", 330, k, 540, 980, seed=3); return x, y, G, 1.0
@@ -78,7 +78,7 @@ def stadium(title, colors):
     def stands(k, lt):
         g = np.random.default_rng(12); row = g.integers(0, 14, k); a = g.random(k)*2*math.pi
         rx = 330 + row*16; ry = 150 + row*11; x = 540 + rx*np.cos(a); y = 1250 + ry*np.sin(a) - row*9
-        tw_ = .45 + .55*np.abs(np.sin(lt*4 + g.random(k)*40)); return x, y, np.where(g.random(k) < .2, G, np.where(g.random(k) < .5, BL, YE)), tw_*(.5 + .5*(np.sin(a) > -2))
+        tw_ = .45 + .55*np.abs(np.sin(lt*4 + g.random(k)*40)); return x, y, np.where(g.random(k) < .2, G, CR), tw_*(.5 + .5*(np.sin(a) > -2))
     def grass(k, lt):
         x, y = P.disc(0, 0, 1, k, 13); return 540 + x*300, 1250 + y*130, GR, .55
     def lights(k, lt):
@@ -123,7 +123,7 @@ def pitch3d(kick_pose, kick_x, kick_z, flight=None):
         for j, ((po, X, Z), h) in enumerate(zip(figs, hs)):
             kk = int(k*h*h/wsum) if j < len(figs) - 1 else k - used; used += kk
             sx, sy, d = proj(X, 0, Z); x, y = P.figure(po, kk, float(sx), float(sy), float(h), seed=30 + j); xs.append(x); ys.append(y)
-        cs = np.concatenate([np.full(len(a), BL if j < 4 else (TE if j == 4 else YE)) for j, a in enumerate(xs)]); return np.concatenate(xs), np.concatenate(ys), cs, .95
+        cs = np.concatenate([np.full(len(a), BL if j < 4 else (CR if j == 4 else G)) for j, a in enumerate(xs)]); return np.concatenate(xs), np.concatenate(ys), cs, .95
     def ballp(k, lt):
         s = flight(lt) if flight else 0.0
         if s is None: s = 0.0
@@ -147,8 +147,8 @@ def toppitch(s_fn, boy_pose="stand", dashed=False, extra=None, show_kicker=True)
         m = k - len(x); return np.pad(x, (0, m), mode="edge"), np.pad(y, (0, m), mode="edge"), CR, .8
     def people(k, lt):
         kk = k//7; xs, ys, cs = [], [], []
-        figs = [("wall", X, 25.85, BL) for X in (1.0, 1.65, 2.3, 2.95)] + [("keeper", -.4, .8, TE), (boy_pose if isinstance(boy_pose, str) else boy_pose(lt), 12.5, -2.0, RD)]
-        if show_kicker: figs.append(("kick", 3.2, 36.2, YE))
+        figs = [("wall", X, 25.85, BL) for X in (1.0, 1.65, 2.3, 2.95)] + [("keeper", -.4, .8, CR), (boy_pose if isinstance(boy_pose, str) else boy_pose(lt), 12.5, -2.0, RD)]
+        if show_kicker: figs.append(("kick", 3.2, 36.2, G))
         for j, (po, X, Z, c) in enumerate(figs):
             sx, sy = top_xy(X, Z); x, y = P.figure(po, kk, float(sx), float(sy) + 24, 96, seed=70 + j); xs.append(x); ys.append(y); cs.append(np.full(kk, c))
         x, y, c = np.concatenate(xs), np.concatenate(ys), np.concatenate(cs); m = k - len(x)
@@ -207,7 +207,7 @@ def spiral(prog=None, shell=False):
         x, y = 540 + r*np.cos(th + math.pi), 1080 + r*np.sin(th + math.pi)*.95
         if shell:
             g = np.random.default_rng(101); wdt = r*.42*g.random(k); x = x - np.cos(th + math.pi)*wdt; y = y - np.sin(th + math.pi)*wdt*.95
-            return x, y, np.where(g.random(k) < .3, G, np.where(th < 3, OR, PK)), .4 + .5*(wdt/(r*.42 + 1e-3))
+            return x, y, np.where(g.random(k) < .3, G, CR), .4 + .5*(wdt/(r*.42 + 1e-3))
         return x, y, G, .9
     parts = [(1.0, curve)]
     if prog:
@@ -249,7 +249,7 @@ def wind():
     def flow(k, lt):
         g = np.random.default_rng(131); ln = g.integers(0, 34, k); y0 = 620 + ln*30.0; ph = g.random(k)
         x = ((ph*.35 + lt*.45 + ln*.137) % 1.0)*1500 - 210; y = y0 + 45*np.sin(x*.006 + ln*.7)
-        seg_ = (ph < .35); return x, y, np.where(ln % 3 == 0, TE, np.where(ln % 3 == 1, BL, CR)), np.where(seg_, .9*np.sin(ph/.35*math.pi), 0.0)
+        seg_ = (ph < .35); return x, y, np.where(ln % 4 == 0, BL, CR), np.where(seg_, .9*np.sin(ph/.35*math.pi), 0.0)
     def ballw(k, lt):
         bx = 300 + 420*min(1, lt/2.0); by = 1100 - 160*math.sin(min(1, lt/2.0)*math.pi); x, y = P.disc(bx, by, 40, k, 132); return x, y, G, 1.0
     return [(1.0, flow), (.06, ballw)]

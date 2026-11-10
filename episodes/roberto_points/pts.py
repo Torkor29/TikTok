@@ -143,7 +143,7 @@ def render(shots, t, beat=0.0):
         splat(buf, x, y, col, al*.62*(.55 + .9*R3)*(1 + .2*beat))
         wv = warp(tt, starts); zz = (SZ0 - wv*SV) % 1.0 + .03; rr = 60/zz            # étoiles qui foncent vers nous
         sx, sy = CX + np.cos(SA)*rr, CY + np.sin(SA)*rr*1.1; si = np.clip((1 - zz)**2, 0, 1)*.5
-        splat(buf, sx, sy, CARR[np.array([0, 1, 2, 7, 9] * 84)], si)
+        splat(buf, sx, sy, CARR[np.array([0, 0, 1, 2, 0] * 84)], si)
     img = buf.reshape(3, H, W).transpose(1, 2, 0)
     img = cv2.GaussianBlur(img, (0, 0), .6)*2.2
     small = cv2.resize(img, (W//4, H//4), interpolation=cv2.INTER_AREA); small = cv2.GaussianBlur(small, (0, 0), 5)
@@ -154,8 +154,7 @@ def render(shots, t, beat=0.0):
         def lf(seed, sc):
             g = np.random.default_rng(seed).random((H//sc + 2, W//sc + 2)).astype(np.float32); return cv2.GaussianBlur(cv2.resize(g, (W, H), interpolation=cv2.INTER_CUBIC), (0, 0), 140)
         n1, n2, n3 = lf(1, 420), lf(2, 520), lf(3, 360); gy = np.linspace(0, 1, H, dtype=np.float32)[:, None]
-        neb = (np.array([.06, .05, .22])*np.clip(n1*2.2 - .6, 0, 1)[..., None] + np.array([.22, .05, .30])*np.clip(n2*2.4 - 1.0, 0, 1)[..., None]
-               + np.array([.02, .16, .20])*np.clip(n3*2.4 - 1.1, 0, 1)[..., None])
+        neb = np.array([.03, .06, .16])*np.clip(n1*2.0 - .5, 0, 1)[..., None] + np.array([.02, .04, .10])*np.clip(n2*2.2 - .9, 0, 1)[..., None]
         _vig = (_vig, (INKBG/255.0)*(1.1 - .4*gy[..., None]) + neb.astype(np.float32))
     vg, bgc = _vig
     out = (bgc + img*(1 - bgc))*vg
