@@ -164,3 +164,17 @@ def glitch(arr, amt, seed):
     for _ in range(int(3*amt) + 1):
         y0 = r.integers(0, H - 80); h = r.integers(10, 60); a[y0:y0 + h] = np.roll(a[y0:y0 + h], r.integers(-40, 40), axis=1)
     return a
+_ic = {}
+def img_pts(path, k, cx, cy, h, gamma=2.0, seed=4):
+    """Statue -> points pondérés par la luminance (autocontraste, gamma, recadrage sur le sujet, bas estompé)."""
+    key = (path, k)
+    if key not in _ic:
+        a = np.asarray(Image.open(path).convert("L"), np.float32)/255.0
+        ys, xs = np.nonzero(a > .12); a = a[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+        lo, hi = np.percentile(a, 2), np.percentile(a, 99.5); a = np.clip((a - lo)/(hi - lo + 1e-6), 0, 1)**gamma
+        fade = np.clip((a.shape[0] - np.arange(a.shape[0]))/(a.shape[0]*.08), 0, 1)[:, None]; a = a*fade
+        p = a.ravel()/a.sum(); g = np.random.default_rng(seed); idx = g.choice(len(p), k, p=p)
+        yy, xx = np.divmod(idx, a.shape[1]); j = g.random((2, k)) - .5
+        _ic[key] = ((xx + j[0])/a.shape[0], (yy + j[1])/a.shape[0], a.ravel()[idx], a.shape[1]/a.shape[0])
+    nx, ny, lum, asp = _ic[key]
+    return cx + (nx - asp/2)*h, cy + (ny - .5)*h, lum

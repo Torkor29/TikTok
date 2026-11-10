@@ -57,6 +57,14 @@ def ball_sphere(cx, cy, R, spin=.8, horns=False):
             return x, y, PK, .9 + .1*math.sin(lt*7)
         parts.append((.12, hg))
     return parts
+ST = os.path.join(ROOT, "assets", "statues")
+def statue(name, cx, cy, h, horns=False):
+    def gen(k, lt):
+        x, y, lum = P.img_pts(os.path.join(ST, name + ".png"), k, cx, cy, h); x = x + (lum - .45)*h*.045*math.sin(lt*.8 + 1)
+        return x, y, CR, .35 + .9*lum
+    parts = [(1.0, gen)]
+    if horns: parts.append(ball_sphere(cx, cy - h*.258, h*.23, horns=True)[1])
+    return parts
 def galaxy(k, lt):
     g = np.random.default_rng(9); u = g.random(k); arm = g.integers(0, 3, k); r = 520*np.sqrt(u)
     a = arm*2*math.pi/3 + r*.012 + lt*.9 + g.normal(0, .25, k); return 540 + r*np.cos(a), 1060 + r*np.sin(a)*.8, np.where(g.random(k) < .2, G, CR), .4 + .6*(1 - u)
@@ -269,8 +277,8 @@ def run_kicker():
 def build():
     S = []
     def add(t0, parts, **kw): S.append(Shot(t0, parts, **kw))
-    add(0.0, ball_sphere(540, 1080, 360, horns=True), glitch=.6)
-    add(tw(0, "roberto"), [(1.0, lambda k, lt: (*P.figure("kick", k, 520, 1640, 1100, seed=7), CR, .95)), (.05, lambda k, lt: (*P.disc(800, 1450, 50, k, 8), G, 1.0))])
+    add(0.0, statue("rc_buste", 540, 1180, 1250, horns=True), glitch=.6)
+    add(tw(0, "roberto"), statue("rc_frappe", 540, 1130, 1350))
     add(tw(1, "trente"), [(1.0, lambda k, lt: (*P.text_pts("35", 560, k, 500, 1020, seed=9), G, 1.0)), (.25, lambda k, lt: (*P.text_pts("m", 300, k, 870, 1130, fnt=P.SERIF, seed=10), CR, 1.0))])
     add(tw(1, "plus"), counter(0) if False else [(1.0, lambda k, lt: counter(lt)[0][1](k, lt)), (.35, lambda k, lt: counter(lt)[1][1](k, lt))])
     add(tw(2, "mais"), [(1.0, galaxy)], glitch=.8)
@@ -282,7 +290,7 @@ def build():
     add(t5, toppitch(s5, dashed=True))
     tb = tw(5, "baisse") - t5
     S[-1].parts = toppitch(s5, boy_pose=lambda lt: P.lerp_pose("stand", "duck", min(1, max(0, (lt - tb)/.3))), dashed=True)
-    add(tw(6, "barthez"), [(1.0, lambda k, lt: (*P.figure("keeper", k, 540, 1700, 1050, seed=11), CR, .95)),
+    add(tw(6, "barthez"), [(1.0, lambda k, lt: statue("gardien", 540, 1240, 1120)[0][1](k, lt)),
                            (.2, lambda k, lt: (*P.text_pts("BARTHEZ", 130, k, 540, 560, seed=12), BL, 1.0))])
     t7 = tw(7, "et"); tp = tw(7, "poteau")
     add(t7, toppitch(lambda lt: min(1.0, .55 + .45*P.ease(min(1, lt/max(.4, tp - t7)))), boy_pose="duck"))
@@ -298,7 +306,7 @@ def build():
     add(tw(12, "vent"), wind())
     add(tw(13, "génie"), words2("GÉNIE", G))
     add(tw(13, "chance"), words2("GÉNIE", DM, "OU CHANCE ?", BL), cont=True)
-    add(tw(13, "dis"), ball_sphere(540, 1080, 360, horns=True), glitch=.5)
+    add(tw(13, "dis"), statue("rc_buste", 540, 1180, 1250, horns=True), glitch=.5)
     for a, b in zip(S, S[1:]): a.t1 = b.t0
     S[-1].t1 = TOTAL
     return S
