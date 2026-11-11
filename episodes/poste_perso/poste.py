@@ -32,7 +32,7 @@ BENCH = [(-37.5, -6), (-37.5, -3.5), (-37.5, -1)]
 SHOTS = [(0, None, None, "QUI ES-TU ?"), (1, "gk", (.35, 1), "LE CHEF"), (2, "cb1", (.45, 1), "LE FIABLE"), (3, "lb", (1, -.35), "L'INVISIBLE"),
          (4, "cm", (.5, 1), "LE CERVEAU"), (5, "lw", (.7, 1), "LE SHOWMAN"), (6, "st", (.35, -1), "L'ÉGO"), (7, "bench", (1, -.25), "LE FIDÈLE"),
          (8, "all", None, "ET TOI ?")]
-WIDE = ((0, 34, -62), (0, 0, -14))
+WIDE = ((0, 30, -66), (0, 2, -10))
 def focus(name, t):
     if name == "bench": return BENCH[1]
     return player_pos(name, t)
@@ -40,7 +40,7 @@ def shot_cam(k, t):
     s = SHOTS[k]
     if s[2] is None: return T.Cam(*WIDE)
     x, z = focus(s[1], t); dx, dz = s[2]; n = math.hypot(dx, dz); dx, dz = dx/n, dz/n
-    return T.Cam((x + dx*5.6, 3.2, z + dz*5.6), (x + dx*1.1, .75, z + dz*1.1))
+    return T.Cam((x + dx*5.6, 2.4, z + dz*5.6), (x + dx*.6, 1.5, z + dz*.6))
 def label_geo(k, t):
     s = SHOTS[k]
     if s[2] is None: return (0, 0, -10), 34

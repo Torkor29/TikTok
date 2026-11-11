@@ -15,7 +15,7 @@ def _world():
     n = 140000; X = g.uniform(-40, 40, n); Z = g.uniform(-60, 60, n)                      # gazon (bandes tondues, vraies couleurs)
     inside = (np.abs(X) < 34) & (np.abs(Z) < 52.5); stripe = (np.floor((Z + 52.5)/7) % 2 == 0)
     base = np.where(stripe[:, None], rgb(80, 185, 70), rgb(55, 150, 55)); base = np.where(inside[:, None], base, rgb(30, 80, 38))
-    base = base*(0.85 + 0.3*g.random(n))[:, None]; parts.append((X, 0*X, Z, base, np.full(n, 1.6)))
+    base = base*(0.85 + 0.3*g.random(n))[:, None]; parts.append((X, 0*X, Z, base, np.full(n, .7)))
     L = []                                                                                 # lignes
     def seg(a, b, k): u = np.linspace(0, 1, k); L.append((a[0] + (b[0] - a[0])*u, a[1] + (b[1] - a[1])*u))
     for z in (-52.5, 52.5): seg((-34, z), (34, z), 700)
@@ -33,13 +33,18 @@ def _world():
         parts.append((px, py, np.full(k, s*52.5), np.tile(rgb(255, 255, 255), (k, 1)), np.full(k, 1.0)))
         k = 2500; nx = np.round(g.uniform(-3.66, 3.66, k)*3)/3; ny = g.uniform(0, 2.44, k); nz = s*(52.5 + 2 - ny*.35)
         parts.append((nx, ny, nz, np.tile(rgb(200, 205, 215), (k, 1)), np.full(k, .35)))
-    k = 26000; t = g.random(k)*2*math.pi; row = g.integers(0, 22, k)                      # tribunes + foule colorée
-    rx, rz = 52 + row*1.6, 72 + row*1.6; X = rx*np.cos(t); Z = rz*np.sin(t); Y = 1.5 + row*1.1
-    crowd = np.array([rgb(230, 230, 235), rgb(40, 90, 200), rgb(220, 50, 50), rgb(240, 200, 60), rgb(30, 30, 40)])[g.integers(0, 5, k)]
-    parts.append((X, Y, Z, crowd*(.5 + .5*g.random(k))[:, None], np.full(k, 1.2)))
-    for (fx, fz) in ((-50, -70), (50, -70), (-50, 70), (50, 70)):                          # projecteurs
-        k = 700; r = 2.2*np.sqrt(g.random(k)); a = g.random(k)*2*math.pi
-        parts.append((fx + r*np.cos(a), 38 + r*np.sin(a), np.full(k, fz), np.tile(rgb(255, 250, 225), (k, 1)), np.full(k, 1.6)))
+    # STADE : 4 tribunes rectangulaires en gradins (béton gris), toit, projecteurs ; les supporters sont dynamiques (crowd())
+    k = 60000; side = g.integers(0, 4, k); u = g.uniform(-1, 1, k); row = g.uniform(0, 1, k)
+    d = 6 + row*28; hgt = .5 + row*22
+    X = np.where(side == 0, u*(34 + d), np.where(side == 1, u*(34 + d), np.where(side == 2, -(34 + d), 34 + d)))
+    Z = np.where(side == 0, -(52.5 + d), np.where(side == 1, 52.5 + d, u*(52.5 + d)))
+    parts.append((X, hgt, Z, np.tile(rgb(55, 60, 75), (k, 1))*(.6 + .4*g.random(k))[:, None], np.full(k, .18)))
+    k = 8000; side = g.integers(0, 4, k); u = g.uniform(-1, 1, k)                      # bord du toit
+    X = np.where(side < 2, u*68, np.where(side == 2, -68, 68)); Z = np.where(side == 0, -86.5, np.where(side == 1, 86.5, u*86.5))
+    parts.append((X, np.full(k, 26.0), Z, np.tile(rgb(200, 205, 215), (k, 1)), np.full(k, .9)))
+    for (fx, fz) in ((-60, -80), (60, -80), (-60, 80), (60, 80), (-68, 0), (68, 0)):   # rampes de projecteurs
+        k = 1500; ax = g.uniform(-5, 5, k); ay = g.uniform(-1.2, 1.2, k)
+        parts.append((fx + ax*(fz != 0), 30 + ay, fz + ax*(fz == 0), np.tile(rgb(255, 250, 230), (k, 1)), np.full(k, 2.5)))
     X = np.concatenate([p[0] for p in parts]); Y = np.concatenate([p[1] for p in parts]); Z = np.concatenate([p[2] for p in parts])
     C = np.concatenate([p[3] for p in parts]); A = np.concatenate([p[4] for p in parts])
     return X.astype(np.float32), Y.astype(np.float32), Z.astype(np.float32), C.astype(np.float32), A.astype(np.float32)
@@ -53,6 +58,23 @@ class Cam:
         f, r, u = self.basis(); dx, dy, dz = X - self.pos[0], Y - self.pos[1], Z - self.pos[2]
         x = dx*r[0] + dy*r[1] + dz*r[2]; y = dx*u[0] + dy*u[1] + dz*u[2]; z = dx*f[0] + dy*f[1] + dz*f[2]
         zz = np.maximum(z, .3); return W/2 + FOCAL*x/zz, H*.5 - FOCAL*y/zz, z
+_cr = None
+def crowd(t, n=110000):
+    """Supporters : points colorés sur les gradins, qui sautent et agitent les écharpes (vague qui fait le tour)."""
+    global _cr
+    if _cr is None:
+        g = np.random.default_rng(7); side = g.integers(0, 4, n); u = g.uniform(-1, 1, n); row = np.floor(g.uniform(0, 1, n)*40)/40
+        d = 6.5 + row*28; hgt = 1.2 + row*22
+        X = np.where(side == 0, u*(34 + d), np.where(side == 1, u*(34 + d), np.where(side == 2, -(34 + d), 34 + d)))
+        Z = np.where(side == 0, -(52.5 + d), np.where(side == 1, 52.5 + d, u*(52.5 + d)))
+        home = np.where((side == 0) | (side == 2), 0, 1)                                    # deux camps : bleu/blanc et rouge/jaune
+        pal = np.array([[rgb(40, 110, 255), rgb(240, 240, 245), rgb(30, 70, 200), rgb(255, 220, 120)], [rgb(230, 40, 50), rgb(255, 205, 40), rgb(240, 240, 245), rgb(200, 30, 40)]])
+        col = pal[home, g.integers(0, 4, n)]*(.75 + .35*g.random(n))[:, None]
+        _cr = (X.astype(np.float32), hgt.astype(np.float32), Z.astype(np.float32), col.astype(np.float32), g.random(n).astype(np.float32), np.arctan2(Z, X).astype(np.float32))
+    X, Y, Z, C, ph, ang = _cr
+    wave = np.clip(np.sin(ang*2 - t*2.2), 0, 1)**6
+    jump = .35*np.abs(np.sin(t*7 + ph*40))*(ph > .55) + 1.4*wave
+    return X, Y + jump, Z, C, np.full(len(X), 4.0, np.float32)
 def lerp_cam(a, b, u):
     u = u*u*(3 - 2*u); return Cam(a.pos + (b.pos - a.pos)*u, a.tgt + (b.tgt - a.tgt)*u)
 # ------------------------------------------------------------------ objets dynamiques
@@ -87,18 +109,20 @@ def dense_grass(cam, size=26.0, step=.085, ahead=-6.0, alpha=.55):
     fade = np.clip((size - np.maximum(np.abs(X - cx), np.abs(Z - cz)))/(size*.35), 0, 1)
     d = np.hypot(np.hypot(X - cam.pos[0], Z - cam.pos[2]), cam.pos[1]); sp = step*1150/np.maximum(d, 1)           # écart à l'écran entre deux brins
     boost = np.clip((sp/1.3)**2, 1, 9)
+    if cam.pos[1] < 8: boost = boost*np.clip(1.3 - d/24, 0, 1)
     return X.astype(np.float32), (sh*.04).astype(np.float32), Z.astype(np.float32), col.astype(np.float32), (alpha*fade*boost).astype(np.float32)
 def render(cam, extra, t, flash=0.0, dense=True):
     """extra : liste de (X, Y, Z, couleur Nx3 ou 3, alpha)."""
     global _bg
     X, Y, Z, C, A = WORLD
     xs, ys, zs, cs, als = [X], [Y], [Z], [C], [A]
+    extra = [crowd(t)] + list(extra)
     if dense: extra = [dense_grass(cam, size=30.0 if cam.pos[1] < 8 else 45.0, step=.07 if cam.pos[1] < 8 else .11, ahead=-99)] + list(extra)
     for (ex, ey, ez, ec, ea) in extra:
         n = len(ex); xs.append(ex); ys.append(ey); zs.append(ez); cs.append(np.broadcast_to(np.asarray(ec, np.float32), (n, 3))); als.append(np.broadcast_to(np.asarray(ea, np.float32), (n,)))
     X, Y, Z, C, A = (np.concatenate(v) for v in (xs, ys, zs, cs, als))
     sx, sy, z = cam.project(X, Y, Z); ok = z > .4
-    inten = A*np.clip(22.0/np.maximum(z, 1), .55, 5.0)
+    inten = A*np.clip(22.0/np.maximum(z, 1), .3, 5.0)
     buf = np.zeros((3, W*H), np.float32); P.splat(buf, sx[ok], sy[ok], C[ok], inten[ok]*.5)
     img = buf.reshape(3, H, W).transpose(1, 2, 0)
     img = cv2.GaussianBlur(img, (0, 0), .8)*2.0
