@@ -14,7 +14,7 @@ def _world():
     g = np.random.default_rng(1); parts = []
     n = 140000; X = g.uniform(-40, 40, n); Z = g.uniform(-60, 60, n)                      # gazon (bandes tondues, vraies couleurs)
     inside = (np.abs(X) < 34) & (np.abs(Z) < 52.5); stripe = (np.floor((Z + 52.5)/7) % 2 == 0)
-    base = np.where(stripe[:, None], rgb(58, 138, 62), rgb(40, 112, 48)); base = np.where(inside[:, None], base, rgb(30, 80, 38))
+    base = np.where(stripe[:, None], rgb(80, 185, 70), rgb(55, 150, 55)); base = np.where(inside[:, None], base, rgb(30, 80, 38))
     base = base*(0.85 + 0.3*g.random(n))[:, None]; parts.append((X, 0*X, Z, base, np.full(n, 1.6)))
     L = []                                                                                 # lignes
     def seg(a, b, k): u = np.linspace(0, 1, k); L.append((a[0] + (b[0] - a[0])*u, a[1] + (b[1] - a[1])*u))
@@ -83,7 +83,7 @@ def dense_grass(cam, size=26.0, step=.085, ahead=-6.0, alpha=.55):
     I, J = np.meshgrid(np.arange(i0, i1), np.arange(j0, j1)); I, J = I.ravel(), J.ravel()
     h = (I*73856093 ^ J*19349663) & 0xffffff; jx = (h & 255)/255.0; jz = ((h >> 8) & 255)/255.0; sh = ((h >> 16) & 255)/255.0
     X = (I + jx)*step; Z = (J + jz)*step; ok = (np.abs(X) < 34) & (np.abs(Z) < 52.5); X, Z, sh = X[ok], Z[ok], sh[ok]
-    stripe = (np.floor((Z + 52.5)/7) % 2 == 0); col = np.where(stripe[:, None], rgb(58, 138, 62), rgb(40, 112, 48))*(.8 + .4*sh)[:, None]
+    stripe = (np.floor((Z + 52.5)/7) % 2 == 0); col = np.where(stripe[:, None], rgb(80, 185, 70), rgb(55, 150, 55))*(.85 + .35*sh)[:, None]
     fade = np.clip((size - np.maximum(np.abs(X - cx), np.abs(Z - cz)))/(size*.35), 0, 1)
     d = np.hypot(np.hypot(X - cam.pos[0], Z - cam.pos[2]), cam.pos[1]); sp = step*1150/np.maximum(d, 1)           # écart à l'écran entre deux brins
     boost = np.clip((sp/1.3)**2, 1, 9)
@@ -104,9 +104,9 @@ def render(cam, extra, t, flash=0.0, dense=True):
     img = cv2.GaussianBlur(img, (0, 0), .8)*2.0
     sm = cv2.GaussianBlur(cv2.resize(img, (W//4, H//4), interpolation=cv2.INTER_AREA), (0, 0), 6)
     img = img + cv2.resize(sm, (W, H))*(.9 + 1.5*flash)
-    img = 1 - np.exp(-img*1.5)
+    img = 1 - np.exp(-img*1.9)
     if _bg is None:
-        gy = np.linspace(0, 1, H, dtype=np.float32)[:, None, None]; _bg = (rgb(6, 10, 26)*(1.2 - .6*gy)).astype(np.float32)
-        yy, xx = np.mgrid[0:H, 0:W]; d = ((xx - W/2)/(W*.75))**2 + ((yy - H/2)/(H*.65))**2; _bg = (_bg, np.clip(1 - .5*d, .3, 1).astype(np.float32)[..., None])
-    bg, vg = _bg; out = (bg + img*(1 - bg))*vg
+        gy = np.linspace(0, 1, H, dtype=np.float32)[:, None, None]; _bg = (rgb(30, 60, 140)*(1 - gy)*.8 + rgb(250, 140, 70)*np.exp(-((gy - .3)/.08)**2)*.45).astype(np.float32)
+        yy, xx = np.mgrid[0:H, 0:W]; d = ((xx - W/2)/(W*.75))**2 + ((yy - H/2)/(H*.65))**2; _bg = (_bg, np.clip(1 - .25*d, .6, 1).astype(np.float32)[..., None])
+    bg, vg = _bg; cov = np.clip(img.max(2, keepdims=True)*2.2, 0, 1); out = (bg*(1 - cov) + img*1.15)*vg
     return (np.clip(out, 0, 1)*255).astype(np.uint8)

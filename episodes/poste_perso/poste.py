@@ -23,7 +23,7 @@ KEYS = {"gardien", "defenseur", "central", "lateral", "milieu", "ailier", "attaq
         "cours", "remarque", "avis", "raison", "dribbles", "expres", "dixieme", "celebres", "aime", "lequel", "commentaire", "tague", "joues", "qui"}
 VOIX = os.path.join(HERE, "voix", "voix.mp3"); WD = KA.Words(TEXTE, VOIX); L0 = [WD.line(i)[0] for i in range(len(TEXTE))]
 TOTAL = WD.end + .8
-GOLD, BLUE = T.rgb(255, 200, 70), T.rgb(70, 130, 255)
+GOLD, BLUE = T.rgb(255, 210, 60), T.rgb(60, 140, 255)
 TEAM = {"gk": ("keeper", 0, -49), "cb1": ("wall", -8, -38), "cb2": ("wall", 8, -38), "lb": ("stand", -27, -33), "rb": ("stand", 27, -33),
         "cm": ("stand", 0, -22), "m1": ("stand", -13, -16), "m2": ("stand", 13, -16), "lw": ("run", -25, -3), "rw": ("run", 25, -3), "st": ("stand", 0, -1)}
 BENCH = [(-37.5, -6), (-37.5, -3.5), (-37.5, -1)]
@@ -40,12 +40,12 @@ def shot_cam(k, t):
     s = SHOTS[k]
     if s[2] is None: return T.Cam(*WIDE)
     x, z = focus(s[1], t); dx, dz = s[2]; n = math.hypot(dx, dz); dx, dz = dx/n, dz/n
-    return T.Cam((x + dx*7.4, 4.0, z + dz*7.4), (x + dx*1.4, .6, z + dz*1.4))
+    return T.Cam((x + dx*5.6, 3.2, z + dz*5.6), (x + dx*1.1, .75, z + dz*1.1))
 def label_geo(k, t):
     s = SHOTS[k]
     if s[2] is None: return (0, 0, -10), 34
     x, z = focus(s[1], t) if s[1] != "lb" else player_pos("lb", L0[3] + 3); dx, dz = s[2]; n = math.hypot(dx, dz)
-    return (x + dx/n*2.6, 0, z + dz/n*2.6), 2.9
+    return (x + dx/n*2.4, 0, z + dz/n*2.4), 2.1
 def shot_at(t):
     k = 0
     for i, s in enumerate(SHOTS):
@@ -59,7 +59,10 @@ def cam_at(t):
         c.pos = c.pos + np.array([0, 16*math.sin(math.pi*u), 0], np.float32)          # arc de drone pendant le vol
     if k in (0, 8): a = .22*math.sin(t*.4); c = T.Cam((c.pos[0] + 18*a, c.pos[1], c.pos[2]), c.tgt)
     end = L0[SHOTS[k + 1][0]] - .35 if k + 1 < len(SHOTS) else TOTAL; d = (t - t0)/max(1, end - t0)
-    c.pos = c.pos + (c.tgt - c.pos)*.07*d; return c
+    c.pos = c.pos + (c.tgt - c.pos)*.07*d
+    tl = t - (L0[SHOTS[k][0]] + .25)
+    if k and 0 < tl < .5: c.pos = c.pos + (c.tgt - c.pos)*.12*math.sin(tl/.5*math.pi)          # coup de zoom quand le mot s'écrit
+    return c
 def player_pos(name, t):
     p, x, z = TEAM[name]
     if name == "lb":
@@ -99,6 +102,13 @@ def frame(fr):
     if t >= ta:                                                    # étiquette peinte qui « pousse » sur la pelouse
         u = min(1.0, (t - ta)/.35); anc, wd = label_geo(k, t); X, Y, Z = T.ground_text(s[3], T.Cam(*((shot_cam(k, t).pos, shot_cam(k, t).tgt))), anc, wd*(.6 + .4*u)); n = int(len(X)*u) or 1
         ex.append((X[:n], Y[:n], Z[:n], GOLD, 4.0 if k in (0, 8) else 1.6))
+    if s[1] not in (None, "all") and t >= ta:                     # anneau lumineux au sol + gerbe de points dorés
+        fx, fz = focus(s[1], t); a = np.linspace(0, 6.283, 900); rr = .9 + .08*math.sin(t*6)
+        ex.append((fx + rr*np.cos(a), np.full(900, .03, np.float32), fz + rr*np.sin(a), GOLD, 2.5))
+        tb = t - ta
+        if tb < 1.2:
+            g = np.random.default_rng(k); n = 700; v = g.uniform(2, 6, n); th = g.random(n)*6.283; up = g.uniform(3, 8, n)
+            ex.append((fx + np.cos(th)*v*tb, np.maximum(0, up*tb - 4.9*tb*tb), fz + np.sin(th)*v*tb, np.array([GOLD, T.rgb(255, 255, 255), T.rgb(255, 120, 60)])[g.integers(0, 3, n)], 2.5*(1 - tb/1.2)))
     flash = 0.0
     if b and b[2] > 52: flash = max(0, 1 - (t - (WD.t(6, "dixième") + .25))*2.5)
     img = T.render(cam, ex, t, flash)
