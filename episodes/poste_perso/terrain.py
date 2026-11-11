@@ -75,6 +75,25 @@ def crowd(t, n=110000):
     wave = np.clip(np.sin(ang*2 - t*2.2), 0, 1)**6
     jump = .35*np.abs(np.sin(t*7 + ph*40))*(ph > .55) + 1.4*wave
     return X, Y + jump, Z, C, np.full(len(X), 4.0, np.float32)
+def stadium_life(t):
+    """Banderoles qui ondulent, fumigènes qui montent, flashs dans la foule."""
+    out = []; g = np.random.default_rng(31)
+    BAN = [(-1, 0, -.4, (230, 40, 50)), (-1, 0, .35, (255, 205, 40)), (1, 0, -.3, (40, 110, 255)), (1, 0, .4, (245, 245, 250)),
+           (0, -1, -.5, (40, 110, 255)), (0, -1, .5, (230, 40, 50)), (0, 1, 0, (255, 205, 40))]
+    for i, (sx, sz, u0, c) in enumerate(BAN):
+        n = 2600; a = g.uniform(-1, 1, n); b = g.uniform(0, 1, n); stripe = (np.floor(a*4) % 2 == 0)
+        col = np.where(stripe[:, None], rgb(*c), rgb(250, 250, 250)); w = 9.0
+        if sx: X = np.full(n, sx*(34 + 7.0)) + 0*a; Z = u0*52.5 + a*w
+        else: X = u0*34 + a*w; Z = np.full(n, sz*(52.5 + 7.0))
+        Y = 1.5 + b*3.2 + .25*np.sin(a*5 + t*4 + i)
+        out.append((X.astype(np.float32), Y.astype(np.float32), Z.astype(np.float32), col.astype(np.float32), np.full(n, 2.2, np.float32)))
+    for i, (fx, fz, c) in enumerate([(-45, -62, (255, 60, 60)), (45, -62, (80, 140, 255)), (-45, 62, (255, 180, 60)), (45, 62, (255, 60, 60))]):
+        n = 3000; age = (g.random(n) + t*.25) % 1.0; ph = g.random(n)*6.283
+        X = fx + np.cos(ph)*age*5 + age*4*np.sin(t*.5 + i); Y = 4 + age*18; Z = fz + np.sin(ph)*age*5
+        out.append((X.astype(np.float32), Y.astype(np.float32), Z.astype(np.float32), rgb(*c), ((1 - age)*.9).astype(np.float32)))
+    X, Y, Z, C, A = crowd(t); gg = np.random.default_rng(int(t*30)); idx = gg.integers(0, len(X), 90)
+    out.append((X[idx], Y[idx] + .5, Z[idx], rgb(255, 255, 255), np.full(90, 25.0, np.float32)))
+    return out
 def lerp_cam(a, b, u):
     u = u*u*(3 - 2*u); return Cam(a.pos + (b.pos - a.pos)*u, a.tgt + (b.tgt - a.tgt)*u)
 # ------------------------------------------------------------------ objets dynamiques

@@ -88,20 +88,31 @@ def goal_ball(t):
 def frame(fr):
     t = fr/FPS; k = shot_at(t); cam = cam_at(t); ex = []
     for i, name in enumerate(TEAM):
-        x, z = player_pos(name, t); X, Y, Z = T.figure3d(pose_of(name, t), x, z, seed=10 + i, cam=cam)
+        x, z = player_pos(name, t); X, Y, Z = T.figure3d(pose_of(name, t), x, z, seed=10 + i, cam=cam); Y = Y*(1 + .015*math.sin(t*3 + i)) + .04*abs(math.sin(t*2.5 + i))
         hl = SHOTS[k][1] == name or (k == 8 and int((t - L0[8])*5) % 11 == i)
         ex.append((X, Y, Z, GOLD if hl else BLUE, 1.7 if hl else .9))
     for j, (bx, bz) in enumerate(BENCH):
         X, Y, Z = T.figure3d("wall", bx, bz, h=1.8, k=2000, seed=40 + j, cam=cam); hl = k == 7 and j == 1
         ex.append((X, Y, Z, GOLD if hl else T.rgb(150, 160, 190), 1.7 if hl else .7))
+    t0 = L0[SHOTS[k][0]] - .35
+    if 0 < k and t - t0 < .85 and SHOTS[k][1] not in (None, "all") and SHOTS[k - 1][1] not in (None, "all"):   # passe dorée d'un poste à l'autre
+        u = (t - t0)/.85; a0 = focus(SHOTS[k - 1][1], t0); a1 = focus(SHOTS[k][1], t); g = np.random.default_rng(3)
+        for j in range(6):
+            uu = max(0, u - j*.03); bx, bz = a0[0] + (a1[0] - a0[0])*uu, a0[1] + (a1[1] - a0[1])*uu; by = .2 + 7*uu*(1 - uu)
+            n = 300; r = .18*np.sqrt(g.random(n)); an = g.random(n)*6.283
+            ex.append((bx + r*np.cos(an), by + r*np.sin(an), np.full(n, bz, np.float32), T.rgb(255, 230, 120) if j else T.rgb(255, 255, 255), 3.0*(1 - j/6)))
+    ex += T.stadium_life(t)
     b = goal_ball(t)
     if b:
         g = np.random.default_rng(5); n = 500; r = .11*np.sqrt(g.random(n)); a = g.random(n)*6.283
         ex.append((b[0] + r*np.cos(a), b[1] + r*np.sin(a), np.full(n, b[2]), T.rgb(255, 255, 255), 2.5))
     s = SHOTS[k]; ta = L0[s[0]] + (.25 if k else .0)
     if t >= ta:                                                    # étiquette peinte qui « pousse » sur la pelouse
-        u = min(1.0, (t - ta)/.35); anc, wd = label_geo(k, t); X, Y, Z = T.ground_text(s[3], T.Cam(*((shot_cam(k, t).pos, shot_cam(k, t).tgt))), anc, wd*(.6 + .4*u)); n = int(len(X)*u) or 1
-        ex.append((X[:n], Y[:n], Z[:n], GOLD, 4.0 if k in (0, 8) else 1.6))
+        anc, wd = label_geo(k, t); X, Y, Z = T.ground_text(s[3], T.Cam(*((shot_cam(k, t).pos, shot_cam(k, t).tgt))), anc, wd)
+        ua = min(1.0, (t - ta)/.6); e = 1 - (1 - ua)**3; g = np.random.default_rng(77 + k); m = len(X)
+        sx, sy, sz = X + g.normal(0, 6, m), g.uniform(2, 10, m), Z + g.normal(0, 6, m)     # les lettres se forment depuis le ciel
+        Xa, Ya, Za = sx + (X - sx)*e, sy + (Y - sy)*e, sz + (Z - sz)*e
+        ex.append((Xa, Ya + .05*np.sin(t*4 + X), Za, GOLD, (4.0 if k in (0, 8) else 1.6)*(.5 + .5*e)))
     if s[1] not in (None, "all") and t >= ta:                     # anneau lumineux au sol + gerbe de points dorés
         fx, fz = focus(s[1], t); a = np.linspace(0, 6.283, 900); rr = .9 + .08*math.sin(t*6)
         ex.append((fx + rr*np.cos(a), np.full(900, .03, np.float32), fz + rr*np.sin(a), GOLD, 2.5))
